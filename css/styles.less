@@ -16,6 +16,7 @@
  @secondary: #857668;
  @tertiary: #c4d7a7;
  @white: #fefefe;
+ @light-grey  : #ccc;
  @highlight: #ff7e00;
  @highlight-bright: #ffaa00;
  @light-text:#fff;
@@ -272,6 +273,41 @@
             margin-bottom:0px;
         }
     }
+ }
+ 
+ section.side-header{ //Section with the header as a tab off to one side rather than full width.
+    > .header{
+        padding:0px;
+        background-color:transparent;
+        color:@dark-text;
+        
+        > h2 {
+            background-color:@secondary;
+            color:@light-text;
+            display:inline-block;
+            .unit-padding-vertical;
+            .unit-padding-horizontal(2);
+            border-radius: 5px 5px 0px 0px;
+        }
+        
+        > span{
+            float:right;
+        }
+        
+    }
+    
+    > .main{
+        background-color:@primary;
+        color:@light-text;
+    
+    }
+ }
+ 
+ 
+ .info-box{
+    background-color:@light-grey;
+    .unit-padding;
+    
  }
  
  .mini-content-box{
