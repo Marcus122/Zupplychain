@@ -1,0 +1,30 @@
+.tabs{
+	list-style:none;
+	border-bottom:3* @unit-px solid @highlight;
+	overflow:hidden;
+	margin-bottom:0;
+}
+.tabs li{
+	padding: @unit-px;
+	background:@secondary;
+	color:@light-text;
+	.border-radius(5px,0,0,5px);
+	text-transform:uppercase;
+	cursor:pointer;
+	position:relative;
+	margin-bottom:0;
+}
+.tabs li:after{
+	content : @ionicon-var-android-checkbox-blank;
+	font-size: 26px;
+	position: absolute;
+	right: @unit-px;
+	top: 8px;
+	.ion;
+}
+.tabs li.active:after{
+	content : @ionicon-var-android-checkbox;
+}
+.tabs li.active{
+	background: @highlight;
+}
