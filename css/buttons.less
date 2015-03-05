@@ -1,0 +1,200 @@
+/** BUTTONS **/
+
+.button-icon-transition{
+    transition:1s transform;
+}
+
+ 
+ 
+ button{
+    border:0px;
+    text-transform: uppercase;
+    transition:0.1s transform, 0.1s box-shadow, 0.1s -moz-box-shadow, 0.1s -webkit-box-shadow;
+    .unit-padding-vertical(1);
+    .unit-padding-horizontal(2);
+ }
+ 
+ button.mini{
+    .unit-padding-vertical(0.5);
+    .unit-padding-horizontal(1);
+    border-radius:4px;
+ }
+ 
+  button.action{
+    .highlight-grad;
+    .slight-shadow; 
+    color:@light-text;
+ }
+ 
+ button.primary{
+    color:@light-text;
+    background-color:@primary;
+ }
+
+ button.secondary{
+    color:@light-text;
+    border-color:@light-text;
+    border:2px solid;
+    background-color:@secondary;
+ }
+ button.tertiary{
+    color:@dark-text;
+    background-color:@tertiary;
+    .slight-shadow;
+ }
+ button.simple{
+    background:transparent;
+    border:1px solid;
+ }
+ 
+ button.action:hover{
+    .vertical-grad(darken(@highlight-bright,4%), lighten(@highlight, 4%));
+ }
+ 
+ button.primary:hover{
+    background-color:darken(@primary, 5%);
+ }
+ 
+ button.secondary:hover{
+    background-color:darken(@secondary, 5%);
+ }
+ button.tertiary:hover{
+    background-color:darken(@tertiary, 5%);
+ }
+
+ 
+ button:active{
+    transform:scale(0.95);
+ }
+ 
+ button.action:active,
+ button.tertiary:active{
+    .very-slight-shadow;
+ }
+ 
+button em{font-weight:bold;font-style:normal;} 
+
+button.tertiary:after, button.tertiary:before{
+    color:@light-text;
+}
+ 
+ /* buttons with icons */
+ button.add-button:after, button.trash-button:after, button.next:after, button.forward:after, button.cancel:after, button.undo:after, button.pending:after, button.refresh:after,
+ button.success:after, button.error:after, button.edit:after, button.down:after, button.config:after,button.go:after{
+    .ion;
+    .unit-margin-left;
+    .button-icon-transition;
+}
+button.prev:before, button.back:before{
+    .ion;
+    .unit-margin-right;
+    .button-icon-transition;
+}
+
+
+
+button:hover:after, button:hover:before{
+    transform:rotateX(360deg) scale(1.2);
+}
+
+button.next:after{
+   content:@ionicon-var-chevron-right;
+}
+button.success:after{
+    content:@ionicon-var-checkmark;
+}
+button.success:hover:after,
+button.error:hover:after{
+    transform:rotateX(0deg) rotateY(360deg);
+}
+button.prev:before{
+    content:@ionicon-var-chevron-left;
+}
+button.cancel:after{
+    content:@ionicon-var-android-close;
+}
+button.cancel:hover:after{
+    transform:rotateX(0deg) rotateZ(180deg);
+}
+
+button.pending:after{
+    content:@ionicon-var-android-sync;
+    animation:rotate 1s linear infinite;
+}
+button.error:after{
+   content:@ionicon-var-alert;
+}
+button.edit:after{
+ content:@ionicon-var-compose;
+}
+button.config:after{
+    content:@ionicon-var-gear-a;
+}
+button.config:hover:after{
+    transform:rotateX(0deg) rotateZ(360deg);
+}
+
+
+button.pending:after{
+    animation:rotate 1s linear infinite;
+    -webkit-animation:rotate 1s linear infinite;
+}
+button.forward:after{
+    content:@ionicon-var-android-arrow-forward;
+}
+
+button.go:after{
+    content:@ionicon-var-android-arrow-forward;
+    font-size:140%;
+    display:block;
+    margin:auto;
+    border:1px solid;
+    border-radius:3px;
+    .unit-padding;
+    .unit-margin-top;
+}
+
+button.back:before{
+    content:@ionicon-var-android-arrow-back;
+}
+button.down:after{
+    content:@ionicon-var-chevron-down;
+}
+button.down:hover:after{
+    transform:rotateX(0deg) rotateY(360deg);
+}
+
+/* mini icon buttons add delete etc. */
+
+button.add-button,
+button.trash-button{
+    padding:0px;
+    background-color:@primary;
+    color:#fff;
+ 
+}
+
+button.add-button:after{
+    content:@ionicon-var-android-close;
+    .unit-margin(1);
+}
+button.trash-button:after{
+    content:@ionicon-var-trash-a;
+    .unit-margin(1);
+}
+
+button.add-button span,
+button.trash-button span
+{
+   display:none;
+}
+ 
+ /* Animation Keyframes */
+ @keyframes rotate{
+    0% {transform:rotateZ(0deg);}
+    100%{transform:rotateZ(-360deg);};
+}
+@-webkit-keyframes rotate{
+    0% {transform:rotateZ(0deg);}
+    100%{transform:rotateZ(-360deg);};
+}

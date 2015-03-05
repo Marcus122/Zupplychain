@@ -1,0 +1,81 @@
+/* FORM STYLES */
+ label{
+    display:block;
+    width:100%;
+ }
+ input, select{
+    width:100%;
+    .unit-margin-bottom(0.5);
+ }
+ 
+ .input-field{
+    .unit-margin-bottom(2);
+    
+    .messages{
+        height:2rem;
+        .hint {
+            color:lighten(@dark-text,20%)
+        }
+        .invalid, .valid {
+            display:none;
+        }
+        
+    }
+ }
+ 
+ .input-field.valid {
+    .messages .valid {
+        display:inline;
+        color:@valid-dark;
+    }
+}
+.input-field.invalid {
+    .messages .invalid{
+        display:inline;
+        color:@invalid-dark;
+    }
+    
+}
+ 
+ .input-shadow(@color){
+    box-shadow: 0px 0px 12px @color;
+ }
+ 
+ .valid > input{
+    border-color:@valid-dark;
+    color:@valid-dark;
+    background-color:@valid-light;
+ }
+ 
+ .valid > input:focus{
+   .input-shadow(@valid-light);
+ }
+ 
+ .invalid > input{
+    border-color:@invalid-dark;
+    color:@invalid-dark;
+    background-color:@invalid-light;
+ }
+ .invalid > input:focus{
+   .input-shadow(@invalid-light);
+ }
+ 
+
+ .valid input{
+    //images
+ }
+.invalid input{
+    //images
+}
+ 
+ @media only screen and (min-width:768px){ /* Bigger screens */
+    label
+        {display:inline-block;width:25%;}
+    input   {width:75%;}
+    select {width:74%;}
+    .input-field .messages{
+        padding-left:25%;
+    
+    }
+ }
+ 
