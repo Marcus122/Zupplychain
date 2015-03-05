@@ -313,7 +313,9 @@ span.highlight-bright{
     }
  }
  
- section.side-header{ //Section with the header as a tab off to one side rather than full width.
+    
+
+ .side-header, .content-box.side-header {
     > .header{
         padding:0px;
         background-color:transparent;
@@ -325,7 +327,7 @@ span.highlight-bright{
             display:inline-block;
             .unit-padding-vertical;
             .unit-padding-horizontal(4);
-            border-radius: 5px 5px 0px 0px;
+            border-radius: 10px 10px 0px 0px;
         }
         
         > span{
@@ -333,12 +335,29 @@ span.highlight-bright{
             .unit-padding-top(3);
         }
         
+        >button{
+            float:right;
+            .unit-margin-right;
+        }
+        
     }
-    
+ 
+ }
+ 
+ section.side-header{ //Section with the header as a tab off to one side rather than full width.
+ 
     > .main{
         background-color:@primary;
         color:@light-text;
     
+    }
+ }
+ 
+ section.tertiary{
+    background-color:@tertiary;
+    .unit-padding(4);
+    .content-box{
+        .unit-margin-bottom(4);
     }
  }
  
@@ -452,6 +471,11 @@ span.highlight-bright{
         .unit-padding-horizontal(2);
         .unit-padding-vertical;
         
+    }
+    
+    .header em{
+        font-weight:bold;
+        font-style:normal;
     }
     
     .main{

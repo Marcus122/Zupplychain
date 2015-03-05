@@ -51,18 +51,142 @@
         
         
         <div class="container">
-            
             <main>
+            <section class="tertiary">
                 <div class="content-box map-container">
                     <div class="header">
+                        <h2><em>1. Map</em> Results</h2>
                     </div>
                     <div class="main">
-                    <iframe id="preview" src="https://www.google.com/maps/embed/v1/place?q=bury&amp;key=AIzaSyD4iE2xVSpkLLOXoyqT-RuPwURN3ddScAI"></iframe>
+                        <img src="/images/map-test.png" alt="test image google maps" style="max-width:100%;"/>
                     </div>
                     <div class="footer">
+                        <em>Key</em>
+                        <div class="key-item">
+                            <span class="ion-thermometer cold"></span>Ambient
+                            
+                        </div>
+                        <div class="key-item">
+                            <span class="ion-thermometer hot"></span>Chilled
+                            
+                        </div>
+                        <div class="key-item">
+                            <span class="ion-ios-snowy"></span>Frozen
+                            
+                        </div>
                     </div>
                 </div>
-            
+                
+                <div class="content-box side-header">
+                    <div class="header">
+                        <h2><em>2. Refine</em> your search</h2>
+                        <button class="action add">Add pallet</button>
+                    </div>
+                    <div class="main">
+                        <table class="simple">
+                            <thead>
+                                <tr>
+                                    <th><span class="ion-trash-a"></span></th>
+                                    <th>Pallet type</th>
+                                    <th>Qty</th>
+                                    <th>Postcode</th>
+                                    <th>Max Distance</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Height <small>(m)</small></th>
+                                    <th>Weight <small>(kg)</small></th>
+                                    <th>Value <small>&gbp;</small></th>
+                                    <th>Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><button class="trash-button"><span class="sr-only">delete</span></button></td>
+                                    <td><select><option>Standard Blue</option><option>Standard Red</option></select></td>
+                                    <td><input type="text" /></td>
+                                    <td><input type="text" /></td>
+                                    <td><input type="text" /></td>
+                                    <td><input type="text" /></td>
+                                    <td><input type="text" /></td>
+                                    <td><input type="text" /></td>
+                                    <td><input type="text" /></td>
+                                    <td><input type="text" /></td>
+                                    <td>
+                                        <select>
+                                            <option></option>
+                                            <option></option>
+                                        </select>
+                                    </td>
+                                    
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="content-box">
+                    <div class="header">
+                        <h2><em>3. List</em> Results</h2><span>Confirm your email to get further information</span>
+                    </div>
+                    <div class="main">
+                        <div class="pagination">
+                            <p>1 to 9 of 24 results</p>
+                            <nav class="controls">
+                                <button type="simple mini">View all items</button>
+                                <ul class="pagination-links">
+                                    <li><a href="#">&lt;</a></li>
+                                    <li class="active"><a href="#">1</a></li>
+                                    <li><a href="#">2</a></li>
+                                    <li><a href="#">&gt;</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                        <table class="simple">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Warehouse</th>
+                                    <th>Town</th>
+                                    <th>Type</th>
+                                    <th>Rating</th>
+                                    <th>Weekly Price</th>
+                                    <th>In / Out Price</th>
+                                    <th>Available Pallets</th>
+                                    <th>View Details</th>
+                                    <th>Select</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1.</td>
+                                    <td>Warehouse 1</td>
+                                    <td>Bury</td>
+                                    <td>
+                                        <span class="ion-thermometer cold"><em class="sr-only">Chilled</em></span>
+                                        <span class="ion-thermometer hot"><em class="sr-only">Ambient</em></span>
+                                        <span class="ion-ios-snowy cold"><em class="sr-only">Frozen</em></span>
+                                    </td>
+                                    <td>
+                                        <span class="ion-android-star"><em class="sr-only">*</em></span>
+                                        <span class="ion-android-star"><em class="sr-only">*</em></span>
+                                        <span class="ion-android-star"><em class="sr-only">*</em></span>
+                                        <span class="ion-android-star"><em class="sr-only">*</em></span>
+                                        <span class="ion-android-star"><em class="sr-only">*</em></span>
+                                    </td>
+                                    <td>£1.00</td>
+                                    <td>£1.00</td>
+                                    <td>200</td>
+                                    <td><button class="action mini">View</button></td>
+                                    <td><input type="checkbox" /></td>
+                                    
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                    </div>
+                
+                </div>
+            </section>
             </main>
         <footer>
         <div class="row">
