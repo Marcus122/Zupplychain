@@ -286,7 +286,7 @@
             color:@light-text;
             display:inline-block;
             .unit-padding-vertical;
-            .unit-padding-horizontal(2);
+            .unit-padding-horizontal(4);
             border-radius: 5px 5px 0px 0px;
         }
         
@@ -313,13 +313,16 @@
     blockquote{
         margin-top:0px;
     }
+    span {
+        font-weight:bold;
+    }
  }
  
  .quote-box:before, .quote-box:after{
     font-size:50px;
     color:@primary;
     .ion;
-  
+    
  }
  
  .quote-box:before{
@@ -331,7 +334,9 @@
     float:right;
  }
  
- 
+ .row.info-boxes{
+    .unit-margin-top(2);
+ }  
  
  .info-box{
     background-color:@light-grey;
@@ -349,6 +354,9 @@
         color:@primary;
         border-radius:10px;
     }
+    p{
+        .small-font;
+    }
  }
  
  .mini-content-box{
@@ -365,12 +373,14 @@
     .unit-margin-vertical(2);
     > * {
         color:@light-text;
-        
         margin-bottom:0px;
     }
-    h2,h3,h4 {
+    h2 {
         text-transform:uppercase;
         margin-bottom:0px;
+    }
+    h3{
+        .unit-margin-bottom;
     }
  }
  
