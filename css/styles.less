@@ -37,8 +37,8 @@
  @unit-rem: 1rem;
  
  //responsive selectors
- @mobile: ~"only screen and (max-width: 520px)";
- @non-mobile: ~"only screen and (min-width: 521px)";
+ @mobile: ~"only screen and (max-width: 549px)";
+ @non-mobile: ~"only screen and (min-width: 550px)";
  
  
  @images: "../images";
@@ -196,7 +196,12 @@
     
  }
  
+ .logo{
+    max-width:100%;
+ }
+ 
  .main-nav{
+    box-sizing:border-box;
     background-color:@primary;
     .unit-padding(0.5);
     .small-font;
@@ -210,6 +215,14 @@
         .unit-padding-horizontal;
     }
  }
+ 
+ @media @mobile {
+    .main-nav{
+        width:100%;
+    }
+ }
+ 
+ 
  
  
  /** header elements **/
