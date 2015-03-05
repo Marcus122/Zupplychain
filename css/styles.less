@@ -16,13 +16,13 @@
  
  
  // colours
- @primary: #85ae23;
- @secondary: #857668;
- @tertiary: #c4d7a7;
+ @primary: #9BC11F;
+ @secondary: #6A6666;
+ @tertiary: #d7d7d7;
  @white: #fefefe;
  @light-grey  : #ccc;
- @highlight: #ff7e00;
- @highlight-bright: #ffaa00;
+ @highlight: #F28711;
+ @highlight-bright: #EFA430;
  @light-text:#fff;
  @dark-text:#857668;
  @valid-dark:#398439;
@@ -296,6 +296,7 @@
         
         > span{
             float:right;
+            .unit-padding-top(3);
         }
         
     }
@@ -311,11 +312,10 @@
     background-color:@white;
     color:@dark-text;
     .unit-padding(2);
-    .unit-padding-bottom(4);
     border-radius:10px;
     .small-font;
     blockquote{
-        margin-top:0px;
+        .unit-margin-top(5);
     }
     span {
         font-weight:bold;
@@ -327,7 +327,7 @@
  }
  
  .quotes:before, .quotes:after{
-    font-size:50px;
+    font-size:40px;
     color:@primary;
     .ion;
     
@@ -335,6 +335,7 @@
  
  .quotes:before{
     content: @ionicon-var-quote;
+    position:absolute;
  }
  .quotes:after{
     content: @ionicon-var-quote;
@@ -348,6 +349,7 @@
  
  .info-box{
     background-color:@light-grey;
+    overflow:hidden;
     .unit-padding;
     .icon{
         font-size:70px;
@@ -361,6 +363,9 @@
         background-color:@white;
         color:@primary;
         border-radius:10px;
+    }
+    h4{
+        font-weight:bold;
     }
     p{
         .small-font;
