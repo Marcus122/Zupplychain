@@ -35,6 +35,7 @@
  // layout grid units.
  @unit-px: 10px;
  @unit-rem: 1rem;
+ @max-width:1200px;
  
  //responsive selectors
  @mobile: ~"only screen and (max-width: 549px)";
@@ -181,6 +182,7 @@
  
  .container {
     overflow:hidden;
+	max-width: @max-width;
  }
  header {
    .slight-shadow;
