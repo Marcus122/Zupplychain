@@ -303,11 +303,30 @@
     }
  }
  
+ .quote-box {
+    background-color:@white;
+    color:@dark-text;
+    .unit-padding(2);
+    border-radius:10px;
+    .small-font;
+ }
  
  .info-box{
     background-color:@light-grey;
     .unit-padding;
-    
+    .icon{
+        font-size:70px;
+        text-align:center;
+        width:70px;
+        font-weight:bold;
+        float:left;
+        line-height:1.2em;
+        .unit-padding(0.5);
+        .unit-margin-right(2);
+        background-color:@white;
+        color:@primary;
+        border-radius:10px;
+    }
  }
  
  .mini-content-box{
@@ -317,13 +336,17 @@
     border-radius:10px;
  }
  
- .row.banner{
+ .banner{
     background-color:@secondary;
-    .unit-padding;
+    .unit-padding-vertical;
+    .unit-padding-horizontal(2);
     .unit-margin-vertical(2);
-    * {
+    > * {
         color:@light-text;
-        text-align:center;
+        
+        margin-bottom:0px;
+    }
+    h2,h3,h4 {
         text-transform:uppercase;
         margin-bottom:0px;
     }
