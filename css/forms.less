@@ -67,6 +67,7 @@
 .invalid input{
     //images
 }
+<<<<<<< HEAD
 .form-footer{
 	background: @secondary;
 	padding:2*@unit-px 4*@unit-px;
@@ -77,11 +78,54 @@
 .form-footer button{
 	margin:0 @unit-px;
 }
+=======
+
+/* Specific forms */
+
+.storage-search{
+    
+    .inputField{
+        width:140px;
+        display:inline-block;
+        .unit-padding-right(2);
+        input,select {
+            color:@dark-text;
+            width:100%;
+        }
+        label {
+            width:100%;
+        }
+    }   
+    
+    .inputField.number{
+        width:75px;
+    }
+    
+    .inputField.checkbox{
+        width:75px;
+        position:relative;
+        label{
+            width:50px;
+            padding-left:20px;
+        }
+        input{
+            left:0px;
+            top:6px;
+            width:20px;
+            position:absolute;
+        }
+    }
+
+}
+
+
+ 
+>>>>>>> origin/master
  @media only screen and (min-width:768px){ /* Bigger screens */
     label
         {display:inline-block;width:25%;}
     input   {width:75%;}
-    select {width:74%;}
+    select {width:75%;}
     .input-field .messages{
         padding-left:25%;
     
