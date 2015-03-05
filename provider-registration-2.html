@@ -51,6 +51,7 @@
         
         
         <div class="container">
+            
 			<main>
 				<div class="row carousel">
 					<img src="http://placehold.it/1200x300"/>
@@ -63,83 +64,51 @@
 				</div>
 				<div class="row">
 					<ul class="tabs">
-						<li class="four columns active checked">Step 1</li>
-						<li class="four columns">Step 2</li>
+						<li class="four columns checked">Step 1</li>
+						<li class="four columns active checked">Step 2</li>
 						<li class="four columns">Step 3</li>
 					</ul>
 					<section class="tab-content">
-						<form method="get" action="/provider-registration-2.html">
+						<form>
 							<div class="main">
 								<div class="content-box primary">
 									<div class="header">
-										<h3>Contact Information</h3>
+										<h3>Define your space</h3>
 									</div>
 									<fieldset class="main">
-										<div class="columns six">
-											<div class="inputField">
-												<label for="warehouseName">Warehouse Name*</label><input type="text" name="warehouse" id="warehouseName" required/>
-											</div>
-											<div class="inputField">
-												<label for="addressLine1">Address Line 1*</label><input type="text" name="addressLine1" id="addressLine1" required/>
-											</div>
-											<div class="inputField">
-												<label for="addressLine2">Address Line 2</label><input type="text" name="addressLine2" id="addressLine2"/>
-											</div>
-											<div class="inputField">
-												<label for="city">Town/City*</label><input type="text" name="city" id="city" required/>
-											</div>
-											<div class="inputField">
-												<label for="postcode">Postcode</label><input type="text" name="postcode" id="postcode"/>
-											</div>
-										</div>
-										<div class="columns six">
-											<div class="inputField">
-												<label for="name">Contact Name*</label><input type="text" name="name" id="name" required/>
-											</div>
-											<div class="inputField">
-												<label for="telephone">Telephone*</label><input type="tel" name="telephone" id="telephone" required/>
-											</div>
-											<div class="inputField">
-												<label for="mobile">Mobile</label><input type="tel" name="mobile" id="mobile"/>
-											</div>
-											<div class="inputField">
-												<label for="email">Email*</label><input type="email" name="email" id="email" required/>
-											</div>
-										</div>
+										<p class="new-pallet">
+											<span class="primary">Add new pallet</span>
+											<button class="add-button"><span>add</span></button>
+										</p>
+										<table class="max">
+											<thead>
+												<tr>
+													<th>Storage Name</th>
+													<th>Pallet Type</th>
+													<th>Storage Temp</th>
+													<th>Max Weight</th>
+													<th>Max Height</th>
+													<th>Pallet Spaces</th>
+													<th></th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td/>
+													<td/>
+													<td/>
+													<td/>
+													<td/>
+													<td/>
+													<td/>
+												</tr>
+											</tbody>
+										</table>
 									</fieldset>
 								</div>
-								<div class="content-box primary">
-									<div class="header">
-										<h3>Warehouse details</h3>
-									</div>
-									<fieldset class="main">
-										<div class="inputField">
-											<label for="description">Warehouse Description*</label>
-											<textarea name="description"></textarea>
-										</div>
-										<p>Upload any profile images and or Quality assurance documents below.</p>
-										<div class="row documents">
-											<div class="columns six">
-												<label for="photos">Upload Warehouse Photos</label>
-												<input type="file" name="photos" id="photos"/>
-												<button class="add-button"><span>add</span></button>
-											</div>
-											<div class="columns six">
-												<label for="docs">Upload Documents</label>
-												<select name="docs" id="docs">
-													<option>Insurance Certificate</option>
-													<option>ISO 90001/14001</option>
-													<option>Fire Safety/Sprinkle documentation</option>
-													<option>Operator License</option>
-												</select>
-												<button class="add-button"><span>add</span></button>
-											</div>
-										</div>
-									</fieldset>
-								</div>
-								<p>*Required Fields</p>
 							</div>
 							<fieldset class="form-footer">
+								<button class="back">Back</button>
 								<button class="action">Save</button>
 								<span>OR</span>
 								<button class="action next">Save &amp; Continue</button>

@@ -201,8 +201,21 @@
  }
  
  
- 
- 
+span.primary{
+	color: @primary;
+}
+span.secondary{
+	color: @secondary;
+}
+span.tertiary{
+	color: @tertiary;
+}
+span.highlight{
+	color: @highlight;
+}
+span.highlight-bright{
+	color: @highlight-bright;
+}
  
  
  /** FONT AND BASICS **/
@@ -360,6 +373,10 @@
     .unit-margin-top(2);
  }  
  
+ .max{
+	width:100%;
+ }
+ 
  .info-box{
     background-color:@light-grey;
     overflow:hidden;
@@ -480,8 +497,13 @@
     border-radius: 5px 5px 0px 0px;
     border:1px solid @tertiary;
  }
- 
- 
+  .new-pallet{
+	text-align:right;
+  }
+ .new-pallet span{
+	text-transform: uppercase;
+	margin-right: @unit-px;
+ }
  
  
  

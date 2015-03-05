@@ -167,23 +167,28 @@ button.down:hover:after{
 /* mini icon buttons add delete etc. */
 
 button.add-button,
+button.close-button,
 button.trash-button{
     padding:0px;
     background-color:@primary;
     color:#fff;
- 
 }
 
-button.add-button:after{
+button.close-button:after{
     content:@ionicon-var-android-close;
-    .unit-margin(1);
+	.unit-margin(1);
+}
+button.add-button:after{
+    content:@ionicon-var-plus;
+	.unit-margin(1);
 }
 button.trash-button:after{
     content:@ionicon-var-trash-a;
-    .unit-margin(1);
+	.unit-margin(1);
 }
 
 button.add-button span,
+button.close-button span,
 button.trash-button span
 {
    display:none;
