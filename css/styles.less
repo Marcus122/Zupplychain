@@ -269,13 +269,21 @@ span.highlight-bright{
  .large-bullets {
     li{
         list-style:none;
+        .unit-padding-left(4);
+        position:relative;
+        font-weight:bold;
+        font-size:18px;
+        font-size:1.8rem;
     }
     li:before{
         .ion;
         content:@ionicon-var-android-checkbox-outline;
-        .unit-margin-right(2);
-        font-size:20px;
-        font-size:2rem;
+        .unit-margin-right(3);
+        font-size:30px;
+        font-size:3rem;
+        color:@primary;
+        position:absolute;
+        left:0px;
     }
     
     
@@ -418,6 +426,11 @@ span.highlight-bright{
         color:@light-text;
         margin-bottom:0px;
     }
+    h1 {
+        text-align:center;
+        .unit-padding(1);
+        text-transform:uppercase;
+    }
     h2 {
         text-transform:uppercase;
         margin-bottom:0px;
@@ -464,6 +477,9 @@ span.highlight-bright{
  }
  
  .content-box.secondary{
+    .header {
+        .unit-padding(2);
+    }
     > .header * {
         margin-bottom:0px;
     }
