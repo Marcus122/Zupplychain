@@ -11,8 +11,8 @@
 
  
  
- @main-font-stack: "Lato";
- @header-font-stack: "Calibri";
+ @main-font-stack: 'Futura', 'Open Sans';
+ @header-font-stack: 'Calibri';
  
  
  // colours
@@ -322,17 +322,21 @@
     }
  }
  
- .quote-box:before, .quote-box:after{
+ .quotes{
+    overflow:hidden; //otherwise the after can float outside the div
+ }
+ 
+ .quotes:before, .quotes:after{
     font-size:50px;
     color:@primary;
     .ion;
     
  }
  
- .quote-box:before{
+ .quotes:before{
     content: @ionicon-var-quote;
  }
- .quote-box:after{
+ .quotes:after{
     content: @ionicon-var-quote;
     transform:rotateY(180deg) rotateX(180deg);
     float:right;
