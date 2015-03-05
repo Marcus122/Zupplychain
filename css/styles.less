@@ -307,9 +307,31 @@
     background-color:@white;
     color:@dark-text;
     .unit-padding(2);
+    .unit-padding-bottom(4);
     border-radius:10px;
     .small-font;
+    blockquote{
+        margin-top:0px;
+    }
  }
+ 
+ .quote-box:before, .quote-box:after{
+    font-size:50px;
+    color:@primary;
+    .ion;
+  
+ }
+ 
+ .quote-box:before{
+    content: @ionicon-var-quote;
+ }
+ .quote-box:after{
+    content: @ionicon-var-quote;
+    transform:rotateY(180deg) rotateX(180deg);
+    float:right;
+ }
+ 
+ 
  
  .info-box{
     background-color:@light-grey;
