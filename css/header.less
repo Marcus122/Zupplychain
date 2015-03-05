@@ -1,0 +1,73 @@
+.logo{
+    max-width:100%;
+ }
+ 
+ .main-nav{
+    box-sizing:border-box;
+    background-color:@primary;
+    .unit-padding(0.5);
+    .small-font;
+    color:@light-text;
+    position:absolute;
+    right:0px;
+    bottom:0px;
+    border-radius:5px 5px 0px 0px;
+    li {
+        text-transform:uppercase;
+        .unit-padding-horizontal;
+    }
+ }
+ 
+ @media @mobile {
+    .main-nav{
+        width:100%;
+        position:fixed;
+        top:0px;
+        height:2.5em;
+        z-index:10;
+        border-radius:0px;
+        border-bottom:1px solid;
+        border-color:@secondary;
+    }
+ }
+ 
+ 
+ 
+ 
+ /** header elements **/
+ .contact-info{
+    float:right;
+    background-color:@secondary;
+    color:@light-text;
+    border-radius:0px 0px 5px 5px;
+    .unit-padding;
+    
+    span {
+        font-weight:bold;
+    }
+ }
+ 
+ @media @mobile {
+    .contact-info{
+        display:none;
+    }
+ }
+ 
+ .user-links{
+    float:right;
+    .unit-margin-right(2);
+    *{
+        margin-bottom:0px;
+        .small-font;
+    }
+ }
+ 
+ @media @mobile {  // Just some quick hacks for now until we sort a responsive header.
+    .user-links{
+        ul,p {
+            display:inline-block;
+        }
+    }
+ }
+ 
+ 
