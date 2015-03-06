@@ -31,7 +31,6 @@ then update the require script tag (in the scripts template) from this:
 To this:
 <script data-main="/js/dist/main.js" src="/js/app/require.js" type="application/javascript"/>
 
-At the moment we're getting a jQuery error but I'll fix this. likely to be a load order issue.... sorted by loading jquery locally rather than over CDN
 
 */
 
