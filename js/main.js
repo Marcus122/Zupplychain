@@ -13,7 +13,6 @@ require(["jquery"], function($) {
         
         if (onPage("search-results")){
             //require the page specific module for example;
-
         }
         
     }

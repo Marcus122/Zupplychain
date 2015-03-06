@@ -88,3 +88,60 @@
  }
  
  
+ // Very basic mobile nav.. will need some work
+ 
+ @media @mobile{
+    header .main-nav{
+        .unit-padding(0);
+        background-color:transparent;
+        height:52px;
+    }
+    
+    
+    
+    header {
+    
+        aside{
+            display:none;
+        }
+    
+        .logo{
+            width:160px;
+        }
+    
+    }
+    
+    .main-nav ul{
+        display:none;
+        .unit-padding(0);
+        border-bottom:2px solid  @secondary;
+    }
+    .main-nav:hover ul{
+        display:block;
+        .unit-padding-horizontal(0);
+        padding-top:52px;
+        overflow:hidden;
+        width:100%;
+        box-sizing:border-box;
+    }
+    .main-nav li:hover{
+            background-color:@secondary;
+            color:@primary;
+        }
+    .main-nav ul li{
+        display:block;
+        width:100%;
+        text-align:center;
+        background-color:@primary;
+        
+        a{
+            display:inline-block;width:100%;
+            .unit-padding();
+        }
+        
+    }
+ }
+ 
+ 
+ 
+ 
