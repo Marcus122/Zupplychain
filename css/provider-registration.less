@@ -2,16 +2,15 @@
 	.unit-margin-bottom(2);
 	.title{
 		background:@secondary;
-		.border-radius(10px,10px,10px,10px);
+		.border-radius(20px,20px,20px,20px);
 		color:@light-text;
 		h2{
 			font-weight:100;
 			display:inline;
 		}
-		padding: @unit-px @unit-px*4 @unit-px @unit-px*4;
+		padding: @unit-px*2 @unit-px*6 @unit-px*2 @unit-px*8;
 		button{
 			float:right;
-			margin-top:@unit-px;
 		}
 	}
 	p{
@@ -19,9 +18,28 @@
 		.border-radius(0,10px,10px,0);
 		display:inline-block;
 		padding: @unit-px/2 @unit-px;
-		.unit-margin-left(4);
+		.unit-margin-left(8);
 		button{
 			padding:0;
 		}
 	}
+}
+.provider-form label{
+	margin-right:5%;
+}
+.warehouse-details textarea{
+	display: block;
+	.border-radius(10px,10px,10px,10px);
+	.unit-margin-top(2);
+	width:100%;
+	height:@unit-px*14;
+}
+.documents{
+	border-top: @tertiary 1px solid;
+	border-bottom: @tertiary 1px solid;
+	padding: @unit-px 0;
+	line-height: 38px;
+}
+.documents input[type="file"]{
+	margin-top:@unit-px;
 }

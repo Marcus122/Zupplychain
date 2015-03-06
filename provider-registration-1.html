@@ -72,7 +72,7 @@
 						<li class="four columns">Step 3</li>
 					</ul>
 					<section class="tab-content">
-						<form method="post" action="/provider-registration-2">
+						<form method="post" action="/provider-registration-2" class="provider-form">
 							<div class="main">
 								<div class="content-box primary">
 									<div class="header">
@@ -116,26 +116,29 @@
 									<div class="header">
 										<h3>Warehouse details</h3>
 									</div>
-									<fieldset class="main">
+									<fieldset class="main warehouse-details">
 										<div class="inputField">
-											<label for="description">Warehouse Description*</label>
-											<textarea name="description"></textarea>
+											<label for="description">Warehouse Description</label>
+											<textarea name="description" placeholder="A short description about your warehouse"></textarea>
 										</div>
 										<p>Upload any profile images and or Quality assurance documents below.</p>
 										<div class="row documents">
-											<div class="columns six">
-												<label for="photos">Upload Warehouse Photos</label>
-												<input type="file" name="photos" id="photos"/>
+											<label  class="columns five" for="photos">Upload Warehouse Photos</label>
+											<input class="columns five" type="file" name="photos" id="photos"/>
+											<div class="columns one">
 												<button class="add-button"><span>add</span></button>
 											</div>
-											<div class="columns six">
-												<label for="docs">Upload Documents</label>
-												<select name="docs" id="docs">
-													<option>Insurance Certificate</option>
-													<option>ISO 90001/14001</option>
-													<option>Fire Safety/Sprinkle documentation</option>
-													<option>Operator License</option>
-												</select>
+										</div>
+										<div class="row documents">
+											<label class="columns two" for="docs">Upload Documents</label>
+											<select class="columns three" name="docs-type" id="docs">
+												<option>Insurance Certificate</option>
+												<option>ISO 90001/14001</option>
+												<option>Fire Safety/Sprinkle documentation</option>
+												<option>Operator License</option>
+											</select>
+											<input class="columns five" type="file" name="docs" id="docs"/>
+											<div class="columns one">
 												<button class="add-button"><span>add</span></button>
 											</div>
 										</div>
