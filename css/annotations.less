@@ -29,6 +29,7 @@ content:@ionicon-var-chatbox-working;
 
 }
 .annotation{
+    box-sizing:border-box;
     line-height:1.4em;
     font-family:@main-font-stack;
     display:none;
@@ -39,12 +40,15 @@ content:@ionicon-var-chatbox-working;
     .unit-padding(4);
     background-color:@blue;
     color:@white;
-    border:1px solid @secondary;
+    border-bottom:2px solid @secondary;
     width:100%;
     z-index:1000;
     p {
         color:@white;
     }
+    background-image:url('/images/weaveability-logo.png');
+    background-repeat:no-repeat;
+    background-position:bottom 0px right 0px;
 }
 .note:hover > .annotation{
     display:block;
