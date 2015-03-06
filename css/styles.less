@@ -336,7 +336,7 @@ span.highlight-bright{
  
     
 
- .side-header, .content-box.side-header {
+ .side-header, .content-box.side-header { //Section with the header as a tab off to one side rather than full width.
     > .header{
         padding:0px;
         background-color:transparent;
@@ -347,7 +347,7 @@ span.highlight-bright{
             color:@light-text;
             display:inline-block;
             .unit-padding-vertical;
-            .unit-padding-horizontal(4);
+            .unit-padding-horizontal(2);
             border-radius: 10px 10px 0px 0px;
         }
         
@@ -365,7 +365,7 @@ span.highlight-bright{
  
  }
  
- section.side-header{ //Section with the header as a tab off to one side rather than full width.
+ section.side-header{ 
  
     > .main{
         background-color:@primary;
@@ -527,7 +527,7 @@ span.highlight-bright{
     .controls{
         position:absolute;
         right:10px;right:1rem;
-        top:10px;top:1rem;
+        top:8px;top:0.8rem;
         button, ul{
             display:inline-block;
             .unit-margin-left;
@@ -535,6 +535,18 @@ span.highlight-bright{
             border-radius:5px;
             .unit-padding(0.5);
             text-transform:none;
+        }
+        a{
+            color:@secondary;
+            text-decoration:none;
+            .unit-margin-horizontal(0.5);
+        }
+        .next,.prev{
+            color:@primary;
+        }
+        .active{
+            border:1px solid;
+            border-radius:3px;
         }
         
     }
