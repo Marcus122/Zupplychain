@@ -1,0 +1,39 @@
+
+.content-box.map-container {
+    .main{
+        .unit-padding(0);
+        .inset-shadow;
+    }
+
+    .key {
+        em{
+            font-weight:bold;
+            text-style:normal;
+            .unit-margin-right(3);
+        }
+       
+        dl, dt, dd {
+            display:inline-block;
+        }
+        dd{
+            .unit-margin-left(1);
+            .unit-margin-right(3);
+        }
+        span{
+            font-size:20px;
+            height:30px;
+            width:30px;
+            display:inline-block;
+            background-color:@white;
+            text-align:center;
+            color:@secondary;
+            border-radius: 5px;
+        }
+        .cold {
+            color:@blue;
+        }
+        .hot {
+            color:@highlight;
+        }
+    }
+}

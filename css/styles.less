@@ -3,11 +3,14 @@
 @import "_ionicons-icons";
 @import "buttons";
 @import "forms";
-@import "home";
 @import "carousel";
 @import "tabs";
 @import "header";
 @import "footer";
+
+// Page specific sheets
+@import "home";
+@import "search-results";
 
  
  
@@ -25,6 +28,7 @@
  @highlight-bright: #EFA430;
  @light-text:#fff;
  @dark-text:#857668;
+ @blue:#37bbec;//user mainly for the pallet type = blue on the designs
  @valid-dark:#398439;
  @valid-light:#b5dfb5;
  @invalid-dark:#d43f3a;
@@ -164,6 +168,10 @@
      -webkit-box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.75);
     box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.75);
+ }
+ 
+ .inset-shadow{
+    box-shadow: inset 0px 0px 4px rgba(0,0,0,0.75);
  }
  
  .carbon-fibre-grad{
@@ -482,7 +490,14 @@ span.highlight-bright{
         .unit-padding(2);
         overflow:hidden;
         background-color:@white;
-    } 
+    }
+    //quick color override classes for content box headers footers and main's
+    > .primary{
+        background-color:@primary;  
+    }
+    > .secondary {
+        background-color:@secondary;
+    }
     
  }
  
