@@ -1,5 +1,6 @@
 
 .content-box.map-container {
+    position:relative;
     .main{
         .unit-padding(0);
         .inset-shadow;
@@ -41,29 +42,58 @@
 }
 
 
-
+.search-result{
+    position:absolute;
+    text-align:center;
+    background-color:@primary;
+    color:@white;
+    border-radius:10px;
+    font-size:24px;
+    font-size:2.4rem;
+    font-weight:600;
+    top:200px;
+    left:100px;
+    width:40px;width:4rem;
+    height:40px;height:4rem;
+}
 
 .search-result-info-box{
-    width:270px;
+    margin:0px;
+    width:290px;
     .small-font;
     position:absolute;
-    top:150px;left:170px; //testing
+    top:110px;left:170px; //testing
     background-color:@secondary;
     color:@light-text;
     .unit-padding(2);
     border-radius:10px;
     
+    h4 {
+        margin:0px;
+    }
+    p {
+        color:@light-grey;
+    }
     .info{
         position:absolute;
         right:0px;
         top:0px;
         .unit-padding-right(2);
-        .unit-padding-top(6);
+        .unit-padding-top(9);
+        > * {
+            .unit-margin-bottom(0.5);
+        }
+        
     }
     
+    .ratings{
+        font-size:16px;
+        font-size:1.6rem;
+    }
     
     hr{
         .unit-margin-vertical(1);
+        border-top-color:@light-grey;
     }
 
 
