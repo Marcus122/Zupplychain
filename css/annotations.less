@@ -21,6 +21,7 @@ To add a note use
     right:10px;
     color:@blue;
     cursor:help;
+    z-index:100;
     
 }
 .note:before{
@@ -41,6 +42,9 @@ content:@ionicon-var-chatbox-working;
     border:1px solid @secondary;
     width:100%;
     z-index:1000;
+    p {
+        color:@white;
+    }
 }
 .note:hover > .annotation{
     display:block;
