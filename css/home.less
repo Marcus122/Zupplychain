@@ -9,7 +9,7 @@
     .mini-content-box{
         text-align:center;
         h2 {
-            font-weight:normal;
+            font-weight:100;
             span {
                     font-weight:bold;
             }
@@ -18,11 +18,19 @@
  }
  
  .call-to-action .fill-your-warehouse{
-    background-image:url('../images/lorry.jpg')
+    background-image:url('../images/homepage-banner-1.png')
  
  }
  .call-to-action .find-warehouse-space{
-    background-image:url('../images/lorry.jpg')
+    background-image:url('../images/homepage-banner-2.png')
+ }
+ .content-box.secondary.match-your{
+	.header{
+		text-align:center;
+		min-height: 52px;
+		 .unit-padding-left(5);
+		 .unit-padding-right(5);
+	}
  }
  
  .content-box.what-is {
@@ -32,6 +40,7 @@
     > .header{
         h3 {
             font-weight:bold;
+			text-indent:@unit-px*4;
         }
         .unit-padding-top(2);
     }
@@ -49,7 +58,9 @@
   
  .testimonial-footer {
     h5 {
-        text-align:right
+        text-align:right;
+		font-weight: bold;
+		font-size: 22px;
     }
     blockquote {
         .small-font;
