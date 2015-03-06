@@ -375,10 +375,11 @@ span.highlight-bright{
  }
  
  section.tertiary{
-    background-color:@tertiary;
-    .unit-padding(4);
     .content-box{
         .unit-margin-bottom(4);
+    }
+    .main{
+        .unit-padding(4);
     }
  }
  
@@ -584,8 +585,42 @@ span.highlight-bright{
     }
  }
  
+ //the temperature icons used in various places
+ .icon-box {
+
+            font-size:20px;
+            height:30px;
+            width:30px;
+            display:inline-block;
+            background-color:@white;
+            text-align:center;
+            border-radius: 5px;
+
+}
+
+ .cold {
+     color:@blue;
+ }
+ .hot {
+      color:@highlight;
+ }
+
  table.simple{
     width:100%;
+ }
+ 
+ table.no-style{ //an unbordered table.
+    border:0px;
+    width:100%;
+    th {
+        text-align:left;
+    }
+    th,td{ 
+        border:0px;
+        background-color:transparent;
+        .unit-padding(0.5);
+    }
+    
  }
  
  blockquote{

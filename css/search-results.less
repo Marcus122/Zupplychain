@@ -19,22 +19,8 @@
             .unit-margin-left(1);
             .unit-margin-right(3);
         }
-        span{
-            font-size:20px;
-            height:30px;
-            width:30px;
-            display:inline-block;
-            background-color:@white;
-            text-align:center;
-            color:@secondary;
-            border-radius: 5px;
-        }
-        .cold {
-            color:@blue;
-        }
-        .hot {
-            color:@highlight;
-        }
+        
+
     }
 }
 
@@ -54,3 +40,31 @@
     }
 }
 
+
+
+
+.search-result-info-box{
+    width:270px;
+    .small-font;
+    position:absolute;
+    top:150px;left:170px; //testing
+    background-color:@secondary;
+    color:@light-text;
+    .unit-padding(2);
+    border-radius:10px;
+    
+    .info{
+        position:absolute;
+        right:0px;
+        top:0px;
+        .unit-padding-right(2);
+        .unit-padding-top(6);
+    }
+    
+    
+    hr{
+        .unit-margin-vertical(1);
+    }
+
+
+}
