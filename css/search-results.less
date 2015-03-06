@@ -14,7 +14,7 @@
     .key {
         em{
             font-weight:bold;
-            text-style:normal;
+            font-style:normal;
             .unit-margin-right(3);
         }
        
@@ -88,6 +88,12 @@
     
     h4 {
         margin:0px;
+        .selected {
+            color:@primary;
+            .unit-margin-left;
+        }
+        
+      
     }
     p {
         color:@light-grey;
@@ -121,5 +127,27 @@ right:0px;
 top:57px;
 border-radius: 0px;
 height:312px;
+width:320px;
 .inset-shadow;
+}
+
+.confirm-email{
+    text-align:left;
+    position:absolute;
+    left:0px;
+    top:0px;
+    .unit-padding-top(2);
+    .unit-padding-left(2);
+    width:auto;
+    display:inline-block;
+    label{
+        display:inline-block;
+        width:auto;
+        .unit-margin-right;
+        color:@light-text;
+    }
+    input {
+        width:200px;
+    }
+  
 }

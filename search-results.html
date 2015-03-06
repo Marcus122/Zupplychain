@@ -137,12 +137,12 @@
                                 Map results are selected by clicking on them, and the current result can be centered on the map.</p>
                             </div>
                         </div>
-                            <h4>Warehouse 2</h4>
+                            <h4>Warehouse 2<span class="selected ion-checkmark"></span></h4>
                             <p class="address">123 Bury New Road, Bur, BL1 1HG</p>
                             <hr/>
                             <img src="/images/warehouse-thumb.jpg" alt="an external view of a warehouse " />
                             <div class="info">
-                                <button class="action mini add">Add to quote</button>
+                                <button class="simple mini delete">Remove from quote</button>
                                 
                                 <div class="ratings">
                                     <span class="ion-android-star rating"><em class="sr-only">*</em></span>
@@ -199,6 +199,7 @@
                         <button class="action add">Add pallet</button>
                     </div>
                     <div class="main">
+                    <form class="storage-search">
                         <table class="simple">
                             <thead>
                                 <tr>
@@ -237,7 +238,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        
+                        </form>
                         
                         
                         
@@ -389,7 +390,12 @@
                 
                 </div>
             </div>
-            <div class="footer">
+            <div class="footer form-footer">
+                <form class="confirm-email">
+                    <label for="email">Your Email:</label>
+                    <input type="text" />
+                    <button class="primary input-button" type="submit">CONFIRM</button>
+                </form>
                 <button class="action large next">Continue</button>
             </div>
             </section>
