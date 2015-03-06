@@ -1,0 +1,47 @@
+/*
+
+CSS to style any annotations for demos.
+To add a note use
+
+<div class="note">
+    <div class="annotation">
+        <h2>Just a quick note</h2>
+        <p>With some info on this part of the page</p>
+    </div>
+</div>
+
+*/
+
+.note {
+    .ion;
+    width:20px;
+    height:20px;  
+    font-size:30px;
+    position:absolute;
+    right:10px;
+    color:@blue;
+    cursor:help;
+    
+}
+.note:before{
+content:@ionicon-var-chatbox-working;
+
+}
+.annotation{
+    line-height:1.4em;
+    font-family:@main-font-stack;
+    display:none;
+    position:fixed;
+    font-size:14px;
+    top:0px;
+    left:0px;
+    .unit-padding(4);
+    background-color:@blue;
+    color:@white;
+    border:1px solid @secondary;
+    width:100%;
+    z-index:1000;
+}
+.note:hover > .annotation{
+    display:block;
+}
