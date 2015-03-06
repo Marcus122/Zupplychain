@@ -29,3 +29,26 @@
 .tabs li.active{
 	background: @highlight;
 }
+.tabs {.four.columns { width: 30.6666666667%; }
+	.column,
+	.columns {
+		margin-left: 4%; 
+	}
+	.column.fat,
+	.columns.fat{
+		margin-left: 1%;
+	 }
+	.column:first-child,
+	.columns:first-child {
+		margin-left: 0; 
+	}
+}
+@media @mobile{
+	 .tabs{
+		.four.columns { width: 33%;  }
+		.column,
+		.columns {
+			margin-left: 0.5%; 
+		}
+	}
+}

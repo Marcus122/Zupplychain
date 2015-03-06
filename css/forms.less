@@ -1,5 +1,5 @@
 /* FORM STYLES */
- label{
+ .inputField label{
     display:block;
     width:100%;
  }
@@ -10,7 +10,17 @@
 input[type="email"], input[type="number"], input[type="search"], input[type="text"], input[type="tel"], input[type="url"], input[type="date"], input[type="password"]{
 	.border-radius(2px,2px,2px,2px);
 }
- 
+input[type="checkbox"]{
+	width:auto;
+	width:@unit-px*2;
+	height:@unit-px*2;
+}
+.checbox label{
+	width:auto;
+}
+ td input,td select{
+	width:100%;
+ }
  .input-field{
     .unit-margin-bottom(2);
     
@@ -78,7 +88,8 @@ input[type="email"], input[type="number"], input[type="search"], input[type="tex
 	color:@light-text;
 }
 .form-footer button{
-	margin:0 @unit-px;
+	margin-left: @unit-px;
+	margin-right: @unit-px;
 }
 .form-footer button.back{
 	float:left;
@@ -87,7 +98,11 @@ input[type="email"], input[type="number"], input[type="search"], input[type="tex
 .form-footer button.back:hover{
 	color:@light-text;
 }
-
+@media @mobile {
+	.form-footer{
+		text-align:center;
+	}
+}
 /* Specific forms */
 
 .storage-search{
@@ -133,9 +148,11 @@ input[type="email"], input[type="number"], input[type="search"], input[type="tex
 
 }
  @media only screen and (min-width:768px){ /* Bigger screens */
-    label
+    .inputField label
         {display:inline-block;width:25%;vertical-align: middle;}
-    input   {width:70%;}
+	.inputField input{
+		width:70%;
+	}
     select {width:70%;}
     .input-field .messages{
         padding-left:25%;

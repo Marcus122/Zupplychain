@@ -58,91 +58,70 @@
             
 			<main>
 				<div class="row carousel">
-					<img src="/images/provider-banner.png" alt="Continue your registration"/>
+					<img src="/images/provider-banner.png" alt="Complete your registration"/>
 					<h1 class="title large-font">
-						<span>Continue your</span>
+						<span>Complete your</span>
 						<br/>
 						registration
 					</h1>
-					<p class="desc medium-font">Continue your registration &amp; help customers choose your warehouse</p>
+					<p class="desc medium-font">Complete your registration &amp; help customers choose your warehouse</p>
 				</div>
 				<div class="row">
 					<ul class="tabs">
 						<li class="four columns checked">Step 1</li>
-						<li class="four columns active checked">Step 2</li>
-						<li class="four columns">Step 3</li>
+						<li class="four columns checked">Step 2</li>
+						<li class="four columns active checked">Step 3</li>
 					</ul>
 					<section class="tab-content">
 						<form method="post" action="/provider-registration-3.html">
 							<div class="main">
 								<div class="content-box primary">
 									<div class="header">
-										<h3>Define your space</h3>
+										<h3>Price and availability</h3>
 									</div>
 									<fieldset class="main">
-										<p class="new-pallet">
-											<span class="primary">Add new pallet</span>
-											<button class="add-button"><span>add</span></button>
-										</p>
-										<table class="max define-space">
+										<table class="max price-and-availability">
 											<thead>
 												<tr>
 													<th>Storage Name</th>
-													<th>Pallet Type</th>
-													<th>Storage Temp</th>
-													<th>Max Weight</th>
-													<th>Max Height</th>
-													<th>Pallet Spaces</th>
-													<th><img src="../images/delete.png" alt="delete"/></th>
+													<th>Price per week*</th>
+													<th>Handling charge*</th>
+													<th>Availabile pallets</th>
 												</tr>
 											</thead>
 											<tbody>
 												<tr>
 													<td class="text">
+														<span>Pallet One</span>
+													</td>
+													<td>
 														<input type="text"/>
 													</td>
-													<td class="select">
-														<select>
-															<option>Blue</option>
-															<option>Euro</option>
-															<option>Standard</option>
-															<option>Ano</option>
-															<option>Other</option>
-															<option>Any</option>
-														</select>
-													</td>
-													<td class="select">
-														<select>
-															<option>Ambient</option>
-															<option>Chilled</option>
-															<option>Frozen</option>
-															<option>Outside</option>
-															<option>Other</option>
-														</select>
-													</td>
-													<td class="value">
+													<td>
 														<input type="text"/>
 													</td>
-													<td class="value">
+													<td>
 														<input type="text"/>
-													</td>
-													<td class="value">
-														<input type="text"/>
-													</td>
-													<td class="action">
-														<button href="#" class="trash-button"><span>Delete</span></button>
 													</td>
 												</tr>
 											</tbody>
 										</table>
+										<div class="row">
+											<div class="columns six checkbox">
+												<input type="checkbox" name="accept" id="accept"/>
+												<label for="accept">*I accept that the ZupplyChain commission is x%.</label>
+											</div>
+											<div class="columns six">
+												<button href="#" class="tertiary forward mini">View Terms &amp; Conditions</button>
+												<button href="#" class="view-list tertiary forward mini">View list of Documentation</button>
+											</div>
+										</div>
 									</fieldset>
 								</div>
 							</div>
 							<fieldset class="form-footer">
 								<button class="back">Back</button>
-								<button class="action">Save</button>
-								<span>OR</span>
-								<button class="action next">Save &amp; Continue</button>
+								<button class="action next">Save &amp; Finish</button>
 							</fieldset>
 						</form>
 					</section>
