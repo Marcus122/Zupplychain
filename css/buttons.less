@@ -22,6 +22,9 @@
     .unit-padding-horizontal(1);
     border-radius:4px;
  }
+ button.medium{
+	font-size: 22px;
+ }
  button.large{
 	font-size:30px;
 	.unit-padding-vertical(0.5);
@@ -88,7 +91,7 @@ button.tertiary:after, button.tertiary:before{
  
  /* buttons with icons */
  button.add-button:after, button.trash-button:after, button.next:after, button.forward:after, button.cancel:after, button.undo:after, button.pending:after, button.refresh:after,button.add:after,
- button.success:after, button.error:after, button.edit:after, button.down:after, button.config:after,button.go:after{
+ button.success:after, button.error:after, button.edit:after, button.down:after, button.config:after,button.go:after,button.dropdown:after{
     .ion;
     .unit-margin-left;
     
@@ -169,7 +172,9 @@ button.go:after{
     .unit-padding;
     .unit-margin-top;
 }
-
+button.dropdown:after{
+	content:@ionicon-var-chevron-down;
+}
 button.back:before{
     content:@ionicon-var-android-arrow-back;
 }
