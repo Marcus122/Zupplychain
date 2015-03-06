@@ -54,6 +54,21 @@
     }
 }
 
+
+.note {
+    .ion;
+    width:20px;
+    height:20px;
+    font-size:30px;
+    position:absolute;
+    right:10px;
+    color:@blue;
+    cursor:help;
+}
+.note:before{
+content:@ionicon-var-chatbox-working;
+
+}
 .annotation{
     display:none;
     position:fixed;
@@ -65,6 +80,6 @@
     border:1px solid @secondary;
     width:100%;
 }
-*:hover > .annotation{
+.note:hover > .annotation{
     display:block;
 }
