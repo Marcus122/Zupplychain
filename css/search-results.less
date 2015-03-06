@@ -37,3 +37,34 @@
         }
     }
 }
+
+.search-results {
+    td, th {
+        text-align:center;
+    }
+    th{
+        text-transform:uppercase;
+    }
+    td:nth-child(9){
+        background-color:@very-light-grey;
+    }
+    td:nth-child(10),th:nth-child(10){
+        .highlight-grad;
+    
+    }
+}
+
+.annotation{
+    display:none;
+    position:fixed;
+    top:0px;
+    left:0px;
+    .unit-padding(4);
+    background-color:@white;
+    color:@primary;
+    border:1px solid @secondary;
+    width:100%;
+}
+*:hover > .annotation{
+    display:block;
+}
