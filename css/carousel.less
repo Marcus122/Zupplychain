@@ -3,18 +3,25 @@
 	margin-bottom:@unit-px*2;
 }
 .carousel .title{
-	background:  @primary;
+	background:  @primary url('../images/green-tiled.png') 0 0 repeat-y;
 	opacity:0.9;
 	display:inline-block;
 	position:absolute;
 	left:0;
-	top:30%;
+	top:20%;
 	color:@light-text;
-	padding:@unit-px*2 @unit-px*8;
+	padding:@unit-px*3 @unit-px*12;
 	text-transform:uppercase;
+	.border-radius(@unit-px,@unit-px,0,0);
+	font-weight:bold;
+	font-weight:100;
 }
 .carousel .title span{
 	font-weight:bold;
+}
+.carousel .title .medium-font{
+	font-weight:100;
+	display: inherit;
 }
 .carousel .desc{
 	background: @secondary;

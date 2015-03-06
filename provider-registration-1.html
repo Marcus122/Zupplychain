@@ -57,95 +57,99 @@
 				<div class="row carousel">
 					<img src="/images/provider-banner.png" alt="Start your registration"/>
 					<h1 class="title large-font">
-						<span>Zupplychain</span>
-						<br/>here to match your<span class="medium-font">warehouse space to potential customers</span>
+						<span>Start your</span>
+						<br/>
+						registration
 					</h1>
+					<p class="desc medium-font">Finish your registration &amp; help customers choose your warehouse</p>
 				</div>
-				<section class="start-selling">
-					<div class="title">
-						<h2 class="largest-font">Start selling your space now</h2>
-						<a href="/provider-registration-2"><button class="action large forward">Click here</button></a>
-					</div>
-					<p>Are you looking for pallet storage <button class="forward">Click here</button></p>
-				</section>
 				<div class="row">
-					<div class="six columns fat">
-						<div class="content-box secondary match-your">
+					<ul class="tabs">
+						<li class="four columns active checked">Step 1</li>
+						<li class="four columns">Step 2</li>
+						<li class="four columns">Step 3</li>
+					</ul>
+					<section class="tab-content">
+						<form method="post" action="/provider-registration-2">
 							<div class="main">
-								<div class="content-box info what-is">
+								<div class="content-box primary">
 									<div class="header">
-										<h3>What is Zupply chain?</h3>
+										<h3>Contact Information</h3>
 									</div>
-									<div class="main">
-										<ul class="large-bullets">
-											<li>Offer space to customers</li>
-											<li>Grow your business</li>
-											<li>Lorem ipsum</li>
-											<li>Dolor sit</li>
-										</ul>
-										
-									</div>
-									<div class="footer">
-										<button class="simple forward mini">MORE</button>
-									</div>
+									<fieldset class="main">
+										<div class="columns six">
+											<div class="inputField">
+												<label for="warehouseName">Warehouse Name*</label><input type="text" name="warehouse" id="warehouseName" required/>
+											</div>
+											<div class="inputField">
+												<label for="addressLine1">Address Line 1*</label><input type="text" name="addressLine1" id="addressLine1" required/>
+											</div>
+											<div class="inputField">
+												<label for="addressLine2">Address Line 2</label><input type="text" name="addressLine2" id="addressLine2"/>
+											</div>
+											<div class="inputField">
+												<label for="city">Town/City*</label><input type="text" name="city" id="city" required/>
+											</div>
+											<div class="inputField">
+												<label for="postcode">Postcode</label><input type="text" name="postcode" id="postcode"/>
+											</div>
+										</div>
+										<div class="columns six">
+											<div class="inputField">
+												<label for="name">Contact Name*</label><input type="text" name="name" id="name" required/>
+											</div>
+											<div class="inputField">
+												<label for="telephone">Telephone*</label><input type="tel" name="telephone" id="telephone" required/>
+											</div>
+											<div class="inputField">
+												<label for="mobile">Mobile</label><input type="tel" name="mobile" id="mobile"/>
+											</div>
+											<div class="inputField">
+												<label for="email">Email*</label><input type="email" name="email" id="email" required/>
+											</div>
+										</div>
+									</fieldset>
 								</div>
-							</div>
-						</div>
-					</div>
-					<div class="six columns fat">
-						<div class="content-box secondary match-your">
-							<div class="main">
-								<div class="content-box info  what-is">
+								<div class="content-box primary">
 									<div class="header">
-										<h3>What is Zupply chain?</h3>
+										<h3>Warehouse details</h3>
 									</div>
-									<div class="main">
-										<ul class="large-bullets">
-											<li>Offer space to customers</li>
-											<li>Grow your business</li>
-											<li>Lorem ipsum</li>
-											<li>Dolor sit</li>
-										</ul>
-										
-									</div>
-									<div class="footer">
-										<button class="simple forward mini">MORE</button>
-									</div>
+									<fieldset class="main">
+										<div class="inputField">
+											<label for="description">Warehouse Description*</label>
+											<textarea name="description"></textarea>
+										</div>
+										<p>Upload any profile images and or Quality assurance documents below.</p>
+										<div class="row documents">
+											<div class="columns six">
+												<label for="photos">Upload Warehouse Photos</label>
+												<input type="file" name="photos" id="photos"/>
+												<button class="add-button"><span>add</span></button>
+											</div>
+											<div class="columns six">
+												<label for="docs">Upload Documents</label>
+												<select name="docs" id="docs">
+													<option>Insurance Certificate</option>
+													<option>ISO 90001/14001</option>
+													<option>Fire Safety/Sprinkle documentation</option>
+													<option>Operator License</option>
+												</select>
+												<button class="add-button"><span>add</span></button>
+											</div>
+										</div>
+									</fieldset>
 								</div>
+								<p>*Required Fields</p>
 							</div>
-						</div>
-					</div>
+							<fieldset class="form-footer">
+								<button class="action">Save</button>
+								<span>OR</span>
+								<button class="action next">Save &amp; Continue</button>
+							</fieldset>
+						</form>
+					</section>
 				</div>
-				<div class="banner">
-					<h3>Testimonials</h3>
-					<div class="row">
-					<div class="three columns fat">
-						<div class="quote-box quotes">
-							<blockquote>Lorem Ipsums dolor sit amet, this is some quote text from a customer who was very impressed with the service. Lorem Ipsums dolor sit amet, this is some quote text from a customer who was very impressed with the service.</blockquote>
-							<span>Joe Blogs, Company A</span>
-						</div>
-					</div>
-					<div class="three columns fat">
-						<div class="quote-box quotes">
-							<blockquote>Lorem Ipsums dolor sit amet, this is some quote text from a customer who was very impressed with the service. Lorem Ipsums dolor sit amet, this is some quote text from a customer who was very impressed with the service.</blockquote>
-							<span>Joe Blogs, Company A</span>
-						</div>
-					</div>
-					<div class="three columns fat">
-						<div class="quote-box quotes">
-							<blockquote>Lorem Ipsums dolor sit amet, this is some quote text from a customer who was very impressed with the service. Lorem Ipsums dolor sit amet, this is some quote text from a customer who was very impressed with the service.</blockquote>
-							<span>Joe Blogs, Company A</span>
-						</div>
-					</div>
-					<div class="three columns fat">
-						<div class="quote-box quotes">
-							<blockquote>Lorem Ipsums dolor sit amet, this is some quote text from a customer who was very impressed with the service. Lorem Ipsums dolor sit amet, this is some quote text from a customer who was very impressed with the service.</blockquote>
-							<span>Joe Blogs, Company A</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			</main>   
+			</main>
         </div>
 		<footer>
 			<div class="row container">
