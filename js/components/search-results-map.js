@@ -46,26 +46,20 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
               
               var thisMarker = new google.maps.Marker(thisMarkerOptions);
               setMarkerOnClick(map, thisMarker, markers, data[i], highlightIcon, normalIcon);
+               
               thisMarker.index = i;
               markers.push(thisMarker);
           }
           
         }
         
-        function select(index) {
-            //activate the marker,
-            //load the data,
-        }
         
-        //TODO : move this to select and add a call.
-        function setMarkerOnClick(map, marker, markers, data, highlightIcon, normalIcon) {
-            google.maps.event.addListener(marker, 'click', function() {
-                map.panTo(marker.getPosition());
-                loadWarehouseData(data);
-                unsetMarkers(markers, normalIcon);
-                marker.setIcon(highlightIcon);
-                
-            });
+        function select(index, map, marker, markers, data, highlightIcon, normalIcon) {
+            
+            map.panTo(marker.getPosition());
+            unsetMarkers(markers, normalIcon);
+            loadWarehouseData(data);
+            marker.setIcon(highlightIcon);
             
             function unsetMarkers(markers, normalIcon){
                 var lim = markers.length;
@@ -73,6 +67,16 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
                     markers[i].setIcon(normalIcon);
                 }
             }
+            
+        }
+        
+        //TODO : move this to select and add a call.
+        function setMarkerOnClick(map, marker, markers, data, highlightIcon, normalIcon) {
+            google.maps.event.addListener(marker, 'click', function() {
+                select(marker.index, map, marker, markers, data, highlightIcon, normalIcon);
+            });
+            
+            
             
         }
         

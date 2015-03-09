@@ -1,10 +1,17 @@
 
 .content-box.map-container {
     position:relative;
+    .header{
+        background-color:@secondary;
+    }
     .main{
         .unit-padding(0);
         .inset-shadow;
     }
+    .footer{
+    
+        border-radius:0px 0px 10px 10px;
+   }
     small{
         .unit-margin-left(2);
         .unit-padding-top(0.5);
@@ -30,7 +37,7 @@
     }
 }
 
-.search-results {
+.content-box.search-results {
     td, th {
         text-align:center;
     }
@@ -47,6 +54,10 @@
     table{
         .unit-margin-top(2);
     }
+    .header{
+        background-color:@secondary;
+    }
+    
 }
 
 
@@ -81,11 +92,13 @@
     .small-font;
     position:absolute;
     top:90px;left:170px; //testing
-    background-color:@secondary;
+    background-color:fade(darken(@secondary,10%),90%);
     color:@light-text;
     .unit-padding(2);
     border-radius:10px;
-    
+    em{
+        font-style:normal;
+    }
     h4 {
         margin:0px;
         .selected {
@@ -120,6 +133,9 @@
     hr{
         .unit-margin-vertical(1);
         border-top-color:@light-grey;
+    }
+    button.simple:hover{
+        color:@primary;
     }
 }
 

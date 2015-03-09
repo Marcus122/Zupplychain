@@ -30,6 +30,15 @@ require(["jquery"], function($) {
                     rating: 2, 
                     imageURL : "/images/warehouse-thumb2.jpg"
                     
+                },
+                {
+                    latitude : 53.590,
+                    longitude:-2.325,
+                    name:"Warehouse 3",
+                    address: "102 Test Road, BL8 8TH", 
+                    rating: 2, 
+                    imageURL : "/images/warehouse-thumb.jpg"
+                    
                 }
                 ]
                 
