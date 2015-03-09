@@ -12,4 +12,60 @@
 			width:100%;
 		 }
 	}
+	.calendar {
+		.header {
+			overflow:hidden;
+			h2{
+				display:inline-block;
+				float:left;
+			}
+			a{
+				float:right;
+				line-height:37px;
+			}
+		}
+	}
+	.reports{
+		select{
+			width:100%;
+			border:1px solid @primary;
+		}
+		.space-filled{
+			text-align:center;
+			.value{
+				font-size:140px;
+				font-size:14rem;
+				color: @highlight;
+			}
+		}
+	}
+	.notifications-table{
+		.header{
+			text-align:right;
+		}
+		table{
+			width:100%;
+			.border-radius(0,10px,10px,0);
+		}
+		td,th{
+			background: @white;
+			border:2px solid @primary;
+			text-align:center;
+		}
+		th{
+			border-top:0;
+		}
+		tr:last-child td{
+			border-bottom:0;
+		}
+		td:first-child, th:first-child{
+			border-left:0;
+		}
+		td:last-child, th:last-child{
+			border-right:0;
+		}
+		.desc{
+			text-align:left;
+		}
+	}
 }
