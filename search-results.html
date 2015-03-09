@@ -16,6 +16,8 @@
         
         <link rel="stylesheet/less" type="text/css" href="css/styles.less" />
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,700italic,400,600,700,800,300' rel='stylesheet' type='text/css'>
+        <script src="js/static/less.min.js" type="text/javascript"></script>
+        <script data-main="/js/app" src="/js/require.js"></script>
     </head>
     <body>
         <!--[if lt IE 8]>
@@ -126,10 +128,8 @@
                         <h2><em>1. Map</em> Results<small>Click to view details</small></h2>
                     </div>
                     <div class="main">
-                        <img src="/images/map-test.png" alt="test image google maps" style="max-width:100%;"/>
-                        <div class="search-result">1</div>
-                        <div class="search-result two active">2</div>
-                        <div class="search-result-info-box fixed">
+                        <div id="map-container">Map loading...</div>
+                        <div class="search-result-info-box fixed" id="search-results-info">
                         <div class="note">
                             <div class="annotation">
                                 <aside>Tom</aside>
@@ -138,21 +138,21 @@
                                 Map results are selected by clicking on them, and the current result can be centered on the map.</p>
                             </div>
                         </div>
-                            <h4>Warehouse 2<span class="selected ion-checkmark"></span></h4>
-                            <p class="address">123 Bury New Road, Bur, BL1 1HG</p>
+                            <h4 class="js-name">Warehouse 2<span class="selected ion-checkmark"></span></h4>
+                            <p class="address js-address">123 Bury New Road, Bur, BL1 1HG</p>
                             <hr/>
-                            <img src="/images/warehouse-thumb.jpg" alt="an external view of a warehouse " />
+                            <img class="js-image" src="/images/warehouse-thumb.jpg" alt="an external view of a warehouse " />
                             <div class="info">
                                 <button class="simple mini delete">Remove from quote</button>
                                 
-                                <div class="ratings">
+                                <div class="ratings js-rating">
                                     <span class="ion-android-star rating"><em class="sr-only">*</em></span>
                                     <span class="ion-android-star rating"><em class="sr-only">*</em></span>
                                     <span class="ion-android-star rating"><em class="sr-only">*</em></span>
                                     <span class="ion-android-star rating"><em class="sr-only">*</em></span>
                                     <span class="ion-android-star rating"><em class="sr-only">*</em></span>
                                 </div>
-                                <div class="temperatures">
+                                <div class="temperatures js-temperatures">
                                     <span class="ion-thermometer cold icon-box"></span>
                                     <span class="ion-thermometer hot icon-box"></span>
                                     <span class="ion-ios-snowy cold icon-box"></span>
@@ -452,7 +452,7 @@
             
         </div>
         
-         <script src="js/static/less.min.js" type="text/javascript"></script>
+         
                
        
     </body>

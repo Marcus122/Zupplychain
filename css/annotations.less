@@ -13,19 +13,20 @@ To add a note use
 */
 
 .note {
+    
     .ion;
     width:20px;
     height:20px;  
     font-size:30px;
-    position:absolute;
     right:10px;
     color:@blue;
     cursor:help;
     z-index:100;
-    
+    display:none;
 }
 .note:before{
 content:@ionicon-var-chatbox-working;
+display:none;
 
 }
 
@@ -40,6 +41,7 @@ content:@ionicon-var-chatbox-working;
     font-size:14px;
     top:0px;
     left:0px;
+     
 
     background-color:@blue;
     color:@white;
