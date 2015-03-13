@@ -337,9 +337,15 @@ span.highlight-bright{
     }
  }
  
+ 
+  .side-header, .content-box.side-header {
+    > .header {
+        background-color:@secondary;
+    }
+ }
     
-
- .side-header, .content-box.side-header { //Section with the header as a tab off to one side rather than full width.
+ @media @non-mobile{
+    .side-header, .content-box.side-header { //Section with the header as a tab off to one side rather than full width.
     > .header{
         padding:0px;
         background-color:transparent;
@@ -367,6 +373,17 @@ span.highlight-bright{
     }
  
  }
+ 
+ 
+ }
+ 
+ .side-header{
+    > .header {
+        background-color:@secondary;
+    }
+ }
+
+ 
  
  section.side-header{ 
  
