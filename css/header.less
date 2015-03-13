@@ -80,16 +80,16 @@
  @media @mobile{
     header .main-nav{
         .unit-padding(0);
-		padding-top:30px;
-		background:#9bc11f;
+		padding-top:40px;
 		height: 0;
 		overflow: hidden;
 		transition: 0.5s all;
 		width:100%;
         position:fixed;
-        top:50px;
+        top:10px;
         z-index:10;
         border-radius:0px;
+		background-color: transparent;
 	}
     header .main-nav:after{
 		content:@ionicon-var-navicon-round;
@@ -99,9 +99,10 @@
 		top:2px;
 		.ion;
 		font-size: 24px;
+		color: #9bc11f;
 	}
 	 header .main-nav:hover{
-		height: 240px;
+		height: 249px;
 	 }
     header {
     
