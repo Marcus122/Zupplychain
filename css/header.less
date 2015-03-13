@@ -25,19 +25,6 @@
     }
  }
  
- @media @mobile {
-    .main-nav{
-        width:100%;
-        position:fixed;
-        top:0px;
-        height:2.5em;
-        z-index:10;
-        border-radius:0px;
-        border-bottom:1px solid;
-        border-color:@secondary;
-    }
- }
- 
  
  header .container{
     position:relative;
@@ -93,12 +80,29 @@
  @media @mobile{
     header .main-nav{
         .unit-padding(0);
-        background-color:transparent;
-        height:52px;
-    }
-    
-    
-    
+		padding-top:30px;
+		background:#9bc11f;
+		height: 0;
+		overflow: hidden;
+		transition: 0.5s all;
+		width:100%;
+        position:fixed;
+        top:50px;
+        z-index:10;
+        border-radius:0px;
+	}
+    header .main-nav:after{
+		content:@ionicon-var-navicon-round;
+		color:@white;
+		position:absolute;
+		right:10px;
+		top:2px;
+		.ion;
+		font-size: 24px;
+	}
+	 header .main-nav:hover{
+		height: 240px;
+	 }
     header {
     
         aside{
@@ -115,11 +119,13 @@
         display:none;
         .unit-padding(0);
         border-bottom:2px solid  @secondary;
+        border-top:2px solid  @secondary;
+		display:block;
+		font-size: 16px;
     }
     .main-nav:hover ul{
-        display:block;
         .unit-padding-horizontal(0);
-        padding-top:52px;
+        /*padding-top:52px;*/
         overflow:hidden;
         width:100%;
         box-sizing:border-box;
@@ -133,10 +139,9 @@
         width:100%;
         text-align:center;
         background-color:@primary;
-        
         a{
             display:inline-block;width:100%;
-            .unit-padding();
+            .unit-padding-vertical();
         }
         
     }
