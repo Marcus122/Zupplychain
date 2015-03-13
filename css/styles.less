@@ -670,5 +670,19 @@ span.highlight-bright{
 	}
  }
  
- 
+@media @mobile{
+	.responsive-table{
+		thead,th{
+			display: none;
+		}
+		table,tr , td, tbody{
+			display:block;
+			margin:0;
+			width: auto !important;
+		}
+		td:before{
+		  content: attr(data-th)": ";
+		}
+	}
+}
  
