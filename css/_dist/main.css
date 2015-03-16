@@ -6,8 +6,8 @@ MIT License: https://github.com/driftyco/ionicons
 */
 @font-face {
   font-family: "Ionicons";
-  src: url("../fonts/ionicons.eot?v=2.0.0");
-  src: url("../fonts/ionicons.eot?v=2.0.0#iefix") format("embedded-opentype"), url("../fonts/ionicons.ttf?v=2.0.0") format("truetype"), url("../fonts/ionicons.woff?v=2.0.0") format("woff"), url("../fonts/ionicons.svg?v=2.0.0#Ionicons") format("svg");
+  src: url("/fonts/ionicons.eot?v=2.0.0");
+  src: url("/fonts/ionicons.eot?v=2.0.0#iefix") format("embedded-opentype"), url("/fonts/ionicons.ttf?v=2.0.0") format("truetype"), url("/fonts/ionicons.woff?v=2.0.0") format("woff"), url("/fonts/ionicons.svg?v=2.0.0#Ionicons") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -3475,7 +3475,7 @@ form.storage-search .inputField.checkbox input {
   overflow: hidden;
 }
 .carousel .title {
-  background: #9bc11f url('../images/green-tiled.png') 0 0 repeat-y;
+  background: #9bc11f url('/images/green-tiled.png') 0 0 repeat-y;
   opacity: 0.95;
   display: inline-block;
   position: absolute;
@@ -3507,7 +3507,7 @@ form.storage-search .inputField.checkbox input {
   display: inherit;
 }
 .carousel .desc {
-  background: #6a6666 url('../images/grey-tiled-flip.png') 100% 0 repeat-y;
+  background: #6a6666 url('/images/grey-tiled-flip.png') 100% 0 repeat-y;
   margin: 0;
   padding: 20px;
   color: #ffffff;
@@ -3631,18 +3631,6 @@ form.storage-search .inputField.checkbox input {
 .main-nav a:hover {
   text-decoration: underline;
 }
-@media only screen and (max-width: 549px) {
-  .main-nav {
-    width: 100%;
-    position: fixed;
-    top: 0px;
-    height: 2.5em;
-    z-index: 10;
-    border-radius: 0px;
-    border-bottom: 1px solid;
-    border-color: #6a6666;
-  }
-}
 header .container {
   position: relative;
 }
@@ -3701,8 +3689,39 @@ header aside {
     padding-top: 0rem;
     padding-bottom: 0px;
     padding-bottom: 0rem;
+    padding-top: 40px;
+    height: 0;
+    overflow: hidden;
+    transition: 0.5s all;
+    width: 100%;
+    position: fixed;
+    top: 10px;
+    z-index: 10;
+    border-radius: 0px;
     background-color: transparent;
-    height: 52px;
+  }
+  header .main-nav:after {
+    content: "\f20d";
+    color: #fefefe;
+    position: absolute;
+    right: 10px;
+    top: 2px;
+    display: inline-block;
+    font-family: "Ionicons";
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    text-rendering: auto;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 24px;
+    color: #9bc11f;
+  }
+  header .main-nav:hover {
+    height: 249px;
   }
   header aside {
     display: none;
@@ -3721,14 +3740,16 @@ header aside {
     padding-bottom: 0px;
     padding-bottom: 0rem;
     border-bottom: 2px solid #6a6666;
+    border-top: 2px solid #6a6666;
+    display: block;
+    font-size: 16px;
   }
   .main-nav:hover ul {
-    display: block;
     padding-left: 0px;
     padding-left: 0rem;
     padding-right: 0px;
     padding-right: 0rem;
-    padding-top: 52px;
+    /*padding-top:52px;*/
     overflow: hidden;
     width: 100%;
     box-sizing: border-box;
@@ -3746,10 +3767,6 @@ header aside {
   .main-nav ul li a {
     display: inline-block;
     width: 100%;
-    padding-left: 10px;
-    padding-left: 1rem;
-    padding-right: 10px;
-    padding-right: 1rem;
     padding-top: 10px;
     padding-top: 1rem;
     padding-bottom: 10px;
@@ -3835,7 +3852,7 @@ footer .latest-tweet .author {
 }
 .call-to-action .columns .mini-content-box {
   text-align: center;
-  background-image: url('../images/green-tiled.png');
+  background-image: url('/images/green-tiled.png');
   background-position: 0 0 ;
   background-repeat: repeat-y;
 }
@@ -3846,10 +3863,10 @@ footer .latest-tweet .author {
   font-weight: bold;
 }
 .call-to-action .fill-your-warehouse {
-  background-image: url('../images/homepage-banner-1.png');
+  background-image: url('/images/homepage-banner-1.png');
 }
 .call-to-action .find-warehouse-space {
-  background-image: url('../images/homepage-banner-2.png');
+  background-image: url('/images/homepage-banner-2.png');
 }
 .content-box.secondary.match-your .header {
   text-align: center;
@@ -4174,6 +4191,7 @@ footer .latest-tweet .author {
   border-bottom-left-radius: 20px;
   border-top-left-radius: 20px;
   color: #ffffff;
+  overflow: hidden;
   padding: 20px 60px 20px 80px;
 }
 .start-selling .title h2 {
@@ -4283,7 +4301,7 @@ footer .latest-tweet .author {
   }
 }
 .dashboard section > .header {
-  background-image: url('../images/grey-tiled.png');
+  background-image: url('/images/grey-tiled.png');
   background-position: 0 0;
   background-repeat: repeat-y;
 }
@@ -4518,6 +4536,7 @@ header {
   position: fixed;
   width: 100%;
   background: #fff;
+  top: 0;
 }
 footer {
   background-color: #6a6666;
@@ -5105,6 +5124,23 @@ table {
 }
 @media only screen and (max-width: 549px) {
   main {
-    margin-top: 52px;
+    margin-top: 80px;
+  }
+}
+@media only screen and (max-width: 549px) {
+  .responsive-table thead,
+  .responsive-table th {
+    display: none;
+  }
+  .responsive-table table,
+  .responsive-table tr,
+  .responsive-table td,
+  .responsive-table tbody {
+    display: block;
+    margin: 0;
+    width: auto !important;
+  }
+  .responsive-table td:before {
+    content: attr(data-th) ": ";
   }
 }
