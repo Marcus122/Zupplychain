@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "dependencies": {
     "express": "*",
-    "less": "*"
+    "less": "*",
+	"body-parser": "*",
+	"morgan":"*"
   },
   "devDependencies": {
     "ejs": "^2.3.1",
