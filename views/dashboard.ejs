@@ -1,0 +1,122 @@
+        <% include ./partials/top %>            
+			<main class="dashboard">
+				<div class="row">
+					<section>
+						<div class="header">	
+							<h1 class="largest-font">Dashboard</h1>
+							<ul class="row dashboard-nav">
+								<li class="columns three">
+									<button class="action medium dropdown">My Account</button>
+								</li>
+								<li class="columns three">
+									<button class="action medium dropdown">Reports</button>
+								</li>
+								<li class="columns three">
+									<button class="action medium dropdown">Customers</button>
+								</li>
+								<li class="columns three">
+									<button class="action medium dropdown">Warehouse</button>
+								</li>
+							</ul>
+						</div>
+					</section>
+					<section>
+						<div class="main">
+							<div class="content-box primary calendar">
+								<div class="header">
+									<h2><strong>Quick view</strong> Calendar</h2>
+									<a href="#">View FULL Calendar &gt;</a>
+								</div>
+								<div class="main">
+									<button class="action go">Make a <br/><stong>Manual booking</strong></button>
+								</div>
+							</div>
+						</div>
+					</section>
+					<section class="reports">
+						<div class="header">	
+							<h2>Reports at a glance...</h2>
+						</div>
+						<div class="row main">
+							<div class="content-box primary columns four">
+								<div class="header">
+									<h3>Space filled</h3>
+								</div>
+								<div class="main">
+									<select>
+										<option>November</option>
+										<option>December</option>
+										<option>January</option>
+									</select>
+									<div class="space-filled">
+										<span class="value">
+											68%
+										</span>
+										<p>Increase on 12% on October</p>
+									</div>
+								</div>
+							</div>
+							<div class="content-box primary columns four">
+								<div class="header">
+									<h3>Revenue</h3>
+								</div>
+								<div class="main">
+									<select>
+										<option>This Week</option>
+										<option>This Month</option>
+										<option>This Year</option>
+									</select>
+								</div>
+							</div>
+							<div class="content-box primary columns four">
+								<div class="header">
+									<h3>Pallet Type</h3>
+								</div>
+								<div class="main">
+									<select>
+										<option>This Week</option>
+										<option>This Month</option>
+										<option>This Year</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</section>
+					<section class="notifications">
+						<div class="header">	
+							<h2><strong>Notifications</strong> and issues</h2>
+						</div>
+						<div class="main">
+							<div class="content-box primary notifications-table">
+								<div class="header">
+									<a href="#">&lt; Previous</a>
+									<span> | </span>
+									<a href="#">Next &gt;</a>
+								</div>
+								<table class="main">
+									<thead>
+										<tr>
+											<th>Date logged</th>
+											<th class="desc">Description</th>
+											<th>Logged by</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>5.10.14</td>
+											<td class="desc">Removing bays 1-6 for 1 week (10-14 November 2014) Please dont use</td>
+											<td>Dan Smith</td>
+										</tr>
+										<tr>
+											<td>5.10.14</td>
+											<td class="desc">Other issue</td>
+											<td>Joe Bloggs</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</section>
+				</div>
+			</main>
+         <% include ./partials/bottom %>   

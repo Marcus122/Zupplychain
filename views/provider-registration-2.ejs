@@ -1,0 +1,96 @@
+ <% include ./partials/top %>   
+			<main>
+				<div class="row carousel">
+					<img src="/images/provider-banner.png" alt="Continue your registration"/>
+					<h1 class="title large-font">
+						<span>Continue your</span>
+						<br/>
+						registration
+					</h1>
+					<p class="desc medium-font">Continue your registration &amp; help customers choose your warehouse</p>
+				</div>
+				<div class="row">
+					<ul class="tabs">
+						<li class="four columns checked">Step 1</li>
+						<li class="four columns active checked">Step 2</li>
+						<li class="four columns">Step 3</li>
+					</ul>
+					<section class="tab-content">
+						<form method="post" action="/provider-registration-3">
+							<div class="main">
+								<div class="content-box primary">
+									<div class="header">
+										<h3>Define your space</h3>
+									</div>
+									<div class="main">
+										<p class="new-pallet">
+											<span class="primary">Add new pallet</span>
+											<button class="add-button"><span>add</span></button>
+										</p>
+										<fieldset>
+											<table class="max define-space responsive-table">
+												<thead>
+													<tr>
+														<th>Storage Name</th>
+														<th>Pallet Type</th>
+														<th>Storage Temp</th>
+														<th>Max Weight</th>
+														<th>Max Height</th>
+														<th>Pallet Spaces</th>
+														<th><img src="../images/delete.png" alt="delete"/></th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td data-th="Storage Name" class="text">
+															<input type="text"/>
+														</td>
+														<td data-th="Pallet Type" class="select">
+															<select>
+																<option>Blue</option>
+																<option>Euro</option>
+																<option>Standard</option>
+																<option>Ano</option>
+																<option>Other</option>
+																<option>Any</option>
+															</select>
+														</td>
+														<td data-th="Storage Temp" class="select">
+															<select>
+																<option>Ambient</option>
+																<option>Chilled</option>
+																<option>Frozen</option>
+																<option>Outside</option>
+																<option>Other</option>
+															</select>
+														</td>
+														<td data-th="Max Weight" class="value">
+															<input type="text"/>
+														</td>
+														<td data-th="Max Height" class="value">
+															<input type="text"/>
+														</td>
+														<td data-th="Pallet Spaces" class="value">
+															<input type="text"/>
+														</td>
+														<td data-th="Remove" class="action">
+															<button href="#" class="trash-button"><span>Delete</span></button>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</fieldset>
+									</div>
+								</div>
+							</div>
+							<fieldset class="form-footer">
+								<button class="back">Back</button>
+								<button class="action">Save</button>
+								<span>OR</span>
+								<button class="action next">Save &amp; Continue</button>
+							</fieldset>
+						</form>
+					</section>
+				</div>
+			</main>
+         <% include ./partials/bottom %>   

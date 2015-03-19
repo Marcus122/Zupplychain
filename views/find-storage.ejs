@@ -1,0 +1,138 @@
+ <% include ./partials/top %>   
+    <main>
+        <div class="row carousel">
+					<img src="/images/provider-banner.png" alt="Start your registration"/>
+					<h1 class="title large-font">
+						<span>Zupplychain</span>
+						<br/>here to match your<span class="medium-font">warehouse space to potential customers</span>
+					</h1>
+				</div>
+        <section class="side-header" ><!-- a section with the header off to one side -->
+            <div class="header">
+                <h2>Get an instant quote</h2>
+                <span>* required field</span>
+            </div>
+            <div class="main">
+                <form class="storage-search" action="/search-results">
+                    <div class="inputField">
+                        <label for="pallet-type">Pallet Type</label>
+                        <select name="pallet-type" id="pallet-type" >
+                            <option value="standard-blue">Standard Blue</option>
+                            <option value="standard-red">Standard Red</option>
+                        </select>
+                    </div>
+                    <div class="inputField number">
+                        <label for="quantity">Qty*</label>
+                        <input type="number" name="quantity" />
+                    </div>
+                    <div class="inputField">
+                        <label for="postcode">Postcode</label>
+                        <input type="text" name="postcode" />
+                    </div>
+                    <div class="inputField">
+                        <label for="max-distance">Max Distance</label>
+                        <select name="max-distance">
+                            <option value="20">20 miles</option>
+                            <option value="10">10 miles</option>
+                        </select>
+                    </div>
+                    <div class="inputField">
+                        <label for="start-date">Start Date</label>
+                        <input type="date" name="start-date"/>
+                    </div>
+                    <div class="inputField">
+                        <label for="end-date">End Date</label>
+                        <input type="date" name="end-date"/>
+                    </div>
+                    <div class="inputField number">
+                        <label for="height">Height (m)</label>
+                        <input type="number" name="height"/>
+                    </div>
+                    <div class="inputField number">
+                        <label for="weight">Weight (kg)</label>
+                        <input type="number" name="weight"/>
+                    </div>
+                    <div class="inputField number">
+                        <label for="value">Value (£)</label>
+                        <input type="number" name="value"/>
+                    </div>
+                    <div class="inputField">
+                        <label for="temperature">Temp</label>
+                        <select name="temperature">
+                            <option value="ambient">Ambient</option>
+                            <option value="chilled">Chilled</option>
+                            <option value="frozen">Frozen</option>
+                        </select>
+                        
+                    </div>
+                    <div class="inputField last">
+                        <button type="submit" class="action forward">Search</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+        <div class="row info-boxes">
+            <div class="three columns fat">
+                <div class="info-box">
+                    <span class="icon">£</span>
+                    <h4>Lowest Price</h4>
+                    <p>Search for the lowest priced warehouse spaces near you</p>
+                </div>
+            </div>
+            <div class="three columns fat">
+                <div class="info-box">
+                    <span class="icon ion-clipboard"></span>
+                    <h4>Compare</h4>
+                    <p>Search for the lowest priced warehouse spaces near you</p>
+                </div>
+            </div>
+            <div class="three columns fat">
+                <div class="info-box">
+                    <span class="icon ion-android-stopwatch"></span>
+                    <h4>Short Term</h4>
+                    <p>Search for the lowest priced warehouse spaces near you</p>
+                </div>
+            </div>
+            <div class="three columns fat">
+                <div class="info-box">
+                    <span class="icon ion-calendar"></span>
+                    <h4>Long Term</h4>
+                    <p>Search for the lowest priced warehouse spaces near you</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="banner">
+            <h3>Testimonials</h3>
+            <div class="row">
+            <div class="three columns fat">
+                <div class="quote-box quotes">
+                    <blockquote>Lorem Ipsums dolor sit amet, this is some quote text from a customer who was very impressed with the service. Lorem Ipsums dolor sit amet, this is some quote text from a customer who was very impressed with the service.</blockquote>
+                    <span>Joe Blogs, Company A</span>
+                </div>
+            </div>
+            <div class="three columns fat">
+                <div class="quote-box quotes">
+                    <blockquote>Lorem Ipsums dolor sit amet, this is some quote text from a customer who was very impressed with the service. Lorem Ipsums dolor sit amet, this is some quote text from a customer who was very impressed with the service.</blockquote>
+                    <span>Joe Blogs, Company A</span>
+                </div>
+            </div>
+            <div class="three columns fat">
+                <div class="quote-box quotes">
+                    <blockquote>Lorem Ipsums dolor sit amet, this is some quote text from a customer who was very impressed with the service. Lorem Ipsums dolor sit amet, this is some quote text from a customer who was very impressed with the service.</blockquote>
+                    <span>Joe Blogs, Company A</span>
+                </div>
+            </div>
+            <div class="three columns fat">
+                <div class="quote-box quotes">
+                    <blockquote>Lorem Ipsums dolor sit amet, this is some quote text from a customer who was very impressed with the service. Lorem Ipsums dolor sit amet, this is some quote text from a customer who was very impressed with the service.</blockquote>
+                    <span>Joe Blogs, Company A</span>
+                </div>
+            </div>
+        </div>
+        </div>
+        
+    </main>
+
+    <% include ./partials/bottom %>   
+    

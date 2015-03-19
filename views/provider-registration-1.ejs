@@ -1,0 +1,102 @@
+ <% include ./partials/top %>   
+			<main>
+				<div class="row carousel">
+					<img src="/images/provider-banner.png" alt="Start your registration"/>
+					<h1 class="title large-font">
+						<span>Start your</span>
+						<br/>
+						registration
+					</h1>
+					<p class="desc medium-font">Start your registration &amp; help customers choose your warehouse</p>
+				</div>
+				<div class="row">
+					<ul class="tabs">
+						<li class="four columns active checked">Step 1</li>
+						<li class="four columns">Step 2</li>
+						<li class="four columns">Step 3</li>
+					</ul>
+					<section class="tab-content">
+						<form method="post" action="/provider-registration-2" class="provider-form">
+							<div class="main">
+								<div class="content-box primary">
+									<div class="header">
+										<h3>Contact Information</h3>
+									</div>
+									<fieldset class="main">
+										<div class="columns six">
+											<div class="inputField">
+												<label for="warehouseName">Warehouse Name*</label><input type="text" name="warehouse" id="warehouseName" required/>
+											</div>
+											<div class="inputField">
+												<label for="addressLine1">Address Line 1*</label><input type="text" name="addressLine1" id="addressLine1" required/>
+											</div>
+											<div class="inputField">
+												<label for="addressLine2">Address Line 2</label><input type="text" name="addressLine2" id="addressLine2"/>
+											</div>
+											<div class="inputField">
+												<label for="city">Town/City*</label><input type="text" name="city" id="city" required/>
+											</div>
+											<div class="inputField">
+												<label for="postcode">Postcode</label><input type="text" name="postcode" id="postcode"/>
+											</div>
+										</div>
+										<div class="columns six">
+											<div class="inputField">
+												<label for="name">Contact Name*</label><input type="text" name="name" id="name" required/>
+											</div>
+											<div class="inputField">
+												<label for="telephone">Telephone*</label><input type="tel" name="telephone" id="telephone" required/>
+											</div>
+											<div class="inputField">
+												<label for="mobile">Mobile</label><input type="tel" name="mobile" id="mobile"/>
+											</div>
+											<div class="inputField">
+												<label for="email">Email*</label><input type="email" name="email" id="email" required/>
+											</div>
+										</div>
+									</fieldset>
+								</div>
+								<div class="content-box primary">
+									<div class="header">
+										<h3>Warehouse details</h3>
+									</div>
+									<fieldset class="main warehouse-details">
+										<div class="inputField">
+											<label for="description">Warehouse Description</label>
+											<textarea name="description" placeholder="A short description about your warehouse"></textarea>
+										</div>
+										<p>Upload any profile images and or Quality assurance documents below.</p>
+										<div class="row documents">
+											<label  class="columns five" for="photos">Upload Warehouse Photos</label>
+											<input class="columns five" type="file" name="photos" id="photos"/>
+											<div class="columns one">
+												<button class="add-button"><span>add</span></button>
+											</div>
+										</div>
+										<div class="row documents">
+											<label class="columns two" for="docs">Upload Documents</label>
+											<select class="columns three" name="docs-type" id="docs">
+												<option>Insurance Certificate</option>
+												<option>ISO 90001/14001</option>
+												<option>Fire Safety/Sprinkle documentation</option>
+												<option>Operator License</option>
+											</select>
+											<input class="columns five" type="file" name="docs" id="docs"/>
+											<div class="columns one">
+												<button class="add-button"><span>add</span></button>
+											</div>
+										</div>
+									</fieldset>
+								</div>
+								<p>*Required Fields</p>
+							</div>
+							<fieldset class="form-footer">
+								<button class="action">Save</button>
+								<span>OR</span>
+								<button class="action next">Save &amp; Continue</button>
+							</fieldset>
+						</form>
+					</section>
+				</div>
+			</main>
+ <% include ./partials/bottom %>   
