@@ -4,14 +4,15 @@
   "dependencies": {
     "express": "*",
     "less": "*",
-	"body-parser": "*",
-	"morgan":"*"
+    "body-parser": "*",
+    "morgan": "*"
   },
   "devDependencies": {
     "ejs": "^2.3.1",
     "grunt": "^0.4.5",
     "grunt-contrib-less": "^1.0.0",
     "grunt-contrib-requirejs": "^0.4.4",
-    "grunt-contrib-watch": "^0.6.1"
+    "grunt-contrib-watch": "^0.6.1",
+    "nightwatch": "^0.5.36"
   }
 }
