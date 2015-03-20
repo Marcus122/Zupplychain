@@ -13,10 +13,13 @@
         <link rel="stylesheet" href="/css/main.css">
         <link rel="stylesheet" href="/css/skeleton.css">
         
-        <!--<link rel="stylesheet/less" type="text/css" href="css/styles.less" />-->
-        <link rel="stylesheet" href="/css/_dist/main.css" type="text/css" />
+      <%if(!live){%>
+			<link rel="stylesheet/less" type="text/css" href="/css/styles.less" />
+			<script src="/js/static/less.min.js" type="text/javascript"></script>
+	  <%}else{%>
+			<link rel="stylesheet" href="/css/_dist/main.css" type="text/css" />
+		<%}%>
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,700italic,400,600,700,800,300' rel='stylesheet' type='text/css'>
-        <script src="/js/static/less.min.js" type="text/javascript"></script>
         
         <script data-main="/js/app" src="/js/require.js"></script>
     </head>
