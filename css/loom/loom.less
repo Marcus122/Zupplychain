@@ -1,0 +1,267 @@
+
+
+//Loom forms. variables at the top control the colours of form elements in the various possible states.
+
+
+// Edit these variables to make quick changes to colours:
+@loom-light-invalid: #ffe9e8;
+@loom-dark-invalid:  #d73b39; 
+@loom-light-valid:   #DFF2BF;
+@loom-dark-valid:    #4F8A10;
+@loom-highlight:     #33C3F0;
+@loom-highlight-light: lighten(@loom-highlight, 40%);
+
+ 
+// More in depth editing:
+@input-background-color:    #FFF;
+@input-border-color:        #ccc;
+@input-text-color:          #aaa;
+@input-font-weight:         normal;
+@input-box-shadow:          inset 0px 0px 5px rgba(0,0,0,0.2);
+
+@input-focus-background-color:  @loom-highlight-light;
+@input-focus-border-color:      @loom-highlight;
+@input-focus-text-color:        #111;
+@input-focus-box-shadow:        inset 0px 0px 5px rgba(0,0,0,0.5);
+
+@input-invalid-background-color:        @loom-light-invalid;
+@input-invalid-border-color:            @loom-dark-invalid;
+@input-invalid-text-color:              @loom-dark-invalid;
+@input-invalid-background-image-url:    './loom/images/icon-warning.png';
+@input-invalid-focus-background-color:  @loom-highlight-light;
+@input-invalid-focus-border-color:      @loom-dark-invalid;
+@input-invalid-focus-text-color:        @loom-dark-invalid;
+
+@input-valid-background-color:          @loom-light-valid;    
+@input-valid-border-color:              @loom-dark-valid;
+@input-valid-text-color:                @loom-dark-valid;
+@input-valid-background-image-url:      './loom/images/icon-success.png';
+@input-valid-focus-background-color:    @loom-highlight-light;    
+@input-valid-focus-border-color:        @loom-highlight;
+@input-valid-focus-text-color:          @loom-dark-valid;
+
+@input-disabled-background-color:       #ddd;
+@input-disabled-text-color:             #999;
+@input-disabled-border-color            :#BBB;
+@input-disabled-background-image-url:   './loom/images/icon-disabled.png';
+
+@message-hint-text-color:               #BBB;
+@message-hint-font-weight:              normal;
+
+@message-invalid-text-color:            @loom-dark-invalid;
+@message-invalid-font-weight:           normal;
+
+@message-valid-text-color:              @loom-dark-valid;
+@message-valid-font-weight:             normal;
+
+@message-disabled-text-color:           #ccc;
+@message-disabled-font-weight:          normal;
+
+@input-background-image-right:          4px;
+@input-background-image-top:            50%;
+
+
+/* The bare minimum rules needed to work with the loom javascript */
+
+
+body .loom-form {
+    .input-field {
+        select, input {
+            background-color:@input-background-color;
+            color:@input-text-color;
+            border-color:@input-border-color;
+            box-shadow:@input-box-shadow;
+            
+            &:focus{
+                background-color:@input-focus-background-color;
+                color:@input-focus-text-color;
+                border-color:@input-focus-border-color;
+                box-shadow:@input-focus-box-shadow;
+            }
+        }
+        input {
+            background-position-x:98%;
+            background-position-y:50%;
+            background-position:right @input-background-image-right top @input-background-image-top;
+            background-repeat:no-repeat;
+        }
+        .success{
+            color:@message-valid-text-color;
+            font-weight:@message-valid-font-weight;
+        }
+        .error{
+            color:@message-invalid-text-color;
+            font-weight:@message-valid-font-weight;
+        }
+        .hint{
+            color:@message-hint-text-color;
+            font-weight:@message-hint-font-weight;
+        }
+    }
+    .input-field.success {
+        select, input {
+            background-color:@input-valid-background-color;
+            color:@input-valid-text-color;
+            border-color:@input-valid-border-color;
+            
+            &:focus{
+                background-color:@input-valid-focus-background-color;
+                color:@input-valid-focus-text-color;
+                border-color:@input-valid-focus-border-color;
+            }
+        }
+        input{
+            background-image:url(@input-valid-background-image-url);
+        }
+    }
+    .input-field.error {
+        select, input {
+            background-color:@input-invalid-background-color;
+            color:@input-invalid-text-color;
+            border-color:@input-invalid-border-color;
+            
+            &:focus{
+                background-color:@input-invalid-focus-background-color;
+                border-color:@input-invalid-focus-border-color;
+                color:@input-invalid-focus-text-color;
+            }
+        }
+        input {
+            background-image:url(@input-invalid-background-image-url);
+        }
+    }
+    .input-field.checkbox {
+        &.error {
+            label {
+                color:@input-invalid-text-color;
+            }
+        }
+        &.success {
+            label {
+                color:@input-valid-text-color;
+            }
+        }
+    
+    }
+    .input-field.disabled{
+        
+        select, input {
+            cursor:not-allowed;
+            background-color:@input-disabled-background-color;
+            color:@input-disabled-text-color;
+            border-color:@input-disabled-border-color;
+            background-image:url(@input-disabled-background-image-url);
+        }
+    
+    }
+    .input-field.no-validation-style { //Hides the validation styles.
+        &.success{
+            input {
+                background-color:@input-background-color;
+                color:@input-text-color;
+                border-color:@input-border-color;
+                box-shadow:@input-box-shadow;
+                background-image:none;
+            }
+        }
+    }
+    select[disabled], input[disabled]{
+           cursor:not-allowed;
+           background-color:@input-disabled-background-color !important;
+           color:@input-disabled-text-color !important;
+           border-color:@input-disabled-border-color;
+           
+    }
+    input[disabled] {
+        //background-image:url(@input-disabled-background-image-url);
+    }
+}
+
+
+.loom-form.form-pending {
+    cursor:wait;
+    button, input, select {
+        cursor:wait;
+    }
+    
+}
+
+.loom-form {
+    .form-messages p {
+        display:none;
+        background-repeat:no-repeat;
+        background-position:top 3px left 0px;
+        padding-left:20px;
+    }
+    &.form-success {
+        .form-messages p.success {
+            display:inherit;
+            color:@input-valid-text-color;
+            background-image:url(@input-valid-background-image-url);
+        }
+    }
+    &.form-error {
+        .form-messages p.error {
+            display:inherit;
+            color:@input-invalid-text-color;
+            background-image:url(@input-invalid-background-image-url);
+        }
+    }
+    
+    &.form-invalid {
+       .form-messages p.invalid {
+            display:inherit;
+            color:@input-invalid-text-color;
+            background-image:url(@input-invalid-background-image-url);
+       }
+    }
+    &.form-pending {
+        .form-messages p.pending {
+            display:inherit;
+        }
+    }
+}
+
+//  Validation messages and hints.
+.loom-form .input-field  .error,
+.loom-form .input-field  .success,
+.loom-form .input-field  .disabled{
+    display:none;
+}
+.loom-form .input-field.success  .success   {display:inherit;}
+.loom-form .input-field.disabled .disabled  {display:inherit;}
+.loom-form .input-field.disabled .hint      {display:none;}
+.loom-form .input-field .hint               {display:block;}    
+.loom-form .input-field.error .hint         {display:none;}    
+.loom-form .input-field.success .hint       {display:none;}    
+.loom-form .input-field.error-confirm	.error-confirm		{display:inherit;}
+.loom-form .input-field.error-monthAndYearInFuture	.error-monthAndYearInFuture {display:inherit;}
+.loom-form .input-field.error-monthAndYearInPast	.error-monthAndYearInPast {display:inherit;}
+.loom-form .input-field.error-creditCardNumber	.error-creditCardNumber		{display:inherit;}
+.loom-form .input-field.error-depends	.error-depends		{display:inherit;}
+.loom-form .input-field.error-name 		.error-name			{display:inherit;}
+.loom-form .input-field.error-address 	.error-address		{display:inherit;}
+.loom-form .input-field.error-password 	.error-password		{display:inherit;}
+.loom-form .input-field.error-telephone .error-telephone	{display:inherit;}
+.loom-form .input-field.error-required 	.error-required		{display:inherit;}
+.loom-form .input-field.error-email 	.error-email		{display:inherit;}
+.loom-form .input-field.error-number 	.error-number		{display:inherit;}
+.loom-form .input-field.error-date 		.error-date			{display:inherit;}
+.loom-form .input-field.error-allcaps 	.error-allcaps		{display:inherit;}
+.loom-form .input-field.error-maxlength	.error-maxlength	{display:inherit;}
+.loom-form .input-field.error-minlength	.error-minlength	{display:inherit;}
+.loom-form .input-field.error-max	 	.error-max			{display:inherit;}
+.loom-form .input-field.error-min	 	.error-min			{display:inherit;}
+.loom-form .input-field.error-tel	 	.error-tel			{display:inherit;}
+.loom-form .input-field.error-UKPostCode .error-UKPostCode	{display:inherit;}
+.loom-form .input-field.error-passwordPolicyStrict .error-passwordPolicyStrict{display:inherit;}
+.loom-form .input-field.error-passwordPolicyNormal .error-passwordPolicyNormal{display:inherit;}
+
+
+@import "jquery-date-picker-ui";
+@import "loomAlert";
+
+
+    
+    
+    

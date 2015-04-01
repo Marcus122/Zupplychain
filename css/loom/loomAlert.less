@@ -1,0 +1,44 @@
+
+// Needs to be imported from the main Loom stylesheet as variables are used.
+// Alternatively those variables could be redefined in this file if used standalone.
+
+.loom-alert {
+    position:fixed;
+    z-index:10000;
+    padding:20px;
+    box-sizing:border-box;
+    background-color:#222;
+    border:1px solid #333;
+    width:300px;
+    margin-left:-150px;
+    left:50%;
+    top:120px;
+    top:35vh;
+    color:#fff;
+    text-align:center;
+     p{
+            margin:0px;
+            padding-left:30px;
+           
+            background-repeat:no-repeat;
+            background-position:left 0px top 50%;
+            }
+    &.success {
+        background-color:@input-valid-background-color;
+        color:@input-valid-text-color;
+        border: 2px solid @input-valid-text-color;
+        p {
+            background-image:url(@input-valid-background-image-url);
+        }
+    }
+    &.error {
+        background-color:@input-invalid-background-color;
+        color:@input-invalid-text-color;
+        border: 2px solid @input-invalid-text-color;
+        p {
+            background-image:url(@input-invalid-background-image-url);
+        }
+    }
+}
+    
+    
