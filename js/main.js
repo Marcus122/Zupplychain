@@ -11,7 +11,13 @@ require(["jquery"], function($) {
     
     function init(){
         
-        if (onPage("search-results")){
+        //fire up the loom form library.
+        require(["loom/loom"], function(Loom){
+            var loom = new Loom();
+            loom.init();
+        });
+        
+        if (onPage("search-results")){ //hacky while testing..
             require(["components/search-results-map"],function(ResultsMap){
                 var testData = [
                 {
