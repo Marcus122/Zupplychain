@@ -24,7 +24,7 @@
 									</div>
 									<div class="main">
 										<p class="new-pallet">
-											<span class="primary">Add new pallet</span>
+											<span class="primary">Add new storage</span>
 											<button class="add-button"><span>add</span></button>
 										</p>
 										<fieldset>
@@ -34,8 +34,8 @@
 														<th>Storage Name</th>
 														<th>Pallet Type</th>
 														<th>Storage Temp</th>
-														<th>Max Weight</th>
-														<th>Max Height</th>
+														<th>Max Weight <br/> (kg)</th>
+														<th>Max Height <br/> (m)</th>
 														<th>Pallet Spaces</th>
 														<th><img src="../images/delete.png" alt="delete"/></th>
 													</tr>
@@ -43,7 +43,7 @@
 												<tbody>
 													<tr class="active" data-tr="View Pallet">
 														<td data-th="Storage Name" class="text">
-															<input type="text"/>
+															<input type="text" value="A"/>
 														</td>
 														<td data-th="Pallet Type" class="select">
 															<select>
@@ -93,4 +93,7 @@
 					</section>
 				</div>
 			</main>
-         <% include ./partials/bottom %>   
+		 <script type="text/template" id="define-space-row">
+			<% include ./partials/define-space-row %> 
+		 </script>
+         <% include ./partials/bottom %> 

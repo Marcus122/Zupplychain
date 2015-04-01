@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 
 app.use(express.static(__dirname));
 
-app.use(morgan('combined'));
+//app.use(morgan('combined'));
 
 app.get('/test', function (req,res) {
     console.log("testing render with EJS");
