@@ -52,6 +52,11 @@ require(["jquery"], function($) {
                 
             });
         }
+		if (onPage("provider-registration-2")){
+			require(["components/provider-registration"],function(Registration){
+				Registration();
+			});
+		}
         
     }
 

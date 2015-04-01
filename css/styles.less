@@ -706,5 +706,44 @@ span.highlight-bright{
 		  content: attr(data-th)": ";
 		}
 	}
+	.responsive-table.collapse{	
+		td{
+			/*display:none;*/
+		}
+		tbody tr{
+			  padding-top: 28px;
+			  position: relative;
+			  height: 0;
+			  overflow: hidden;
+			  transition: 1s all;
+		}
+		tbody tr:before {
+		  content: "> "attr(data-tr);
+		  position: absolute;
+		  left: 0;
+		  top: 0;
+		  cursor: pointer;
+		  background: #d7d7d7;
+		  width: 100%;
+		  padding: 4px 0;
+		  text-indent: 10px;
+		  border: 1px solid #fff;
+		}
+		tr.active td{
+			display:block;
+		}
+		tr.active:before {
+			content:"v";
+		}
+		tr.active{
+			height: 585px; 
+		}
+		/*tr.active {
+			padding-top:0;
+		}
+		tr.active:before{
+			content:"";
+		}*/
+	}
 }
  
