@@ -3,7 +3,7 @@
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema,
 	ObjectId = Schema.ObjectId,
-	warehouse_controller = require('../controllers/warehouse');
+	warehouse_controller = require('../controllers/warehouses');
 
 var fields = {
 	name: { type: String },
