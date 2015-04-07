@@ -28,30 +28,30 @@
 												<label for="warehouseName">Warehouse Name*</label><input type="text" name="warehouse" id="warehouseName" required/>
 											</div>
 											<div class="input-field">
-												<label for="addressLine1">Address Line 1*</label><input type="text" name="addressLine1" id="addressLine1" required/>
+												<label for="name">Contact Name*</label><input type="text" name="name" id="name" required value="<%= user.name %>"/>
 											</div>
 											<div class="input-field">
-												<label for="addressLine2">Address Line 2</label><input type="text" name="addressLine2" id="addressLine2"/>
+												<label for="telephone">Telephone*</label><input type="tel" name="telephone" id="telephone" required value="<%= user.telephone %>"/>
 											</div>
 											<div class="input-field">
-												<label for="city">Town/City*</label><input type="text" name="city" id="city" required/>
+												<label for="mobile">Mobile</label><input type="tel" name="mobile" id="mobile" value="<%= user.mobile %>"/>
 											</div>
 											<div class="input-field">
-												<label for="postcode">Postcode*</label><input type="text" name="postcode" id="postcode" required/>
+												<label for="email">Email*</label><input type="email" name="email" id="email" required value="<%= user.email %>"/>
 											</div>
 										</div>
 										<div class="columns six">
 											<div class="input-field">
-												<label for="name">Contact Name*</label><input type="text" name="name" id="name" required/>
+												<label for="addressLine1">Address Line 1*</label><input type="text" name="addressLine1" id="addressLine1" required value="<%= user.addressline1 %>"/>
 											</div>
 											<div class="input-field">
-												<label for="telephone">Telephone*</label><input type="tel" name="telephone" id="telephone" required/>
+												<label for="addressLine2">Address Line 2</label><input type="text" name="addressLine2" id="addressLine2" value="<%= user.addressline2 %>"/>
 											</div>
 											<div class="input-field">
-												<label for="mobile">Mobile</label><input type="tel" name="mobile" id="mobile"/>
+												<label for="city">Town/City*</label><input type="text" name="city" id="city" required value="<%= user.city %>"/>
 											</div>
 											<div class="input-field">
-												<label for="email">Email*</label><input type="email" name="email" id="email" required/>
+												<label for="postcode">Postcode*</label><input type="text" name="postcode" id="postcode" required value="<%= user.postcode %>"/>
 											</div>
 										</div>
 									</fieldset>
@@ -63,7 +63,7 @@
 									<fieldset class="main warehouse-details">
 										<div class="input-field">
 											<label for="description">Warehouse Description</label>
-											<textarea name="description" placeholder="A short description about your warehouse"></textarea>
+											<textarea name="description" placeholder="A short description about your warehouse"><%= user.description %></textarea>
 										</div>
 										<div class="specifications">
 											<h4>Warehouse Specifications</h4>

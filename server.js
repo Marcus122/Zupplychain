@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(cookieParser());
 // parse application/json 
-app.use(bodyParser.json());
+app.use(bodyParser.json({ type: 'application/*+json' }));
 
 app.use(express.static(__dirname));
 
@@ -43,7 +43,7 @@ app.get('/provider-registration/:step', function (req,res) {
 app.post('/provider-registration-:step', function (req,res) {
     providerHandler(req,res);
 });
-require('./routes/user-handler')(app);
+require('./app/routes/user-handler')(app);
 
 function providerHandler(req,res){
 	if (req.params.step == 0) {

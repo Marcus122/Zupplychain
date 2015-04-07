@@ -17,8 +17,8 @@ exports.create_user = function (data,cb) {
 		 }
 	});
 }
-exports.update_user = function(User,cb){
-	User.save(function(err){
+exports.update_user = function(user,cb){
+	user.save(function(err){
 		if(!err){
 			cb(null,user);
 		}else{
@@ -27,7 +27,7 @@ exports.update_user = function(User,cb){
 	});
 }
 exports.user_by_id = function (id,callback) {
-	User.findById(data.id,function(err,user){
+	User.findById(id,function(err,user){
 		if(err){
 			return callback(err);
 		}else{
@@ -40,6 +40,7 @@ exports.user_by_email = function (email,callback) {
 		if(err){
 			return callback(err);
 		}else{
+			extendUser(user);
 			return callback(null,user)
 		}
 	});
