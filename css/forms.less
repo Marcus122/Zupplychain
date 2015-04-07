@@ -3,7 +3,10 @@
     display:block;
     width:100%;
  }
- input, select{
+ input[type="checkbox"]{
+	vertical-align: middle;
+ }
+ input:not([type='checkbox']), select{
     width:100%;
     .unit-margin-bottom(0.5);
  }
@@ -15,8 +18,11 @@ input[type="checkbox"]{
 	width:@unit-px*2;
 	height:@unit-px*2;
 }
+.input-field.check label,
 .checbox label{
 	width:auto;
+	display:inline;
+	word-wrap: break-word;
 }
  td input,td select{
 	width:100%;
@@ -160,7 +166,7 @@ form.storage-search{
  @media only screen and (min-width:768px){ /* Bigger screens */
     .input-field label
         {display:inline-block;width:25%;vertical-align: middle;}
-	.input-field input{
+	.input-field input:not([type='checkbox']){
 		width:70%;
 	}
     select {width:70%;}

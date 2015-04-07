@@ -37,7 +37,7 @@
 												<label for="city">Town/City*</label><input type="text" name="city" id="city" required/>
 											</div>
 											<div class="input-field">
-												<label for="postcode">Postcode</label><input type="text" name="postcode" id="postcode"/>
+												<label for="postcode">Postcode*</label><input type="text" name="postcode" id="postcode" required/>
 											</div>
 										</div>
 										<div class="columns six">
@@ -65,17 +65,105 @@
 											<label for="description">Warehouse Description</label>
 											<textarea name="description" placeholder="A short description about your warehouse"></textarea>
 										</div>
+										<div class="specifications">
+											<h4>Warehouse Specifications</h4>
+											<div class="services">
+												<h5>Services</h5>
+												<div class="row">
+													<div class="input-field check columns three">
+														<input type="checkbox"/>
+														<label>Transport / Distribution</label>
+													</div>
+													<div class="input-field check columns three">
+														<input type="checkbox"/>
+														<label>Pallet network</label>
+													</div>
+													<div class="input-field check columns three">
+														<input type="checkbox"/>
+														<label>Container Palletisation</label>
+													</div>
+													<div class="input-field check columns three">
+														<input type="checkbox"/>
+														<label>Pick &amp; Pack</label>
+													</div>
+												</div>
+												<div class="row">
+													<div class="input-field check columns three">
+														<input type="checkbox"/>
+														<label>Home Delivery</label>
+													</div>
+													<div class="input-field check columns three">
+														<input type="checkbox"/>
+														<label>Product Disposal</label>
+													</div>
+													<div class="input-field check columns three">
+														<input type="checkbox"/>
+														<label>Add. Product Insurance</label>
+													</div>
+													<div class="input-field check columns three">
+														<input type="checkbox"/>
+														<label>Bunded Warehouse</label>
+													</div>
+												</div>
+											</div>
+											<div class="warehouse-specifications">
+												<h5>Specifications</h5>
+												<div class="row">
+													<div class="input-field check columns three">
+														<input type="checkbox"/>
+														<label>Perimeter Fencing</label>
+													</div>
+													<div class="input-field check columns three">
+														<input type="checkbox"/>
+														<label>24hr security</label>
+													</div>
+													<div class="input-field check columns three">
+														<input type="checkbox"/>
+														<label>CCTV</label>
+													</div>
+													<div class="input-field check columns three">
+														<input type="checkbox"/>
+														<label>Sprinklers</label>
+													</div>
+												</div>
+												<div class="row">
+													<div class="input-field check columns three">
+														<input type="checkbox"/>
+														<label>Narrow .. racking</label>
+													</div>
+													<div class="input-field check columns three">
+														<input type="checkbox"/>
+														<label>Outdoor storage</label>
+													</div>
+													<div class="input-field check columns three">
+														<input type="checkbox"/>
+														<label>Bulk Storage</label>
+													</div>
+													<div class="input-field check columns three">
+														<input type="checkbox"/>
+														<label>Roll in Roll unit storage</label>
+													</div>
+												</div>
+											</div>
+										</div>
+									</fieldset>
+								</div>
+								<div class="content-box primary">
+									<div class="header">
+										<h3>Uploads</h3>
+									</div>
+									<fieldset class="main warehouse-documents">
 										<p>Upload any profile images and or Quality assurance documents below.</p>
 										<div class="row documents">
 											<label  class="columns five" for="photos">Upload Warehouse Photos</label>
 											<input class="columns five" type="file" name="photos" id="photos"/>
 											<div class="columns one">
-												<button class="add-button"><span>add</span></button>
+												<button class="attach primary mini"><span>add</span></button>
 											</div>
 										</div>
 										<div class="row documents">
 											<label class="columns two" for="docs">Upload Documents</label>
-											<select class="columns three" name="docs-type" id="docs">
+											<select class="columns three" name="docs-type" id="doc-type">
 												<option>Insurance Certificate</option>
 												<option>ISO 90001/14001</option>
 												<option>Fire Safety/Sprinkle documentation</option>
@@ -83,7 +171,7 @@
 											</select>
 											<input class="columns five" type="file" name="docs" id="docs"/>
 											<div class="columns one">
-												<button class="add-button"><span>add</span></button>
+												<button class="attach primary mini"><span>add</span></button>
 											</div>
 										</div>
 									</fieldset>

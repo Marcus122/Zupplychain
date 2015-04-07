@@ -5,7 +5,9 @@
     "express": "*",
     "less": "*",
     "body-parser": "*",
-    "morgan": "*"
+    "morgan": "*",
+	"mongoose":"*",
+	"cookie-parser":"*"
   },
   "devDependencies": {
     "ejs": "^2.3.1",

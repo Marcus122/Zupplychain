@@ -7,6 +7,7 @@
 @import "tabs";
 @import "header";
 @import "footer";
+@import "popup";
 
 //loom forms and alerts
 @import "loom/loom";
@@ -663,6 +664,9 @@ span.highlight-bright{
     .unit-padding;
     border:1px solid @tertiary;
  }
+ td.button-cell{
+	text-align:center;
+ }
  th {
     background-color:@tertiary;
     border-right: 1px solid @white;
@@ -706,6 +710,14 @@ span.highlight-bright{
 		  content: attr(data-th)": ";
 		}
 	}
+	table.responsive-table.title:before{
+			content: attr(data-title);
+			display:block;
+			background:@secondary;
+			padding:20px;
+			font-size:2rem;
+			color:@light-text;
+		}
 	.responsive-table.collapse{	
 		td{
 			/*display:none;*/
@@ -733,7 +745,7 @@ span.highlight-bright{
 			display:block;
 		}
 		tr.active:before {
-			content:"v";
+			content:"v "attr(data-tr-closed);
 		}
 		tr.active{
 			height: 585px; 

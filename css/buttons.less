@@ -1,5 +1,7 @@
 /** BUTTONS **/
-
+a button{
+	color:#fff;
+}
 .button-icon-transition{
     transition:1s transform;
 }
@@ -9,6 +11,7 @@
     outline: 0; 
  }
  
+ .button,
  button{
     border:0px;
     text-transform: uppercase;
@@ -91,13 +94,13 @@ button.tertiary:after, button.tertiary:before{
  
  /* buttons with icons */
  button.add-button:after, button.trash-button:after, button.next:after, button.forward:after, button.cancel:after, button.undo:after, button.pending:after, button.refresh:after,button.add:after,
- button.success:after, button.error:after, button.edit:after, button.down:after, button.config:after,button.go:after,button.dropdown:after{
+ button.success:after, button.popup:after, button.close:after, button.attach:after, button.error:after, button.edit:after, button.down:after, button.config:after,button.go:after,button.dropdown:after{
     .ion;
     .unit-margin-left;
     
 }
 button:hover:after, button:hover:before{
-    .button-icon-transition;
+    /*.button-icon-transition;*/
 }
 
 
@@ -110,9 +113,11 @@ button.prev:before, button.back:before{
 
 
 button:hover:after, button:hover:before{
-    transform:rotateX(360deg) scale(1.2);
+    /*transform:rotateX(360deg) scale(1.2);*/
 }
-
+button.close:after{
+	content:@ionicon-var-ios-close-outline
+}
 button.next:after{
    content:@ionicon-var-chevron-right;
 }
@@ -132,7 +137,12 @@ button.cancel:after{
 button.cancel:hover:after{
     transform:rotateX(0deg) rotateZ(180deg);
 }
-
+button.popup:after{
+	content:@ionicon-var-ios-photos-outline;
+}
+button.attach:after{
+	content:@ionicon-var-ios-upload-outline;
+}
 button.pending:after{
     content:@ionicon-var-android-sync;
     animation:rotate 1s linear infinite;
@@ -210,6 +220,7 @@ button.trash-button:after{
 
 button.add-button span,
 button.close-button span,
+button.close span,
 button.trash-button span
 {
    display:none;
@@ -239,5 +250,8 @@ button.input-button{
 		margin-top:@unit-px;
 		margin-bottom:@unit-px;
 		float:none;
+	}
+	button.no-resize{
+		width:auto;
 	}
 }

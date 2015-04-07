@@ -1,4 +1,4 @@
-define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (GM, $) {
+define(["jquery"], function ($) {
 
     
     function Class(data) {
@@ -22,6 +22,7 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
 				//$('.define-space .active').removeClass('active');
 				$(this).toggleClass('active');
 			});
+			popups();
 		}
 		function addPallet(){
 			$('.define-space .active').removeClass('active');
@@ -29,10 +30,21 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
 			var data={};
 			data.name = storageNames[$('.define-space tbody tr').length];
 			var $element = template.bind(data);
-			var $tr = $('<tr/>').append($element);
-			$('.define-space tbody').append($tr);
+			$('.define-space tbody').append($element);
 		}
-
+		function popups(){
+			$('.popup').on("click",function(){
+				//Remove any old windows
+				$('.popup-window').remove();
+				var templateName = $(this).data('template');
+				var template = templates.getTemplate(templateName);
+				var $element = template.getElement();
+				$('body').append($element);
+			});
+			$(document).on("click",".popup-window .close",function(){
+				$('.popup-window').remove();
+			});
+		}
         $(function() {
             initialize();
         });

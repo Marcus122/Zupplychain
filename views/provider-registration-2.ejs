@@ -41,7 +41,7 @@
 													</tr>
 												</thead>
 												<tbody>
-													<tr class="active" data-tr="View Pallet">
+													<!--<tr class="active" data-tr="View Pallet">
 														<td data-th="Storage Name" class="text">
 															<input type="text" value="A"/>
 														</td>
@@ -76,7 +76,8 @@
 														<td data-th="Remove" class="action">
 															<button href="#" class="trash-button"><span>Delete</span></button>
 														</td>
-													</tr>
+													</tr>-->
+													<% include ./partials/define-space-row %> 
 												</tbody>
 											</table>
 										</fieldset>
@@ -84,7 +85,7 @@
 								</div>
 							</div>
 							<fieldset class="form-footer">
-								<button class="back">Back</button>
+								<a href="/provider-registration-1"><button type="button" class="back button">Back</button></a>
 								<button class="action">Save</button>
 								<span>OR</span>
 								<button class="action next">Save &amp; Continue</button>

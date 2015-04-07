@@ -20,10 +20,12 @@ define(["jquery"],function($){
 				var $this = $(this);
 				for (var property in $this.data()) {
 					if (property.indexOf(config.bind) == 0) {
-						var attribute = property.replace(config.bind ,'').toLowerCase();
-						var bind = $this.data(property);
-						var value = getBindValue(data,bind);
-						$this.attr(attribute,value);
+						if(passesCondition($this,property,data)){
+							var attribute = property.replace(config.bind ,'').toLowerCase();
+							var bind = $this.data(property);
+							var value = getBindValue(data,bind);
+							$this.attr(attribute,value);
+						}
 					}
 				}
 			});
@@ -43,6 +45,12 @@ define(["jquery"],function($){
 			});
 			return $wrapper.children();
 			
+		}
+		function passesCondition($element,bind,data){
+			var condition = $element.data(bind+'-condition');
+			if(!condition) return true; //no condition then passes
+			var value = getBindValue(data,condition);
+			return value ? true : false;
 		}
 		function getBindValue(_data,text){
 			var data=_data;

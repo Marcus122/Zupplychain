@@ -17,7 +17,7 @@
 						<li class="four columns active checked">Step 3</li>
 					</ul>
 					<section class="tab-content">
-						<form method="post" action="/provider-registration-3.html">
+						<form method="post" action="/provider-registration-complete" class="responsive-table">
 							<div class="main">
 								<div class="content-box primary">
 									<div class="header">
@@ -28,24 +28,24 @@
 											<thead>
 												<tr>
 													<th>Storage Name</th>
-													<th>Price per week*</th>
-													<th>Handling charge*</th>
-													<th>Availabile pallets</th>
+													<th>Pricing</th>
+													<th>Volume Discount</th>
+													<th>Availabile Pallets</th>
 												</tr>
 											</thead>
 											<tbody>
 												<tr>
-													<td class="text">
+													<td class="text" data-th="Storage Name">
 														<span>Pallet One</span>
 													</td>
-													<td>
-														<input type="text"/>
+													<td class="button-cell" data-th="Pricing">
+														<button data-template="pricing" type="button" class="secondary popup mini">click here</button>
 													</td>
-													<td>
-														<input type="text"/>
+													<td class="button-cell" data-th="Volume Discount">
+														<button data-template="volume"  type="button" class="secondary popup mini">click here</button>
 													</td>
-													<td>
-														<input type="text"/>
+													<td class="button-cell" data-th="Available Pallets">
+														<button data-template="pallets" type="button" class="secondary popup mini">click here</button>
 													</td>
 												</tr>
 											</tbody>
@@ -64,11 +64,125 @@
 								</div>
 							</div>
 							<fieldset class="form-footer">
-								<button class="back">Back</button>
+								<a href="/provider-registration-2"><button class="back" type="button">Back</button></a>
 								<button class="action next">Save &amp; Finish</button>
 							</fieldset>
 						</form>
 					</section>
 				</div>
 			</main>
-         <% include ./partials/bottom %>   
+         <% include ./partials/bottom %> 
+		 <script type="text/template" id="pricing-row">
+			<tr>
+				<td data-th="From"><input type="date" class="datepicker" /></td>
+				<td data-th="To"><input type="date" class="datepicker"/></td>
+				<td data-th="Price per pallet per week"><input  placeholder="£" type="text"/></td>
+				<td data-th="Handling charge per pallet (In and Out)"><input  placeholder="£" type="text"/></td>
+				<td data-th="Cost to reserve"><input  placeholder="£" type="text"/></td>
+				<td data-th="Remove"><button type="button" class="trash-button"><span>Delete</span></button></td>
+			</tr>
+		 </script>
+		 <script type="text/template" id="pricing">
+			<div class="popup-window">
+				<div class="inner">
+					<button class="close no-resize"><span>close</span></button>
+					<table class="show-title responsive-table" data-title="Pricing">
+						<thead>
+							<tr>
+								<th>From</th>
+								<th>To</th>
+								<th>Price per pallet per week</th>
+								<th>Handling charge per pallet (In and Out)</th>
+								<th>Cost to reserve</th>
+								<th/>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td data-th="From"><input type="date" class="datepicker" /></td>
+								<td data-th="To"><input type="date" class="datepicker"/></td>
+								<td data-th="Price per pallet per week"><input  placeholder="£" type="text"/></td>
+								<td data-th="Handling charge per pallet (In and Out)"><input  placeholder="£" type="text"/></td>
+								<td data-th="Cost to reserve"><input  placeholder="£" type="text"/></td>
+								<td data-th="Remove"><button type="button" class="trash-button"><span>Delete</span></button></td>
+							</tr>
+						</tbody>
+					</table>
+					<button class="action">add row</button>
+					<button class="action">save</button>
+				</div>
+			</div>
+		 </script>
+		 <script type="text/template" id="volume">
+			<div class="popup-window">
+				<div class="inner">
+					<button class="close no-resize"><span>close</span></button>
+					<table class="show-title responsive-table" data-title="Volume Discount">
+						<thead>
+							<th>Number of Pallets</th>
+							<th>% Discount</th>
+							<th>Discount Value
+						</thead>
+						<tbody>
+							<tr>
+								<td data-th="No Pallets"><span>11 - 50 pallets</span></td>
+								<td data-th="% Discount"><input type="text"/></td>
+								<td data-th="Discount Value"><input type="text"/></td>
+							</tr>
+							<tr>
+								<td data-th="No Pallets"><span>50 - 100 pallets</span></td>
+								<td data-th="% Discount"><input type="text"/></td>
+								<td data-th="Discount Value"><input type="text"/></td>
+							</tr>
+							<tr>
+								<td data-th="No Pallets"><span>100 - 250 pallets</span></td>
+								<td data-th="% Discount"><input type="text"/></td>
+								<td data-th="Discount Value"><input type="text"/></td>
+							</tr>
+							<tr>
+								<td data-th="No Pallets"><span>250 - 500 pallets</span></td>
+								<td data-th="% Discount"><input type="text"/></td>
+								<td data-th="Discount Value"><input type="text"/></td>
+							</tr>
+							<tr>
+								<td data-th="No Pallets"><span>500+ pallets</span></td>
+								<td data-th="% Discount"><input type="text"/></td>
+								<td data-th="Discount Value"><input type="text"/></td>
+							</tr>
+						</tbody>
+					</table>
+					<button class="action">save</button>
+				</div>
+			</div>
+		 </script>
+		 <script type="text/template" id="pallets">
+			<div class="popup-window">
+				<div class="inner">
+					<button class="close no-resize"><span>close</span></button>
+					<table class="show-title responsive-table" data-title="Available Pallets">
+						<thead>
+							<tr>
+								<th>From</th>
+								<th>To</th>
+								<th>Total Pallets</th>
+								<th>Estimated in Use</th>
+								<th>Estimated Free</th>
+								<th/>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td data-th="From"><input type="date" class="datepicker" /></td>
+								<td data-th="To"><input type="date" class="datepicker"/></td>
+								<td data-th="Total Pallets"><input type="text"/></td>
+								<td data-th="Estimated in Use"><input type="text"/></td>
+								<td data-th="Estimated Free"><input  type="text"/></td>
+								<td data-th="Remove"><button type="button" class="trash-button"><span>Delete</span></button></td>
+							</tr>
+						</tbody>
+					</table>
+					<button class="action">add row</button>
+					<button class="action">save</button>
+				</div>
+			</div>
+		 </script>

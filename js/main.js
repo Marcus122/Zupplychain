@@ -52,7 +52,7 @@ require(["jquery"], function($) {
                 
             });
         }
-		if (onPage("provider-registration-2")){
+		if (onPage("provider-registration-2") || onPage("provider-registration-3")){
 			require(["components/provider-registration"],function(Registration){
 				Registration();
 			});
