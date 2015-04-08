@@ -29,6 +29,9 @@ define({
 	
 	//HTML5 validator types, these are looked up by the 'type' of the input so names must match HTML5 spec input types.
 	email : function(input) {
+        if (input == "") { //blank inputs are 'valid'
+            return true;
+        }
 		var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 		return re.test(input);
 	},
@@ -50,7 +53,11 @@ define({
 		var re= /^\d{4}-\d{2}$/
 		return re.test(input);
 	},
-	tel : function(input) { //accept numbers, spaces, dashes, brackets and + sign. Expect 10-16 numbers once all other chars are stripped.
+	tel : function(input) {
+        if (input == "") { //blank inputs are 'valid'
+            return true;
+        }
+        //accept numbers, spaces, dashes, brackets and + sign. Expect 10-16 numbers once all other chars are stripped.
 		var reOnlyValidChars= /^[0-9()-+\ ]+$/;
         var onlyNumbers = input.toString().replace(/[^0-9]/g, "");
 		return reOnlyValidChars.test(input) && onlyNumbers.length >= 10 && onlyNumbers.length <= 16
@@ -62,7 +69,7 @@ define({
 		return false;
 	},
 	url : function (input){
-		return false;
+		return true;
 	},
 	
 	// end HTML5 types
