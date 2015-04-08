@@ -6,16 +6,9 @@ var mongoose = require('mongoose'),
 	warehouse_controller = require('../controllers/warehouses');
 
 var fields = {
-	name: { type: String },
 	email: { type: String },
-	addressline1: { type: String },
-	addressline2: { type: String },
-	city: { type: String },
-	postcode: { type: String },
-	description: { type: String },
-	telephone: { type: String },
-	mobile: { type:String },
-	active: { type: Boolean, default: true },
+	password: {type:String},
+	active: { type: Boolean, default: false },
 	created: { type: Date , default: Date.now } 
 };
 

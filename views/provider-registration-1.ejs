@@ -16,14 +16,17 @@
 						<li class="four columns">Step 3</li>
 					</ul>
 					<section class="tab-content">
-						<form method="post" action="/provider-registration-2" class="provider-form loom-form" novalidate>
+						<form method="post" action="/provider-registration-2" id="registration" class="provider-form loom-form" novalidate>
 							<div class="main">
 								<div class="content-box primary">
 									<div class="header">
 										<h3>Contact Information</h3>
 									</div>
-									<fieldset class="main">
+									<fieldset class="main" data-object="user">
 										<div class="columns six">
+											<div class="input-field">
+												<label for="email">Email*</label><input type="email" name="email" id="email" required value="<%= user.email %>"/>
+											</div>
 											<div class="input-field">
 												<label for="warehouseName">Warehouse Name*</label><input type="text" name="warehouse" id="warehouseName" required/>
 											</div>
@@ -36,16 +39,13 @@
 											<div class="input-field">
 												<label for="mobile">Mobile</label><input type="tel" name="mobile" id="mobile" value="<%= user.mobile %>"/>
 											</div>
-											<div class="input-field">
-												<label for="email">Email*</label><input type="email" name="email" id="email" required value="<%= user.email %>"/>
-											</div>
 										</div>
 										<div class="columns six">
 											<div class="input-field">
-												<label for="addressLine1">Address Line 1*</label><input type="text" name="addressLine1" id="addressLine1" required value="<%= user.addressline1 %>"/>
+												<label for="addressLine1">Address Line 1*</label><input type="text" name="addressline1" id="addressLine1" required value="<%= user.addressline1 %>"/>
 											</div>
 											<div class="input-field">
-												<label for="addressLine2">Address Line 2</label><input type="text" name="addressLine2" id="addressLine2" value="<%= user.addressline2 %>"/>
+												<label for="addressLine2">Address Line 2</label><input type="text" name="addressline2" id="addressLine2" value="<%= user.addressline2 %>"/>
 											</div>
 											<div class="input-field">
 												<label for="city">Town/City*</label><input type="text" name="city" id="city" required value="<%= user.city %>"/>
@@ -71,7 +71,7 @@
 												<h5>Services</h5>
 												<div class="row">
 													<div class="input-field check columns three">
-														<input type="checkbox"/>
+														<input name="name" type="checkbox" value="Transport / Distribution"/>
 														<label>Transport / Distribution</label>
 													</div>
 													<div class="input-field check columns three">
