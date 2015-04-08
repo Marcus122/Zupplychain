@@ -2,7 +2,7 @@ define(["jquery"],function($){
 	
 		/*
         
-        Super simple alert library that simple shows a message and has it fadeout.
+        Super simple alert library that simply shows a message and has it fadeout.
         The styling of the different types of message is obviously handled in the css.
         TODO: add dismissable dialouges and Confirm dialogues that take callbacks.
         
@@ -23,11 +23,26 @@ define(["jquery"],function($){
         
         function showMessage(messageClass, message, options) {
             cleanUpDom();
-            var onComplete = options ? options.onComplete : function(){;};
-            var fadeOutTime = options ? options.fadeOutTime : 2300;
+            var defaults = {
+                onComplete : $(),
+                fadeOutTime : 600,
+                preFadeOutTime : 500,
+                noFadeOut : false
+            }
+            var settings = $.extend(defaults, options);
+            
             var message = $("<div class='loom-alert " + messageClass + "'><p>" + message + "</p></div>");
             $(document.body).append(message);
-            message.fadeOut(fadeOutTime, function(){onComplete(message);});
+            if (settings.noFadeOut) {
+                settings.onComplete(message);
+                return;
+            }
+            
+            
+            setTimeout( function(){
+                message.fadeOut(settings.fadeOutTime, function(){settings.onComplete(message);});
+            },
+            settings.preFadeOutTime);
         }
         
         function cleanUpDom() {

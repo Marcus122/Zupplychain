@@ -21,7 +21,13 @@ define(["jquery", "./form"],function($, Form){
 		}
 		
 		function init() {
-			var formElements = $("form.loom-form");
+			//intentionally left for backwards compatability with an older version.
+		}
+        
+        init2();
+        
+        function init2() {
+            var formElements = $("form.loom-form");
             var count = 0;
 			formElements.each(function(){
 				form = new Form(this);
@@ -31,7 +37,7 @@ define(["jquery", "./form"],function($, Form){
                 }
                 forms[id] = form;
 			});
-		}
+        }
         
         //TODO: would be nice if these took jquery elements rather than IDs
         function addOnSuccessCallback(id, callback) {
@@ -50,10 +56,20 @@ define(["jquery", "./form"],function($, Form){
             }
         }
         
+        function isFormValid(formID) {
+            var form = forms[formID];
+            if (!form || form.length < 1) {
+                return false;
+            } else {
+                return form.validateFormAndReturnTrueIfValid();
+            }
+        }
+        
 		instance = {
 			init:init,
             addOnSuccessCallback:addOnSuccessCallback,
             addOnErrorCallback:addOnErrorCallback,
+            isFormValid:isFormValid,
             rebind:rebind
 		}
         return instance;

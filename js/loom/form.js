@@ -25,6 +25,10 @@ define(["jquery", "./formField"],function($, FormField){
 		var prefix;
         var successCallbacks = [];
         var errorCallbacks = [];
+        var disableOnSuccess;
+        var noAJAX;
+        var noSubmit;
+        var resetOnSuccess;
 		
 		// INIT
 		formElement 	= $($form);
@@ -32,6 +36,11 @@ define(["jquery", "./formField"],function($, FormField){
 		action 			= formElement.attr("data-loom-action");
 		dataType 		= formElement.attr("data-loom-data-type");
 		prefix 			= formElement.attr("data-loom-field-prefix") || "";
+        noAJAX          = formElement.attr("data-loom-no-ajax");
+        noSubmit        = formElement.attr("data-loom-no-submit");
+        disableOnSuccess= formElement.attr("data-loom-disable-on-success"); //TODO : being implemented
+        resetOnSuccess  = formElement.attr("data-loom-reset-on-success"); //TODO : being implemented
+        //canGoBackAndEdit= formElement.attr("data-loom-can-go-back-and-edit"); //TODO : being implemented
 		
         if (!dataType) {
             dataType="json";
@@ -89,9 +98,7 @@ define(["jquery", "./formField"],function($, FormField){
         var resetButton = formElement.find("button[type='reset']");
         
         resetButton.on("click", function(evt){
-            clearStateMessages();
-            clearValidationMessages();
-            resetInputs();
+            reset();
         });
 		
 		formElement.on("submit", function(evt){
@@ -107,11 +114,19 @@ define(["jquery", "./formField"],function($, FormField){
 				}
 				return;
 			} else {
-				setStatePending();
-				doFormSubmission();
+                if (!noSubmit) {
+                    setStatePending();
+                    doFormSubmission();
+                }
 			}
 		});
 		
+        function reset() {
+            clearStateMessages();
+            clearValidationMessages();
+            resetInputs();
+        }
+        
 		function setupConfirmationValidators(){
 			var lim = fields.length;
 			for(var i = 0;i < lim; i++) {
@@ -253,7 +268,8 @@ define(["jquery", "./formField"],function($, FormField){
 		
 		function formSubmissionCallback(response){
             var callbacksToDo = [];
-			if (response.error) {
+            var err = response.error;
+			if (err) {
 				clearStateMessages();
 				setStateError();
                 callbacksToDo = errorCallbacks;
@@ -261,12 +277,52 @@ define(["jquery", "./formField"],function($, FormField){
 				clearStateMessages();
 				setStateSuccess();
                 callbacksToDo = successCallbacks;
+
 			}
             var lim = callbacksToDo.length;
             for (var i = 0;i < lim;i++) {
                 callbacksToDo[i](response);//previously formElement.. this shouldn't break anything though.
             }
+            
+            if (!err) {
+                if (disableOnSuccess) {
+                    disable();
+                }
+                if (resetOnSuccess) {
+                    reset();
+                }
+            }
 		}
+        
+        function disable() {
+            if (disableOnSuccess != "true") { //checking for literal value 'true' vs the name of a class. if we're calling this method then it's a truthy value
+                formElement.closest("." + disableOnSuccess).addClass("disabled");
+            }
+            formElement.addClass("disabled");
+            formElement.find("input").attr("disabled", "disabled");
+            formElement.find("select").attr("disabled", "disabled");
+            formElement.find("textarea").attr("disabled", "disabled");
+            var $submitButton = formElement.find("button");
+            $submitButton.data("loom-old-html", $submitButton.html() );
+            $submitButton.addClass("loom-edit").html("Edit");
+            $submitButton.on("click.loom", function(evt){evt.preventDefault(); enable(); } );
+            $submitButton.attr("type", "button");
+        }
+        
+        function enable(){
+            if (disableOnSuccess != "true") { //checking for literal value 'true' vs the name of a class. if we're calling this method then it's a truthy value
+                formElement.closest("." + disableOnSuccess).removeClass("disabled");
+            }
+            formElement.removeClass("disabled");
+            formElement.find("input").removeAttr("disabled");
+            formElement.find("select").removeAttr("disabled");
+            formElement.find("textarea").removeAttr("disabled");
+            var $submitButton = formElement.find("button");
+            var oldHTML = $submitButton.data("loom-old-html");
+            $submitButton.off("click.loom");
+            $submitButton.addClass("loom-edit").html(oldHTML);
+            $submitButton.attr("type", "submit");
+        }
 		
 		function appendFormField(name,value,string){
 			var object = {};
@@ -279,7 +335,6 @@ define(["jquery", "./formField"],function($, FormField){
 			return string;
 		}
 		
-		//TODO : switch on dataType, if JSON jsonify the form and post up.
 		function doFormSubmission(){
 			var result = {};
 			var params;
@@ -296,7 +351,7 @@ define(["jquery", "./formField"],function($, FormField){
 			$.ajax({
 				type: "POST",
 				url: url,
-				dataType: dataType, //was json.
+				dataType: dataType,
 				data: params
 			}).done(function(response){
 				formSubmissionCallback(response);
@@ -379,7 +434,10 @@ define(["jquery", "./formField"],function($, FormField){
             addOnSuccessCallback:addOnSuccessCallback,
             addOnErrorCallback:addOnErrorCallback,
             successCallbacks:successCallbacks,
-            errorCallbacks:errorCallbacks
+            errorCallbacks:errorCallbacks,
+            disable:disable,
+            enable:enable,
+            reset:reset
 		};
 	}
 });
