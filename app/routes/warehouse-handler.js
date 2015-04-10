@@ -1,7 +1,8 @@
 var user = require("../controllers/users.js"),
 	warehouse = require("../controllers/warehouses.js"),
 	storage = require("../controllers/storage.js"),
-	local = require("../local.config.js");
+	local = require("../local.config.js"),
+	async = require("async");
 
 var handler = function(app) {
 	app.param('warehouse_id', warehouse.load);
@@ -19,33 +20,60 @@ var handler = function(app) {
 		}
 	});
 	app.post('/warehouse/:warehouse_id/storage',createStorage);
+	app.post('/warehouse/:warehouse_id/storage/batch',batchStorage)
 };
 function createUser(req,res){
 	var data={};
 	user.create(data,function(err,user){
 		setCookie(user,res);
+		req.data.user=user;
 		createWarehouse(req,res);
 	});
 }
 function createWarehouse(req,res){
-	warehouse.create(req.data.user,req.body,function(err,warehouse){
+	warehouse.create(req.data.user,req.body,function(err,Warehouse){
 		if(err){
 			setErrorResponse(err,res);
 		}else{
-			req.warehouse = warehouse;
+			req.warehouse = Warehouse;
 			setResponse(req,res);
 		}
 	});
 }
 function createStorage(req,res,next){
-	if(!req.warehouse) next();
-	storage.create(req.warehouse,req.body,function(err,storage){
+	if(!req.warehouse) next("Warehouse not found");
+	storage.create(req.body,function(err,storage){
 		if(err){
 			setErrorResponse(err,res);
 		}else{
 			req.storage = storage;
-			setStorageResponse(req,res);
+			req.warehouse.storage.push(storage._id);
+			req.warehouse.save(function(){
+				setStorageResponse(req,res);
+			});
 		}
+	});
+}
+function batchStorage(req,res){
+	if(!req.warehouse) next();
+	req.warehouse.storage=[];
+	async.each(req.body, function(_storage,callback){
+		if(!_storage.id){
+			storage.create(_storage,function(err,Storage){
+				req.warehouse.storage.push(Storage._id);
+				callback();
+			});
+		}else{
+			storage.updateWithData(_storage,function(err,Storage){
+				req.warehouse.storage.push(Storage._id);
+				callback();
+			});
+		}
+		
+	},function(err){
+		req.warehouse.save(function(){
+			setResponse(req,res);
+		});
 	});
 }
 function updateWarehouse(req,res){

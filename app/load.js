@@ -8,9 +8,8 @@ module.exports = function(_data){
 		req.data.user = {};
 		var session = req.cookies["session-id"];
 		if(!session) return next();
-		console.log(session);
 		user_controller.user_by_id(session,function(err,user){
-			if(!err){
+			if(user){
 				req.data.user = user;
 			}
 			return next();

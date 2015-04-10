@@ -1,4 +1,4 @@
-define(["jquery"], function ($) {
+define(["jquery","controllers/warehouse"], function ($,Warehouse) {
 
     
     function Class(data) {
@@ -30,8 +30,25 @@ define(["jquery"], function ($) {
 					if( lm.isFormValid($registration.attr('id')) ){
 						var warehouse={};
 						bindFormToObject($registration,warehouse);
-						updateWarehouse(warehouse)
+						Warehouse.update(warehouse,function(){
+							window.location = './provider-registration-2';
+						});
 					}
+				});
+			});
+			var $defineSpace = $('#define-space');
+			$defineSpace.on("submit",function(ev){
+				ev.preventDefault();
+				var storage=[];
+				$defineSpace.find('tbody tr').each(function(){
+					var s={};
+					bindFormToObject($(this),s);
+					storage.push(s);
+				});
+				var warehouse={};
+				warehouse.id = $defineSpace.find('input[name="warehouse_id"]').val();
+				Warehouse.updateStorageBatch(warehouse,storage,function(){
+					window.location = './provider-registration-3';
 				});
 			});
 			popups();
@@ -64,8 +81,8 @@ define(["jquery"], function ($) {
     }
 	
 	function bindFormToObject($form,object){
-		var $inputs = $.merge( $form.find('input') , $form.find('textarea') );
-		$form.find('input').each(function(){
+		var $inputs = $.merge( $.merge( $form.find('input') , $form.find('textarea') ), $form.find('select') );
+		$inputs.each(function(){
 			var $input = $(this);
 			var name = $input.attr('name');
 			var array = $input.data('array');
@@ -87,20 +104,6 @@ define(["jquery"], function ($) {
 				}
 			}
 		});
-	}
-	function updateWarehouse(warehouse){
-		var url = '/warehouse';
-		if(warehouse.id) url+='/'+ warehouse.id;
-		$.ajax({
-			url: url,
-			type:'POST',
-			data: JSON.stringify(warehouse),
-			contentType: 'application/json; charset=utf-8',
-			dataType: 'json',
-			success:function(){
-				window.location = './provider-registration-2';
-			}
-		})
 	}
     
     return Class;

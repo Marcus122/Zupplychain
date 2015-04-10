@@ -22,7 +22,8 @@
 						<li class="four columns">Step 3</li>
 					</ul>
 					<section class="tab-content">
-						<form method="post" action="/provider-registration-3">
+						<form method="post" action="/provider-registration-3" id="define-space">
+							<input type="hidden" value="<%=warehouse._id%>" name="warehouse_id"/>
 							<div class="main">
 								<div class="content-box primary">
 									<div class="header">
@@ -112,6 +113,7 @@
 				</div>
 			</main>
 		 <script type="text/template" id="define-space-row">
+			<% var row = {}; %>
 			<% include ./partials/define-space-row %> 
 		 </script>
          <% include ./partials/bottom %> 

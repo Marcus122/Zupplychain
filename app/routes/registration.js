@@ -22,7 +22,6 @@ function populateUserData(req,res, next){
 	if(!req.data.user._id) return next();
 	req.data.user.getWarehouses(function(warehouses){
 		req.data.user.warehouses = warehouses;
-		console.log(req.data.user.warehouses)
 		return next();
 	});
 }

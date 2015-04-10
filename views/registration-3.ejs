@@ -1,5 +1,13 @@
  <% include ./partials/top %>   
-            
+            <%
+				warehouse={};
+				if( user.warehouses && user.warehouses.length  ){
+					warehouse=user.warehouses[0];
+				}
+				if(!warehouse.storage.length){
+					warehouse.storage=[];
+				}
+			%>
 			<main>
 				<div class="row carousel">
 					<img src="/images/provider-banner.png" alt="Complete your registration"/>
@@ -34,9 +42,10 @@
 												</tr>
 											</thead>
 											<tbody>
+												<%for( var i=0; i<warehouse.storage.length;i++ ){%>
 												<tr>
 													<td class="text" data-th="Storage Name">
-														<span>Pallet One</span>
+														<span><%=warehouse.storage[i].name%></span>
 													</td>
 													<td class="button-cell" data-th="Pricing">
 														<button data-template="pricing" type="button" class="secondary popup mini">click here</button>
@@ -47,7 +56,8 @@
 													<td class="button-cell" data-th="Available Pallets">
 														<button data-template="pallets" type="button" class="secondary popup mini">click here</button>
 													</td>
-												</tr>
+											    </tr>
+											    <%}%>
 											</tbody>
 										</table>
 										<div class="row">

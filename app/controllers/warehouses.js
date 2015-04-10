@@ -21,7 +21,6 @@ exports.load = function(req,res,next,id) {
 	if(!req.data.user._id) return next(new Error('not found'));
 	Warehouse.load(id,function(err,warehouse){
 		if(err){
-			console.log(err)
 			return next(new Error('not found'));
 		}else{
 			//Check warehouse is for user
