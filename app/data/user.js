@@ -9,7 +9,7 @@ var fields = {
 	email: { type: String },
 	password: {type:String},
 	active: { type: Boolean, default: false },
-	created: { type: Date , default: Date.now } 
+	created: { type: Date , default: Date.now }
 };
 
 var userSchema = new Schema(fields);
@@ -17,6 +17,11 @@ userSchema.index({ email:1 , type:-1 });
 
 userSchema.methods.addWarehouse = function(data,cb){
 	warehouse_controller.create_warehouse(this,data,cb);
+}
+userSchema.methods.getWarehouses = function(cb){
+	warehouse_controller.warehouse_by_user(this,function(err,warehouses){
+		cb(warehouses);
+	});
 }
 
 module.exports = mongoose.model('users', userSchema);

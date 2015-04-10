@@ -6,7 +6,7 @@ exports.version = "0.1.0";
 /**
  * User class.
  */
-exports.create_user = function (data,cb) {
+exports.create = function (data,cb) {
 	var user = new User(data);
 	user.save(function(err){
 		if (!err) {
@@ -17,7 +17,7 @@ exports.create_user = function (data,cb) {
 		 }
 	});
 }
-exports.update_user = function(user,cb){
+exports.update = function(user,cb){
 	user.save(function(err){
 		if(!err){
 			cb(null,user);

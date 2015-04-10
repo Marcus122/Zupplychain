@@ -1,4 +1,10 @@
- <% include ./partials/top %>   
+ <% include ./partials/top %> 
+			<%
+				warehouse={};
+				if( user.warehouses && user.warehouses.length  ){
+					warehouse=user.warehouses[0];
+				}
+			%>
 			<main>
 				<div class="row carousel">
 					<img src="/images/provider-banner.png" alt="Continue your registration"/>
@@ -77,7 +83,18 @@
 															<button href="#" class="trash-button"><span>Delete</span></button>
 														</td>
 													</tr>-->
-													<% include ./partials/define-space-row %> 
+													<%
+														var row = {};
+														row.name = "A";
+														if( !warehouse.storage || !warehouse.storage.length ){%>
+														
+														<% include ./partials/define-space-row %>
+													<%}else{
+														for( var i=0; i < warehouse.storage.length; i++ ){
+															row = warehouse.storage[i];%>
+															<% include ./partials/define-space-row %>
+														<%}
+													}%>
 												</tbody>
 											</table>
 										</fieldset>

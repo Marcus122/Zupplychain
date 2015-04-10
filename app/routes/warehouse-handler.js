@@ -1,51 +1,75 @@
-var user_controller = require("../controllers/users.js"),
-	warehouse_controller = require("../controllers/warehouses.js"),
+var user = require("../controllers/users.js"),
+	warehouse = require("../controllers/warehouses.js"),
+	storage = require("../controllers/storage.js"),
 	local = require("../local.config.js");
 
 var handler = function(app) {
-  app.post('/create-warehouse', function(req, res) {
+	app.param('warehouse_id', warehouse.load);
+	
+	app.get('/warehouse/:warehouse_id', setResponse);
+	
+	app.post('/warehouse/:warehouse_id', updateWarehouse );
+	
+	app.post('/warehouse', function(req, res) {
 		//If user is not logged in then create user
-		if(req.data.user){
-			user = user_controller.user_by_id(req.data.user._id,function(err,user){
-				//If no user then create
-				if(!user){
-					createUser(req, res);
-				}else{
-					createWarehouse(user,req,res);
-				}
-			});
+		if(req.data.user._id){
+			createWarehouse(req,res);
 		}else{
 			createUser(req, res);
 		}
-  });
-  app.post('/update-warehouse',function(req,res){
-		warehouse_controller.warehouse_by_id(req.body.id,function(err,warehouse){
-			if(!err){
-				for(i in req.body){
-					if(warehouse[i]) warehouse[i] = req.body[i];
-				}
-				warehouse.save(function(err){
-					setResponse(warehouse,res);
-				});
-			}else{
-				setResponse(err,res);
-			}
-		});
-  });
+	});
+	app.post('/warehouse/:warehouse_id/storage',createStorage);
 };
 function createUser(req,res){
 	var data={};
-	user_controller.create_user(data,function(err,user){
+	user.create(data,function(err,user){
 		setCookie(user,res);
-		createWarehouse(user,req,res);
+		createWarehouse(req,res);
 	});
 }
-function createWarehouse(user,req,res){
-	user.addWarehouse(req.body)
+function createWarehouse(req,res){
+	warehouse.create(req.data.user,req.body,function(err,warehouse){
+		if(err){
+			setErrorResponse(err,res);
+		}else{
+			req.warehouse = warehouse;
+			setResponse(req,res);
+		}
+	});
 }
-function setResponse(data,res){
+function createStorage(req,res,next){
+	if(!req.warehouse) next();
+	storage.create(req.warehouse,req.body,function(err,storage){
+		if(err){
+			setErrorResponse(err,res);
+		}else{
+			req.storage = storage;
+			setStorageResponse(req,res);
+		}
+	});
+}
+function updateWarehouse(req,res){
+	warehouse.update(req.warehouse,req.body,function(err){
+		if(err){
+			setErrorResponse(err,res);
+		}else{
+			setResponse(req,res);
+		}
+	});
+}
+function setResponse(req,res){
 	res.writeHead(200, {"Content-Type": "application/json"});
-    var output = { error: null, data: data };
+    var output = { error: null, data: req.warehouse };
+    res.end(JSON.stringify(output) + "\n");
+}
+function setStorageResponse(req,res){
+	res.writeHead(200, {"Content-Type": "application/json"});
+    var output = { error: null, data: req.storage };
+    res.end(JSON.stringify(output) + "\n");
+}
+function setErrorResponse(err,res){
+	res.writeHead(500, {"Content-Type": "application/json"});
+    var output = { error: true};
     res.end(JSON.stringify(output) + "\n");
 }
 function setCookie(user,res){

@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(cookieParser());
 // parse application/json 
-app.use(bodyParser.json({ type: 'application/*+json' }));
+app.use(bodyParser.json());
 
 app.use(express.static(__dirname));
 
@@ -34,26 +34,24 @@ app.get('/test', function (req,res) {
     res.render("index",req.data);
 });
 
-app.get('/provider-registration', function(req,res){
-    res.render("provider-registration",req.data);
-});
-app.get('/provider-registration/:step', function (req,res) {
-    providerHandler(req,res);
-});
-app.post('/provider-registration-:step', function (req,res) {
-    providerHandler(req,res);
-});
 require('./app/routes/user-handler')(app);
-
-function providerHandler(req,res){
-	if (req.params.step == 0) {
-        res.render("provider-registration",req.data);
-    } else {
-        res.render("provider-registration" + "-" + req.params.step,req.data);
-    }
-}
-
-app.get('*', function(req, res) {
+require('./app/routes/warehouse-handler')(app);
+require('./app/routes/registration')(app);
+/**
+* Error handling
+*/
+app.use(function (err, req, res, next) {
+	// treat as 404
+	if (err.message
+	  && (~err.message.indexOf('not found')
+	  || (~err.message.indexOf('Cast to ObjectId failed')))) {
+	  return next();
+	}
+	console.error(err.stack);
+	// error page
+	res.status(500).render('500', { error: err.stack });
+});
+app.use('*', function(req, res) {
     try {
         res.render(req.path.substring(1, req.path.length),req.data); //strip leading '/'
     }

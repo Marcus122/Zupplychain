@@ -22,6 +22,18 @@ define(["jquery"], function ($) {
 				//$('.define-space .active').removeClass('active');
 				$(this).toggleClass('active');
 			});
+			var $registration = $('#registration');
+			$registration.on("submit",function(ev){
+				ev.preventDefault();
+				require(["loom/loom"], function (Loom) {
+					var lm = new Loom(); 
+					if( lm.isFormValid($registration.attr('id')) ){
+						var warehouse={};
+						bindFormToObject($registration,warehouse);
+						updateWarehouse(warehouse)
+					}
+				});
+			});
 			popups();
 		}
 		function addPallet(){
@@ -50,6 +62,46 @@ define(["jquery"], function ($) {
         });
 
     }
+	
+	function bindFormToObject($form,object){
+		var $inputs = $.merge( $form.find('input') , $form.find('textarea') );
+		$form.find('input').each(function(){
+			var $input = $(this);
+			var name = $input.attr('name');
+			var array = $input.data('array');
+			if(array){
+				if(!object[array]){
+					object[array]=[];
+				}
+				var obj = {};
+				if($input.val()){
+					obj[name]=$input.val();
+					if($input.attr('type') === 'checkbox'){
+						obj.active = $input.is(':checked');
+					}
+					object[array].push(obj);
+				}
+			}else{
+				if(name){
+					object[name] = $input.val();
+				}
+			}
+		});
+	}
+	function updateWarehouse(warehouse){
+		var url = '/warehouse';
+		if(warehouse.id) url+='/'+ warehouse.id;
+		$.ajax({
+			url: url,
+			type:'POST',
+			data: JSON.stringify(warehouse),
+			contentType: 'application/json; charset=utf-8',
+			dataType: 'json',
+			success:function(){
+				window.location = './provider-registration-2';
+			}
+		})
+	}
     
     return Class;
     

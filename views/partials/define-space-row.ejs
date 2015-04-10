@@ -1,34 +1,62 @@
 <tr class="active" data-tr="Expand" data-tr-closed="Collapse">
 	<td data-th="Storage Name" class="text">
-		<input type="text" value="A" data-bind-value="name" data-bind-value-condition="name" required/>
+		<input type="text" data-bind-value="name" data-bind-value-condition="name" required  value="<%=row.name%>"/>
 	</td>
 	<td data-th="Pallet Type" class="select">
 		<select>
-			<option>Blue</option>
-			<option>Euro</option>
-			<option>Standard</option>
-			<option>Ano</option>
-			<option>Other</option>
-			<option>Any</option>
+			<option
+				<%if(row.palletType === 'Blue' ){%>
+					selected="selected"
+				<%}%>
+			>Blue</option>
+			<option 
+				<%if(row.palletType === 'Euro' ){%>
+					selected="selected"
+				<%}%>
+			>Euro</option>
+			<option
+				<%if(row.palletType === 'Standard' ){%>
+					selected="selected"
+				<%}%>
+			>Standard</option>
+			<option
+				<%if(row.palletType === 'Ano' ){%>
+					selected="selected"
+				<%}%>
+			>Ano</option>
+			<option
+				<%if(row.palletType === 'Other' ){%>
+					selected="selected"
+				<%}%>
+			>Other</option>
+			<option
+				<%if(row.palletType === 'Ant' ){%>
+					selected="selected"
+				<%}%>
+			>Any</option>
 		</select>
 	</td>
 	<td data-th="Storage Temp" class="select">
 		<select>
 			<option>Ambient</option>
-			<option>Chilled</option>
+			<option
+				<%if(row.temp === 'Chilled' ){%>
+					selected="selected"
+				<%}%>
+			>Chilled</option>
 			<option>Frozen</option>
 			<option>Outside</option>
 			<option>Other</option>
 		</select>
 	</td>
 	<td data-th="Max Weight" class="value">
-		<input type="text"/>
+		<input type="text" value="<%=row.maxWeight%>"/>
 	</td>
 	<td data-th="Max Height" class="value">
-		<input type="text"/>
+		<input type="text" value="<%=row.maxHeight%>"/>
 	</td>
 	<td data-th="Pallet Spaces" class="value">
-		<input type="text"/>
+		<input type="text" value="<%=row.palletSpaces%>"/>
 	</td>
 	<td data-th="Remove" class="action">
 		<button href="#" class="trash-button"><span>Delete</span></button>

@@ -5,7 +5,6 @@ var mongoose = require('mongoose'),
 	ObjectId = Schema.ObjectId;
 
 var fields = {
-	warehouse: { type: String }, //Warehouse ID
 	name: { type: String },
 	palletType: { type: String },
 	temp: { type: String },
