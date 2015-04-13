@@ -2,7 +2,8 @@ var user = require("../controllers/users.js"),
 	warehouse = require("../controllers/warehouses.js"),
 	storage = require("../controllers/storage.js"),
 	local = require("../local.config.js"),
-	async = require("async");
+	async = require("async"),
+	UKPostcodes = require("uk-postcodes-node");
 
 var handler = function(app) {
 	app.param('warehouse_id', warehouse.load);
@@ -20,7 +21,10 @@ var handler = function(app) {
 		}
 	});
 	app.post('/warehouse/:warehouse_id/storage',createStorage);
-	app.post('/warehouse/:warehouse_id/storage/batch',batchStorage)
+	app.post('/warehouse/:warehouse_id/storage/batch',batchStorage);
+	
+	app.param('storage_id', storage.load);
+	app.post('/stroage/:storage_id', updateStorage );
 };
 function createUser(req,res){
 	var data={};
@@ -31,13 +35,16 @@ function createUser(req,res){
 	});
 }
 function createWarehouse(req,res){
-	warehouse.create(req.data.user,req.body,function(err,Warehouse){
-		if(err){
-			setErrorResponse(err,res);
-		}else{
-			req.warehouse = Warehouse;
-			setResponse(req,res);
-		}
+	getLatLong(req.body.postcode,function(latlng){
+		req.body.geo = latlng;
+		warehouse.create(req.data.user,req.body,function(err,Warehouse){
+			if(err){
+				setErrorResponse(err,res);
+			}else{
+				req.warehouse = Warehouse;
+				setResponse(req,res);
+			}
+		});
 	});
 }
 function createStorage(req,res,next){
@@ -77,12 +84,37 @@ function batchStorage(req,res){
 	});
 }
 function updateWarehouse(req,res){
-	warehouse.update(req.warehouse,req.body,function(err){
-		if(err){
-			setErrorResponse(err,res);
-		}else{
-			setResponse(req,res);
+	async.waterfall([
+		//Any data request go here
+		function(callback){
+			getLatLong(req.body.postcode,function(latlng){
+				req.body.geo=latlng;
+				callback(null);
+			});
 		}
+
+	],function (err, result) {
+		warehouse.update(req.warehouse,req.body,function(err){
+			if(err){
+				setErrorResponse(err,res);
+			}else{
+				setResponse(req,res);
+			}
+		});
+	});
+}
+function getLatLong(postcode,cb){
+	var geo = {
+		lat:"",
+		lng:""
+	};
+	if(!postcode) return cb(geo);
+	UKPostcodes.getPostcode(postcode, function (error, data) {
+		if(!error){
+			geo.lat = data.geo.lat;
+			geo.lng = data.geo.lng;
+		}
+		return cb(geo);
 	});
 }
 function setResponse(req,res){

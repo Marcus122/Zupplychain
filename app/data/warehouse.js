@@ -23,7 +23,11 @@ var fields = {
 	documents: [{filename:String, type:String}],
 	active: { type: Boolean, default: false },
 	created: { type: Date , default: Date.now },
-	storage: [{ type: Schema.ObjectId, ref: 'storage' }]
+	storage: [{ type: Schema.ObjectId, ref: 'storage' }],
+	geo: {
+		lat: { type: Number },
+		lng: { type: Number }
+	}
 };
 
 var warehouseSchema = new Schema(fields);
