@@ -6,7 +6,7 @@ var mongoose = require('mongoose'),
 	Storage = require("./storage.js");
 
 var fields = {
-	user: {  type : String }, //User ID
+	user: { type: Schema.ObjectId, ref: 'users' },
 	name: { type: String },
 	email: { type: String },
 	contact: { type: String },
@@ -36,11 +36,13 @@ warehouseSchema.statics = {
 	load: function (id, cb) {
 		this.findOne({ _id : id })
 		  .populate('storage')
+		  .populate('user')
 		  .exec(cb);
   },
   loadByUser: function(user,cb){
 	 this.find({'user': user._id})
 		  .populate('storage')
+		  .populate('user')
 		  .exec(cb); 
   }
 }

@@ -10,7 +10,7 @@ var handler = function(app) {
 	
 	app.get('/warehouse/:warehouse_id', setResponse);
 	
-	app.post('/warehouse/:warehouse_id', updateWarehouse );
+	app.post('/warehouse/:warehouse_id', warehouseAuth, updateWarehouse );
 	
 	app.post('/warehouse', function(req, res) {
 		//If user is not logged in then create user
@@ -24,7 +24,8 @@ var handler = function(app) {
 	app.post('/warehouse/:warehouse_id/storage/batch',batchStorage);
 	
 	app.param('storage_id', storage.load);
-	app.post('/stroage/:storage_id', updateStorage );
+	app.post('/stroage/:storage_id', storageAuth,  updateStorage );
+	app.get('/storage/:storage_id', setStorageResponse );
 };
 function createUser(req,res){
 	var data={};
@@ -33,6 +34,10 @@ function createUser(req,res){
 		req.data.user=user;
 		createWarehouse(req,res);
 	});
+}
+function warehouseAuth(req,res,next){
+	if(req.warehouse.user._id.equals( req.data.user._id) ) return next();
+	setResponse(req,res,next);
 }
 function createWarehouse(req,res){
 	getLatLong(req.body.postcode,function(latlng){
@@ -47,17 +52,30 @@ function createWarehouse(req,res){
 		});
 	});
 }
+function storageAuth(req,res,next){
+	if(req.storage.user._id.equals( req.data.user._id) ) return next();
+	setStorageResponse(req,res,next);
+}
 function createStorage(req,res,next){
 	if(!req.warehouse) next("Warehouse not found");
-	storage.create(req.body,function(err,storage){
+	storage.create(req.data.user, req.body,function(err,storage){
 		if(err){
 			setErrorResponse(err,res);
 		}else{
 			req.storage = storage;
 			req.warehouse.storage.push(storage._id);
 			req.warehouse.save(function(){
-				setStorageResponse(req,res);
+				setStorageResponse(req,res,next);
 			});
+		}
+	});
+}
+function updateStorage(req,res,next){
+	storage.update(req.storage,req.body,function(err){
+		if(err){
+			setErrorResponse(err,res);
+		}else{
+			setStorageResponse(req,res);
 		}
 	});
 }
@@ -122,7 +140,8 @@ function setResponse(req,res){
     var output = { error: null, data: req.warehouse };
     res.end(JSON.stringify(output) + "\n");
 }
-function setStorageResponse(req,res){
+function setStorageResponse(req,res,next){
+	if(!req.storage) next();
 	res.writeHead(200, {"Content-Type": "application/json"});
     var output = { error: null, data: req.storage };
     res.end(JSON.stringify(output) + "\n");

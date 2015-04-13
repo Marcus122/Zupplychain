@@ -43,7 +43,8 @@
 											</thead>
 											<tbody>
 												<%for( var i=0; i<warehouse.storage.length;i++ ){%>
-												<tr>
+												<tr data-id="<%=warehouse.storage[i]._id %>">
+													
 													<td class="text" data-th="Storage Name">
 														<span><%=warehouse.storage[i].name%></span>
 													</td>
@@ -82,16 +83,6 @@
 				</div>
 			</main>
          <% include ./partials/bottom %> 
-		 <script type="text/template" id="pricing-row">
-			<tr>
-				<td data-th="From"><input type="date" class="datepicker" /></td>
-				<td data-th="To"><input type="date" class="datepicker"/></td>
-				<td data-th="Price per pallet per week"><input  placeholder="£" type="text"/></td>
-				<td data-th="Handling charge per pallet (In and Out)"><input  placeholder="£" type="text"/></td>
-				<td data-th="Cost to reserve"><input  placeholder="£" type="text"/></td>
-				<td data-th="Remove"><button type="button" class="trash-button"><span>Delete</span></button></td>
-			</tr>
-		 </script>
 		 <script type="text/template" id="pricing">
 			<div class="popup-window">
 				<div class="inner">
@@ -108,20 +99,15 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td data-th="From"><input type="date" class="datepicker" /></td>
-								<td data-th="To"><input type="date" class="datepicker"/></td>
-								<td data-th="Price per pallet per week"><input  placeholder="£" type="text"/></td>
-								<td data-th="Handling charge per pallet (In and Out)"><input  placeholder="£" type="text"/></td>
-								<td data-th="Cost to reserve"><input  placeholder="£" type="text"/></td>
-								<td data-th="Remove"><button type="button" class="trash-button"><span>Delete</span></button></td>
-							</tr>
 						</tbody>
 					</table>
-					<button class="action">add row</button>
-					<button class="action">save</button>
+					<button class="action add">add row</button>
+					<button class="action">done</button>
 				</div>
 			</div>
+		 </script>
+		 <script type="text/template" id="pricing-row">
+		    <% include ./partials/pricing-row %> 
 		 </script>
 		 <script type="text/template" id="volume">
 			<div class="popup-window">
@@ -161,7 +147,7 @@
 							</tr>
 						</tbody>
 					</table>
-					<button class="action">save</button>
+					<button class="action">done</button>
 				</div>
 			</div>
 		 </script>
@@ -192,7 +178,7 @@
 						</tbody>
 					</table>
 					<button class="action">add row</button>
-					<button class="action">save</button>
+					<button class="action">done</button>
 				</div>
 			</div>
 		 </script>

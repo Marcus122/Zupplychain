@@ -37,10 +37,23 @@ define(["jquery"], function ($) {
 				}
 			});
 		}
+		function getStorage(id,cb){
+			var new_url = '/storage/' + id;
+			$.ajax({
+				url: new_url,
+				type:'GET',
+				contentType: 'application/json; charset=utf-8',
+				dataType: 'json',
+				success:function(response){
+					cb(response);
+				}
+			});
+		}
 		
 		return{
 			update :update,
-			updateStorageBatch:updateStorageBatch
+			updateStorageBatch:updateStorageBatch,
+			getStorage:getStorage
 		}
 	}
 		

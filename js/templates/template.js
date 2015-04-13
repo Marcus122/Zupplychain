@@ -85,7 +85,7 @@ define(["jquery"],function($){
 			});
 		}
 		function getElement(){
-			return $template;
+			return $($script.html());
 		}
 		return{
 			bind:bind,
