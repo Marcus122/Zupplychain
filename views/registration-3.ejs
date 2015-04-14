@@ -102,7 +102,7 @@
 						</tbody>
 					</table>
 					<button class="action add">add row</button>
-					<button class="action">done</button>
+					<button class="action done">done</button>
 				</div>
 			</div>
 		 </script>
@@ -115,41 +115,22 @@
 					<button class="close no-resize"><span>close</span></button>
 					<table class="show-title responsive-table" data-title="Volume Discount">
 						<thead>
-							<th>Number of Pallets</th>
+							<th>From</th>
+							<th>To</th>
 							<th>% Discount</th>
-							<th>Discount Value
+							<th>Discount Value</th>
+							<th/>
 						</thead>
 						<tbody>
-							<tr>
-								<td data-th="No Pallets"><span>11 - 50 pallets</span></td>
-								<td data-th="% Discount"><input type="text"/></td>
-								<td data-th="Discount Value"><input type="text"/></td>
-							</tr>
-							<tr>
-								<td data-th="No Pallets"><span>50 - 100 pallets</span></td>
-								<td data-th="% Discount"><input type="text"/></td>
-								<td data-th="Discount Value"><input type="text"/></td>
-							</tr>
-							<tr>
-								<td data-th="No Pallets"><span>100 - 250 pallets</span></td>
-								<td data-th="% Discount"><input type="text"/></td>
-								<td data-th="Discount Value"><input type="text"/></td>
-							</tr>
-							<tr>
-								<td data-th="No Pallets"><span>250 - 500 pallets</span></td>
-								<td data-th="% Discount"><input type="text"/></td>
-								<td data-th="Discount Value"><input type="text"/></td>
-							</tr>
-							<tr>
-								<td data-th="No Pallets"><span>500+ pallets</span></td>
-								<td data-th="% Discount"><input type="text"/></td>
-								<td data-th="Discount Value"><input type="text"/></td>
-							</tr>
 						</tbody>
 					</table>
-					<button class="action">done</button>
+					<button class="action add">add row</button>
+					<button class="action done">done</button>
 				</div>
 			</div>
+		 </script>
+		 <script type="text/template" id="discount-row">
+		    <% include ./partials/discount-row %> 
 		 </script>
 		 <script type="text/template" id="pallets">
 			<div class="popup-window">
@@ -167,18 +148,13 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td data-th="From"><input type="date" class="datepicker" /></td>
-								<td data-th="To"><input type="date" class="datepicker"/></td>
-								<td data-th="Total Pallets"><input type="text"/></td>
-								<td data-th="Estimated in Use"><input type="text"/></td>
-								<td data-th="Estimated Free"><input  type="text"/></td>
-								<td data-th="Remove"><button type="button" class="trash-button"><span>Delete</span></button></td>
-							</tr>
 						</tbody>
 					</table>
-					<button class="action">add row</button>
-					<button class="action">done</button>
+					<button class="action add">add row</button>
+					<button class="action done">done</button>
 				</div>
 			</div>
+		 </script>
+		 <script type="text/template" id="pallet-row">
+		    <% include ./partials/pallet-row %> 
 		 </script>

@@ -76,12 +76,18 @@ define(["jquery","controllers/warehouse"], function ($,Warehouse) {
 						case 'pricing':
 							doPricing(Storage,$element);
 							break;
+						case 'pallets':
+							doPallets(Storage,$element);
+							break;
+						case 'volume':
+							doDiscount(Storage,$element);
+							break;
 						
 					}
 				});
 			});
 			$(document).on("click",".popup-window .close",function(){
-				$('.popup-window').remove();
+				closePopup();
 			});
 		}
 		function getStorage(id,cb){
@@ -94,8 +100,12 @@ define(["jquery","controllers/warehouse"], function ($,Warehouse) {
 				});
 			}
 		}
-		function doPricing(Storage,$element){
+		function closePopup(){
+			$('.popup-window').remove();
+		}
+		function doPricing(_Storage,$element){
 			var template = templates.getTemplate("pricing-row");
+			var Storage = _Storage;
 			if(!Storage.pricing || !Storage.pricing.length){
 				var $row = template.getElement();
 				$element.find('table').append($row);
@@ -111,9 +121,103 @@ define(["jquery","controllers/warehouse"], function ($,Warehouse) {
 				var $newrow = template.getElement();
 				$element.find('tbody').append($newrow);
 			});
+			$element.find('.done').on("click",function(){
+				Storage.pricing=[];
+				$element.find('tbody tr').each(function(){
+					var price={};
+					bindFormToObject($(this),price);
+					price.from = new Date(price.from).toISOString();
+					price.to = new Date(price.to).toISOString();
+					Storage.pricing.push(price);
+				});
+				closePopup();
+			});
 			$element.on('click','.trash-button',function(){
 				$(this).closest('tr').remove();
 			});
+		}
+		function doPallets(_Storage,$element){
+			var template = templates.getTemplate("pallet-row");
+			var Storage = _Storage;
+			if(!Storage.pallets || !Storage.pallets.length){
+				addPalletRow();
+			}else{
+				for(i in Storage.pallets){
+					Storage.pallets[i].from = new Date(Storage.pallets[i].from).toISOString().substring(0, 10);
+					Storage.pallets[i].to = new Date(Storage.pallets[i].to).toISOString().substring(0, 10);
+					addPalletRow( Storage.pallets[i] );
+				}
+			}
+			$element.find('.add').on("click",function(){
+				addPalletRow();
+			});
+			$element.find('.done').on("click",function(){
+				Storage.pallets=[];
+				$element.find('tbody tr').each(function(){
+					var pallet={};
+					bindFormToObject($(this),pallet);
+					pallet.from = new Date(pallet.from).toISOString();
+					pallet.to = new Date(pallet.to).toISOString();
+					Storage.pallets.push(pallet);
+				});
+				closePopup();
+			});
+			$element.on('click','.trash-button',function(){
+				$(this).closest('tr').remove();
+			});
+			function addPalletRow(_data){
+				var data = _data || {};
+				if(!_data){
+					data.total = Storage.palletSpaces;
+					data.inUse = 0;
+					data.free = data.total;
+				}
+				var $row = template.bind( data );
+				$element.find('tbody').append($row);
+			}
+		}
+		function doDiscount(_Storage,$element){
+			var template = templates.getTemplate("discount-row");
+			var Storage = _Storage;
+			if(!Storage.discounts || !Storage.discounts.length){
+				addDiscountRow();
+			}else{
+				for(i in Storage.discounts){
+					addDiscountRow( Storage.discounts[i] );
+				}
+			}
+			$element.find('.add').on("click",function(){
+				addDiscountRow();
+			});
+			$element.find('.done').on("click",function(){
+				Storage.discounts=toArray();
+				closePopup();
+			});
+			$element.on('click','.trash-button',function(){
+				$(this).closest('tr').remove();
+			});
+			function addDiscountRow(_data){
+				var data = _data || {};
+				if(!_data){
+					data.from = 1;
+					data.value = 0;
+					var arr = toArray();
+					if(arr.length){
+						data.from=Number(arr[arr.length-1].to )+1;
+					}
+				}
+				var $row = template.bind( data );
+				$element.find('tbody').append($row);
+			}
+			function toArray(){
+				var array=[];
+				$element.find('tbody tr').each(function(){
+					var discount={};
+					bindFormToObject($(this),discount);
+					array.push(discount);
+				});
+				return array;
+			}
 		}
         $(function() {
             initialize();

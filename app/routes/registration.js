@@ -16,7 +16,11 @@ var handler = function(app) {
 	});
 };
 function registrationHandler(req,res){
-	res.render("registration" + "-" + req.params.step,req.data);
+	if(req.params.step > 1 && !req.data.user._id ){
+		res.redirect('/provider-registration-1');
+	}else{
+		res.render("registration" + "-" + req.params.step,req.data);
+	}
 }
 function populateUserData(req,res, next){
 	if(!req.data.user._id) return next();

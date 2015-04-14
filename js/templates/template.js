@@ -11,11 +11,9 @@ define(["jquery"],function($){
 			//Bind all data
 			//Wrap template in tag
 			var $wrapper = $('<wrap>');
-			$wrapper.append($template);
+			$wrapper.append($script.html());
 			//First attributes
-			if( !$attrElements.length ){
-				$attrElements = getAttributeBindables($wrapper);
-			}
+			$attrElements = getAttributeBindables($wrapper);
 			$attrElements.each(function(){
 				var $this = $(this);
 				for (var property in $this.data()) {
@@ -30,9 +28,7 @@ define(["jquery"],function($){
 				}
 			});
 			//Now text
-			if( !$textElements.length ){
-				$textElements = getTextBindables($wrapper);
-			}
+			$textElements = getTextBindables($wrapper);
 			var regex = new RegExp(config.textRegex,"g");
 			$textElements.each(function(){
 				var $this = $(this);
@@ -78,7 +74,8 @@ define(["jquery"],function($){
 			var regex = new RegExp(config.textRegex);
 			return $container.find('*').filter(function(){
 				var $this = $(this);
-				if(regex.test($this.text())){
+				var text = $this.clone().children().remove().end().text(); //Get only element text
+				if(regex.test(text)){
 					return true;
 				}
 				return false;
