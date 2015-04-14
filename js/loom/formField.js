@@ -304,6 +304,7 @@ FormField.prototype.isValid = function(){
         if (this.element.attr("disabled")) {
             return true;
         }
+		this.setValueFromBoundInput();
         var lim = this.validatorFunctions.length;
         for(var i = 0; i < lim; i++){
             var isValid = this.validatorFunctions[i].func(this.value);
