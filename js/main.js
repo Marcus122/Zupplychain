@@ -23,8 +23,8 @@ require(["jquery"], function($) {
                 
                 $("input[name='postcode']").blur(function(){
                     resultsMap = new ResultsMap($("input[name='postcode']").val(), $("select[name='max-distance']").val());
-                    $(".js-map-results-container").show();
-                    $(".js-page-banner").hide();
+                    
+                    $(".js-page-banner").fadeOut(function(){$(".js-map-results-container").fadeIn();});
                 });
                 
                 $("select[name='max-distance']").change(function(){
@@ -36,6 +36,11 @@ require(["jquery"], function($) {
                 var loom = new Loom();
                 loom.addOnSuccessCallback("search-form", function(){
                     alert("posted and got result");
+                    $("search-result-info-box").fadeIn();
+                });
+                loom.addOnErrorCallback("search-form", function(){
+                    alert("posted and got result");
+                    $(".search-result-info-box").fadeIn();
                 });
                 
                 var testData = [
