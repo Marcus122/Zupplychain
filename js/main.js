@@ -22,7 +22,7 @@ require(["jquery"], function($) {
                 
                 //on postcode entry, load up the map centered on that postcode.
                 $("input[name='postcode']").blur(function(){
-                    var resultsMap = new ResultsMap();
+                    var resultsMap = new ResultsMap("BL0 0AT");
                     $(".js-map-results-container").show();
                 });
                 

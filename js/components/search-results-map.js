@@ -1,7 +1,7 @@
 define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (GM, $) {
 
     
-    function Class() {
+    function Class(postcodeToCenterOn) {
     
         var MAP_ELEM_ID = "map-container"
         var RESULT_INFO_ELEM_SELECTOR = "#search-results-info";
@@ -21,10 +21,10 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
           
           
         
-        function initialize() {
-          //var loc1 = new google.maps.LatLng(data[0].latitude, data[0].longitude);
+        function initialize(postcode) {
+          var loc1 = new google.maps.LatLng(0,0);
           var mapOptions = {
-            //center: loc1,
+            center: loc1,
             zoom: 14
           };
           map = new google.maps.Map( document.getElementById(MAP_ELEM_ID), mapOptions);
@@ -34,7 +34,21 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
               map:map,
               animation:'DROP'
           }
-
+          
+          //var latlong = geoCodePostCode(postcode);
+          //var loc2 = new google.maps.LatLng(latlong.latitude, latlong.longitude);
+          //map.setCenter(latlong);
+          
+          function geoCodePostCode(address, callback) {
+                geocoder = new google.maps.Geocoder();
+              geocoder.geocode( { 'address': address}, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                  results[0].geometry.location;
+                } else {
+                  alert('Geocode was not successful for the following reason: ' + status);
+                }
+              });
+          }
           
           
         }
