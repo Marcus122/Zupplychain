@@ -7,56 +7,57 @@
 						<br/>here to match your<span class="medium-font">warehouse space to potential customers</span>
 					</h1>
 				</div>
+                <% include ./results-map %>
         <section class="side-header" ><!-- a section with the header off to one side -->
             <div class="header">
                 <h2>Get an instant quote</h2>
                 <span>* required field</span>
             </div>
             <div class="main">
-                <form class="storage-search" action="/search-results">
-                    <div class="inputField">
+                <form class="storage-search loom-form" action="/search-results">
+                    <div class="input-field">
                         <label for="pallet-type">Pallet Type</label>
                         <select name="pallet-type" id="pallet-type" >
                             <option value="standard-blue">Standard Blue</option>
                             <option value="standard-red">Standard Red</option>
                         </select>
                     </div>
-                    <div class="inputField number">
+                    <div class="input-field number">
                         <label for="quantity">Qty*</label>
                         <input type="number" name="quantity" />
                     </div>
-                    <div class="inputField">
+                    <div class="input-field">
                         <label for="postcode">Postcode</label>
                         <input type="text" name="postcode" />
                     </div>
-                    <div class="inputField">
+                    <div class="input-field">
                         <label for="max-distance">Max Distance</label>
                         <select name="max-distance">
                             <option value="20">20 miles</option>
                             <option value="10">10 miles</option>
                         </select>
                     </div>
-                    <div class="inputField">
+                    <div class="input-field">
                         <label for="start-date">Start Date</label>
                         <input type="date" name="start-date"/>
                     </div>
-                    <div class="inputField">
+                    <div class="input-field">
                         <label for="end-date">End Date</label>
                         <input type="date" name="end-date"/>
                     </div>
-                    <div class="inputField number">
+                    <div class="input-field number">
                         <label for="height">Height (m)</label>
-                        <input type="number" name="height"/>
+                        <input type="number" name="height" min="0" max="100"/>
                     </div>
-                    <div class="inputField number">
+                    <div class="input-field number">
                         <label for="weight">Weight (kg)</label>
                         <input type="number" name="weight"/>
                     </div>
-                    <div class="inputField number">
+                    <div class="input-field number">
                         <label for="value">Value (£)</label>
                         <input type="number" name="value"/>
                     </div>
-                    <div class="inputField">
+                    <div class="input-field">
                         <label for="temperature">Temp</label>
                         <select name="temperature">
                             <option value="ambient">Ambient</option>
@@ -65,7 +66,7 @@
                         </select>
                         
                     </div>
-                    <div class="inputField last">
+                    <div class="input-field last">
                         <button type="submit" class="action forward">Search</button>
                     </div>
                 </form>

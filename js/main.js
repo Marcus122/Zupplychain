@@ -17,8 +17,16 @@ require(["jquery"], function($) {
             loom.init();
         });
         
-        if (onPage("search-results")){ //hacky while testing..
+        if (onPage("search")){ //hacky while testing..
             require(["components/search-results-map"],function(ResultsMap){
+                
+                //on postcode entry, load up the map centered on that postcode.
+                $("input[name='postcode']").blur(function(){
+                    var resultsMap = new ResultsMap();
+                    $(".js-map-results-container").show();
+                });
+                
+                
                 var testData = [
                 {
                     latitude : 53.593, 
@@ -48,7 +56,8 @@ require(["jquery"], function($) {
                 }
                 ]
                 
-                var resultsMap = new ResultsMap(testData);
+                var resultsMap = new ResultsMap();
+                //resultsMap.load(testData);
                 
             });
         }
