@@ -168,6 +168,17 @@ body .loom-form {
             }
         }
     }
+	.input-field.no-success-validation-style { //Hides the validation styles.
+        &.success{
+            input {
+                background-color:@input-background-color;
+                color:@input-text-color;
+                border-color:@input-border-color;
+                box-shadow:@input-box-shadow;
+                background-image:none;
+            }
+        }
+    }
     select[disabled], input[disabled]{
            cursor:not-allowed;
            background-color:@input-disabled-background-color !important;
