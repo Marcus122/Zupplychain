@@ -45,7 +45,7 @@
 @input-disabled-border-color            :#BBB;
 @input-disabled-background-image-url:   './loom/images/icon-disabled.png';
 
-@message-hint-text-color:               #BBB;
+@message-hint-text-color:               #777;
 @message-hint-font-weight:              normal;
 
 @message-invalid-text-color:            @loom-dark-invalid;
@@ -63,10 +63,13 @@
 
 /* The bare minimum rules needed to work with the loom javascript */
 
+body .disabled .loom-form button.loom-edit {
+    opacity: 1.0; // .disabled forms and divs have a low opacity. Loom adds a loom-edit class to a button to edit the form, which should have the opacity removed, hence this rule.
+}
 
 body .loom-form {
     .input-field {
-        select, input:not([type='checkbox']) {
+        select, input {
             background-color:@input-background-color;
             color:@input-text-color;
             border-color:@input-border-color;
@@ -155,7 +158,7 @@ body .loom-form {
     
     }
     .input-field.no-validation-style { //Hides the validation styles.
-        &.success{
+        &.success, &.error{
             input {
                 background-color:@input-background-color;
                 color:@input-text-color;
