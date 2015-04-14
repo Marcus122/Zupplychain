@@ -69,14 +69,14 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
             }
             var pixelWidth = $("#" + MAP_ELEM_ID).width();
             var zoom = Math.round(Math.log(pixelWidth * 360 / angle / GLOBE_WIDTH) / Math.LN2);
-            map.setZoom(zoom-3);
+            map.setZoom(zoom-4);
             //zoom is the zoom required to fit those points on the map.
             var miles = radiusInMiles;
                var radiusOptions = {
-                strokeColor: '#FF0000',
+                strokeColor: '#37bbec',
                 strokeOpacity: 0.8,
                 strokeWeight: 2,
-                fillColor: '#FF0000',
+                fillColor: '#c3eaf9',
                 fillOpacity: 0.35,
                 map: map,
                 center:map.getCenter(),

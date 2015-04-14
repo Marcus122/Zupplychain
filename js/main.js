@@ -14,13 +14,13 @@ require(["jquery"], function($) {
         //fire up the loom form library.
         require(["loom/loom"], function(Loom){
             var loom = new Loom();
-            loom.init();
         });
         
         if (onPage("search")){ //hacky while testing..
-            require(["components/search-results-map"],function(ResultsMap){
+            require(["components/search-results-map", "loom/loom"],function(ResultsMap, Loom){
                 var resultsMap;
                 //on postcode entry, load up the map centered on that postcode.
+                
                 $("input[name='postcode']").blur(function(){
                     resultsMap = new ResultsMap($("input[name='postcode']").val(), $("select[name='max-distance']").val());
                     $(".js-map-results-container").show();
@@ -28,9 +28,15 @@ require(["jquery"], function($) {
                 });
                 
                 $("select[name='max-distance']").change(function(){
-                    resultsMap.setRadius($("select[name='max-distance']").val());
+                    if (resultsMap) {
+                        resultsMap.setRadius($("select[name='max-distance']").val());
+                    }
                 });
                 
+                var loom = new Loom();
+                loom.addOnSuccessCallback("search-form", function(){
+                    alert("posted and got result");
+                });
                 
                 var testData = [
                 {

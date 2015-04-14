@@ -14,7 +14,7 @@
                 <span>* required field</span>
             </div>
             <div class="main">
-                <form class="storage-search loom-form" action="/search-results">
+                <form class="storage-search loom-form" action="/search-results" id="search-form">
                     <div class="input-field">
                         <label for="pallet-type">Pallet Type</label>
                         <select name="pallet-type" id="pallet-type" >
@@ -24,7 +24,7 @@
                     </div>
                     <div class="input-field number">
                         <label for="quantity">Qty*</label>
-                        <input type="number" name="quantity" />
+                        <input type="number" name="quantity" value="10" min="1" max="2000" />
                     </div>
                     <div class="input-field">
                         <label for="postcode">Postcode</label>
@@ -39,23 +39,23 @@
                     </div>
                     <div class="input-field">
                         <label for="start-date">Start Date</label>
-                        <input type="date" name="start-date"/>
+                        <input type="date" name="start-date" value="2014-01-01"/>
                     </div>
                     <div class="input-field">
                         <label for="end-date">End Date</label>
-                        <input type="date" name="end-date"/>
+                        <input type="date" name="end-date" value="2016-01-01"/>
                     </div>
                     <div class="input-field number">
                         <label for="height">Height (m)</label>
-                        <input type="number" name="height" min="0" max="100"/>
+                        <input type="number" name="height" min="0" max="100" value="1"/>
                     </div>
                     <div class="input-field number">
                         <label for="weight">Weight (kg)</label>
-                        <input type="number" name="weight"/>
+                        <input type="number" name="weight" min="0" max="2000" value="50"/>
                     </div>
                     <div class="input-field number">
                         <label for="value">Value (£)</label>
-                        <input type="number" name="value"/>
+                        <input type="number" name="value" min="0" max="10000" value="200"/>
                     </div>
                     <div class="input-field">
                         <label for="temperature">Temp</label>

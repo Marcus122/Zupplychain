@@ -78,6 +78,9 @@ define({
 		var re = /^[-A-z ']+$/ // Alpha, hyphens, spaces, apostrophe's
 		return re.test(input);
 	},
+    integer : function(input) {
+      return (input === parseInt(input, 10));
+    },
 	mobileNumber : function(input) {
 		return input;
 	},
