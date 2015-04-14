@@ -19,11 +19,16 @@ require(["jquery"], function($) {
         
         if (onPage("search")){ //hacky while testing..
             require(["components/search-results-map"],function(ResultsMap){
-                
+                var resultsMap;
                 //on postcode entry, load up the map centered on that postcode.
                 $("input[name='postcode']").blur(function(){
-                    var resultsMap = new ResultsMap("BL0 0AT");
+                    resultsMap = new ResultsMap($("input[name='postcode']").val(), $("select[name='max-distance']").val());
                     $(".js-map-results-container").show();
+                    $(".js-page-banner").hide();
+                });
+                
+                $("select[name='max-distance']").change(function(){
+                    resultsMap.setRadius($("select[name='max-distance']").val());
                 });
                 
                 
@@ -56,7 +61,7 @@ require(["jquery"], function($) {
                 }
                 ]
                 
-                var resultsMap = new ResultsMap();
+                //var resultsMap = new ResultsMap();
                 //resultsMap.load(testData);
                 
             });

@@ -1,13 +1,14 @@
 define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (GM, $) {
 
     
-    function Class(postcodeToCenterOn) {
+    function Class(postcode, radius) {
     
         var MAP_ELEM_ID = "map-container"
         var RESULT_INFO_ELEM_SELECTOR = "#search-results-info";
         var markers = []
         var selectedMarkerIndex =0;
         var map;
+        var circle;
         var normalIcon = {
               url  : "/images/map-icon.png"
           }
@@ -21,7 +22,8 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
           
           
         
-        function initialize(postcode) {
+        function initialize(postcode, radius) {
+            
           var loc1 = new google.maps.LatLng(0,0);
           var mapOptions = {
             center: loc1,
@@ -35,22 +37,58 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
               animation:'DROP'
           }
           
-          //var latlong = geoCodePostCode(postcode);
-          //var loc2 = new google.maps.LatLng(latlong.latitude, latlong.longitude);
-          //map.setCenter(latlong);
+          centerMapAtPostCode(postcode, map, radius);
           
-          function geoCodePostCode(address, callback) {
+          function centerMapAtPostCode(address, map, radius) {
+              
+              if (!radius) {
+                  radius = 20;//default 20 miles;
+              }
                 geocoder = new google.maps.Geocoder();
-              geocoder.geocode( { 'address': address}, function(results, status) {
+              geocoder.geocode( { 'address': postcode}, function(results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
-                  results[0].geometry.location;
+                  
+                  var latlong = results[0].geometry.location;
+                    var loc2 = new google.maps.LatLng(latlong.latitude, latlong.longitude);
+                    map.setCenter(latlong);
+                    setRadius(radius);
                 } else {
                   alert('Geocode was not successful for the following reason: ' + status);
                 }
               });
           }
-          
-          
+        }
+        
+        function setRadius(radiusInMiles) {
+            var GLOBE_WIDTH = 256; // a constant in Google's map projection
+            //var west = sw.lng();
+            //var east = ne.lng();
+            var angle = radiusInMiles/69;//east - west;
+            if (angle < 0) {
+                angle += 360;
+            }
+            var pixelWidth = $("#" + MAP_ELEM_ID).width();
+            var zoom = Math.round(Math.log(pixelWidth * 360 / angle / GLOBE_WIDTH) / Math.LN2);
+            map.setZoom(zoom-3);
+            //zoom is the zoom required to fit those points on the map.
+            var miles = radiusInMiles;
+               var radiusOptions = {
+                strokeColor: '#FF0000',
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: '#FF0000',
+                fillOpacity: 0.35,
+                map: map,
+                center:map.getCenter(),
+                radius: miles * 1609.344
+                };
+                // Add the circle for this city to the map.
+                if (circle){
+                    circle.setMap(null);
+                }
+                
+                circle = new google.maps.Circle(radiusOptions);
+            
         }
         
         function load(data) {
@@ -125,11 +163,11 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
             setTimeout(function(){resultsElem.find('.js-image').prop("src", data.imageURL).removeClass("rotateY90");}, 300 );
         }
 
-        $(function() {
-            initialize();
-        });
+            initialize(postcode, radius);
+
         return {
-            load:load
+            load:load,
+            setRadius:setRadius
         }
 
     }
