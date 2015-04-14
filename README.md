@@ -21,11 +21,18 @@ cb() - clear breakpoint
 
 
 To run MongoDB
+
 mongod
+
+(on some installs might need the full path to mongod.exe)
+
+/PROGRA~1/MongoDB/Server/3.0/bin/mongod.exe 
 
 For MongoDB gui I have used https://www.npmjs.com/package/mongo-express
 Need to set up config file or copy config.default.js into a new file called config.js
 To run use command node app and go to http://localhost:8081
+
+
 
 For MongoDB shell 
 mongo

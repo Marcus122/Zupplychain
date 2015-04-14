@@ -37,6 +37,7 @@ app.get('/test', function (req,res) {
 require('./app/routes/user-handler')(app);
 require('./app/routes/warehouse-handler')(app);
 require('./app/routes/registration')(app);
+require('./app/routes/search')(app);
 /**
 * Error handling
 */
