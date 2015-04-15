@@ -79,7 +79,8 @@ define({
 		return re.test(input);
 	},
     integer : function(input) {
-      return (input === parseInt(input, 10));
+        var n = ~~Number(input);
+        return String(n) === input && n >= 0;
     },
 	mobileNumber : function(input) {
 		return input;

@@ -40,6 +40,7 @@ define(["jquery", "./formField"],function($, FormField){
         noAJAX          = formElement.attr("data-loom-no-ajax");
         noSubmit        = formElement.attr("data-loom-no-submit");
         preventDefault  = String(formElement.attr("data-loom-prevent-default")) ? JSON.parse(formElement.attr("data-loom-prevent-default")) : true;
+        disableOnLoad   = formElement.attr("data-loom-disabled"); //disable the form immediately, changing the submit button to an edit button
         disableOnSuccess= formElement.attr("data-loom-disable-on-success"); //TODO : being implemented
         resetOnSuccess  = formElement.attr("data-loom-reset-on-success"); //TODO : being implemented
         //canGoBackAndEdit= formElement.attr("data-loom-can-go-back-and-edit"); //TODO : being implemented
@@ -54,6 +55,7 @@ define(["jquery", "./formField"],function($, FormField){
 		setupConfirmationValidators();
         setupAutoPopulationOnSelection();
         setupCopyOnCheck();
+        disableIfDisableOnLoadSet();
         
         //TODO if we try to submit an invalid form, an invalid message appears.
         // if we then fill out the fields correctly, when we come back to the bottom of the form the messages is still there.
@@ -76,6 +78,12 @@ define(["jquery", "./formField"],function($, FormField){
 				fields[i].element.on("blur", getValidationCallback(fields[i]));
 			}
 		}
+        
+        function disableIfDisableOnLoadSet(){
+            if (disableOnLoad){
+                disable();
+            }
+        }
 
 		function getValidationCallback(elem){
 			return function(evt){
@@ -103,7 +111,14 @@ define(["jquery", "./formField"],function($, FormField){
             reset();
         });
 		
-		formElement.on("submit", function(evt){
+		formElement.on("submit", function(evt){ 
+			onSubmit(evt);
+		});
+        
+        function onSubmit(evt) {
+            if (evt) {
+                evt.preventDefault();
+            }
 			clearStateMessages();
 			clearValidationMessages();
 			loadFormValuesIntoModelFields();
@@ -123,7 +138,7 @@ define(["jquery", "./formField"],function($, FormField){
                     doFormSubmission();
                 }
 			}
-		});
+        }
 		
         function reset() {
             clearStateMessages();
@@ -306,11 +321,12 @@ define(["jquery", "./formField"],function($, FormField){
             formElement.find("input").attr("disabled", "disabled");
             formElement.find("select").attr("disabled", "disabled");
             formElement.find("textarea").attr("disabled", "disabled");
-            var $submitButton = formElement.find("button");
+            var $submitButton = formElement.find("button[type='submit']");
             $submitButton.data("loom-old-html", $submitButton.html() );
             $submitButton.addClass("loom-edit").html("Edit");
             $submitButton.on("click.loom", function(evt){evt.preventDefault(); enable(); } );
             $submitButton.attr("type", "button");
+            $submitButton.removeAttr("disabled");
         }
         
         function enable(){
@@ -441,7 +457,9 @@ define(["jquery", "./formField"],function($, FormField){
             errorCallbacks:errorCallbacks,
             disable:disable,
             enable:enable,
-            reset:reset
+            reset:reset,
+            onSubmit:onSubmit,
+            disableIfDisableOnLoadSet:disableIfDisableOnLoadSet
 		};
 	}
 });

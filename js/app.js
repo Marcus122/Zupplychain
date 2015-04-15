@@ -15,6 +15,7 @@ require.config({
         },
     shim :{
         "jqueryPlugins" : ["jquery"],
-        "debounce" : ["jquery"]
+        "debounce" : ["jquery"],
+        "jqueryPlugins/jquery.scrollTo.min" : ["jquery"]
     } 
 });
