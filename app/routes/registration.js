@@ -1,4 +1,4 @@
-var user_controller = require("../controllers/users.js"),
+var User = require("../controllers/users.js"),
 	local = require("../local.config.js");
 
 var handler = function(app) {
@@ -14,10 +14,11 @@ var handler = function(app) {
 	app.post('/provider-registration-:step', function (req,res) {
 		registrationHandler(req,res);
 	});
+	app.post('/complete-registration',completeRegistration);
 };
 function registrationHandler(req,res){
 	if(req.params.step > 1 && !req.data.user._id ){
-		res.redirect('/provider-registration-1');
+		redirectToStart(res)
 	}else{
 		res.render("registration" + "-" + req.params.step,req.data);
 	}
@@ -28,5 +29,24 @@ function populateUserData(req,res, next){
 		req.data.user.warehouses = warehouses;
 		return next();
 	});
+}
+function completeRegistration(req,res){
+	if(!req.data.user._id) return redirectToStart(res);
+	req.data.user.email = req.body.email;
+	req.data.user.password = req.body.password;
+	req.data.user.contact = req.body.contact;
+	req.data.user.name = req.body.name;
+	User.register(req.data.user,function(err){
+		if(err){
+			var backURL=req.header('Referer') 
+			return backURL ? res.redirect(backURL) : redirectToStart(res);
+		}else{
+			return res.redirect('/dashboard');
+		}
+	})
+	
+}
+function redirectToStart(res){
+	res.redirect('/provider-registration-1');
 }
 module.exports = handler;

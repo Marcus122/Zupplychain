@@ -25,7 +25,7 @@
 						<li class="four columns active checked">Step 3</li>
 					</ul>
 					<section class="tab-content">
-						<form method="post" action="/provider-registration-complete" class="responsive-table">
+						<form id="price-and-availability" class="loom-form responsive-table" data-loom-no-submit="true" method="post" action="/provider-registration-complete" novalidate>
 							<div class="main">
 								<div class="content-box primary">
 									<div class="header">
@@ -48,8 +48,8 @@
 													<td class="text" data-th="Storage Name">
 														<span><%=warehouse.storage[i].name%></span>
 													</td>
-													<td class="button-cell" data-th="Pricing">
-														<button data-template="pricing" type="button" class="secondary popup mini">click here</button>
+													<td class="button-cell pricing" data-th="Pricing">
+														<div><button data-template="pricing" type="button" class="secondary popup mini">click here</button></div>
 													</td>
 													<td class="button-cell" data-th="Volume Discount">
 														<button data-template="volume"  type="button" class="secondary popup mini">click here</button>
@@ -62,8 +62,8 @@
 											</tbody>
 										</table>
 										<div class="row">
-											<div class="columns six checkbox">
-												<input type="checkbox" name="accept" id="accept"/>
+											<div class="columns six check checkbox input-field">
+												<input required type="checkbox" name="accept" id="accept"/>
 												<label for="accept">*I accept that the ZupplyChain commission is x%.</label>
 											</div>
 											<div class="columns six">
@@ -75,6 +75,7 @@
 								</div>
 							</div>
 							<fieldset class="form-footer">
+								<input name="warehouse" type="hidden" value="<%=warehouse._id%>"/>
 								<a href="/provider-registration-2"><button class="back" type="button">Back</button></a>
 								<button class="action next">Save &amp; Finish</button>
 							</fieldset>
@@ -87,22 +88,24 @@
 			<div class="popup-window">
 				<div class="inner">
 					<button class="close no-resize"><span>close</span></button>
-					<table class="show-title responsive-table" data-title="Pricing">
-						<thead>
-							<tr>
-								<th>From</th>
-								<th>To</th>
-								<th>Price per pallet per week</th>
-								<th>Handling charge per pallet (In and Out)</th>
-								<th>Cost to reserve</th>
-								<th/>
-							</tr>
-						</thead>
-						<tbody>
-						</tbody>
-					</table>
-					<button class="action add">add row</button>
-					<button class="action done">done</button>
+					<form id="pricing-form" class="loom-form" novalidate method="post" data-loom-no-submit="true">
+						<table class="show-title responsive-table" data-title="Pricing">
+							<thead>
+								<tr>
+									<th>From</th>
+									<th>To</th>
+									<th>Price per pallet per week</th>
+									<th>Handling charge per pallet (In and Out)</th>
+									<th>Cost to reserve</th>
+									<th/>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+						<button type="button" class="action add">add row</button>
+						<button class="action done">done</button>
+					</form>
 				</div>
 			</div>
 		 </script>
@@ -113,19 +116,21 @@
 			<div class="popup-window">
 				<div class="inner">
 					<button class="close no-resize"><span>close</span></button>
-					<table class="show-title responsive-table" data-title="Volume Discount">
-						<thead>
-							<th>From</th>
-							<th>To</th>
-							<th>% Discount</th>
-							<th>Discount Value</th>
-							<th/>
-						</thead>
-						<tbody>
-						</tbody>
-					</table>
-					<button class="action add">add row</button>
-					<button class="action done">done</button>
+					<form method="post" id="discount-form" class="loom-form" novalidate data-loom-no-submit="true">
+						<table class="show-title responsive-table" data-title="Volume Discount">
+							<thead>
+								<th>From</th>
+								<th>To</th>
+								<th>% Discount</th>
+								<th>Discount Value</th>
+								<th/>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+						<button type="button" class="action add">add row</button>
+						<button class="action done">done</button>
+					</form>
 				</div>
 			</div>
 		 </script>
@@ -136,22 +141,24 @@
 			<div class="popup-window">
 				<div class="inner">
 					<button class="close no-resize"><span>close</span></button>
-					<table class="show-title responsive-table" data-title="Available Pallets">
-						<thead>
-							<tr>
-								<th>From</th>
-								<th>To</th>
-								<th>Total Pallets</th>
-								<th>Estimated in Use</th>
-								<th>Estimated Free</th>
-								<th/>
-							</tr>
-						</thead>
-						<tbody>
-						</tbody>
-					</table>
-					<button class="action add">add row</button>
-					<button class="action done">done</button>
+					<form method="post" id="pallets-form" class="loom-form" novalidate data-loom-no-submit="true">
+						<table class="show-title responsive-table" data-title="Available Pallets">
+							<thead>
+								<tr>
+									<th>From</th>
+									<th>To</th>
+									<th>Total Pallets</th>
+									<th>Estimated in Use</th>
+									<th>Estimated Free</th>
+									<th/>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+						<button type="button" class="action add">add row</button>
+						<button class="action done">done</button>
+					</form>
 				</div>
 			</div>
 		 </script>

@@ -1,4 +1,5 @@
 'use strict';
+var passwordHash = require('password-hash');
 
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema,
@@ -7,7 +8,9 @@ var mongoose = require('mongoose'),
 
 var fields = {
 	email: { type: String },
-	password: {type:String},
+	password: {type:String, set:setPassword },
+	name: {type:String},
+	contact: {type:String},
 	active: { type: Boolean, default: false },
 	created: { type: Date , default: Date.now }
 };
@@ -23,5 +26,7 @@ userSchema.methods.getWarehouses = function(cb){
 		cb(warehouses);
 	});
 }
-
+function setPassword(password){
+    return passwordHash.generate(password);
+}
 module.exports = mongoose.model('users', userSchema);

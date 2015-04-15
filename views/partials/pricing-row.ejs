@@ -1,8 +1,20 @@
 <tr>
-	<td data-th="From"><input type="date" name="from" class="datepicker" data-bind-value="from"/></td>
-	<td data-th="To"><input data-bind-value="to" type="date" name="to" class="datepicker"/></td>
-	<td data-th="Price per pallet per week"><input data-bind-value="price"  name="price"  placeholder="£" type="text"/></td>
-	<td data-th="Handling charge per pallet (In and Out)"><input data-bind-value="charge" name="charge"  placeholder="£" type="text"/></td>
-	<td data-th="Cost to reserve"><input data-bind-value="reserve" name="reserve" placeholder="£" type="text"/></td>
-	<td data-th="Remove"><button type="button" class="trash-button"><span>Delete</span></button></td>
+	<td data-th="From" class="input-field no-success-validation-style">
+		<input required type="date" name="from" class="datepicker" data-bind-value="from"/>
+	</td>
+	<td data-th="To" class="input-field no-success-validation-style">
+		<input required data-bind-value="to" type="date" name="to" class="datepicker"/>
+	</td>
+	<td data-th="Price per pallet per week" class="input-field no-success-validation-style">
+		<input required data-bind-value="price"  name="price"  placeholder="£" type="number"/>
+	</td>
+	<td data-th="Handling charge per pallet (In and Out)" class="input-field no-success-validation-style">
+		<input data-bind-value="charge" name="charge"  placeholder="£" type="number"/>
+	</td>
+	<td data-th="Cost to reserve" class="input-field no-success-validation-style">
+		<input data-bind-value="reserve" name="reserve" placeholder="£" type="number"/>
+	</td>
+	<td data-th="Remove" class="input-field no-success-validation-style">
+		<button type="button" class="trash-button"><span>Delete</span></button>
+	</td>
 </tr>

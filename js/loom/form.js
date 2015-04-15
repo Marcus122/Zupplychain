@@ -9,7 +9,7 @@ define(["jquery", "./formField"],function($, FormField){
 		var FORM_PENDING_CLASS  =  config.FORM_PENDING_CLASS || "form-pending";
 		var FORM_ERROR_CLASS    =  config.FORM_ERROR_CLASS || "form-error";
 		var FORM_SUCCESS_CLASS  =  config.FORM_SUCCESS_CLASS || "form-success";
-        var FORM_FIELD_CONTAINER_SELECTOR = config.FORM_FIELD_CONTAINER_SELECTOR || ".input-field"
+        var FORM_FIELD_CONTAINER_SELECTOR = config.FORM_FIELD_CONTAINER_SELECTOR || ".input-field";
 		
 		var VALIDATE_ON_BLUR                    = config.VALIDATE_ON_BLUR || false;
 		var MAY_NOT_PROGRESS_PAST_INVALID_FIELD = config.MAY_NOT_PROGRESS_PAST_INVALID_FIELD || false;
@@ -114,7 +114,7 @@ define(["jquery", "./formField"],function($, FormField){
 		formElement.on("submit", function(evt){ 
 			onSubmit(evt);
 		});
-        
+		
         function onSubmit(evt) {
             if (evt) {
                 evt.preventDefault();

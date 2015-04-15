@@ -28,10 +28,7 @@ var handler = function(app) {
 	app.get('/storage/:storage_id', setStorageResponse );
 };
 function createUser(req,res){
-	var data={};
-	user.create(data,function(err,user){
-		setCookie(user,res);
-		req.data.user=user;
+	user.create(req,res,{},function(err,user){
 		createWarehouse(req,res);
 	});
 }
@@ -81,24 +78,36 @@ function updateStorage(req,res,next){
 }
 function batchStorage(req,res){
 	if(!req.warehouse) next();
-	req.warehouse.storage=[];
+	var storageArr=[];
 	async.each(req.body, function(_storage,callback){
-		if(!_storage.id){
-			storage.create(_storage,function(err,Storage){
-				req.warehouse.storage.push(Storage._id);
+		if(!_storage._id){
+			storage.create(req.data.user,_storage,function(err,Storage){
+				storageArr.push(Storage._id);
 				callback();
 			});
 		}else{
+			_storage.user=req.data.user._id;
+			delete _storage.__v;
 			storage.updateWithData(_storage,function(err,Storage){
-				req.warehouse.storage.push(Storage._id);
-				callback();
+				if(!err){
+					storageArr.push(Storage._id);
+					callback();
+				}else{
+					console.log(err);
+					callback(err);
+				}
 			});
 		}
 		
 	},function(err){
-		req.warehouse.save(function(){
-			setResponse(req,res);
-		});
+		if(!err){	
+			req.warehouse.storage=storageArr;
+			req.warehouse.save(function(){
+				setResponse(req,res);
+			});
+		}else{
+			setErrorResponse(err,res);
+		}
 	});
 }
 function updateWarehouse(req,res){
@@ -148,10 +157,7 @@ function setStorageResponse(req,res,next){
 }
 function setErrorResponse(err,res){
 	res.writeHead(500, {"Content-Type": "application/json"});
-    var output = { error: true};
+    var output = { error: true, data: err };
     res.end(JSON.stringify(output) + "\n");
-}
-function setCookie(user,res){
-	res.cookie('session-id',user._id,local.cookie_config );
 }
 module.exports = handler;

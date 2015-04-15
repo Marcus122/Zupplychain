@@ -17,7 +17,7 @@ exports.create = function (user,data,cb) {
 	});
 }
 exports.updateWithData = function(_data,cb){
-	Storage.findOne({ _id : _data.id },function(err,storage){
+	Storage.findOne({ _id : _data._id },function(err,storage){
 		if(!err){
 			storage.set(_data);
 			storage.save(function(err){

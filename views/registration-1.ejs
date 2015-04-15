@@ -1,199 +1,199 @@
- <% include ./partials/top %>   
-			<main>
-				<div class="row carousel">
-					<img src="/images/provider-banner.png" alt="Start your registration"/>
-					<h1 class="title large-font">
-						<span>Start your</span>
-						<br/>
-						registration
-					</h1>
-					<p class="desc medium-font">Start your registration &amp; help customers choose your warehouse</p>
-				</div>
-				<div class="row">
-					<ul class="tabs">
-						<li class="four columns active checked">Step 1</li>
-						<li class="four columns">Step 2</li>
-						<li class="four columns">Step 3</li>
-					</ul>
-					<%
-						warehouse={};
-						if( user.warehouses && user.warehouses.length  ){
-							warehouse=user.warehouses[0];
-						}
-					%>
-					<section class="tab-content">
-						<form data-loom-no-submit="true" method="post" action="/provider-registration-2" id="registration" class="provider-form loom-form" novalidate>
-							<div class="main">
-								<div class="content-box primary">
-									<div class="header">
-										<h3>Contact Information</h3>
-									</div>
-									<fieldset class="main" data-object="user">
-										<div class="columns six">
-											<div class="input-field">
-												<label for="email">Email*</label><input type="email" name="email" id="email" required value="<%= warehouse.email %>"/>
-											</div>
-											<div class="input-field">
-												<label for="warehouseName">Warehouse Name*</label><input type="text" name="name" id="warehouseName" required value="<%= warehouse.name %>"/>
-											</div>
-											<div class="input-field">
-												<label for="name">Contact Name*</label><input type="text" name="contact" id="name" required value="<%= warehouse.contact %>"/>
-											</div>
-											<div class="input-field">
-												<label for="telephone">Telephone*</label><input type="tel" name="telephone" id="telephone" required value="<%= warehouse.telephone %>"/>
-											</div>
-											<div class="input-field">
-												<label for="mobile">Mobile</label><input type="tel" name="mobile" id="mobile" value="<%= warehouse.mobile %>"/>
-											</div>
-										</div>
-										<div class="columns six">
-											<div class="input-field">
-												<label for="addressLine1">Address Line 1*</label><input type="text" name="addressline1" id="addressLine1" required value="<%= warehouse.addressline1 %>"/>
-											</div>
-											<div class="input-field">
-												<label for="addressLine2">Address Line 2</label><input type="text" name="addressline2" id="addressLine2" value="<%= warehouse.addressline2 %>"/>
-											</div>
-											<div class="input-field">
-												<label for="city">Town/City*</label><input type="text" name="city" id="city" required value="<%= warehouse.city %>"/>
-											</div>
-											<div class="input-field">
-												<label for="postcode">Postcode*</label><input type="text" name="postcode" id="postcode" required value="<%= warehouse.postcode %>"/>
-											</div>
-										</div>
-									</fieldset>
-								</div>
-								<div class="content-box primary">
-									<div class="header">
-										<h3>Warehouse details</h3>
-									</div>
-									<fieldset class="main warehouse-details">
-										<div class="input-field">
-											<label for="description">Warehouse Description</label>
-											<textarea name="description" placeholder="A short description about your warehouse"><%= warehouse.description %></textarea>
-										</div>
-										<div class="specifications">
-											<h4>Warehouse Specifications</h4>
-											<div class="services">
-												<h5>Services</h5>
-												<div class="row">
-													<div class="input-field check columns three">
-														<input data-array="services" name="name" type="checkbox" value="Transport / Distribution"/>
-														<label>Transport / Distribution</label>
-													</div>
-													<div class="input-field check columns three">
-														<input type="checkbox"/>
-														<label>Pallet network</label>
-													</div>
-													<div class="input-field check columns three">
-														<input type="checkbox"/>
-														<label>Container Palletisation</label>
-													</div>
-													<div class="input-field check columns three">
-														<input type="checkbox"/>
-														<label>Pick &amp; Pack</label>
-													</div>
-												</div>
-												<div class="row">
-													<div class="input-field check columns three">
-														<input type="checkbox"/>
-														<label>Home Delivery</label>
-													</div>
-													<div class="input-field check columns three">
-														<input type="checkbox"/>
-														<label>Product Disposal</label>
-													</div>
-													<div class="input-field check columns three">
-														<input type="checkbox"/>
-														<label>Add. Product Insurance</label>
-													</div>
-													<div class="input-field check columns three">
-														<input type="checkbox"/>
-														<label>Bunded Warehouse</label>
-													</div>
-												</div>
-											</div>
-											<div class="warehouse-specifications">
-												<h5>Specifications</h5>
-												<div class="row">
-													<div class="input-field check columns three">
-														<input type="checkbox"/>
-														<label>Perimeter Fencing</label>
-													</div>
-													<div class="input-field check columns three">
-														<input type="checkbox"/>
-														<label>24hr security</label>
-													</div>
-													<div class="input-field check columns three">
-														<input type="checkbox"/>
-														<label>CCTV</label>
-													</div>
-													<div class="input-field check columns three">
-														<input type="checkbox"/>
-														<label>Sprinklers</label>
-													</div>
-												</div>
-												<div class="row">
-													<div class="input-field check columns three">
-														<input type="checkbox"/>
-														<label>Narrow .. racking</label>
-													</div>
-													<div class="input-field check columns three">
-														<input type="checkbox"/>
-														<label>Outdoor storage</label>
-													</div>
-													<div class="input-field check columns three">
-														<input type="checkbox"/>
-														<label>Bulk Storage</label>
-													</div>
-													<div class="input-field check columns three">
-														<input type="checkbox"/>
-														<label>Roll in Roll unit storage</label>
-													</div>
-												</div>
-											</div>
-										</div>
-									</fieldset>
-								</div>
-								<div class="content-box primary">
-									<div class="header">
-										<h3>Uploads</h3>
-									</div>
-									<fieldset class="main warehouse-documents">
-										<p>Upload any profile images and or Quality assurance documents below.</p>
-										<div class="row documents">
-											<label  class="columns five" for="photos">Upload Warehouse Photos</label>
-											<input data-array="photos" class="columns five" type="file" name="filename" id="photos"/>
-											<div class="columns one">
-												<button class="attach primary mini"><span>add</span></button>
-											</div>
-										</div>
-										<div class="row documents">
-											<label class="columns two" for="docs">Upload Documents</label>
-											<select class="columns three" id="doc-type">
-												<option>Insurance Certificate</option>
-												<option>ISO 90001/14001</option>
-												<option>Fire Safety/Sprinkle documentation</option>
-												<option>Operator License</option>
-											</select>
-											<input data-array="documents" class="columns five" type="file" name="documents" id="docs"/>
-											<div class="columns one">
-												<button class="attach primary mini"><span>add</span></button>
-											</div>
-										</div>
-									</fieldset>
-								</div>
-								<p>*Required Fields</p>
+ <% include ./partials/top%>   
+	<main>
+		<div class="row carousel">
+			<img src="/images/provider-banner.png" alt="Start your registration"/>
+			<h1 class="title large-font">
+				<span>Start your</span>
+				<br/>
+				registration
+			</h1>
+			<p class="desc medium-font">Start your registration &amp; help customers choose your warehouse</p>
+		</div>
+		<div class="row">
+			<ul class="tabs">
+				<li class="four columns active checked">Step 1</li>
+				<li class="four columns">Step 2</li>
+				<li class="four columns">Step 3</li>
+			</ul>
+			<%
+				warehouse={};
+				if( user.warehouses && user.warehouses.length  ){
+					warehouse=user.warehouses[0];
+				}
+			%>
+			<section class="tab-content">
+				<form data-loom-no-submit="true" method="post" action="/provider-registration-2" id="registration" novalidate class="provider-form loom-form">
+					<div class="main">
+						<div class="content-box primary">
+							<div class="header">
+								<h3>Contact Information</h3>
 							</div>
-							<fieldset class="form-footer">
-								<%if( warehouse._id ){%>
-									<input name="id" value="<%=warehouse._id%>" type="hidden"/>
-								<%}%>
-								<button class="action">Save</button>
-								<span>OR</span>
-								<button class="action next">Save &amp; Continue</button>
+							<fieldset class="main">
+								<div class="columns six">
+									<div class="input-field">
+										<label for="email">Email*</label><input type="email" name="email" id="email" required value="<%=warehouse.email%>"/>
+									</div>
+									<div class="input-field">
+										<label for="warehouseName">Warehouse Name*</label><input type="text" name="name" id="warehouseName" required value="<%=warehouse.name%>"/>
+									</div>
+									<div class="input-field">
+										<label for="name">Contact Name*</label><input type="text" name="contact" id="name" required value="<%=warehouse.contact%>"/>
+									</div>
+									<div class="input-field">
+										<label for="telephone">Telephone*</label><input type="tel" name="telephone" id="telephone" required value="<%=warehouse.telephone%>"/>
+									</div>
+									<div class="input-field">
+										<label for="mobile">Mobile</label><input type="tel" name="mobile" id="mobile" value="<%=warehouse.mobile%>"/>
+									</div>
+								</div>
+								<div class="columns six">
+									<div class="input-field">
+										<label for="addressLine1">Address Line 1*</label><input type="text" name="addressline1" id="addressLine1" required value="<%=warehouse.addressline1%>"/>
+									</div>
+									<div class="input-field">
+										<label for="addressLine2">Address Line 2</label><input type="text" name="addressline2" id="addressLine2" value="<%=warehouse.addressline2%>"/>
+									</div>
+									<div class="input-field">
+										<label for="city">Town/City*</label><input type="text" name="city" id="city" required value="<%=warehouse.city%>"/>
+									</div>
+									<div class="input-field">
+										<label for="postcode">Postcode*</label><input type="text" name="postcode" id="postcode" required value="<%=warehouse.postcode%>"/>
+									</div>
+								</div>
 							</fieldset>
-						</form>
-					</section>
-				</div>
-			</main>
- <% include ./partials/bottom %>   
+						</div>
+						<div class="content-box primary">
+							<div class="header">
+								<h3>Warehouse details</h3>
+							</div>
+							<fieldset class="main warehouse-details">
+								<div class="input-field">
+									<label for="description">Warehouse Description</label>
+									<textarea id="description" name="description" placeholder="A short description about your warehouse"><%=warehouse.description%></textarea>
+								</div>
+								<div class="specifications">
+									<h4>Warehouse Specifications</h4>
+									<div class="services">
+										<h5>Services</h5>
+										<div class="row">
+											<div class="input-field check columns three">
+												<input data-array="services" name="name" type="checkbox" value="Transport / Distribution"/>
+												<label>Transport / Distribution</label>
+											</div>
+											<div class="input-field check columns three">
+												<input type="checkbox"/>
+												<label>Pallet network</label>
+											</div>
+											<div class="input-field check columns three">
+												<input type="checkbox"/>
+												<label>Container Palletisation</label>
+											</div>
+											<div class="input-field check columns three">
+												<input type="checkbox"/>
+												<label>Pick &amp; Pack</label>
+											</div>
+										</div>
+										<div class="row">
+											<div class="input-field check columns three">
+												<input type="checkbox"/>
+												<label>Home Delivery</label>
+											</div>
+											<div class="input-field check columns three">
+												<input type="checkbox"/>
+												<label>Product Disposal</label>
+											</div>
+											<div class="input-field check columns three">
+												<input type="checkbox"/>
+												<label>Add. Product Insurance</label>
+											</div>
+											<div class="input-field check columns three">
+												<input type="checkbox"/>
+												<label>Bunded Warehouse</label>
+											</div>
+										</div>
+									</div>
+									<div class="warehouse-specifications">
+										<h5>Specifications</h5>
+										<div class="row">
+											<div class="input-field check columns three">
+												<input type="checkbox"/>
+												<label>Perimeter Fencing</label>
+											</div>
+											<div class="input-field check columns three">
+												<input type="checkbox"/>
+												<label>24hr security</label>
+											</div>
+											<div class="input-field check columns three">
+												<input type="checkbox"/>
+												<label>CCTV</label>
+											</div>
+											<div class="input-field check columns three">
+												<input type="checkbox"/>
+												<label>Sprinklers</label>
+											</div>
+										</div>
+										<div class="row">
+											<div class="input-field check columns three">
+												<input type="checkbox"/>
+												<label>Narrow .. racking</label>
+											</div>
+											<div class="input-field check columns three">
+												<input type="checkbox"/>
+												<label>Outdoor storage</label>
+											</div>
+											<div class="input-field check columns three">
+												<input type="checkbox"/>
+												<label>Bulk Storage</label>
+											</div>
+											<div class="input-field check columns three">
+												<input type="checkbox"/>
+												<label>Roll in Roll unit storage</label>
+											</div>
+										</div>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+						<div class="content-box primary">
+							<div class="header">
+								<h3>Uploads</h3>
+							</div>
+							<fieldset class="main warehouse-documents">
+								<p>Upload any profile images and or Quality assurance documents below.</p>
+								<div class="row documents">
+									<label  class="columns five" for="photos">Upload Warehouse Photos</label>
+									<input data-array="photos" class="columns five" type="file" name="filename" id="photos"/>
+									<div class="columns one">
+										<button class="attach primary mini"><span>add</span></button>
+									</div>
+								</div>
+								<div class="row documents">
+									<label class="columns two" for="docs">Upload Documents</label>
+									<select class="columns three" id="doc-type">
+										<option>Insurance Certificate</option>
+										<option>ISO 90001/14001</option>
+										<option>Fire Safety/Sprinkle documentation</option>
+										<option>Operator License</option>
+									</select>
+									<input data-array="documents" class="columns five" type="file" name="documents" id="docs"/>
+									<div class="columns one">
+										<button class="attach primary mini"><span>add</span></button>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+						<p>*Required Fields</p>
+					</div>
+					<fieldset class="form-footer">
+						<%if( warehouse._id ){%>
+							<input name="id" value="<%=warehouse._id%>" type="hidden"/>
+						<%}%>
+						<button class="action">Save</button>
+						<span>OR</span>
+						<button class="action next">Save &amp; Continue</button>
+					</fieldset>
+				</form>
+			</section>
+		</div>
+	</main>
+ <% include ./partials/bottom%>   

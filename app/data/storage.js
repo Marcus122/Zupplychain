@@ -15,9 +15,9 @@ var fields = {
 	pricing: [{
 		from:Date,
 		to:Date,
-		price: Number,
-		charge:Number,
-		reserve:Number
+		price: { type: Number, set:setPrice },
+		charge:{ type: Number, default:0 },
+		reserve:{ type: Number, default:0 }
 	}],
 	discounts:[{
 		from:Number,
@@ -32,7 +32,9 @@ var fields = {
 		free:Number
 	}]
 };
-
+function setPrice(num){
+    return Number(num).toFixed(2);
+}
 
 var storageSchema = new Schema(fields);
 
