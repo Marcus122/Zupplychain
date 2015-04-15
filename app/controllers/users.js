@@ -1,4 +1,5 @@
-var User = require("../data/user.js");
+var User = require("../data/user.js"),
+	local = require("../local.config.js");
 
 exports.version = "0.1.0";
 
@@ -6,7 +7,7 @@ exports.version = "0.1.0";
 /**
  * User class.
  */
-exports.create = function (res,req,data,cb) {
+exports.create = function (req,res,data,cb) {
 	//Need res to set cookie
 	var user = new User(data);
 	user.save(function(err){

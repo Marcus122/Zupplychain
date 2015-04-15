@@ -1,5 +1,6 @@
 define(["jquery","controllers/warehouse","loom/loom"], function ($,Warehouse,Loom) {
-
+	/*SINGLETON*/
+	
     
     function Class(data) {
 		var templates;
@@ -54,9 +55,9 @@ define(["jquery","controllers/warehouse","loom/loom"], function ($,Warehouse,Loo
 			$priceForm.on("submit",function(ev){
 				ev.preventDefault();
 				//Check each storage has pricing
+				var complete=true;
 				$priceForm.find('tbody tr').each(function(){
 					var $tr=$(this);
-					var complete=true;
 					var Storage = storage[$tr.data('id')];
 					if(!Storage || !Storage.pricing.length){
 						$tr.find('.pricing').addClass('error');
@@ -64,18 +65,18 @@ define(["jquery","controllers/warehouse","loom/loom"], function ($,Warehouse,Loo
 					}else{
 						$tr.find('.pricing').removeClass('error');
 					}
-					if(complete && lm.isFormValid($priceForm.attr('id')) ){
-						var warehouse={};
-						warehouse.id=$priceForm.find('input[name="warehouse"]').val();
-						var s=[];
-						for(i in storage){
-							s.push(storage[i]);
-						}
-						Warehouse.updateStorageBatch(warehouse,s,function(){
-							window.location = './provider-registration-complete';
-						});
-					}
 				});
+				if(complete && lm.isFormValid($priceForm.attr('id')) ){
+					var warehouse={};
+					warehouse.id=$priceForm.find('input[name="warehouse"]').val();
+					var s=[];
+					for(i in storage){
+						s.push(storage[i]);
+					}
+					Warehouse.updateStorageBatch(warehouse,s,function(){
+						window.location = './provider-registration-complete';
+					});
+				}
 			});
 			popups();
 		}

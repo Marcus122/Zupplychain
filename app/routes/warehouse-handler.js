@@ -79,11 +79,18 @@ function updateStorage(req,res,next){
 function batchStorage(req,res){
 	if(!req.warehouse) next();
 	var storageArr=[];
+	console.log("call");
 	async.each(req.body, function(_storage,callback){
 		if(!_storage._id){
+			delete _storage._id;
 			storage.create(req.data.user,_storage,function(err,Storage){
-				storageArr.push(Storage._id);
-				callback();
+				if(err){
+					console.log(err);
+					callback(err);
+				}else{
+					storageArr.push(Storage._id);
+					callback();
+				}
 			});
 		}else{
 			_storage.user=req.data.user._id;

@@ -39,7 +39,7 @@ define(["jquery", "./formField"],function($, FormField){
 		prefix 			= formElement.attr("data-loom-field-prefix") || "";
         noAJAX          = formElement.attr("data-loom-no-ajax");
         noSubmit        = formElement.attr("data-loom-no-submit");
-        preventDefault  = String(formElement.attr("data-loom-prevent-default")) ? JSON.parse(formElement.attr("data-loom-prevent-default")) : true;
+        preventDefault  = formElement.attr("data-loom-prevent-default") ? JSON.parse(formElement.attr("data-loom-prevent-default")) : true;
         disableOnLoad   = formElement.attr("data-loom-disabled"); //disable the form immediately, changing the submit button to an edit button
         disableOnSuccess= formElement.attr("data-loom-disable-on-success"); //TODO : being implemented
         resetOnSuccess  = formElement.attr("data-loom-reset-on-success"); //TODO : being implemented
@@ -116,14 +116,11 @@ define(["jquery", "./formField"],function($, FormField){
 		});
 		
         function onSubmit(evt) {
-            if (evt) {
-                evt.preventDefault();
-            }
 			clearStateMessages();
 			clearValidationMessages();
 			loadFormValuesIntoModelFields();
 			var isValid = validateFormAndReturnTrueIfValid();
-			if(!isValid || preventDefault){
+			if(evt && (!isValid || preventDefault)){
 				evt.preventDefault();
 			}
 			if (!isValid){

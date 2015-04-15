@@ -1,6 +1,9 @@
 define(["jquery"], function ($) {
 	/*SINGLETON*/
-	var c = new Class();
+	var c;
+	if(!c){
+		c= new Class();
+	}
     
     function Class() {
 		var url = '/warehouse';
@@ -25,7 +28,8 @@ define(["jquery"], function ($) {
 		}
 		
 		function updateStorageBatch(warehouse,storage,cb){
-			var new_url = url + '/'+ warehouse.id + '/storage/batch';
+			var new_url = url + '/'+ warehouse.id + '/storage/batch/';
+			console.log("once");
 			$.ajax({
 				url: new_url,
 				type:'POST',
