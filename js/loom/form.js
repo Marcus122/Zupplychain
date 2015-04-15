@@ -29,6 +29,7 @@ define(["jquery", "./formField"],function($, FormField){
         var noAJAX;
         var noSubmit;
         var resetOnSuccess;
+		var preventDefault;
 		
 		// INIT
 		formElement 	= $($form);
@@ -38,6 +39,7 @@ define(["jquery", "./formField"],function($, FormField){
 		prefix 			= formElement.attr("data-loom-field-prefix") || "";
         noAJAX          = formElement.attr("data-loom-no-ajax");
         noSubmit        = formElement.attr("data-loom-no-submit");
+        preventDefault  = String(formElement.attr("data-loom-prevent-default")) ? JSON.parse(formElement.attr("data-loom-prevent-default")) : true;
         disableOnSuccess= formElement.attr("data-loom-disable-on-success"); //TODO : being implemented
         resetOnSuccess  = formElement.attr("data-loom-reset-on-success"); //TODO : being implemented
         //canGoBackAndEdit= formElement.attr("data-loom-can-go-back-and-edit"); //TODO : being implemented
@@ -102,11 +104,13 @@ define(["jquery", "./formField"],function($, FormField){
         });
 		
 		formElement.on("submit", function(evt){
-			evt.preventDefault();
 			clearStateMessages();
 			clearValidationMessages();
 			loadFormValuesIntoModelFields();
 			var isValid = validateFormAndReturnTrueIfValid();
+			if(!isValid || preventDefault){
+				evt.preventDefault();
+			}
 			if (!isValid){
 				showValidationMessage();
 				if (JUMP_TO_INVALID_FIELD_ON_SUBMIT) {
