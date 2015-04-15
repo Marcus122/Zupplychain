@@ -26,7 +26,7 @@ define(["components/search-results-map", "loom/loom"],function(ResultsMap, Loom)
         resultsMap.load(response.results);
         $(".search-result-info-box").fadeIn();
         require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) { 
-            $.scrollTo("body", {duration : 600 });
+            $.scrollTo(0, {duration : 600 });
         });
     });
     loom.addOnErrorCallback("search-form", function(response){
