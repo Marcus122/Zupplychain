@@ -76,79 +76,32 @@
 									<div class="services">
 										<h5>Services</h5>
 										<div class="row">
-											<div class="input-field check columns three">
-												<input data-array="services" name="name" type="checkbox" value="Transport / Distribution"/>
-												<label>Transport / Distribution</label>
-											</div>
-											<div class="input-field check columns three">
-												<input type="checkbox"/>
-												<label>Pallet network</label>
-											</div>
-											<div class="input-field check columns three">
-												<input type="checkbox"/>
-												<label>Container Palletisation</label>
-											</div>
-											<div class="input-field check columns three">
-												<input type="checkbox"/>
-												<label>Pick &amp; Pack</label>
-											</div>
+											<% for( i in services ){%>
+												<div class="input-field check columns three">
+													<%if( warehouse.services && warehouse.services.indexOf(services[i]) != -1 ){%>
+														<input data-array="services" name="name" type="checkbox" value="<%=services[i]%>" checked/>
+													<%}else{%>
+														<input data-array="services" name="name" type="checkbox" value="<%=services[i]%>"/>
+													<%}%>
+													<label><%=services[i]%></label>
+												</div>
+											<%}%>
 										</div>
-										<div class="row">
-											<div class="input-field check columns three">
-												<input type="checkbox"/>
-												<label>Home Delivery</label>
-											</div>
-											<div class="input-field check columns three">
-												<input type="checkbox"/>
-												<label>Product Disposal</label>
-											</div>
-											<div class="input-field check columns three">
-												<input type="checkbox"/>
-												<label>Add. Product Insurance</label>
-											</div>
-											<div class="input-field check columns three">
-												<input type="checkbox"/>
-												<label>Bunded Warehouse</label>
-											</div>
-										</div>
+
 									</div>
 									<div class="warehouse-specifications">
 										<h5>Specifications</h5>
 										<div class="row">
-											<div class="input-field check columns three">
-												<input type="checkbox"/>
-												<label>Perimeter Fencing</label>
-											</div>
-											<div class="input-field check columns three">
-												<input type="checkbox"/>
-												<label>24hr security</label>
-											</div>
-											<div class="input-field check columns three">
-												<input type="checkbox"/>
-												<label>CCTV</label>
-											</div>
-											<div class="input-field check columns three">
-												<input type="checkbox"/>
-												<label>Sprinklers</label>
-											</div>
-										</div>
-										<div class="row">
-											<div class="input-field check columns three">
-												<input type="checkbox"/>
-												<label>Narrow .. racking</label>
-											</div>
-											<div class="input-field check columns three">
-												<input type="checkbox"/>
-												<label>Outdoor storage</label>
-											</div>
-											<div class="input-field check columns three">
-												<input type="checkbox"/>
-												<label>Bulk Storage</label>
-											</div>
-											<div class="input-field check columns three">
-												<input type="checkbox"/>
-												<label>Roll in Roll unit storage</label>
-											</div>
+											<% for( i in specifications ){%>
+												<div class="input-field check columns three">
+													<%if( warehouse.specifications && warehouse.specifications.indexOf(specifications[i]) != -1 ){%>
+														<input data-array="specifications" name="name" type="checkbox" value="<%=specifications[i]%>" checked/>
+													<%}else{%>
+														<input data-array="specifications" name="name" type="checkbox" value="<%=specifications[i]%>"/>
+													<%}%>
+													<label><%=specifications[i]%></label>
+												</div>
+											<%}%>
 										</div>
 									</div>
 								</div>
@@ -162,10 +115,18 @@
 								<p>Upload any profile images and or Quality assurance documents below.</p>
 								<div class="row documents">
 									<label  class="columns five" for="photos">Upload Warehouse Photos</label>
-									<input data-array="photos" class="columns five" type="file" name="filename" id="photos"/>
+									<input class="columns five" type="file" id="photos"/>
 									<div class="columns one">
-										<button class="attach primary mini"><span>add</span></button>
+										<button id="add-photo" type="button" class="attach primary mini"><span>add</span></button>
 									</div>
+								</div>
+								<div id="upload-photos">
+									<%if(warehouse.photos){
+										for(var i=0;i<warehouse.photos.length;i++){
+											var url = "/images/" + warehouse.photos[i];%>
+											<img src="<%=url%>"/>
+										<%}
+									}%>
 								</div>
 								<div class="row documents">
 									<label class="columns two" for="docs">Upload Documents</label>
@@ -175,9 +136,9 @@
 										<option>Fire Safety/Sprinkle documentation</option>
 										<option>Operator License</option>
 									</select>
-									<input data-array="documents" class="columns five" type="file" name="documents" id="docs"/>
+									<input class="columns five" type="file" id="docs"/>
 									<div class="columns one">
-										<button class="attach primary mini"><span>add</span></button>
+										<button type="button" class="attach primary mini"><span>add</span></button>
 									</div>
 								</div>
 							</fieldset>
@@ -188,7 +149,7 @@
 						<%if( warehouse._id ){%>
 							<input name="id" value="<%=warehouse._id%>" type="hidden"/>
 						<%}%>
-						<button class="action">Save</button>
+						<button type="button" class="action save">Save</button>
 						<span>OR</span>
 						<button class="action next">Save &amp; Continue</button>
 					</fieldset>
@@ -196,4 +157,8 @@
 			</section>
 		</div>
 	</main>
- <% include ./partials/bottom%>   
+	 <script type="text/template" id="warehouse-image">
+		<img data-bind-src="file"/>
+	 </script>
+ <% include ./partials/bottom%>
+ 

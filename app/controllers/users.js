@@ -1,5 +1,6 @@
 var User = require("../data/user.js"),
-	local = require("../local.config.js");
+	local = require("../local.config.js"),
+	passwordHash = require('password-hash');
 
 exports.version = "0.1.0";
 
@@ -18,6 +19,23 @@ exports.create = function (req,res,data,cb) {
 		  }else{
 			 return cb(err);
 		 }
+	});
+}
+exports.login = function(req,res,cb){
+	var loginFailed={error:"login failed"};
+	if(!req.body.email || !req.body.password) return cb(loginFailed);
+	
+	User.findOne({email:req.body.email,active:true},function(err,user){
+		if(err || !user){
+			return cb(loginFailed);
+		}else{
+			if( passwordHash.verify(req.body.password,user.password ) ){
+				setCookie(user,res);
+				cb(null,user);
+			}else{
+				cb(loginFailed);
+			}
+		}
 	});
 }
 exports.register = function(user,cb){
@@ -64,7 +82,6 @@ exports.user_by_email = function (email,callback) {
 		if(err){
 			return callback(err);
 		}else{
-			extendUser(user);
 			return callback(null,user)
 		}
 	});

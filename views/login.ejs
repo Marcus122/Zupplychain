@@ -1,0 +1,33 @@
+ <% include ./partials/top %>   
+            
+	<main>
+		<section>
+			<form data-loom-no-submit="true" data-loom-prevent-default="false" method="post" action="/login" class="provider-form loom-form" novalidate>
+				<div class="main">
+					<div class="content-box primary">
+						<div class="header">
+							<h3>Login</h3>
+						</div>
+						<fieldset class="main">
+							<div>
+								<div class="input-field">
+									<label for="name">Email*</label><input type="email" name="email" id="email" required>
+								</div>
+								<div class="input-field">
+									<label for="email">Password*</label><input type="password" name="password" id="password" required>
+								</div>
+								<div>
+									<button class="action primary">Login</button>
+								</div>
+							</div>
+							<% if( typeof loginFailed != "undefined" && loginFailed ){%>
+								<p>Login Failed</p>
+							<%}%>
+						</fieldset>
+					</div>
+					<p>*Required Fields</p>
+				</div>
+			</form>
+		</section>
+	</main>
+ <% include ./partials/bottom %>   

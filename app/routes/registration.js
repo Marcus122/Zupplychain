@@ -1,20 +1,17 @@
 var User = require("../controllers/users.js"),
-	local = require("../local.config.js");
+	local = require("../local.config.js"),
+	multiparty = require('multiparty'),
+	fs = require('fs');
 
 var handler = function(app) {
 	app.get('/provider-registration', function(req,res){
 		res.render("registration",req.data);
 	});
-	app.get('/provider-registration/:step', populateUserData, function (req,res) {
-		registrationHandler(req,res);
-	});
-	app.get('/provider-registration-:step', populateUserData, function (req,res) {
-		registrationHandler(req,res);
-	});
-	app.post('/provider-registration-:step', function (req,res) {
-		registrationHandler(req,res);
-	});
+	app.get('/provider-registration/:step', populateUserData, registrationHandler);
+	app.get('/provider-registration-:step', populateUserData, registrationHandler);
+	app.post('/provider-registration-:step', registrationHandler);
 	app.post('/complete-registration',completeRegistration);
+	app.post('/registration/upload',uploadFile,fileOutput);
 };
 function registrationHandler(req,res){
 	if(req.params.step > 1 && !req.data.user._id ){
@@ -25,6 +22,9 @@ function registrationHandler(req,res){
 }
 function populateUserData(req,res, next){
 	if(!req.data.user._id) return next();
+	req.data.services = local.config.services;
+	req.data.specifications = local.config.specifications
+	
 	req.data.user.getWarehouses(function(warehouses){
 		req.data.user.warehouses = warehouses;
 		return next();
@@ -46,7 +46,28 @@ function completeRegistration(req,res){
 	})
 	
 }
+function uploadFile(req,res,next){
+	var form = new multiparty.Form();
+	 form.parse(req, function(err, fields, files) {
+		req.files = files[0];
+		req.fields = fields;
+		for( i in files[0] ){
+			fs.rename(files[0][i].path, __dirname + '../../../images/' + files[0][i].originalFilename);
+		}
+		next();
+    });
+}
 function redirectToStart(res){
 	res.redirect('/provider-registration-1');
+}
+function fileOutput(req,res){
+	var files=[];
+	res.writeHead(200, {"Content-Type": "application/json"});
+	for(i in req.files){
+		var file={};
+		file.name = req.files[i].originalFilename;
+		files.push(file);
+	}
+	res.end(JSON.stringify(files));
 }
 module.exports = handler;

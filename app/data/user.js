@@ -27,6 +27,6 @@ userSchema.methods.getWarehouses = function(cb){
 	});
 }
 function setPassword(password){
-    return passwordHash.generate(password);
+    return passwordHash.isHashed(password) ? password : passwordHash.generate(password);
 }
 module.exports = mongoose.model('users', userSchema);

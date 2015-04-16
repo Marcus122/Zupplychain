@@ -1,41 +1,62 @@
-define(["jquery","controllers/warehouse","loom/loom"], function ($,Warehouse,Loom) {
+define(["jquery","controllers/warehouse","loom/loom","templates/templates"], function ($,Warehouse,Loom,Templates) {
 	/*SINGLETON*/
 	
-    
     function Class(data) {
-		var templates;
+		var templates = new Templates();
 		var storageNames=['A','B','C','D','E','F','G','H','I'];
 		var storage=[];
+		var warehouse={};
 		var lm = new Loom();
 		
 		function initialize() {
-			require(["templates/templates"], function(Templates){
-				templates = new Templates();
-			});
 			$('.new-pallet button').on("click",function(ev){
-					ev.preventDefault();
-					addPallet();
+				ev.preventDefault();
+				addPallet();
+			});
+			var addPhoto = $('#add-photo');
+			addPhoto.on("click",function(ev){
+				ev.preventDefault();
+				var files=$('#photos').prop("files");
+				if(!files) return;
+				sendFile(files,function(data){
+					if(!warehouse.photos) warehouse.photos=[];
+					var template = templates.getTemplate("warehouse-image");
+					for( i in data){
+						var image = data[i];
+						image.file = '/images/' + data[i].name;
+						warehouse.photos.push(data[i].name);
+						var $image = template.bind( image );
+						$('#upload-photos').append($image);
+						addPhoto.val("");
+					}
+				});
 			});
 			$('.define-space').on("click",".trash-button",function(ev){
-					ev.preventDefault();
-					$(this).closest('tr').remove();
+				ev.preventDefault();
+				$(this).closest('tr').remove();
 			});
 			$('.define-space').on("click","tr",function(ev){
 				ev.preventDefault();
-				//$('.define-space .active').removeClass('active');
 				$(this).toggleClass('active');
 			});
 			var $registration = $('#registration');
 			$registration.on("submit",function(ev){
 				ev.preventDefault();
+				saveWarehouse(function(){
+					window.location = './provider-registration-2';
+				});
+			});
+			$registration.find('.save').on("click",function(ev){
+				saveWarehouse();
+			});
+			function saveWarehouse(cb){
 				if( lm.isFormValid($registration.attr('id')) ){
-					var warehouse={};
 					bindFormToObject($registration,warehouse);
 					Warehouse.update(warehouse,function(){
-						window.location = './provider-registration-2';
+						if(cb) cb();
 					});
 				}
-			});
+			}
 			var $defineSpace = $('#define-space');
 			$defineSpace.on("submit",function(ev){
 				ev.preventDefault();
@@ -67,7 +88,6 @@ define(["jquery","controllers/warehouse","loom/loom"], function ($,Warehouse,Loo
 					}
 				});
 				if(complete && lm.isFormValid($priceForm.attr('id')) ){
-					var warehouse={};
 					warehouse.id=$priceForm.find('input[name="warehouse"]').val();
 					var s=[];
 					for(i in storage){
@@ -322,12 +342,12 @@ define(["jquery","controllers/warehouse","loom/loom"], function ($,Warehouse,Loo
 					object[array]=[];
 				}
 				var obj = {};
-				if($input.val()){
-					obj[name]=$input.val();
+				if($input.is(':checked')){
 					if($input.attr('type') === 'checkbox'){
-						obj.active = $input.is(':checked');
+						object[array].push($input.attr('value'));
+					}else{
+						object[array].push($input.val());
 					}
-					object[array].push(obj);
 				}
 			}else{
 				if(name){
@@ -336,7 +356,30 @@ define(["jquery","controllers/warehouse","loom/loom"], function ($,Warehouse,Loo
 			}
 		});
 	}
-    
+	
+	function sendFile(files,cb){
+		if(!files) return cb();
+		var data = new FormData();
+		$.each(files, function(key, value)
+		{
+			data.append(key, value);
+		});
+		$.ajax({
+			url: '/registration/upload',
+			type: 'POST',
+			data: data,
+			cache: false,
+			dataType: 'json',
+			processData: false, // Don't process the files
+			contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+			success: function(data){
+				cb(data);
+			},
+			error: function(){
+				cb();
+			}
+		})
+	}
     return Class;
     
     

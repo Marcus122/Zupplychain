@@ -64,8 +64,13 @@
 		text-align:center;
 	}
 }
-.specifications h5{
-	.unit-margin-vertical(2);
+.specifications{ 
+	h5{.unit-margin-vertical(2);}
+	
+	.columns.three:nth-child(4n+1){
+		margin-left:0;
+	}
+	
 }
 .price-and-availability td.error{
 	background-image: url('/css/loom/images/icon-warning.png');

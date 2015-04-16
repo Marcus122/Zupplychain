@@ -11,5 +11,27 @@ exports.config = {
 		secure:false
 	},
 
-    static_content: "../static/"
+    static_content: "../static/",
+	
+	services: [
+		"Transport / Distribution",
+		"Pallet network",
+		"Container Palletisation",
+		"Pick & Pack",
+		"Home Delivery",
+		"Product Disposal",
+		"Add. Product Insurance",
+		"Bunded Warehouse"
+	],
+	specifications: [
+		"Perimeter Fencing",
+		"24hr security",
+		"CCTV",
+		"Sprinklers",
+		"Narrow .. racking",
+		"Outdoor storage",
+		"Bulk Storage",
+		"Roll in Roll unit storage"
+	]
+	
 };

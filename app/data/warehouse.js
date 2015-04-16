@@ -3,7 +3,8 @@
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema,
 	ObjectId = Schema.ObjectId,
-	Storage = require("./storage.js");
+	Storage = require("./storage.js"),
+	local = require("../local.config.js");
 
 var fields = {
 	user: { type: Schema.ObjectId, ref: 'users' },
@@ -17,9 +18,9 @@ var fields = {
 	telephone: { type: String },
 	mobile: { type:String },
 	description: { type: String },
-	services: [{name:String, active: Boolean}],
-	specifications: [{name:String, active: Boolean}],
-	photos: [{filename:String}],
+	services: [String],
+	specifications: [String],
+	photos: [String],
 	documents: [{filename:String, type:String}],
 	active: { type: Boolean, default: false },
 	created: { type: Date , default: Date.now },
@@ -44,6 +45,12 @@ warehouseSchema.statics = {
 		  .populate('storage')
 		  .populate('user')
 		  .exec(cb); 
+  },
+  availableServices: function(){
+	  return local.services;
+  },
+  availableSpecifications: function(){
+	  return local.specifications;
   }
 }
 
