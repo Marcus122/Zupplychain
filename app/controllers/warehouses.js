@@ -46,10 +46,16 @@ exports.warehouse_by_user = function (user,callback) {
 
 exports.warehouse_by_query = function(query,cb) {
     // do the actual search and return the warehouse data.
-    Warehouse.search_by_query(query, function(){
-        
+    Warehouse.search_by_query(query, function(err,result){
+        var data = {error: 'There were no results for your search'};
+        if (err) {
+            data = {error: 'There were no results for your search'};
+        } else {
+            data = {results : result};
+        }
+        return cb(data);
     });
-    var data = { results :[
+    /*var data1 = { results :[
                 {
                     latitude : 53.593, 
                     longitude: -2.298, 
@@ -76,6 +82,6 @@ exports.warehouse_by_query = function(query,cb) {
                     imageURL : "/images/warehouse-thumb.jpg"
                     
                 }
-    ]};
-    return cb(data);   
+    ]};*/
+       
 }

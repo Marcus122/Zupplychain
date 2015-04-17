@@ -32,6 +32,13 @@ For MongoDB gui I have used https://www.npmjs.com/package/mongo-express
 Need to set up config file or copy config.default.js into a new file called config.js
 To run use command node app and go to http://localhost:8081
 
+/PROGRA~1/MongoDB/Server/3.0/bin/mongodump.exe dumps the database into a /dump folder in the current dir
+
+PROGRA~1/MongoDB/Server/3.0/bin/mongorestore.exe updates a database from a previous /dump.
+
+mongorestore doesn't update, only inserts, so ensure database is empty before you restore.
+
+
 
 
 For MongoDB shell 

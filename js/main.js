@@ -23,7 +23,6 @@ require(["jquery"], function($) {
         
         if (onPage("search")){ //hacky while testing.. TODO: Move this lot to its own Search component.
             require(["components/search"], function(Search) {
-               debugger;
                Search();
             });
         }

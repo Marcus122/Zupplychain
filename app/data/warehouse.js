@@ -47,9 +47,6 @@ warehouseSchema.statics = {
 		  .exec(cb); 
   },
   search_by_query: function(query, cb) {
-    this.find(function(err,result){
-            console.log(result);   
-    });
       
     this.find({
               "geo.lat":{ $gte:(query.geo.lat -80), $lte:(query.geo.lat + 80)},
@@ -57,8 +54,7 @@ warehouseSchema.statics = {
               },
               function(err,result){
                   console.log("in Warehouse.js got query result:")
-                    console.log(err);
-                    console.log(result);
+                  console.log(result);
               }).exec(cb);
   },
   availableServices: function(){
