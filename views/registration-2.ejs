@@ -22,7 +22,7 @@
 						<li class="four columns">Step 3</li>
 					</ul>
 					<section class="tab-content">
-						<form method="post" action="/provider-registration-3" id="define-space">
+						<form class="loom-form" data-loom-no-submit="true" method="post" action="/provider-registration-3" id="define-space" novalidate>
 							<input type="hidden" value="<%=warehouse._id%>" name="warehouse_id"/>
 							<div class="main">
 								<div class="content-box primary">
@@ -48,42 +48,6 @@
 													</tr>
 												</thead>
 												<tbody>
-													<!--<tr class="active" data-tr="View Pallet">
-														<td data-th="Storage Name" class="text">
-															<input type="text" value="A"/>
-														</td>
-														<td data-th="Pallet Type" class="select">
-															<select>
-																<option>Blue</option>
-																<option>Euro</option>
-																<option>Standard</option>
-																<option>Ano</option>
-																<option>Other</option>
-																<option>Any</option>
-															</select>
-														</td>
-														<td data-th="Storage Temp" class="select">
-															<select>
-																<option>Ambient</option>
-																<option>Chilled</option>
-																<option>Frozen</option>
-																<option>Outside</option>
-																<option>Other</option>
-															</select>
-														</td>
-														<td data-th="Max Weight" class="value">
-															<input type="text"/>
-														</td>
-														<td data-th="Max Height" class="value">
-															<input type="text"/>
-														</td>
-														<td data-th="Pallet Spaces" class="value">
-															<input type="text"/>
-														</td>
-														<td data-th="Remove" class="action">
-															<button href="#" class="trash-button"><span>Delete</span></button>
-														</td>
-													</tr>-->
 													<%
 														var row = {};
 														row.name = "A";
@@ -104,7 +68,7 @@
 							</div>
 							<fieldset class="form-footer">
 								<a href="/provider-registration-1"><button type="button" class="back button">Back</button></a>
-								<button class="action">Save</button>
+								<button type="button" class="action save">Save</button>
 								<span>OR</span>
 								<button class="action next">Save &amp; Continue</button>
 							</fieldset>

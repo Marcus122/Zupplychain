@@ -120,11 +120,20 @@
 										<button id="add-photo" type="button" class="attach primary mini"><span>add</span></button>
 									</div>
 								</div>
-								<div id="upload-photos">
+								<div id="upload-photos" class="row upload-area">
 									<%if(warehouse.photos){
 										for(var i=0;i<warehouse.photos.length;i++){
 											var url = "/images/" + warehouse.photos[i];%>
-											<img src="<%=url%>"/>
+											<div class="columns four row document">
+												<div class="columns five image">
+													<img src="<%=url%>"/>
+												</div>
+												<span class="file-name columns four"><%=warehouse.photos[i];%></span>
+												<input type="hidden" name="photo" data-array="photos" value="<%=warehouse.photos[i];%>"/>
+												<div class="columns one">
+													<button type="button" href="#" class="trash-button"><span>Delete</span></button>
+												</div>
+											</div>
 										<%}
 									}%>
 								</div>
@@ -158,7 +167,16 @@
 		</div>
 	</main>
 	 <script type="text/template" id="warehouse-image">
-		<img data-bind-src="file"/>
+		<div class="columns four row document">
+			<div class="columns five image">
+				<img data-bind-src="file"/>
+			</div>
+			<span class="file-name columns four">@name@</span>
+			<input type="hidden" name="photo" data-array="photos" data-bind-value="name"/>
+			<div class="columns one">
+				<button type="button" href="#" class="trash-button"><span>Delete</span></button>
+			</div>
+		</div>
 	 </script>
  <% include ./partials/bottom%>
  

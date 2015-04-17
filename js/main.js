@@ -10,7 +10,12 @@ require(["jquery"], function($) {
     }
     
     function init(){
-        
+        $(document).ajaxSend(function() {
+		  $("body").addClass("wait");
+		});
+		 $(document).ajaxStop(function() {
+		  $("body").removeClass("wait");
+		});
         //fire up the loom form library.
         require(["loom/loom"], function(Loom){
             var loom = new Loom();

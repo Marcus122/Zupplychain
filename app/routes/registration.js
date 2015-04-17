@@ -4,6 +4,7 @@ var User = require("../controllers/users.js"),
 	fs = require('fs');
 
 var handler = function(app) {
+	console.log(local.config.upload_folder);
 	app.get('/provider-registration', function(req,res){
 		res.render("registration",req.data);
 	});
@@ -21,10 +22,9 @@ function registrationHandler(req,res){
 	}
 }
 function populateUserData(req,res, next){
-	if(!req.data.user._id) return next();
 	req.data.services = local.config.services;
 	req.data.specifications = local.config.specifications
-	
+	if(!req.data.user._id) return next();
 	req.data.user.getWarehouses(function(warehouses){
 		req.data.user.warehouses = warehouses;
 		return next();
@@ -52,7 +52,7 @@ function uploadFile(req,res,next){
 		req.files = files[0];
 		req.fields = fields;
 		for( i in files[0] ){
-			fs.rename(files[0][i].path, __dirname + '../../../images/' + files[0][i].originalFilename);
+			fs.rename(files[0][i].path, local.config.upload_folder + files[0][i].originalFilename);
 		}
 		next();
     });

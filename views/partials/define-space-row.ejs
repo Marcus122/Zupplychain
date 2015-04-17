@@ -1,9 +1,9 @@
 <tr class="active" data-tr="Expand" data-tr-closed="Collapse">
-	<td data-th="Storage Name" class="text">
+	<td data-th="Storage Name" class="text input-field no-success-validation-style">
 		<input type="hidden" value="<%=row.id%>" name="_id"/>
 		<input type="text" data-bind-value="name" data-bind-value-condition="name" required  value="<%=row.name%>" name="name"/>
 	</td>
-	<td data-th="Pallet Type" class="select">
+	<td data-th="Pallet Type" class="select input-field no-success-validation-style">
 		<select name="palletType">
 			<option
 				<%if(row.palletType === 'Blue' ){%>
@@ -37,7 +37,7 @@
 			>Any</option>
 		</select>
 	</td>
-	<td data-th="Storage Temp" class="select">
+	<td data-th="Storage Temp" class="select input-field no-success-validation-style">
 		<select name="temp">
 			<option>Ambient</option>
 			<option
@@ -50,14 +50,14 @@
 			<option>Other</option>
 		</select>
 	</td>
-	<td data-th="Max Weight" class="value">
+	<td data-th="Max Weight" class="value input-field no-success-validation-style">
 		<input name="maxWeight" type="text" value="<%=row.maxWeight%>"/>
 	</td>
-	<td data-th="Max Height" class="value">
+	<td data-th="Max Height" class="value input-field no-success-validation-style">
 		<input name="maxHeight" type="text" value="<%=row.maxHeight%>"/>
 	</td>
-	<td data-th="Pallet Spaces" class="value">
-		<input name="palletSpaces"  type="text" value="<%=row.palletSpaces%>"/>
+	<td data-th="Pallet Spaces" class="value input-field no-success-validation-style">
+		<input required name="palletSpaces"  type="text" value="<%=row.palletSpaces%>"/>
 	</td>
 	<td data-th="Remove" class="action">
 		<button type="button" href="#" class="trash-button"><span>Delete</span></button>

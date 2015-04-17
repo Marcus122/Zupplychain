@@ -79,7 +79,6 @@ function updateStorage(req,res,next){
 function batchStorage(req,res){
 	if(!req.warehouse) next();
 	var storageArr=[];
-	console.log("call");
 	async.each(req.body, function(_storage,callback){
 		if(!_storage._id){
 			delete _storage._id;
@@ -121,10 +120,14 @@ function updateWarehouse(req,res){
 	async.waterfall([
 		//Any data request go here
 		function(callback){
-			getLatLong(req.body.postcode,function(latlng){
-				req.body.geo=latlng;
+			if(req.body.postcode != req.warehouse.postcode){
+				getLatLong(req.body.postcode,function(latlng){
+					req.body.geo=latlng;
+					callback(null);
+				});
+			}else{
 				callback(null);
-			});
+			}
 		}
 
 	],function (err, result) {

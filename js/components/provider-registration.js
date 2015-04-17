@@ -13,10 +13,12 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates"], fun
 				ev.preventDefault();
 				addPallet();
 			});
-			var addPhoto = $('#add-photo');
-			addPhoto.on("click",function(ev){
+			var $addPhoto = $('#add-photo');
+			var $uploadPhoto = $('#photos');
+			var $photoArea = $('#upload-photos');
+			$addPhoto.on("click",function(ev){
 				ev.preventDefault();
-				var files=$('#photos').prop("files");
+				var files=$uploadPhoto.prop("files");
 				if(!files) return;
 				sendFile(files,function(data){
 					if(!warehouse.photos) warehouse.photos=[];
@@ -24,18 +26,22 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates"], fun
 					for( i in data){
 						var image = data[i];
 						image.file = '/images/' + data[i].name;
-						warehouse.photos.push(data[i].name);
 						var $image = template.bind( image );
-						$('#upload-photos').append($image);
-						addPhoto.val("");
+						$photoArea.append($image);
+						$uploadPhoto.val("");
 					}
 				});
 			});
-			$('.define-space').on("click",".trash-button",function(ev){
+			$photoArea.on("click",".trash-button",function(ev){
+				ev.preventDefault();
+				$(this).closest('.document').remove();
+			});
+			var $defineSpace = $('.define-space');
+			$defineSpace.on("click",".trash-button",function(ev){
 				ev.preventDefault();
 				$(this).closest('tr').remove();
 			});
-			$('.define-space').on("click","tr",function(ev){
+			$defineSpace.on("click","tr",function(ev){
 				ev.preventDefault();
 				$(this).toggleClass('active');
 			});
@@ -60,18 +66,29 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates"], fun
 			var $defineSpace = $('#define-space');
 			$defineSpace.on("submit",function(ev){
 				ev.preventDefault();
-				var storage=[];
-				$defineSpace.find('tbody tr').each(function(){
-					var s={};
-					bindFormToObject($(this),s);
-					storage.push(s);
-				});
-				var warehouse={};
-				warehouse.id = $defineSpace.find('input[name="warehouse_id"]').val();
-				Warehouse.updateStorageBatch(warehouse,storage,function(){
+				saveDefinedSpace(function(){
 					window.location = './provider-registration-3';
 				});
 			});
+			$defineSpace.find('.save').on("click",function(ev){
+				ev.preventDefault();
+				saveDefinedSpace();
+			});
+			function saveDefinedSpace(cb){
+				if( lm.isFormValid($defineSpace.attr('id')) ){
+					var storage=[];
+					$defineSpace.find('tbody tr').each(function(){
+						var s={};
+						bindFormToObject($(this),s);
+						storage.push(s);
+					});
+					var warehouse={};
+					warehouse.id = $defineSpace.find('input[name="warehouse_id"]').val();
+					Warehouse.updateStorageBatch(warehouse,storage,function(){
+						if(cb) cb();
+					});
+				}
+			}
 			var $priceForm = $('#price-and-availability');
 			$priceForm.on("submit",function(ev){
 				ev.preventDefault();
@@ -342,12 +359,12 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates"], fun
 					object[array]=[];
 				}
 				var obj = {};
-				if($input.is(':checked')){
-					if($input.attr('type') === 'checkbox'){
+				if($input.attr('type') === 'checkbox'){
+					if($input.is(':checked')){
 						object[array].push($input.attr('value'));
-					}else{
-						object[array].push($input.val());
 					}
+				}else{
+					object[array].push($input.val());
 				}
 			}else{
 				if(name){

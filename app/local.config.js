@@ -13,6 +13,8 @@ exports.config = {
 
     static_content: "../static/",
 	
+	upload_folder: __dirname + '../../images/',
+	
 	services: [
 		"Transport / Distribution",
 		"Pallet network",

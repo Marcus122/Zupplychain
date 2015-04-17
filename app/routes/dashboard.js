@@ -18,7 +18,7 @@ function validateLogon(req,res,next){
 	})
 }
 function checkForLogon(req,res,next){
-	if(req.data.user.active) next();
+	if(req.data.user.active) return next();
 	res.redirect('/');
 }
 module.exports = handler;
