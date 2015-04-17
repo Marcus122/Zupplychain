@@ -10,6 +10,11 @@ var handler = function(app) {
 	
 	app.get('/warehouse/:warehouse_id', setResponse);
 	
+	app.get('/warehouse-profile/:warehouse_id', function(req,res){
+		req.data.warehouse = req.warehouse;
+		res.render("warehouse-profile",req.data);
+	});
+	
 	app.post('/warehouse/:warehouse_id', warehouseAuth, updateWarehouse );
 	
 	app.post('/warehouse', function(req, res) {
