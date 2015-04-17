@@ -19,7 +19,7 @@ exports.create = function (user,data,cb) {
 }
 exports.load = function(req,res,next,id) {
 	Warehouse.load(id,function(err,warehouse){
-		if(err){
+		if(err || !warehouse){
 			return next(new Error('not found'));
 		}else{
 			//Check warehouse is for user
@@ -43,3 +43,39 @@ exports.warehouse_by_user = function (user,callback) {
 		}
 	});
 };
+
+exports.warehouse_by_query = function(query,cb) {
+    // do the actual search and return the warehouse data.
+    Warehouse.search_by_query(query, function(){
+        
+    });
+    var data = { results :[
+                {
+                    latitude : 53.593, 
+                    longitude: -2.298, 
+                    name: "Warehouse 1", 
+                    address: "123 Bury New Road, BL1 1HG", 
+                    rating: 4, 
+                    imageURL : "/images/warehouse-thumb.jpg"
+                },
+                {
+                    latitude : 53.592,
+                    longitude:-2.305,
+                    name:"Warehouse 2",
+                    address: "88 Bolton Road, BL8 8TH", 
+                    rating: 2, 
+                    imageURL : "/images/warehouse-thumb2.jpg"
+                    
+                },
+                {
+                    latitude : 53.590,
+                    longitude:-2.325,
+                    name:"Warehouse 3",
+                    address: "102 Test Road, BL8 8TH", 
+                    rating: 2, 
+                    imageURL : "/images/warehouse-thumb.jpg"
+                    
+                }
+    ]};
+    return cb(data);   
+}
