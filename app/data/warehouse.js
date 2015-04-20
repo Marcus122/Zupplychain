@@ -51,11 +51,14 @@ warehouseSchema.statics = {
     this.find({
               "geo.lat":{ $gte:(query.geo.lat -80), $lte:(query.geo.lat + 80)},
               "geo.lng":{ $gte:(query.geo.lng -80), $lte:(query.geo.lng + 80)},
+              "active": true
               },
               function(err,result){
                   console.log("in Warehouse.js got query result:")
+                  console.log(query.palletType);
+                  console.log(err);
                   console.log(result);
-              }).exec(cb);
+              }).populate({ path : "storage", match : {palletType : query.palletType} }).exec(cb);
   },
   availableServices: function(){
 	  return local.services;

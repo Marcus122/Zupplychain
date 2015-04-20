@@ -29,9 +29,9 @@ function searchHandler(req,res){
 function populateSearchData(req,res, next){
         var postcode = req.body.postcode;
         var radius = req.body.distance;
-        var pallet_type = req.body["pallet-type"];
+        var palletType = req.body["pallet-type"];
         
-        var query = {"postcode" : postcode, "radius" : radius};
+        var query = {"postcode" : postcode, "radius" : radius, "palletType" : palletType};
         searchController.search_storage(query, function(results) { req.data.results = results; next(); });
 }
 module.exports = handler;

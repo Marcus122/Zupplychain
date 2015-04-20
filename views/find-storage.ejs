@@ -1,5 +1,5 @@
  <% include ./partials/top %>   
-    <main>
+    <main class="search-results-page">
     <div class="search-top-section">
         <div class="row carousel js-page-banner find-storage-banner">
 					<img src="/images/provider-banner.png" alt="Start your registration"/>
@@ -8,9 +8,8 @@
 						<br/>here to match your<span class="medium-font">warehouse space to potential customers</span>
 					</h1>
 				</div>
-                <% include ./results-map %>
     </div>
-        <section class="side-header" ><!-- a section with the header off to one side -->
+        <section class="side-header quote-form-section"  id="search-area"><!-- a section with the header off to one side -->
             <div class="header">
                 <h2>Get an instant quote</h2>
                 <span>* required field</span>
@@ -20,8 +19,12 @@
                     <div class="input-field">
                         <label for="pallet-type">Pallet Type</label>
                         <select name="pallet-type" id="pallet-type" >
-                            <option value="standard-blue">Standard Blue</option>
-                            <option value="standard-red">Standard Red</option>
+                            <option value="Blue">Blue</option>
+                            <option value="Euro">Euro</option>
+                            <option value="Standard">Standard</option>
+                            <option value="Anno">Anno</option>
+                            <option value="Ant">Ant</option>
+                            <option value="Other">Other</option>
                         </select>
                     </div>
                     <div class="input-field number">
@@ -74,37 +77,38 @@
                 </form>
             </div>
         </section>
+        <% include ./partials/results-map %>
         <div class="row info-boxes">
             <div class="three columns fat">
                 <div class="info-box">
                     <span class="icon">£</span>
                     <h4>Lowest Price</h4>
-                    <p>Search for the lowest priced warehouse spaces near you</p>
+                    <p>Search for the lowest priced warehouse spaces near you.</p>
                 </div>
             </div>
             <div class="three columns fat">
                 <div class="info-box">
                     <span class="icon ion-clipboard"></span>
-                    <h4>Compare</h4>
-                    <p>Search for the lowest priced warehouse spaces near you</p>
+                    <h4>Compare Price</h4>
+                    <p>No registration needed when you compare prices and availability.</p>
                 </div>
             </div>
             <div class="three columns fat">
                 <div class="info-box">
                     <span class="icon ion-android-stopwatch"></span>
                     <h4>Short Term</h4>
-                    <p>Search for the lowest priced warehouse spaces near you</p>
+                    <p>Options include problems like excess stock.</p>
                 </div>
             </div>
             <div class="three columns fat">
                 <div class="info-box">
                     <span class="icon ion-calendar"></span>
                     <h4>Long Term</h4>
-                    <p>Search for the lowest priced warehouse spaces near you</p>
+                    <p>Full 3PL service package for longer term storage.</p>
                 </div>
             </div>
         </div>
-        
+        <% include ./partials/results-table %>
         <div class="banner">
             <h3>Testimonials</h3>
             <div class="row">

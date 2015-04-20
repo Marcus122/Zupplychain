@@ -9,6 +9,7 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
         var selectedMarkerIndex =0;
         var map;
         var circle;
+        var factoryData;
         var normalIcon = {
               url  : "/images/map-icon.png"
           }
@@ -43,7 +44,7 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
               
               if (!radius) {
                   radius = 20;//default 20 miles;
-              }
+              } //TODO: have a local API that we use for this.
                 geocoder = new google.maps.Geocoder();
               geocoder.geocode( { 'address': postcode}, function(results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
@@ -92,9 +93,13 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
         }
         
         function load(data) {
+           if (data.length < 1) {
+               return false;
+           }
+          factoryData = data;
           var lim = data.length;
           for (var i =0;i<lim;i++) {
-              var position = new google.maps.LatLng(data[i].latitude, data[i].longitude);
+              var position = new google.maps.LatLng(data[i].geo.lat, data[i].geo.lng);
               
               var thisMarkerOptions = $.extend(markerOptions, {
                 title : data[i].name,
@@ -112,6 +117,8 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
               markers.push(thisMarker);
           }
           setPrevNextOnClick(map, markers, data, highlightIcon, normalIcon);
+          google.maps.event.trigger(markers[0], "click");
+          return true;
         }
         
         
@@ -151,16 +158,17 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
                 }
                 select(selectedMarkerIndex, map, markers[selectedMarkerIndex], markers, data[selectedMarkerIndex], highlightIcon, normalIcon)
             });
-            
         }
         
         function loadWarehouseData(data) {
             var resultsElem = $(RESULT_INFO_ELEM_SELECTOR);
             resultsElem.find('.js-name').html(data.name);
-            resultsElem.find('.js-address').html(data.address);
+            resultsElem.find('.js-address').html(data.addressline1 + ", " + data.addressline2 + ", " + data.city + ", " + data.postcode );
             resultsElem.find('.js-name').html(data.name);
             resultsElem.find('.js-image').addClass("rotateY90");
-            setTimeout(function(){resultsElem.find('.js-image').prop("src", data.imageURL).removeClass("rotateY90");}, 300 );
+            resultsElem.find('.add-to-quote').data("id", data._id);
+            resultsElem.find('.view-details').attr("href" , "/warehouse-profile/" + data._id);
+            setTimeout(function(){resultsElem.find('.js-image').prop("src", data.photos[0]).removeClass("rotateY90");}, 300 );
         }
 
             initialize(postcode, radius);

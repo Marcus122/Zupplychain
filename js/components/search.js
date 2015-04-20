@@ -8,9 +8,12 @@ define(["components/search-results-map", "loom/loom"],function(ResultsMap, Loom)
     
     $("input[name='postcode']").blur(function(){
         resultsMap = new ResultsMap($("input[name='postcode']").val(), $("select[name='max-distance']").val());
-        $(".js-map-results-container").show(); //needs to be visible for map to load successfully.
-        $(".js-page-banner").slideUp(600,function(){$(".search-top-section").css("height", "auto");
-            
+        $(".js-map-results-container").slideDown(); //needs to be visible for map to load successfully.
+        $(".js-page-banner").slideUp(300,function(){$(".search-top-section").css("height", "auto");
+         require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) {
+             
+            $.scrollTo("#search-area",{ duration: 200, offset : -200});
+         });
         });
         
     });
@@ -23,11 +26,15 @@ define(["components/search-results-map", "loom/loom"],function(ResultsMap, Loom)
     
     var loom = new Loom();
     loom.addOnSuccessCallback("search-form", function(response){
-        resultsMap.load(response.results);
-        $(".search-result-info-box").fadeIn();
-        require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) { 
-            $.scrollTo(0, {duration : 600 });
-        });
+        var res = resultsMap.load(response.results);
+        if (res) {
+            $(".search-result-info-box").fadeIn();
+            require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) { 
+                $.scrollTo("#results-area", {duration : 600, offset : -150 });
+            });
+        } else {
+            alert("no results found for your search");
+        }
     });
     loom.addOnErrorCallback("search-form", function(response){
         alert("posted and got error result");
