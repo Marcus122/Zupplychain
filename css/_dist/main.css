@@ -3984,7 +3984,7 @@ body .loom-form .input-field.success input:focus {
   border-color: #33c3f0;
 }
 body .loom-form .input-field.success input {
-  background-image: url('loom/images/icon-success.png');
+  background-image: url('/css/loom/images/icon-success.png');
 }
 body .loom-form .input-field.error select,
 body .loom-form .input-field.error input {
@@ -3999,7 +3999,7 @@ body .loom-form .input-field.error input:focus {
   color: #d73b39;
 }
 body .loom-form .input-field.error input {
-  background-image: url('loom/images/icon-warning.png');
+  background-image: url('/css/loom/images/icon-warning.png');
 }
 body .loom-form .input-field.checkbox.error label {
   color: #d73b39;
@@ -4013,7 +4013,7 @@ body .loom-form .input-field.disabled input {
   background-color: #dddddd;
   color: #999999;
   border-color: #bbbbbb;
-  background-image: url('loom/images/icon-disabled.png');
+  background-image: url('/css/loom/images/icon-disabled.png');
 }
 body .loom-form .input-field.no-validation-style.success input,
 body .loom-form .input-field.no-validation-style.error input {
@@ -4055,17 +4055,17 @@ body .loom-form input[disabled] {
 .loom-form.form-success .form-messages p.success {
   display: inherit;
   color: #4f8a10;
-  background-image: url('loom/images/icon-success.png');
+  background-image: url('/css/loom/images/icon-success.png');
 }
 .loom-form.form-error .form-messages p.error {
   display: inherit;
   color: #d73b39;
-  background-image: url('loom/images/icon-warning.png');
+  background-image: url('/css/loom/images/icon-warning.png');
 }
 .loom-form.form-invalid .form-messages p.invalid {
   display: inherit;
   color: #d73b39;
-  background-image: url('loom/images/icon-warning.png');
+  background-image: url('/css/loom/images/icon-warning.png');
 }
 .loom-form.form-pending .form-messages p.pending {
   display: inherit;
@@ -5177,7 +5177,7 @@ body .loom-form input[disabled] {
   border: 2px solid #d73b39;
 }
 .loom-alert.error p {
-  background-image: url('loom/images/icon-warning.png');
+  background-image: url('/css/loom/images/icon-warning.png');
 }
 .loom-alert.info {
   background-color: #fefefe;
