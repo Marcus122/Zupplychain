@@ -21,8 +21,8 @@
 									<th>Storage Name</th>
 									<th>Pallet Type</th>
 									<th>Storage Temp</th>
-									<th>Max Weight</th>
-									<th>Max Height</th>
+									<th>Max Weight (kg)</th>
+									<th>Max Height (m)</th>
 									<th>Price/Availability</th>
 								</tr>
 							</thead>
@@ -36,10 +36,10 @@
 										<td>
 											<%switch( storage.temp ){
 												case "Ambient": %>
-													<span class="ion-thermometer cold icon-box"></span>
+													<span class="ion-thermometer hot icon-box"></span>
 											  <%	break;
 												case "Frozen": %>
-													<span class="ion-ios-snowy hot icon-box"></span>
+													<span class="ion-ios-snowy cold icon-box"></span>
 												<%	break;
 												case "Chilled": %>
 													<span class="ion-thermometer cold icon-box"></span>
