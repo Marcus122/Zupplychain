@@ -1,0 +1,182 @@
+ <% include ./partials/top%>   
+	<main>
+		<div class="row carousel">
+			<img src="/images/provider-banner.png" alt="Start your registration"/>
+			<h1 class="title large-font">
+				<span>Start your</span>
+				<br/>
+				registration
+			</h1>
+			<p class="desc medium-font">Start your registration &amp; help customers choose your warehouse</p>
+		</div>
+		<div class="row">
+			<ul class="tabs">
+				<li class="four columns active checked">Step 1</li>
+				<li class="four columns">Step 2</li>
+				<li class="four columns">Step 3</li>
+			</ul>
+			<%
+				warehouse={};
+				if( user.warehouses && user.warehouses.length  ){
+					warehouse=user.warehouses[0];
+				}
+			%>
+			<section class="tab-content">
+				<form data-loom-no-submit="true" method="post" action="/provider-registration-2" id="registration" novalidate class="provider-form loom-form">
+					<div class="main">
+						<div class="content-box primary">
+							<div class="header">
+								<h3>Contact Information</h3>
+							</div>
+							<fieldset class="main">
+								<div class="columns six">
+									<div class="input-field">
+										<label for="email">Email*</label><input type="email" name="email" id="email" required value="<%=warehouse.email%>"/>
+									</div>
+									<div class="input-field">
+										<label for="warehouseName">Warehouse Name*</label><input type="text" name="name" id="warehouseName" required value="<%=warehouse.name%>"/>
+									</div>
+									<div class="input-field">
+										<label for="name">Contact Name*</label><input type="text" name="contact" id="name" required value="<%=warehouse.contact%>"/>
+									</div>
+									<div class="input-field">
+										<label for="telephone">Telephone*</label><input type="tel" name="telephone" id="telephone" required value="<%=warehouse.telephone%>"/>
+									</div>
+									<div class="input-field">
+										<label for="mobile">Mobile</label><input type="tel" name="mobile" id="mobile" value="<%=warehouse.mobile%>"/>
+									</div>
+								</div>
+								<div class="columns six">
+									<div class="input-field">
+										<label for="addressLine1">Address Line 1*</label><input type="text" name="addressline1" id="addressLine1" required value="<%=warehouse.addressline1%>"/>
+									</div>
+									<div class="input-field">
+										<label for="addressLine2">Address Line 2</label><input type="text" name="addressline2" id="addressLine2" value="<%=warehouse.addressline2%>"/>
+									</div>
+									<div class="input-field">
+										<label for="city">Town/City*</label><input type="text" name="city" id="city" required value="<%=warehouse.city%>"/>
+									</div>
+									<div class="input-field">
+										<label for="postcode">Postcode*</label><input type="text" name="postcode" id="postcode" required value="<%=warehouse.postcode%>"/>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+						<div class="content-box primary">
+							<div class="header">
+								<h3>Warehouse details</h3>
+							</div>
+							<fieldset class="main warehouse-details">
+								<div class="input-field">
+									<label for="description">Warehouse Description</label>
+									<textarea id="description" name="description" placeholder="A short description about your warehouse"><%=warehouse.description%></textarea>
+								</div>
+								<div class="specifications">
+									<h4>Warehouse Specifications</h4>
+									<div class="services">
+										<h5>Services</h5>
+										<div class="row">
+											<% for( i in services ){%>
+												<div class="input-field check columns three">
+													<%if( warehouse.services && warehouse.services.indexOf(services[i]) != -1 ){%>
+														<input data-array="services" name="name" type="checkbox" value="<%=services[i]%>" checked/>
+													<%}else{%>
+														<input data-array="services" name="name" type="checkbox" value="<%=services[i]%>"/>
+													<%}%>
+													<label><%=services[i]%></label>
+												</div>
+											<%}%>
+										</div>
+
+									</div>
+									<div class="warehouse-specifications">
+										<h5>Specifications</h5>
+										<div class="row">
+											<% for( i in specifications ){%>
+												<div class="input-field check columns three">
+													<%if( warehouse.specifications && warehouse.specifications.indexOf(specifications[i]) != -1 ){%>
+														<input data-array="specifications" name="name" type="checkbox" value="<%=specifications[i]%>" checked/>
+													<%}else{%>
+														<input data-array="specifications" name="name" type="checkbox" value="<%=specifications[i]%>"/>
+													<%}%>
+													<label><%=specifications[i]%></label>
+												</div>
+											<%}%>
+										</div>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+						<div class="content-box primary">
+							<div class="header">
+								<h3>Uploads</h3>
+							</div>
+							<fieldset class="main warehouse-documents">
+								<p>Upload any profile images and or Quality assurance documents below.</p>
+								<div class="row documents">
+									<label  class="columns five" for="photos">Upload Warehouse Photos</label>
+									<input class="columns five" type="file" id="photos"/>
+									<div class="columns one">
+										<button id="add-photo" type="button" class="attach primary mini"><span>add</span></button>
+									</div>
+								</div>
+								<div id="upload-photos" class="row upload-area">
+									<%if(warehouse.photos){
+										for(var i=0;i<warehouse.photos.length;i++){
+											var url = "/images/" + warehouse.photos[i];%>
+											<div class="columns four row document">
+												<div class="columns five image">
+													<img src="<%=url%>"/>
+												</div>
+												<span class="file-name columns four"><%=warehouse.photos[i];%></span>
+												<input type="hidden" name="photo" data-array="photos" value="<%=warehouse.photos[i];%>"/>
+												<div class="columns one">
+													<button type="button" href="#" class="trash-button"><span>Delete</span></button>
+												</div>
+											</div>
+										<%}
+									}%>
+								</div>
+								<div class="row documents">
+									<label class="columns two" for="docs">Upload Documents</label>
+									<select class="columns three" id="doc-type">
+										<option>Insurance Certificate</option>
+										<option>ISO 90001/14001</option>
+										<option>Fire Safety/Sprinkle documentation</option>
+										<option>Operator License</option>
+									</select>
+									<input class="columns five" type="file" id="docs"/>
+									<div class="columns one">
+										<button type="button" class="attach primary mini"><span>add</span></button>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+						<p>*Required Fields</p>
+					</div>
+					<fieldset class="form-footer">
+						<%if( warehouse._id ){%>
+							<input name="id" value="<%=warehouse._id%>" type="hidden"/>
+						<%}%>
+						<button type="button" class="action save">Save</button>
+						<span>OR</span>
+						<button class="action next">Save &amp; Continue</button>
+					</fieldset>
+				</form>
+			</section>
+		</div>
+	</main>
+	 <script type="text/template" id="warehouse-image">
+		<div class="columns four row document">
+			<div class="columns five image">
+				<img data-bind-src="file"/>
+			</div>
+			<span class="file-name columns four">@name@</span>
+			<input type="hidden" name="photo" data-array="photos" data-bind-value="name"/>
+			<div class="columns one">
+				<button type="button" href="#" class="trash-button"><span>Delete</span></button>
+			</div>
+		</div>
+	 </script>
+ <% include ./partials/bottom%>
+ 

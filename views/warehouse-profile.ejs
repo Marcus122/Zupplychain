@@ -1,0 +1,95 @@
+ <% include ./partials/top%>   
+	<main>
+		<div class="row carousel">
+			<img src="/images/provider-banner.png" alt="Start your registration"/>
+			<h1 class="title large-font">
+				<span><%=warehouse.name%></span>
+				<br/>
+				profile
+			</h1>
+		</div>
+		<section>
+			<div class="main">
+				<div class="content-box primary">
+					<div class="header">
+						<h2>Pricing and availability</h2>
+					</div>
+					<div class="main warehouse-pricing">
+						<table class="max">
+							<thead>
+								<tr>
+									<th>Storage Name</th>
+									<th>Pallet Type</th>
+									<th>Storage Temp</th>
+									<th>Max Weight (kg)</th>
+									<th>Max Height (m)</th>
+									<th>Price/Availability</th>
+								</tr>
+							</thead>
+							<tbody>
+								<% for( var i= 0; i<warehouse.storage.length;i++ ){
+									var storage = warehouse.storage[i];
+									%>
+									<tr>
+										<td><%=storage.name%></td>
+										<td><%=storage.palletType%></td>
+										<td>
+											<%switch( storage.temp ){
+												case "Ambient": %>
+													<span class="ion-thermometer hot icon-box"></span>
+											  <%	break;
+												case "Frozen": %>
+													<span class="ion-ios-snowy cold icon-box"></span>
+												<%	break;
+												case "Chilled": %>
+													<span class="ion-thermometer cold icon-box"></span>
+												<% break;
+											}%>
+										<%=storage.temp%></td>
+										<td><%=storage.maxWeight%></td>
+										<td>
+											<%if( storage.maxHeight ){%>
+												<%=storage.maxHeight%>
+											<%}else{%>
+												N/A
+											<%}%>
+										</td>
+										<td class="button-cell"><button data-template="volume" type="button" class="secondary popup mini">click here</button></td>
+									</tr>
+								<%}%>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section>
+			<div class="row main">
+				<div class="content-box columns six ">
+					<div class="header">
+						<h2>About the warehouse</h2>
+					</div>
+					<div class="main">
+						<p><%=warehouse.description%></p>
+					</div>
+				</div>
+				<div class="content-box columns six">
+					<div class="header">
+						<h2>Warehouse features</h2>
+					</div>
+					<div class="main">
+						<ul>
+							<% for( var i= 0; i<warehouse.specifications.length;i++ ){%>
+								<li><%=warehouse.specifications[i]%></li>
+							<%}%>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="footer">
+				<button type="button" class="back button">Back</button>
+			</div>
+		</section>
+	</main>
+ <% include ./partials/bottom%>
+ 

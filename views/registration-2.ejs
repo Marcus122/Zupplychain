@@ -1,0 +1,83 @@
+ <% include ./partials/top %> 
+			<%
+				warehouse={};
+				if( user.warehouses && user.warehouses.length  ){
+					warehouse=user.warehouses[0];
+				}
+			%>
+			<main>
+				<div class="row carousel">
+					<img src="/images/provider-banner.png" alt="Continue your registration"/>
+					<h1 class="title large-font">
+						<span>Continue your</span>
+						<br/>
+						registration
+					</h1>
+					<p class="desc medium-font">Continue your registration &amp; help customers choose your warehouse</p>
+				</div>
+				<div class="row">
+					<ul class="tabs">
+						<li class="four columns checked">Step 1</li>
+						<li class="four columns active checked">Step 2</li>
+						<li class="four columns">Step 3</li>
+					</ul>
+					<section class="tab-content">
+						<form class="loom-form" data-loom-no-submit="true" method="post" action="/provider-registration-3" id="define-space" novalidate>
+							<input type="hidden" value="<%=warehouse._id%>" name="warehouse_id"/>
+							<div class="main">
+								<div class="content-box primary">
+									<div class="header">
+										<h3>Define your space</h3>
+									</div>
+									<div class="main">
+										<p class="new-pallet">
+											<span class="primary">Add new storage</span>
+											<button class="add-button"><span>add</span></button>
+										</p>
+										<fieldset>
+											<table class="max define-space responsive-table collapse">
+												<thead>
+													<tr>
+														<th>Storage Name</th>
+														<th>Pallet Type</th>
+														<th>Storage Temp</th>
+														<th>Max Weight <br/> (kg)</th>
+														<th>Max Height <br/> (m)</th>
+														<th>Pallet Spaces</th>
+														<th><img src="../images/delete.png" alt="delete"/></th>
+													</tr>
+												</thead>
+												<tbody>
+													<%
+														var row = {};
+														row.name = "A";
+														if( !warehouse.storage || !warehouse.storage.length ){%>
+														
+														<% include ./partials/define-space-row %>
+													<%}else{
+														for( var i=0; i < warehouse.storage.length; i++ ){
+															row = warehouse.storage[i];%>
+															<% include ./partials/define-space-row %>
+														<%}
+													}%>
+												</tbody>
+											</table>
+										</fieldset>
+									</div>
+								</div>
+							</div>
+							<fieldset class="form-footer">
+								<a href="/provider-registration-1"><button type="button" class="back button">Back</button></a>
+								<button type="button" class="action save">Save</button>
+								<span>OR</span>
+								<button class="action next">Save &amp; Continue</button>
+							</fieldset>
+						</form>
+					</section>
+				</div>
+			</main>
+		 <script type="text/template" id="define-space-row">
+			<% var row = {}; %>
+			<% include ./partials/define-space-row %> 
+		 </script>
+         <% include ./partials/bottom %> 

@@ -1,0 +1,102 @@
+
+// Needs to be imported from the main Loom stylesheet as variables are used.
+// Alternatively those variables could be redefined in this file if used standalone.
+
+
+@success-message-background: @primary;
+@success-message-foreground: @white;
+@success-message-image-url: "./loom/images/icon-success-white.png";
+
+@info-message-background: @white;
+@info-message-foreground: @white;
+@info-message-image-url: "./loom/images/icon-info-white.png";
+
+@error-message-background: @input-invalid-background-color;
+@error-message-foreground: @input-invalid-text-color;
+
+@wait-message-background:#d4e8f3;
+@wait-message-foreground:#109cc5;
+@wait-message-image-url: "./loom/images/icon-info-blue.png";
+
+
+.loom-alert {
+    position:fixed;
+    z-index:10000;
+    padding:20px;
+    box-sizing:border-box;
+    background-color:#222;
+    border:1px solid #333;
+    width:300px;
+    margin-left:-150px;
+    left:50%;
+    top:120px;
+    top:35vh;
+    color:#fff;
+    text-align:center;
+     p{
+            margin:0px;
+            padding-left:30px;
+            padding-bottom:2px;
+            background-repeat:no-repeat;
+            background-position:left 0px top 3px;
+            }
+    &.success {
+        background-color:@success-message-background;
+        color:@success-message-foreground;
+        border: 2px solid @success-message-foreground;
+        p {
+            background-image:url(@success-message-image-url);
+        }
+    }
+    &.error {
+        background-color:@error-message-background;
+        color:@error-message-foreground;
+        border: 2px solid @error-message-foreground;
+        p {
+            background-image:url(@input-invalid-background-image-url);
+        }
+    }
+    &.info {
+        background-color:@info-message-background;
+        color:@info-message-foreground;
+        border: 2px solid @info-message-foreground;
+        p {
+            background-image:url(@info-message-image-url);
+        }
+    
+    }
+    &#wait {//the global wait 
+        background-color:@wait-message-background;
+        color:@wait-message-foreground;
+        border: 2px solid @wait-message-foreground;
+        p {
+            background-image:url(@wait-message-image-url);
+        }
+    
+    }
+    .controls{
+        text-align:right;
+        .unit-margin-top;
+        .unit-padding-top;
+        border-top:1px solid;
+        button {
+            .unit-margin-left;
+        }
+    }
+}
+
+#wait {
+    display:none;
+}
+body.wait #wait{
+    display:block;
+}
+
+.loom-alert.loom-alert-with-controls{
+    p {
+        text-align:left;
+    }
+
+} 
+    
+    

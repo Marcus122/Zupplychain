@@ -56,13 +56,51 @@
 		text-align:center;
 	}
 }
-.view-list{
+#define-space .input-field input{
+	width:100%;
+}
+#price-and-availability .view{
 	float:right;
+	max-width:100%;
+	white-space: initial;
 }
 .price-and-availability{
 	.text{
 		text-align:center;
 	}
+}
+.specifications{ 
+	h5{.unit-margin-vertical(2);}
+	
+	.columns.three:nth-child(4n+1){
+		margin-left:0;
+		clear: left;
+	}
+	
+}
+#upload-photos{
+	img{
+		max-width:100%;
+		max-height:200px;
+	}
+	.image{
+		text-align: center;
+	}
+	.file-name{
+		display: inline-block;
+		word-wrap: break-word;
+		vertical-align: middle;
+		text-align: center;
+	}
+	button{
+		vertical-align:middle;
+	}
+}
+.price-and-availability td.error{
+	background-image: url('/css/loom/images/icon-warning.png');
+	background-repeat:no-repeat;
+	background-position: 95% 50%;
+	background-color: #ffe9e8;
 }
 @media @mobile{
 	.start-selling {

@@ -1,0 +1,38 @@
+module.exports = {
+  "Demo test Zupply" : function (browser) {
+    browser
+      .url("http://localhost:8080")
+      .resizeWindow(1260, 880 )
+      .waitForElementVisible('body', 2000)
+      .waitForElementVisible('.find-warehouse-space', 2000)
+      .pause(3000)
+      .click('.find-warehouse-space a')
+      .pause(3000)
+      .waitForElementVisible('input', 2000)
+      .click(".storage-search select[name='pallet-type'] option[value='standard-red']")
+      .pause(1000)
+      .setValue('.storage-search input[name="quantity"]', '20')
+      .pause(1000)
+      .setValue('.storage-search input[name="postcode"]', 'BL0 0AT')
+      .pause(1000)
+      .click(".storage-search select[name='max-distance'] option[value='10']")
+      .pause(1000)
+      .setValue('.storage-search input[name="start-date"]', '12/04/2015')
+      .pause(1000)
+      .setValue('.storage-search input[name="end-date"]', '05/05/2015')
+      .pause(1000)
+      .setValue('.storage-search input[name="height"]', '12')
+      .pause(1000)
+      .setValue('.storage-search input[name="weight"]', '150')
+      .pause(1000)
+      .setValue('.storage-search input[name="value"]', '100')
+      .pause(1000)
+      .click(".storage-search select[name='temperature'] option[value='chilled']")
+      .pause(4000)
+      .click(".storage-search button[type='submit']")
+      .waitForElementVisible("#map-container", 4000)
+      .pause(4000)
+      .assert.containsText('body', 'fail')
+      .end();
+  }
+};

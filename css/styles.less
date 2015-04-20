@@ -7,6 +7,11 @@
 @import "tabs";
 @import "header";
 @import "footer";
+@import "popup";
+
+//loom forms and alerts
+@import "loom/loom";
+@import "loom/loomAlert";
 
 // Page specific sheets
 @import "home";
@@ -14,7 +19,10 @@
 @import "provider-registration";
 @import "dashboard";
 
+
+
 @import "annotations"; //some CSS to style development annotations for demos.
+
 
  
  
@@ -193,7 +201,10 @@
  }
  
  /** MAIN PAGE AREAS **/
- 
+ body.wait,
+ body.wait *{
+	cursor:wait;
+ }
  header, footer, main{
     position:relative;
  }
@@ -319,6 +330,9 @@ span.highlight-bright{
         .unit-padding-vertical;
         .unit-padding-horizontal(2);
      }
+	 > .footer .back{
+		  border: 1px solid #ffffff;
+	 }
      .header *, .footer *{
         margin-bottom:0px;margin-top:0px;
      }
@@ -449,6 +463,7 @@ span.highlight-bright{
  
  .info-box{
     background-color:@light-grey;
+    min-height:110px;
     overflow:hidden;
     .unit-padding;
     .icon{
@@ -656,6 +671,9 @@ span.highlight-bright{
     .unit-padding;
     border:1px solid @tertiary;
  }
+ td.button-cell{
+	text-align:center;
+ }
  th {
     background-color:@tertiary;
     border-right: 1px solid @white;
@@ -698,6 +716,53 @@ span.highlight-bright{
 		td:before{
 		  content: attr(data-th)": ";
 		}
+	}
+	table.responsive-table.title:before{
+			content: attr(data-title);
+			display:block;
+			background:@secondary;
+			padding:20px;
+			font-size:2rem;
+			color:@light-text;
+		}
+	.responsive-table.collapse{	
+		td{
+			/*display:none;*/
+		}
+		tbody tr{
+			  padding-top: 28px;
+			  position: relative;
+			  height: 0;
+			  overflow: hidden;
+			  transition: 1s all;
+		}
+		tbody tr:before {
+		  content: "> "attr(data-tr);
+		  position: absolute;
+		  left: 0;
+		  top: 0;
+		  cursor: pointer;
+		  background: #d7d7d7;
+		  width: 100%;
+		  padding: 4px 0;
+		  text-indent: 10px;
+		  border: 1px solid #fff;
+		}
+		tr.active td{
+			display:block;
+		}
+		tr.active:before {
+			content:"v "attr(data-tr-closed);
+		}
+		tr.active{
+			height: 585px; 
+		}
+		/*tr.active {
+			padding-top:0;
+		}
+		tr.active:before{
+			content:"";
+		}*/
 	}
 }
  

@@ -1,0 +1,22 @@
+<tr>
+	<td data-th="From" class="input-field no-success-validation-style">
+		<input required type="date" name="from" class="datepicker" data-bind-value="from"/>
+	</td>
+	<td data-th="To" class="input-field no-success-validation-style">
+		<input required data-bind-value="to" type="date" name="to" class="datepicker"/>
+	</td>
+	<td data-th="Total Pallets" class="input-field no-success-validation-style">
+		<input disabled required data-bind-value="total" name="total" type="number"/>
+	</td>
+	<td data-th="Estimated in Use" class="input-field no-success-validation-style">
+		<input required data-bind-value="inUse" data-bind-max="total" name="inUse" type="number" data-loom-validators="integer"/>
+	</td>
+	<td data-th="Estimated Free" class="input-field no-success-validation-style">
+		<input disabled required data-bind-value="free" name="free" type="number"/>
+	</td>
+	<td data-th="Remove">
+		<button type="button" class="trash-button">
+			<span>Delete</span>
+		</button>
+	</td>
+</tr>

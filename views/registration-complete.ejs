@@ -1,0 +1,49 @@
+ <% include ./partials/top %>   
+            
+	<main>
+		<div class="row carousel">
+			<img src="/images/provider-banner.png" alt="Start your registration">
+			<h1 class="title large-font">
+				<span>Complete your</span>
+				<br>
+				registration
+			</h1>
+			<p class="desc medium-font">Finally enter your details to start selling your space</p>
+		</div>
+		<section>
+			<form data-loom-no-submit="true" data-loom-prevent-default="false" method="post" action="/complete-registration" class="provider-form loom-form" novalidate>
+				<div class="main">
+					<div class="content-box primary">
+						<div class="header">
+							<h3>Register</h3>
+						</div>
+						<fieldset class="main">
+							<div>
+								<div class="row">
+									<div class="input-field columns six">
+										<label for="name">Name*</label><input type="text" name="name" id="name" required>
+									</div>
+									<div class="input-field columns six">
+										<label for="email">Email*</label><input type="email" name="email" id="email" required>
+									</div>
+								</div>
+								<div class="row">
+									<div class="input-field columns six">
+										<label for="tel">Contact Number*</label><input type="tel" name="contact" id="tel" required>
+									</div>
+									<div class="input-field columns six">
+										<label for="password">Password*</label><input type="password" name="password" id="password" required>
+									</div>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+					<p>*Required Fields</p>
+				</div>
+				<fieldset class="form-footer">
+					<button class="action next">Complete</button>
+				</fieldset>
+			</form>
+		</section>
+	</main>
+ <% include ./partials/bottom %>   

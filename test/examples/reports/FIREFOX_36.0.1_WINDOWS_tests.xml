@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="tests"
+             errors="0"
+             failures="1"
+             tests="6">
+  
+  <testsuite errors="0" failures="1" hostname="" id=""
+    name="Demo test Zupply" package="tests" skipped="1"
+    tests="6" time="" timestamp="">
+    
+    
+      <testcase name="Element &lt;body&gt; was visible after 282 milliseconds.">
+        
+        
+      </testcase>
+    
+      <testcase name="Element &lt;.find-warehouse-space&gt; was visible after 1734 milliseconds.">
+        
+        
+      </testcase>
+    
+      <testcase name="Element &lt;input&gt; was visible after 110 milliseconds.">
+        
+        
+      </testcase>
+    
+      <testcase name="Element &lt;#map-container&gt; was visible after 344 milliseconds.">
+        
+        
+      </testcase>
+    
+      <testcase name="Testing if element &lt;body&gt; contains text: &quot;fail&quot;.">
+        
+          <failure message="Expected &quot;fail&quot; but got: &quot;Call Us: 01204 785 822
+Signed in as: Joe Bloggs
+Need Help? My Account
+HOME ABOUT US NEWS REVIEWS TESTIMONIALS
+1. MAP RESULTS
+1
+2
+WAREHOUSE 1
+123 Bury New Road, Bur, BL1 1HG
+ADD TO QUOTE
+*
+*
+*
+*
+*
+pallet type Size Available
+B 2m x 2m 400
+Key Ambient Chilled Frozen
+
+1. MAP RESULTS
+CLICK TO VIEW DETAILS
+Map data ©2015 Google
+Terms of Use
+Report a map error
+Map
+Satellite
+WAREHOUSE 2
+123 Bury New Road, Bur, BL1 1HG
+REMOVE FROM QUOTE
+*
+*
+*
+*
+*
+pallet type Size Available
+B 2m x 2m 400
+PREV
+NEXT
+Key Ambient Chilled Frozen
+2. REFINE YOUR SEARCH
+ADD PALLET
+Pallet type Qty Postcode Max Distance Start Date End Date Height (m) Weight (kg) Value £ Type
+Standard Blue
+Standard Red
+2. REFINE YOUR SEARCH (SIMPLE FORM VERSION)
+Pallet Type
+Standard Blue
+Standard Red
+Qty* Postcode Max Distance
+20 miles
+10 miles
+Start Date End Date Height (m) Weight (kg) Value (£) Temp
+Ambient
+Chilled
+Frozen
+REFINE
+3. LIST RESULTS
+Confirm your email to get further information
+1 to 9 of 24 results
+View all items
+previous
+1 2
+next
+WAREHOUSE TOWN TYPE RATING WEEKLY PRICE IN / OUT PRICE AVAILABLE PALLETS VIEW DETAILS SELECT
+1. Warehouse 1 Bury
+Chilled
+Ambient
+Frozen
+*
+*
+*
+*
+*
+£1.00 £1.00 200 VIEW
+Your Email:
+CONFIRM
+CONTINUE
+Unit 20, Shuttleworth Mead Business Park,
+Burnley, Lancashire, BB2 8JZ
+T:01254 785522
+F:01254 785577
+twitter
+twitter
+twitter
+TERMS AND CONDITIONS
+The company provides all items and services at the sellers own risk. Lorem ipsum dolor sit amet.
+LATEST TWEET
+The company provides all items and services at the sellers own risk. Lorem ipsum dolor sit amet.
+FOLLOW
+2 days ago
+by @newsabc&quot;"></failure>
+        
+        
+      </testcase>
+    
+    
+    </testsuite>
+  
+</testsuites>

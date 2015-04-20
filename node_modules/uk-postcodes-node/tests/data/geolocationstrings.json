@@ -1,0 +1,32 @@
+{
+	"tests" : [
+		{
+			"base" : "52.2523533,-0.24235354",
+			"expected" : true
+		},
+		{
+			"base" : "England,-0.24235354",
+			"expected" : false
+		},
+		{
+			"base" : "52.2523533,Scotland",
+			"expected" : false
+		},
+		{
+			"base" : "252.2523533,-0.24235354",
+			"expected" : false
+		},
+		{
+			"base" : "52.2523533,-220.24235354",
+			"expected" : false
+		},
+		{
+			"base" : "52.2523533,220.24235354",
+			"expected" : false
+		},
+		{
+			"base" : "-552.2523533,-0.24235354",
+			"expected" : false
+		}
+	]
+}
