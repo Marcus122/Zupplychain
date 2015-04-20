@@ -5519,10 +5519,16 @@ body.wait #wait {
 }
 .search-result-info-box img {
   transition: transform 0.3s;
+  max-width: 180px;
+  height: auto;
 }
 .search-result-info-box .ratings {
   font-size: 16px;
   font-size: 1.6rem;
+  text-align: right;
+}
+.search-result-info-box .temperatures {
+  text-align: right;
 }
 .search-result-info-box hr {
   margin-top: 10px;

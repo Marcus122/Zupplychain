@@ -161,14 +161,18 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
         }
         
         function loadWarehouseData(data) {
+            if (!data){
+                return;
+            }
             var resultsElem = $(RESULT_INFO_ELEM_SELECTOR);
             resultsElem.find('.js-name').html(data.name);
             resultsElem.find('.js-address').html(data.addressline1 + ", " + data.addressline2 + ", " + data.city + ", " + data.postcode );
             resultsElem.find('.js-name').html(data.name);
             resultsElem.find('.js-image').addClass("rotateY90");
             resultsElem.find('.add-to-quote').data("id", data._id);
+            resultsElem.find('.remove-from-quote').data("id", data._id);
             resultsElem.find('.view-details').attr("href" , "/warehouse-profile/" + data._id);
-            setTimeout(function(){resultsElem.find('.js-image').prop("src", data.photos[0]).removeClass("rotateY90");}, 300 );
+            setTimeout(function(){resultsElem.find('.js-image').prop("src", "/images/" + data.photos[0]).removeClass("rotateY90");}, 300 );
         }
 
             initialize(postcode, radius);

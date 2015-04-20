@@ -24,6 +24,34 @@ define(["components/search-results-map", "loom/loom"],function(ResultsMap, Loom)
         }
     });
     
+    $(document).on("click", "button.add-to-quote", function(evt){
+        $button = $(evt.target);
+        id = $button.data("id");
+        $('#' + id).find('input').prop("checked",true);
+        $button.hide();
+        $button.parent().find(".remove-from-quote").show();
+    });
+    
+    $(document).on("click", "button.remove-from-quote", function(evt){
+        $button = $(evt.target);
+        id = $button.data("id");
+        $('#' + id).find('input').prop("checked", false);
+        $button.hide();
+        $button.parent().find(".add-to-quote").show();
+    });
+    
+    $(document).on("change", "#search-results-table input", function(evt){
+        var check = $(evt.target).is(":checked");
+        var id = $(evt.target).closest("tr").attr("id");
+        if (check){
+            $(".remove-from-quote[data-id='" + id + "']").show();
+            $(".add-to-quote[data-id='" + id + "']").hide();
+        } else {
+            $(".remove-from-quote[data-id='" + id + "']").hide();
+            $(".add-to-quote[data-id='" + id + "']").show();
+        }
+    });
+    
     
     var loom = new Loom();
     loom.addOnSuccessCallback("search-form", function(response){
