@@ -33,7 +33,19 @@
 									<tr>
 										<td><%=storage.name%></td>
 										<td><%=storage.palletType%></td>
-										<td><%=storage.temp%></td>
+										<td>
+											<%switch( storage.temp ){
+												case "Ambient": %>
+													<span class="ion-thermometer cold icon-box"></span>
+											  <%	break;
+												case "Frozen": %>
+													<span class="ion-ios-snowy hot icon-box"></span>
+												<%	break;
+												case "Chilled": %>
+													<span class="ion-thermometer cold icon-box"></span>
+												<% break;
+											}%>
+										<%=storage.temp%></td>
 										<td><%=storage.maxWeight%></td>
 										<td>
 											<%if( storage.maxHeight ){%>
