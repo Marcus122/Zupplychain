@@ -54,10 +54,6 @@ warehouseSchema.statics = {
               "active": true
               },
               function(err,result){
-                  console.log("in Warehouse.js got query result:")
-                  console.log(query.palletType);
-                  console.log(err);
-                  console.log(result);
               }).populate({ path : "storage", match : {palletType : query.palletType} }).exec(cb);
   },
   availableServices: function(){
