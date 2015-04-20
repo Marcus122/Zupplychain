@@ -1,9 +1,9 @@
-<div class="content-box search-results">
+<div class="content-box search-results" style="display:none">
                     <div class="header">
                         <h2><em>3. List</em> Results</h2><span>Confirm your email to get further information</span>
                     </div>
                     <div class="main">
-                        <div class="pagination">
+                        <!--<div class="pagination">
                             <p>1 to 9 of 24 results</p>
                             <nav class="controls">
                                 <button class="simple mini">View all items</button>
@@ -19,8 +19,8 @@
                                         </a></li>
                                 </ul>
                             </nav>
-                        </div>
-                        <table class="simple">
+                        </div>-->
+                        <table class="simple " id="search-results-table">
                             <thead>
                                 <tr>
                                     <th></th>
@@ -36,7 +36,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <!--<tr>
                                     <td>1.</td>
                                     <td>Warehouse 1</td>
                                     <td>Bury</td>
@@ -58,10 +58,36 @@
                                     <td><button class="action mini">View</button></td>
                                     <td><input type="checkbox" /></td>
                                     
-                                </tr>
+                                </tr>-->
+                                
                             </tbody>
                         </table>
                         
                     </div>
                 
                 </div>
+                <script id="result-table-row" type="text/template">
+                <tr>
+                                    <td>@num@.</td>
+                                    <td>@name@</td>
+                                    <td>@city@</td>
+                                    <td>
+                                        <span class="ion-thermometer cold"><em class="sr-only">Chilled</em></span>
+                                        <span class="ion-thermometer hot"><em class="sr-only">Ambient</em></span>
+                                        <span class="ion-ios-snowy cold"><em class="sr-only">Frozen</em></span>
+                                    </td>
+                                    <td>
+                                        <span class="ion-android-star rating"><em class="sr-only">*</em></span>
+                                        <span class="ion-android-star rating"><em class="sr-only">*</em></span>
+                                        <span class="ion-android-star rating"><em class="sr-only">*</em></span>
+                                        <span class="ion-android-star rating"><em class="sr-only">*</em></span>
+                                        <span class="ion-android-star rating"><em class="sr-only">*</em></span>
+                                    </td>
+                                    <td>£TBC</td>
+                                    <td>£TBC</td>
+                                    <td>200</td>
+                                    <td><a target="_blank" data-bind-href="href"><button class="action mini"  >View</button></a></td>
+                                    <td><input type="checkbox" /></td>
+                                    
+                                </tr>
+                </script>

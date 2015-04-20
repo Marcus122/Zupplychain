@@ -10,6 +10,8 @@
     .unit-margin-bottom(2);
 }
 
+
+
 .quote-form-section{
     .unit-margin-top(2);
 }
@@ -53,11 +55,21 @@
             .unit-margin-left(1);
             .unit-margin-right(3);
         }
-        
-
     }
 }
 
+.search-results .header{
+    h2{
+    display:inline;
+}    
+    
+    span{
+        display:inline;
+        float:right;
+        padding-top:5px;
+    }
+
+}
 .content-box.search-results {
     td, th {
         text-align:center;
@@ -128,6 +140,10 @@
         
       
     }
+    a.view-details {
+        border:1px solid #fff;
+        color:#fff;
+    }
     p {
         color:@light-grey;
     }
@@ -195,7 +211,7 @@
     position:absolute;
     left:0px;
     top:0px;
-    .unit-padding-top(2);
+    .unit-padding-top(3);
     .unit-padding-left(2);
     width:auto;
     display:inline-block;
@@ -211,6 +227,10 @@
         width:200px;
     }
   
+}
+
+.continue-links{
+    position:relative;
 }
 
 #map-container{
