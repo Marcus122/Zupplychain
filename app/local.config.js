@@ -17,23 +17,23 @@ exports.config = {
 	
 	services: [
 		"Transport / Distribution",
-		"Pallet network",
-		"Container Palletisation",
+		"Pallet Network",
+		"Container Destaffing",
 		"Pick & Pack",
 		"Home Delivery",
 		"Product Disposal",
-		"Add. Product Insurance",
-		"Bunded Warehouse"
+		"Additional Insurance",
+		"Bonded Warehouse"
 	],
 	specifications: [
 		"Perimeter Fencing",
-		"24hr security",
+		"24hr Security",
 		"CCTV",
 		"Sprinklers",
-		"Narrow .. racking",
-		"Outdoor storage",
+		"Narrow Aisle Racking",
+		"Outdoor Storage",
 		"Bulk Storage",
-		"Roll in Roll unit storage"
+		"Roll in Roll out unit storage"
 	]
 	
 };

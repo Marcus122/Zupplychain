@@ -5,7 +5,9 @@ a button{
 .button-icon-transition{
     transition:1s transform;
 }
-
+.button{
+	color:inherit;
+}
  button:focus,
  .button:focus{
     outline: 0; 
@@ -19,92 +21,104 @@ a button{
     .unit-padding-vertical(1);
     .unit-padding-horizontal(2);
  }
- 
+ .button.mini,
  button.mini{
     .unit-padding-vertical(0.5);
     .unit-padding-horizontal(1);
     border-radius:4px;
  }
+ .button.medium,
  button.medium{
 	font-size: 22px;
  }
+ .button.large,
  button.large{
 	font-size:30px;
 	.unit-padding-vertical(0.5);
     .unit-padding-horizontal(1);
  }
- 
+ .button.action,
   button.action{
     .highlight-grad;
     .slight-shadow; 
     color:@light-text;
  }
- 
+ .button.primary,
  button.primary{
     color:@light-text;
     background-color:@primary;
  }
-
+.button.secondary,
  button.secondary{
     color:@light-text;
     border-color:@light-text;
     border:2px solid;
     background-color:@secondary;
  }
+ .button.tertiary,
  button.tertiary{
     color:@dark-text;
     background-color:@tertiary;
     .slight-shadow;
  }
+ .button.simple,
  button.simple{
     background:transparent;
     border:1px solid;
  }
- 
+ .button.action:hover,
  button.action:hover{
     .vertical-grad(darken(@highlight-bright,4%), lighten(@highlight, 4%));
  }
- 
+ .button.primary:hover,
  button.primary:hover{
     background-color:darken(@primary, 5%);
  }
- 
+ .button.secondary:hover,
  button.secondary:hover{
     background-color:darken(@secondary, 5%);
  }
+ .button.tertiary:hover,
  button.tertiary:hover{
     background-color:darken(@tertiary, 5%);
  }
 
- 
+ .button:active,
  button:active{
     transform:scale(0.95);
  }
- 
+ .button.action:active,
+ .button.tertiary:active,
  button.action:active,
  button.tertiary:active{
     .very-slight-shadow;
  }
  
+.button em,
 button em{font-weight:bold;font-style:normal;} 
 
+.button.tertiary:after, .button.tertiary:before,
 button.tertiary:after, button.tertiary:before{
     color:@light-text;
 }
  
  /* buttons with icons */
  button.add-button:after, button.trash-button:after, button.next:after, button.forward:after, button.cancel:after, button.undo:after, button.pending:after, button.refresh:after,button.add:after,
- button.success:after, button.popup:after, button.close:after, button.attach:after, button.error:after, button.edit:after, button.down:after, button.config:after,button.go:after,button.dropdown:after{
+ .button.add-button:after, .button.trash-button:after, .button.next:after, .button.forward:after, .button.cancel:after, .button.undo:after, .button.pending:after, .button.refresh:after,.button.add:after,
+ button.success:after, button.popup:after, button.close:after, button.attach:after, button.error:after, button.edit:after, button.down:after, button.config:after,button.go:after,button.dropdown:after,
+ .button.success:after, .button.popup:after, .button.close:after, .button.attach:after, .button.error:after, .button.edit:after, .button.down:after, .button.config:after,.button.go:after,.button.dropdown:after{
     .ion;
     .unit-margin-left;
     
 }
+.button:hover:after, .button:hover:before,
 button:hover:after, button:hover:before{
     /*.button-icon-transition;*/
 }
 
 
 
+.button.prev:before, .button.back:before,
 button.prev:before, button.back:before{
     .ion;
     .unit-margin-right;
@@ -112,66 +126,86 @@ button.prev:before, button.back:before{
 
 
 
+.button:hover:after, .button:hover:before,
 button:hover:after, button:hover:before{
     /*transform:rotateX(360deg) scale(1.2);*/
 }
+.button.close:after,
 button.close:after{
 	content:@ionicon-var-ios-close-outline
 }
+.button.next:after,
 button.next:after{
    content:@ionicon-var-chevron-right;
 }
+.button.success:after,
 button.success:after{
     content:@ionicon-var-checkmark;
 }
 button.success:hover:after,
-button.error:hover:after{
+.button.success:hover:after,
+button.error:hover:after,
+.button.error:hover:after{
     transform:rotateX(0deg) rotateY(360deg);
 }
+.button.prev:before,
 button.prev:before{
     content:@ionicon-var-chevron-left;
 }
+.button.cancel:after,
 button.cancel:after{
     content:@ionicon-var-android-close;
 }
+.button.cancel:hover:after,
 button.cancel:hover:after{
     transform:rotateX(0deg) rotateZ(180deg);
 }
+.button.popup:after,
 button.popup:after{
 	content:@ionicon-var-ios-photos-outline;
 }
+.button.attach:after,
 button.attach:after{
 	content:@ionicon-var-ios-upload-outline;
 }
+.button.pending:after,
 button.pending:after{
     content:@ionicon-var-android-sync;
     animation:rotate 1s linear infinite;
 }
+.button.error:after,
 button.error:after{
    content:@ionicon-var-alert;
 }
+.button.edit:after,
 button.edit:after{
  content:@ionicon-var-compose;
 }
+.button.config:after,
 button.config:after{
     content:@ionicon-var-gear-a;
 }
+.button.config:hover:after,
 button.config:hover:after{
     transform:rotateX(0deg) rotateZ(360deg);
 }
 
 
+.button.pending:after,
 button.pending:after{
     animation:rotate 1s linear infinite;
     -webkit-animation:rotate 1s linear infinite;
 }
+.button.forward:after,
 button.forward:after{
     content:@ionicon-var-android-arrow-forward;
 }
+.button.add:after,
 button.add:after{
     content:@ionicon-var-android-add;
 }
 
+.button.go:after,
 button.go:after{
     content:@ionicon-var-android-arrow-forward;
     font-size:140%;
@@ -182,15 +216,19 @@ button.go:after{
     .unit-padding;
     .unit-margin-top;
 }
+.button.dropdown:after,
 button.dropdown:after{
 	content:@ionicon-var-chevron-down;
 }
+.button.back:before,
 button.back:before{
     content:@ionicon-var-android-arrow-back;
 }
+.button.down:after,
 button.down:after{
     content:@ionicon-var-chevron-down;
 }
+.button.down:hover:after,
 button.down:hover:after{
     transform:rotateX(0deg) rotateY(360deg);
 }
@@ -198,34 +236,45 @@ button.down:hover:after{
 /* mini icon buttons add delete etc. */
 
 button.add-button,
+.button.add-button,
 button.close-button,
-button.trash-button{
+.button.close-button,
+button.trash-button,
+.button.trash-button{
     padding:0px;
     background-color:@primary;
     color:#fff;
 }
 
+.button.close-button:after,
 button.close-button:after{
     content:@ionicon-var-android-close;
 	.unit-margin(1);
 }
+.button.add-button:after,
 button.add-button:after{
     content:@ionicon-var-plus;
 	.unit-margin(1);
 }
+.button.trash-button:after,
 button.trash-button:after{
     content:@ionicon-var-trash-a;
 	.unit-margin(1);
 }
 
 button.add-button span,
+.button.add-button span,
 button.close-button span,
+.button.close-button span,
 button.close span,
-button.trash-button span
+.button.close span,
+button.trash-button span,
+.button.trash-button span
 {
    display:none;
 }
 
+.button.input-button,
 button.input-button{
     margin-left:-6px !important;
     padding-top: 7px;
@@ -245,12 +294,14 @@ button.input-button{
     100%{transform:rotateZ(-360deg);};
 }
 @media @mobile {
+	.button,
 	button{
 		width:100%;
 		margin-top:@unit-px;
 		margin-bottom:@unit-px;
 		float:none;
 	}
+	.button.no-resize,
 	button.no-resize{
 		width:auto;
 	}

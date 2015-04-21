@@ -10,6 +10,7 @@
 			display:inline;
 		}
 		padding: @unit-px*2 @unit-px*6 @unit-px*2 @unit-px*8;
+		.button,
 		button{
 			float:right;
 		}
@@ -20,13 +21,22 @@
 		display:inline-block;
 		padding: @unit-px/2 @unit-px;
 		.unit-margin-left(8);
+		.button,
 		button{
 			padding:0;
 		}
 	}
 }
-.provider-form label{
-	margin-right:5%;
+.provider-form{
+	 label{
+		margin-right:5%;
+	}
+	 .small-input label{
+		width:50%;
+	}
+	 .small-input input{
+		width:20%;
+	}
 }
 .warehouse-details textarea{
 	display: block;
@@ -96,11 +106,19 @@
 		vertical-align:middle;
 	}
 }
-.price-and-availability td.error{
-	background-image: url('/css/loom/images/icon-warning.png');
-	background-repeat:no-repeat;
-	background-position: 95% 50%;
-	background-color: #ffe9e8;
+.price-and-availability{ 
+	td.error{
+		background-image: url('/css/loom/images/icon-warning.png');
+		background-repeat:no-repeat;
+		background-position: 95% 50%;
+		background-color: #ffe9e8;
+	}
+	td.success{
+		background-image: url('/css/loom/images/icon-success.png');
+		background-repeat:no-repeat;
+		background-position: 95% 50%;
+		  background-color: #dff2bf;
+	}
 }
 @media @mobile{
 	.start-selling {
@@ -119,5 +137,8 @@
 			margin-left:0;
 			display:block;
 		}
+	}
+	.provider-form .small-input input{
+		width:100%;
 	}
 }

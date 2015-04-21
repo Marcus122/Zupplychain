@@ -115,6 +115,15 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates"], fun
 					});
 				}
 			});
+			$(document).on("pricing-success",function(ev,id){
+				$priceForm.find('tbody tr').each(function(){
+					var $tr = $(this);
+					if( $tr.data('id') === id ){
+						$tr.find('.pricing').addClass('success');
+						return true;
+					}
+				});
+			});
 			popups();
 		}
 		function addPallet(){
@@ -195,6 +204,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates"], fun
 				ev.preventDefault();
 				if( lm.isFormValid($form.attr('id')) ){
 					Storage.pricing=toArray();
+					$(document).trigger("pricing-success",Storage._id);
 					closePopup();
 				}
 			});

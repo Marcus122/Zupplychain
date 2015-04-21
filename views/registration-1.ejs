@@ -7,7 +7,7 @@
 				<br/>
 				registration
 			</h1>
-			<p class="desc medium-font">Start your registration &amp; help customers choose your warehouse</p>
+			<p class="desc medium-font">Follow our simple 3 step process to complete your registration</p>
 		</div>
 		<div class="row">
 			<ul class="tabs">
@@ -26,18 +26,15 @@
 					<div class="main">
 						<div class="content-box primary">
 							<div class="header">
-								<h3>Contact Information</h3>
+								<h3>Warehouse Information</h3>
 							</div>
 							<fieldset class="main">
 								<div class="columns six">
 									<div class="input-field">
-										<label for="email">Email*</label><input type="email" name="email" id="email" required value="<%=warehouse.email%>"/>
+										<label for="company">Company Name*</label><input type="text" name="company" id="company" required value="<%=warehouse.company%>"/>
 									</div>
 									<div class="input-field">
 										<label for="warehouseName">Warehouse Name*</label><input type="text" name="name" id="warehouseName" required value="<%=warehouse.name%>"/>
-									</div>
-									<div class="input-field">
-										<label for="name">Contact Name*</label><input type="text" name="contact" id="name" required value="<%=warehouse.contact%>"/>
 									</div>
 									<div class="input-field">
 										<label for="telephone">Telephone*</label><input type="tel" name="telephone" id="telephone" required value="<%=warehouse.telephone%>"/>
@@ -52,6 +49,9 @@
 									</div>
 									<div class="input-field">
 										<label for="addressLine2">Address Line 2</label><input type="text" name="addressline2" id="addressLine2" value="<%=warehouse.addressline2%>"/>
+									</div>
+									<div class="input-field">
+										<label for="addressLine3">Address Line 3</label><input type="text" name="addressline3" id="addressLine3" value="<%=warehouse.addressline3%>"/>
 									</div>
 									<div class="input-field">
 										<label for="city">Town/City*</label><input type="text" name="city" id="city" required value="<%=warehouse.city%>"/>
@@ -70,6 +70,21 @@
 								<div class="input-field">
 									<label for="description">Warehouse Description</label>
 									<textarea id="description" name="description" placeholder="A short description about your warehouse"><%=warehouse.description%></textarea>
+								</div>
+								<div class="row">
+									<div class="input-field columns six small-input">
+										<label for="officeHours">Office Hours (Mon-Fri)</label><input id="officeHours" name="officeHours" type="text" placeholder="9:00-17:00"/>
+									</div>
+								</div>
+								<div class="row">
+									<div class="input-field columns six small-input">
+										<label for="size">Size (sq m)</label><input id="size "name="size" type="number" placeholder="m"/>
+									</div>
+								</div>
+								<div class="row">
+									<div class="columns six input-field small-input">
+										<label for="height">Height (m)</label><input id="height" name="height" type="number" placeholder="m"/>
+									</div>
 								</div>
 								<div class="specifications">
 									<h4>Warehouse Specifications</h4>
@@ -112,7 +127,7 @@
 								<h3>Uploads</h3>
 							</div>
 							<fieldset class="main warehouse-documents">
-								<p>Upload any profile images and or Quality assurance documents below.</p>
+								<p>Upload any profile images and or quality assurance documents below.</p>
 								<div class="row documents">
 									<label  class="columns five" for="photos">Upload Warehouse Photos</label>
 									<input class="columns five" type="file" id="photos"/>

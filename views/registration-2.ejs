@@ -30,10 +30,6 @@
 										<h3>Define your space</h3>
 									</div>
 									<div class="main">
-										<p class="new-pallet">
-											<span class="primary">Add new storage</span>
-											<button class="add-button"><span>add</span></button>
-										</p>
 										<fieldset>
 											<table class="max define-space responsive-table collapse">
 												<thead>
@@ -43,16 +39,15 @@
 														<th>Storage Temp</th>
 														<th>Max Weight <br/> (kg)</th>
 														<th>Max Height <br/> (m)</th>
-														<th>Pallet Spaces</th>
+														<th>Total Pallet Spaces</th>
 														<th><img src="../images/delete.png" alt="delete"/></th>
 													</tr>
 												</thead>
 												<tbody>
 													<%
+													if( !warehouse.storage || !warehouse.storage.length ){
 														var row = {};
-														row.name = "A";
-														if( !warehouse.storage || !warehouse.storage.length ){%>
-														
+														row.name = "A";%>
 														<% include ./partials/define-space-row %>
 													<%}else{
 														for( var i=0; i < warehouse.storage.length; i++ ){
@@ -62,12 +57,16 @@
 													}%>
 												</tbody>
 											</table>
+											<p class="new-pallet">
+												<span class="primary">Add new storage</span>
+												<button class="add-button"><span>add</span></button>
+											</p>
 										</fieldset>
 									</div>
 								</div>
 							</div>
 							<fieldset class="form-footer">
-								<a href="/provider-registration-1"><button type="button" class="back button">Back</button></a>
+								<a href="/provider-registration-1" class="back button">Back</a>
 								<button type="button" class="action save">Save</button>
 								<span>OR</span>
 								<button class="action next">Save &amp; Continue</button>
