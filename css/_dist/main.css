@@ -2964,6 +2964,9 @@ a button {
 .button-icon-transition {
   transition: 1s transform;
 }
+.button {
+  color: inherit;
+}
 button:focus,
 .button:focus {
   outline: 0;
@@ -2982,6 +2985,7 @@ button {
   padding-right: 20px;
   padding-right: 2rem;
 }
+.button.mini,
 button.mini {
   padding-top: 5px;
   padding-top: 0.5rem;
@@ -2993,9 +2997,11 @@ button.mini {
   padding-right: 1rem;
   border-radius: 4px;
 }
+.button.medium,
 button.medium {
   font-size: 22px;
 }
+.button.large,
 button.large {
   font-size: 30px;
   padding-top: 5px;
@@ -3007,6 +3013,7 @@ button.large {
   padding-right: 10px;
   padding-right: 1rem;
 }
+.button.action,
 button.action {
   background: #efa430;
   /* Old browsers */
@@ -3027,16 +3034,19 @@ button.action {
   box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.75);
   color: #ffffff;
 }
+.button.primary,
 button.primary {
   color: #ffffff;
   background-color: #9bc11f;
 }
+.button.secondary,
 button.secondary {
   color: #ffffff;
   border-color: #ffffff;
   border: 2px solid;
   background-color: #6a6666;
 }
+.button.tertiary,
 button.tertiary {
   color: #857668;
   background-color: #d7d7d7;
@@ -3044,10 +3054,12 @@ button.tertiary {
   -moz-box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.75);
   box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.75);
 }
+.button.simple,
 button.simple {
   background: transparent;
   border: 1px solid;
 }
+.button.action:hover,
 button.action:hover {
   background: #f39124;
   /* Old browsers */
@@ -3064,28 +3076,37 @@ button.action:hover {
   background: linear-gradient(to bottom, #f39124 0%, #ee9c1d 100%);
   /* W3C */
 }
+.button.primary:hover,
 button.primary:hover {
   background-color: #89ab1b;
 }
+.button.secondary:hover,
 button.secondary:hover {
   background-color: #5d5959;
 }
+.button.tertiary:hover,
 button.tertiary:hover {
   background-color: #cacaca;
 }
+.button:active,
 button:active {
   transform: scale(0.95);
 }
+.button.action:active,
+.button.tertiary:active,
 button.action:active,
 button.tertiary:active {
   -webkit-box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.75);
   box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.75);
 }
+.button em,
 button em {
   font-weight: bold;
   font-style: normal;
 }
+.button.tertiary:after,
+.button.tertiary:before,
 button.tertiary:after,
 button.tertiary:before {
   color: #ffffff;
@@ -3100,6 +3121,15 @@ button.undo:after,
 button.pending:after,
 button.refresh:after,
 button.add:after,
+.button.add-button:after,
+.button.trash-button:after,
+.button.next:after,
+.button.forward:after,
+.button.cancel:after,
+.button.undo:after,
+.button.pending:after,
+.button.refresh:after,
+.button.add:after,
 button.success:after,
 button.popup:after,
 button.close:after,
@@ -3109,7 +3139,17 @@ button.edit:after,
 button.down:after,
 button.config:after,
 button.go:after,
-button.dropdown:after {
+button.dropdown:after,
+.button.success:after,
+.button.popup:after,
+.button.close:after,
+.button.attach:after,
+.button.error:after,
+.button.edit:after,
+.button.down:after,
+.button.config:after,
+.button.go:after,
+.button.dropdown:after {
   display: inline-block;
   font-family: "Ionicons";
   speak: none;
@@ -3124,10 +3164,14 @@ button.dropdown:after {
   margin-left: 10px;
   margin-left: 1rem;
 }
+.button:hover:after,
+.button:hover:before,
 button:hover:after,
 button:hover:before {
   /*.button-icon-transition;*/
 }
+.button.prev:before,
+.button.back:before,
 button.prev:before,
 button.back:before {
   display: inline-block;
@@ -3144,64 +3188,85 @@ button.back:before {
   margin-right: 10px;
   margin-right: 1rem;
 }
+.button:hover:after,
+.button:hover:before,
 button:hover:after,
 button:hover:before {
   /*transform:rotateX(360deg) scale(1.2);*/
 }
+.button.close:after,
 button.close:after {
   content: "\f405";
 }
+.button.next:after,
 button.next:after {
   content: "\f125";
 }
+.button.success:after,
 button.success:after {
   content: "\f122";
 }
 button.success:hover:after,
-button.error:hover:after {
+.button.success:hover:after,
+button.error:hover:after,
+.button.error:hover:after {
   transform: rotateX(0deg) rotateY(360deg);
 }
+.button.prev:before,
 button.prev:before {
   content: "\f124";
 }
+.button.cancel:after,
 button.cancel:after {
   content: "\f2d7";
 }
+.button.cancel:hover:after,
 button.cancel:hover:after {
   transform: rotateX(0deg) rotateZ(180deg);
 }
+.button.popup:after,
 button.popup:after {
   content: "\f481";
 }
+.button.attach:after,
 button.attach:after {
   content: "\f4ca";
 }
+.button.pending:after,
 button.pending:after {
   content: "\f3b1";
   animation: rotate 1s linear infinite;
 }
+.button.error:after,
 button.error:after {
   content: "\f101";
 }
+.button.edit:after,
 button.edit:after {
   content: "\f12c";
 }
+.button.config:after,
 button.config:after {
   content: "\f13d";
 }
+.button.config:hover:after,
 button.config:hover:after {
   transform: rotateX(0deg) rotateZ(360deg);
 }
+.button.pending:after,
 button.pending:after {
   animation: rotate 1s linear infinite;
   -webkit-animation: rotate 1s linear infinite;
 }
+.button.forward:after,
 button.forward:after {
   content: "\f30f";
 }
+.button.add:after,
 button.add:after {
   content: "\f2c7";
 }
+.button.go:after,
 button.go:after {
   content: "\f30f";
   font-size: 140%;
@@ -3220,26 +3285,34 @@ button.go:after {
   margin-top: 10px;
   margin-top: 1rem;
 }
+.button.dropdown:after,
 button.dropdown:after {
   content: "\f123";
 }
+.button.back:before,
 button.back:before {
   content: "\f2ca";
 }
+.button.down:after,
 button.down:after {
   content: "\f123";
 }
+.button.down:hover:after,
 button.down:hover:after {
   transform: rotateX(0deg) rotateY(360deg);
 }
 /* mini icon buttons add delete etc. */
 button.add-button,
+.button.add-button,
 button.close-button,
-button.trash-button {
+.button.close-button,
+button.trash-button,
+.button.trash-button {
   padding: 0px;
   background-color: #9bc11f;
   color: #fff;
 }
+.button.close-button:after,
 button.close-button:after {
   content: "\f2d7";
   margin-left: 10px;
@@ -3251,6 +3324,7 @@ button.close-button:after {
   margin-bottom: 10px;
   margin-bottom: 1rem;
 }
+.button.add-button:after,
 button.add-button:after {
   content: "\f218";
   margin-left: 10px;
@@ -3262,6 +3336,7 @@ button.add-button:after {
   margin-bottom: 10px;
   margin-bottom: 1rem;
 }
+.button.trash-button:after,
 button.trash-button:after {
   content: "\f252";
   margin-left: 10px;
@@ -3274,11 +3349,16 @@ button.trash-button:after {
   margin-bottom: 1rem;
 }
 button.add-button span,
+.button.add-button span,
 button.close-button span,
+.button.close-button span,
 button.close span,
-button.trash-button span {
+.button.close span,
+button.trash-button span,
+.button.trash-button span {
   display: none;
 }
+.button.input-button,
 button.input-button {
   margin-left: -6px !important;
   padding-top: 7px;
@@ -3305,12 +3385,14 @@ button.input-button {
   }
 }
 @media only screen and (max-width: 549px) {
+  .button,
   button {
     width: 100%;
     margin-top: 10px;
     margin-bottom: 10px;
     float: none;
   }
+  .button.no-resize,
   button.no-resize {
     width: auto;
   }
@@ -3425,6 +3507,7 @@ td select {
   margin-left: 10px;
   margin-right: 10px;
 }
+.form-footer .button.back,
 .form-footer button.back {
   float: left;
   border: 1px solid #ffffff;
@@ -3506,7 +3589,7 @@ form.storage-search .input-field.checkbox input {
   overflow: hidden;
 }
 .carousel .title {
-  background: #9bc11f url('../images/green-tiled.png') 0 0 repeat-y;
+  background: #9bc11f url('/images/green-tiled.png') 0 0 repeat-y;
   opacity: 0.95;
   display: inline-block;
   position: absolute;
@@ -3538,7 +3621,7 @@ form.storage-search .input-field.checkbox input {
   display: inherit;
 }
 .carousel .desc {
-  background: #6a6666 url('../images/grey-tiled-flip.png') 100% 0 repeat-y;
+  background: #6a6666 url('/images/grey-tiled-flip.png') 100% 0 repeat-y;
   margin: 0;
   padding: 20px;
   color: #ffffff;
@@ -5249,7 +5332,7 @@ body.wait #wait {
 }
 .call-to-action .find-warehouse-space {
   background-image: url('/images/homepage-banner-2.png');
-  background-position: 50% 0;
+  background-position: 12% 0;
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -5288,6 +5371,7 @@ body.wait #wait {
 .content-box.what-is .footer {
   text-align: right;
 }
+.content-box.what-is .button,
 .content-box.what-is button {
   border: 0px;
   padding: 0px;
@@ -5644,6 +5728,7 @@ body.wait #wait {
   font-weight: 100;
   display: inline;
 }
+.start-selling .title .button,
 .start-selling .title button {
   float: right;
 }
@@ -5666,11 +5751,18 @@ body.wait #wait {
   margin-left: 80px;
   margin-left: 8rem;
 }
+.start-selling p .button,
 .start-selling p button {
   padding: 0;
 }
 .provider-form label {
   margin-right: 5%;
+}
+.provider-form .small-input label {
+  width: 50%;
+}
+.provider-form .small-input input {
+  width: 20%;
 }
 .warehouse-details textarea {
   display: block;
@@ -5753,6 +5845,12 @@ body.wait #wait {
   background-position: 95% 50%;
   background-color: #ffe9e8;
 }
+.price-and-availability td.success {
+  background-image: url('/css/loom/images/icon-success.png');
+  background-repeat: no-repeat;
+  background-position: 95% 50%;
+  background-color: #dff2bf;
+}
 @media only screen and (max-width: 549px) {
   .start-selling {
     text-align: center;
@@ -5781,6 +5879,9 @@ body.wait #wait {
   .start-selling p {
     margin-left: 0;
     display: block;
+  }
+  .provider-form .small-input input {
+    width: 100%;
   }
 }
 .dashboard section > .header {
