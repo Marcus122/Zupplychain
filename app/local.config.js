@@ -6,7 +6,7 @@ exports.config = {
 		database:"ZupplyChain"
     },
 	cookie_config: {
-		maxAge: 900000,
+		maxAge: 259200, // 72 hours * 60 mins * 60s
 		httpOnly:false,
 		secure:false
 	},
@@ -26,14 +26,15 @@ exports.config = {
 		"Bonded Warehouse"
 	],
 	specifications: [
-		"Perimeter Fencing",
-		"24hr Security",
+        "Perimeter Fencing",
+        "24hr Security",
 		"CCTV",
 		"Sprinklers",
 		"Narrow Aisle Racking",
 		"Outdoor Storage",
-		"Bulk Storage",
-		"Roll in Roll out unit storage"
-	]
+        "Roll in Roll out unit storage",
+		"Bulk Storage"
+		
+	],
 	
 };

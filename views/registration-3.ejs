@@ -90,7 +90,19 @@
 			<div class="popup-window">
 				<div class="inner">
 					<button class="close no-resize"><span>close</span></button>
-					<h2>Pricing</h2>
+					<h2>Basic Pricing</h2>
+                    <form id="default-pricing-form" class="loom-form" novalidate method="post" data-loom-no-submit="true">
+                        <table class="responsive-table">
+                            <thead><tr>
+                                <th>Price per pallet per week</th>
+                                <th>Handling charge per pallet (In and Out)</th>
+                                <th>Cost to reserve</th></tr>
+                            </thead>
+                        </table>
+                    </form>
+                    
+                    <h2>Date Range Pricing</h2>
+                    <p>You can add pricing conditions for different time periods</p>
 					<form id="pricing-form" class="loom-form" novalidate method="post" data-loom-no-submit="true">
 						<table class="show-title responsive-table" data-title="Pricing">
 							<thead>

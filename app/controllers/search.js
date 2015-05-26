@@ -6,10 +6,10 @@ exports.search_storage = function(query, cb) {
     //need to convert postcode to lat lng and attach to the query.
    
     var postcode = query.postcode;
-    getLatLong(postcode, function(geoData) {
+    getLatLong(postcode, function(error, geoData) {
        query.geo =  geoData;
-       var result = warehouse.warehouse_by_query(query, function(res) {
-           cb(res);
+       var result = warehouse.warehouse_by_query(query, function(error,res) {
+           cb(null,res);
        });
     });
     
@@ -19,7 +19,7 @@ exports.search_storage = function(query, cb) {
             lat:52.00,
             lng:-2.00
         };
-        if(!postcode) return cb(geo);
+        if(!postcode) return cb(null,geo);
         UKPostcodes.getPostcode(postcode, function (error, data) {
             if(!error){
                 geo.lat = data.geo.lat;
@@ -31,7 +31,7 @@ exports.search_storage = function(query, cb) {
                 console.log("error in UK postcodes module:");
                 console.log(error);
             }
-            return cb(geo);
+            return cb(null,geo);
         });
     }
     

@@ -32,6 +32,11 @@ function populateSearchData(req,res, next){
         var palletType = req.body["pallet-type"];
         
         var query = {"postcode" : postcode, "radius" : radius, "palletType" : palletType};
-        searchController.search_storage(query, function(results) { req.data.results = results; next(); });
+        searchController.search_storage(query, function(error, results) {
+            if (error) {
+                req.data.error = error;
+            }
+            req.data.results = results; next(); 
+        });
 }
 module.exports = handler;

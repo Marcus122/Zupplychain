@@ -20,10 +20,10 @@
                 <span>* required field</span>
             </div>
             <div class="main">
-                <form class="storage-search loom-form" action="/search" id="search-form">
+                <form class="storage-search loom-form" action="/search" id="search-form" novalidate>
                     <div class="input-field">
-                        <label for="pallet-type">Pallet Type</label>
-                        <select name="pallet-type" id="pallet-type" >
+                        <label for="pallet-type">Pallet Type*</label>
+                        <select name="pallet-type" id="pallet-type" required="required" >
                             <option value="Blue">Blue</option>
                             <option value="Euro">Euro</option>
                             <option value="Standard">Standard</option>
@@ -34,19 +34,29 @@
                     </div>
                     <div class="input-field number">
                         <label for="quantity">Qty*</label>
-                        <input type="number" name="quantity" value="10" min="1" max="2000" />
+                        <input type="number" name="quantity" value="10" min="1" max="2000" required="required"/>
                     </div>
                     <div class="input-field">
-                        <label for="postcode">Postcode</label>
-                        <input type="text" name="postcode" />
+                        <label for="postcode">Target Postcode*</label>
+                        <input type="text" name="postcode" required="required"/>
                     </div>
                     <div class="input-field">
-                        <label for="max-distance">Max Distance</label>
+                        <label for="max-distance">Max Distance*</label>
+                       
                         <select name="max-distance">
+                            <option value="40">40 miles</option>
+                            <option value="30">30 miles</option>
                             <option value="20">20 miles</option>
                             <option value="10">10 miles</option>
+                            <option value="5">5 miles</option>
+                            <option value="1">1 miles</option>
+                            <option value="500">Any distance</option>
                         </select>
                     </div>
+                    <div class="input-field">
+                        <label for="description">Product Description*</label>
+                        <input type="text" name="description" minlength="0" maxlength="100" placeholder="" required="required"/>
+                    </div><br/>
                     <div class="input-field">
                         <label for="start-date">Start Date</label>
                         <input type="date" name="start-date" value="2014-01-01"/>
@@ -63,10 +73,7 @@
                         <label for="weight">Weight (kg)</label>
                         <input type="number" name="weight" min="0" max="2000" value="50"/>
                     </div>
-                    <div class="input-field number">
-                        <label for="value">Value (£)</label>
-                        <input type="number" name="value" min="0" max="10000" value="200"/>
-                    </div>
+                    
                     <div class="input-field">
                         <label for="temperature">Temp</label>
                         <select name="temperature">
