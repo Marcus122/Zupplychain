@@ -42,6 +42,7 @@ exports.register = function(user,cb){
 	if(!user.email || !user.password){
 		return cb({error:"required fields"});
 	}
+	
 	user.active=true;
 	//Activate each warehouse
 	//Dont need to wait for warehouses to update

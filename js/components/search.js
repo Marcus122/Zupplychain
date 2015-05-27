@@ -10,7 +10,7 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
         if ($("input[name='postcode']").val().length <=4){
             return;
         }
-        resultsMap = new ResultsMap($("input[name='postcode']").val(), $("select[name='max-distance']").val());
+        resultsMap = new ResultsMap($("input[name='postcode']").val(), $("input[name='max-distance']").val());
         $(".js-map-results-container").slideDown(); //needs to be visible for map to load successfully.
         $(".js-page-banner").slideUp(300,function(){$(".search-top-section").css("height", "auto");
          require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) {
@@ -20,9 +20,9 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
         
     });
     
-    $("select[name='max-distance']").change(function(){
+    $("input[name='max-distance']").change(function(){
         if (resultsMap) {
-            resultsMap.setRadius($("select[name='max-distance']").val());
+            resultsMap.setRadius($("input[name='max-distance']").val());
         }
     });
     

@@ -21,7 +21,7 @@ require(["jquery"], function($) {
             var loom = new Loom();
         });
         
-        if (onPage("search")){ //hacky while testing.. TODO: Move this lot to its own Search component.
+        if (onPage("search")){
             require(["components/search"], function(Search) {
                Search();
             });

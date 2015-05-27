@@ -49,6 +49,9 @@
 														var row = {};
 														row.name = "A";%>
 														<% include ./partials/define-space-row %>
+														<%row = {};
+														row.name = "B";%>
+														<% include ./partials/define-space-row %>
 													<%}else{
 														for( var i=0; i < warehouse.storage.length; i++ ){
 															row = warehouse.storage[i];%>

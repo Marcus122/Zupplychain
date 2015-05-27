@@ -25,7 +25,8 @@
 						<li class="four columns active checked">Step 3</li>
 					</ul>
 					<section class="tab-content">
-						<form id="price-and-availability" class="loom-form responsive-table" data-loom-no-submit="true" method="post" action="/provider-registration-complete" novalidate>
+						<!--<form id="price-and-availability" class="loom-form responsive-table" data-loom-no-submit="true" method="post" action="/complete-registration" novalidate>-->
+						<form id="price-and-availability" class="loom-form responsive-table provider-form" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" action="/complete-registration" novalidate>
 							<div class="main">
 								<div class="content-box primary">
 									<div class="header">
@@ -64,13 +65,43 @@
 										<div class="row">
 											<div class="columns five check checkbox input-field">
 												<input required type="checkbox" name="accept" id="accept"/>
-												<label for="accept">*I accept that the ZupplyChain commission is x%.</label>
+												<label for="accept">*I agree to the terms and conditions.</label>
 											</div>
 											<div class="columns four">
 												<button href="#" class="view tertiary forward mini">View list of Documentation</button>
 											</div>
 											<div class="columns three">
 												<button href="#" class="view tertiary forward mini">View Terms &amp; Conditions</button>
+											</div>
+										</div>
+									</fieldset>
+								</div>
+								<div class="content-box primary">
+									<div class="header">
+										<h3>Your Login Details</h3>
+									</div>
+									<fieldset class="main">
+										<div>
+											<div class="row">
+												<div class="input-field columns six">
+													<label for="name">Name*</label><input type="text" name="name" id="name" required>
+												</div>
+												<div class="input-field columns six">
+													<label for="email">Email*</label><input type="email" name="email" id="email" required>
+												</div>
+											</div>
+											<div class="row">
+												<div class="input-field columns six">
+													<label for="tel">Contact Number*</label><input type="tel" name="contact" id="tel" required>
+												</div>
+												<div class="input-field columns six">
+													<label for="password">Password*</label><input type="password" name="password" id="password" required>
+												</div>
+											</div>
+											<div class="row">
+												<div class="input-field columns six">
+													<label for="confirm-password">Confirm Password*</label><input type="password" name="confirm-password" id="confirm-password" required>
+												</div>
 											</div>
 										</div>
 									</fieldset>
@@ -139,7 +170,6 @@
 								<th>From</th>
 								<th>To</th>
 								<th>% Discount</th>
-								<th>Discount Value</th>
 								<th/>
 							</thead>
 							<tbody>

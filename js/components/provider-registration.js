@@ -111,7 +111,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates"], fun
 						s.push(storage[i]);
 					}
 					Warehouse.updateStorageBatch(warehouse,s,function(){
-						window.location = './provider-registration-complete';
+						window.location = './complete-registration';
 					});
 				}
 			});
