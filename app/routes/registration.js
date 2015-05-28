@@ -37,14 +37,13 @@ function completeRegistration(req,res){
 	req.data.user.contact = req.body.contact;
 	req.data.user.name = req.body.name;
 	req.data.user.confirm = req.body.confirm;
-	console.log(req.data.user.confirm);
 	if (req.body.confirm == req.body.password){
 		User.register(req.data.user,function(err){
 			if(err){
 				var backURL=req.header('Referer') 
 				return backURL ? res.redirect(backURL) : redirectToStart(res);
 			}else{
-				return res.redirect('/dashboard');
+				res.send({redirect: '/dashboard'});
 			}
 		})
 	}

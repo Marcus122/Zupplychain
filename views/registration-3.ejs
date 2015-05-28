@@ -25,8 +25,7 @@
 						<li class="four columns active checked">Step 3</li>
 					</ul>
 					<section class="tab-content">
-						<!--<form id="price-and-availability" class="loom-form responsive-table" data-loom-no-submit="true" method="post" action="/complete-registration" novalidate>-->
-						<form id="price-and-availability" class="loom-form responsive-table provider-form" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" action="/complete-registration" novalidate>
+						<form id="price-and-availability-user-data" class="loom-form responsive-table provider-form" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" action="/complete-registration" novalidate>
 							<div class="main">
 								<div class="content-box primary">
 									<div class="header">
@@ -100,7 +99,7 @@
 											</div>
 											<div class="row">
 												<div class="input-field columns six">
-													<label for="confirm-password">Confirm Password*</label><input type="password" name="confirm-password" id="confirm-password" required>
+													<label for="confirm-password">Confirm Password*</label><input type="password" name="confirm-password" id="confirm-password" required data-loom-confirm="password">
 												</div>
 											</div>
 										</div>
@@ -211,5 +210,5 @@
 			</div>
 		 </script>
 		 <script type="text/template" id="pallet-row">
-		    <% include ./partials/pallet-row %> 
+		    <% include ./partials/pallet-row%> 
 		 </script>

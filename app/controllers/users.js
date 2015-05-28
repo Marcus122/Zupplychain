@@ -53,7 +53,7 @@ exports.register = function(user,cb){
 		});
 	});
 	user.save(function(err){
-		if(!err){
+		if(!err){	 
 			cb(null);
 		}else{
 			cb(err);

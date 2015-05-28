@@ -89,7 +89,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates"], fun
 					});
 				}
 			}
-			var $priceForm = $('#price-and-availability');
+			var $priceForm = $('#price-and-availability-user-data');
 			$priceForm.on("submit",function(ev){
 				ev.preventDefault();
 				//Check each storage has pricing
@@ -111,7 +111,21 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates"], fun
 						s.push(storage[i]);
 					}
 					Warehouse.updateStorageBatch(warehouse,s,function(){
-						window.location = './complete-registration';
+						$.ajax({
+							url: '/complete-registration',
+							type: 'POST',
+							data: { name : $('input[name="name"]').val(),
+									contact : $('input[name="contact"]').val(),
+									email : $('input[name="email"]').val(),
+									password : $('input[name="password"]').val(),
+									confirm : $('input[name="confirm-password"]').val()	},
+							cache: false,
+							success: function(data){
+								if (typeof data.redirect == 'string'){
+									window.location = data.redirect;
+								}
+							}
+						})
 					});
 				}
 			});
@@ -182,9 +196,11 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates"], fun
 			var $form = $element.find('form');
 			if(!Storage.pricing || !Storage.pricing.length){
 				var data={};
-				var from = new Date();
+				var from = new Date(),
+					to = new Date();
+				to.setDate(from.getDate() + 364);
 				data.from = from.toISOString().substring(0, 10);
-				data.to = "9999-12-31";
+				data.to = to.toISOString().substring(0, 10);
 				addPricingRow(data);
 			}else{
 				for(i in Storage.pricing){
@@ -219,7 +235,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates"], fun
 					if(arr.length){
 						var date = new Date(arr[arr.length-1].to);
 						date.setDate(date.getDate()+1);
-						data.from = date.toISOString().substring(0, 10);
+						data.from = date.toISOString().substring(0, 10)
 					}
 				}
 				var $newrow = template.bind(data);
@@ -274,6 +290,19 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates"], fun
 					data.total = Storage.palletSpaces;
 					data.inUse = 0;
 					data.free = data.total;
+					var arr = toArray();
+					if(arr.length){
+						var date = new Date(arr[arr.length-1].to);
+						date.setDate(date.getDate()+1);
+						data.from = date.toISOString().substring(0, 10);
+						var dateTo = new Date(data.from);
+						if ((dateTo.getFullYear()+1) % 4 == 0){
+							dateTo.setDate(dateTo.getDate()+366);
+						}else{
+							dateTo.setDate(dateTo.getDate()+365);
+						}
+						data.to = dateTo.toISOString().substring(0, 10);
+					}
 				}
 				var $row = template.bind( data );
 				$element.find('tbody').append($row);

@@ -19,6 +19,10 @@ sb(line) - set breakpoint on specific line
 sb('script.js',1) - set breakpoint on first line of script.js
 cb() - clear breakpoint
 
+Debugging Express. More Info - http://expressjs.com/guide/debugging.html
+
+Windows Systems    - set DEBUG=express:* & node server
+UNIX Based Systems - DEBUG=express:* node server
 
 To run MongoDB
 
