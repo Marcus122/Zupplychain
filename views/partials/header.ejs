@@ -8,13 +8,15 @@
 	<div class="contact-info">
 		Call Us: <span>01204 785 822</span>
 	</div>
-	<nav class="user-links">
-		<p>Signed in as: <span>Joe Bloggs</span></p>
-		<ul>
-			<li><a href="#">Need Help?</a></li>
-			<li><a href="#">My Account</a></li>
-		</ul>
-	</nav>
+	<%if (user.name != undefined){%>
+		<nav class="user-links">
+			<p>Signed in as:  <span><%=user.name%></span></p>
+			<ul>
+				<li><a href="#">Need Help?</a></li>
+				<li><a href="#">My Account</a></li>
+			</ul>
+		</nav>
+	<%}%>
 	</aside>
 	<nav class="main-nav">
 		<ul>

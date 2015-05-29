@@ -115,6 +115,8 @@
 
   .offset-by-one-half.column,
   .offset-by-one-half.columns     { margin-left: 52%; }
+  
+  .loom-form div.main .content-box:nth-child(2) fieldset.main div .row:nth-child(3) .input-field { position: relative; float: right; }
 
 }
 
