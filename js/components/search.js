@@ -4,9 +4,11 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
 
  function Class() {
     var resultsMap;
+	var $postcode = $("input[name='postcode']");
+	var $maxDistance = $("input[name='max-distance']");
+		
     //on postcode entry, load up the map centered on that postcode.
-    
-    $("input[name='postcode']").blur(function(){
+    $postcode.blur(function(){
         if ($("input[name='postcode']").val().length <=4){
             return;
         }
@@ -20,7 +22,7 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
         
     });
     
-    $("input[name='max-distance']").change(function(){
+    $maxDistance.change(function(){
         if (resultsMap) {
             resultsMap.setRadius($("input[name='max-distance']").val());
         }
@@ -55,6 +57,12 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
             $(".add-to-quote[data-id='" + id + "']").show();
         }
     });
+	
+	function triggerSearch(){
+		$postcode.trigger("blur")
+		$maxDistance.trigger("change");
+		$("#search-form").submit();
+	}
     
     
     var loom = new Loom();
@@ -81,6 +89,7 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
                    var row = template.bind(response.results[i]);
                    $("#search-results-table tbody ").append(row);
                }
+			   $(".continue-links.footer.form-footer .button.action.large.next").attr("href", response.results[0].href);
             });
             
             
@@ -92,6 +101,10 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
     loom.addOnErrorCallback("search-form", function(response){
         Alerts.showPersistentErrorMessage("There was an error completing your search");
     });
+	
+	if ($('input[name="search-cached"]').length){
+		triggerSearch();
+	}
     
     }
 

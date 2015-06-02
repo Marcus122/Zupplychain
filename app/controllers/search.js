@@ -1,5 +1,12 @@
-var UKPostcodes = require("uk-postcodes-node");
+//var UKPostcodes = require("uk-postcodes-node");
 var warehouse = require("../controllers/warehouses");
+var extra = {
+	apiKey : '',
+	formatter: null
+};
+var geocoderProvider = 'google';
+var httpAdapter = 'http';
+var geocoder = require('node-geocoder')(geocoderProvider, httpAdapter, extra);
 
 
 exports.search_storage = function(query, cb) {
@@ -20,19 +27,32 @@ exports.search_storage = function(query, cb) {
             lng:-2.00
         };
         if(!postcode) return cb(null,geo);
-        UKPostcodes.getPostcode(postcode, function (error, data) {
-            if(!error){
-                geo.lat = data.geo.lat;
-                geo.lng = data.geo.lng;
-                console.log ("in search.js");
-                console.log("Successfully converted postcode to lat lng using the api");
-            } else {
-                console.log ("in search.js");
+        // UKPostcodes.getPostcode(postcode, function (error, data) {
+            // if(!error){
+                // geo.lat = data.geo.lat;
+                // geo.lng = data.geo.lng;
+                // console.log ("in search.js");
+                // console.log("Successfully converted postcode to lat lng using the api");
+            // } else {
+                // console.log ("in search.js");
+                // console.log("error in UK postcodes module:");
+                // console.log(error);
+            // }
+            // return cb(null,geo);
+        // });
+		
+		geocoder.geocode(postcode, function(error, result){
+			if(!error){
+				geo.lat = result[0].latitude;
+				geo.lng = result[0].longitude;
+			}else{
+				console.log ("in search.js");
                 console.log("error in UK postcodes module:");
                 console.log(error);
-            }
-            return cb(null,geo);
-        });
+			}
+			return cb(null,geo);
+		});
+		
     }
     
     

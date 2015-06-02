@@ -1,95 +1,20 @@
- <% include ./partials/top %>   
+ <% include ./partials/top %> 
     <main class="search-results-page">
-    <div class="search-top-section">
-        <div class="row carousel js-page-banner find-storage-banner">
-					<img src="/images/userpage-main-banner.png" alt="Start your registration"/>
-					<h1 class="title large-font">
-						<span>Zupplychain</span>
-						<br/>here to match your
-						<span class="medium-font">
-							Pallet storage requirements to
-							<br/>
-							its unique database of providers
-						</span>
-					</h1>
-				</div>
-    </div>
-        <section class="side-header quote-form-section"  id="search-area"><!-- a section with the header off to one side -->
-            <div class="header">
-                <h2>Get an instant quote</h2>
-                <span>* required field</span>
-            </div>
-            <div class="main">
-                <form class="storage-search loom-form" action="/search" id="search-form" novalidate>
-                    <div class="input-field">
-                        <label for="pallet-type">Pallet Type*</label>
-                        <select name="pallet-type" id="pallet-type" required="required" >
-                            <option value="Blue">Blue</option>
-                            <option value="Euro">Euro</option>
-                            <option value="Standard">Standard</option>
-                            <option value="Anno">Anno</option>
-                            <option value="Ant">Ant</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    <div class="input-field number">
-                        <label for="quantity">Qty*</label>
-                        <input type="number" name="quantity" value="10" min="1" max="2000" required="required"/>
-                    </div>
-                    <div class="input-field">
-                        <label for="postcode">Target Postcode*</label>
-                        <input type="text" name="postcode" required="required"/>
-                    </div>
-                    <div class="input-field">
-                        <label for="max-distance">Max Distance*</label>
-                       
-                        <!--<select name="max-distance">
-                            <option value="40">40 miles</option>
-                            <option value="30">30 miles</option>
-                            <option value="20">20 miles</option>
-                            <option value="10">10 miles</option>
-                            <option value="5">5 miles</option>
-                            <option value="1">1 miles</option>
-                            <option value="500">Any distance</option>
-                        </select>-->
-						<input type="text" name="max-distance" value="100" required="required"/>
-                    </div>
-                    <div class="input-field">
-                        <label for="description">Product Description*</label>
-                        <input type="text" name="description" minlength="0" maxlength="100" placeholder="" required="required"/>
-                    </div><br/>
-                    <div class="input-field">
-                        <label for="start-date">Start Date</label>
-                        <input type="date" name="start-date" value="2014-01-01"/>
-                    </div>
-                    <div class="input-field">
-                        <label for="end-date">End Date</label>
-                        <input type="date" name="end-date" value="2016-01-01"/>
-                    </div>
-                    <div class="input-field number">
-                        <label for="height">Height (m)</label>
-                        <input type="number" name="height" min="0" max="100" value="1"/>
-                    </div>
-                    <div class="input-field number">
-                        <label for="weight">Weight (kg)</label>
-                        <input type="number" name="weight" min="0" max="2000" value="50"/>
-                    </div>
-                    
-                    <div class="input-field">
-                        <label for="temperature">Temp</label>
-                        <select name="temperature">
-                            <option value="ambient">Ambient</option>
-                            <option value="chilled">Chilled</option>
-                            <option value="frozen">Frozen</option>
-                        </select>
-                        
-                    </div>
-                    <div class="input-field last">
-                        <button type="submit" class="action forward">Search</button>
-                    </div>
-                </form>
-            </div>
-        </section>
+		<div class="search-top-section">
+				<div class="row carousel js-page-banner find-storage-banner">
+						<img src="/images/userpage-main-banner.png" alt="Start your registration"/>
+						<h1 class="title large-font">
+							<span>Zupplychain</span>
+							<br/>here to match your
+							<span class="medium-font">
+								Pallet storage requirements to
+								<br/>
+								its unique database of providers
+							</span>
+						</h1>
+					</div>
+		</div>
+		<% include ./partials/search-criteria %>
         <% include ./partials/results-map %>
         <div class="row info-boxes">
             <div class="three columns fat">
@@ -158,7 +83,7 @@
                     
                     <button class="primary input-button" type="submit">CONFIRM</button>
                 </form>
-                <button class="action large next">Continue</button>
+                <a target="_blank" href="#" class="button action large next">Continue With Top Result</a>
             </div>
         
     </main>

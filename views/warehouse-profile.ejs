@@ -30,7 +30,12 @@
 								<% for( var i= 0; i<warehouse.storage.length;i++ ){
 									var storage = warehouse.storage[i];
 									%>
-									<tr>
+									<tr <%if (session.whSC != undefined){
+											if (storage.maxWeight <= session.whSC.sc[0].weight && session.whSC.sc[0].palletType == storage.palletType
+											&& session.whSC.sc[0].temp == storage.temp && storage.maxHeight <= session.whSC.sc[0].height){%>
+												class="storage-matched"
+											<%}%>
+										<%}%>>
 										<td><%=storage.name%></td>
 										<td><%=storage.palletType%></td>
 										<td>
@@ -47,6 +52,7 @@
 											}%>
 										<%=storage.temp%></td>
 										<td><%=storage.maxWeight%></td>
+										
 										<td>
 											<%if( storage.maxHeight ){%>
 												<%=storage.maxHeight%>
@@ -87,7 +93,7 @@
 				</div>
 			</div>
 			<div class="footer">
-				<button type="button" class="back button">Back</button>
+				<a href="/search" class="back button">Back</a>
 			</div>
 		</section>
 	</main>

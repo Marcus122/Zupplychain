@@ -45,6 +45,18 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates"], fun
 				ev.preventDefault();
 				$(this).toggleClass('active');
 			});
+			$("form#define-space").on("click",".reg-2-example",function(ev){
+				ev.preventDefault();
+				var $form = $(this).closest('form');
+				var form = lm.getForm($form.attr("id"));
+				var formLim = $form.find('table').find('tbody').find('tr').length;
+				for (i = 0; i < formLim; i++){
+					$($form.find('table').find('tbody').find('tr')[i].children[0]).find('input[name="name"]').val(storageNames[i]);
+					$($form.find('table').find('tbody').find('tr')[i].children[3]).find('input[name="maxWeight"]').val(100);
+					$($form.find('table').find('tbody').find('tr')[i].children[4]).find('input[name="maxHeight"]').val(100);
+					$($form.find('table').find('tbody').find('tr')[i].children[5]).find('input[name="palletSpaces"]').val(100);
+				}
+			});
 			var $registration = $('#registration');
 			$registration.on("submit",function(ev){
 				ev.preventDefault();
@@ -400,7 +412,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates"], fun
 				});
 				return array;
 			}
-		}
+		}						
         $(function() {
             initialize();
         });

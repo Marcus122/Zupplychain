@@ -166,14 +166,23 @@
                                 </tr>
                             </thead>
                             <tbody>
+								<%if (postcode != undefined){
+									console.log('YAY!!! We've got results');
+								}else{
+									console.log('AWWWWW, it didnt work');
+								}%>
+								<%console.log('STUFF!!!!!!!!!!!!!');%>
                                 <tr>
                                     <td data-th="Delete"><button class="trash-button"><span class="sr-only">delete</span></button></td>
                                     <td data-th="Pallet type"><select><option>Standard Blue</option><option>Standard Red</option></select></td>
                                     <td data-th="Qty"><input type="text" /></td>
-                                    <td data-th="Postcode"><input type="text" /></td>
+									<%if (postcode != undefined){%>
+										<td data-th="Postcode"><input type="text" value=<%=postcode%> /></td>
+									<%}else{%>
+										<td data-th="Postcode"><input type="text" value="BL9 5BN" /></td>
+									<%}%>
                                     <td data-th="Max Distance"><input type="text" /></td>
-                                    
-                                    <td data-th="Start Date"><input type="text" /></td>
+                                                                     <td data-th="Start Date"><input type="text" /></td>
                                     <td data-th="End Date"><input type="text" /></td>
                                     <td data-th="Height"><input type="text" /></td>
                                     <td  data-th="Weight"><input type="text" /></td>
