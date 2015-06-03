@@ -31,8 +31,8 @@
 									var storage = warehouse.storage[i];
 									%>
 									<tr <%if (session.whSC != undefined){
-											if (storage.maxWeight <= session.whSC.sc[0].weight && session.whSC.sc[0].palletType == storage.palletType
-											&& session.whSC.sc[0].temp == storage.temp && storage.maxHeight <= session.whSC.sc[0].height){%>
+											if (storage.maxWeight >= session.whSC.sc[0].weight && session.whSC.sc[0].palletType == storage.palletType
+											&& session.whSC.sc[0].temp == storage.temp && storage.maxHeight >= session.whSC.sc[0].height){%>
 												class="storage-matched"
 											<%}%>
 										<%}%>>

@@ -83,6 +83,7 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
                var templates = new Templates();
                var template = templates.getTemplate("result-table-row");
                var lim=response.results.length;
+			   $("#search-results-table tbody tr").remove();
                for (var i =0 ;i< lim;i++) {
                    response.results[i].num = i + 1;
                    response.results[i].href = '/warehouse-profile/' + response.results[i]._id;
