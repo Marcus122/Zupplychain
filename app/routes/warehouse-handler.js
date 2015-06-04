@@ -2,8 +2,15 @@ var user = require("../controllers/users.js"),
 	warehouse = require("../controllers/warehouses.js"),
 	storage = require("../controllers/storage.js"),
 	local = require("../local.config.js"),
-	async = require("async"),
-	UKPostcodes = require("uk-postcodes-node");
+	async = require("async");
+	// UKPostcodes = require("uk-postcodes-node");
+var extra = {
+	apiKey : '',
+	formatter: null
+};
+var geocoderProvider = 'google';
+var httpAdapter = 'http';
+var geocoder = require('node-geocoder')(geocoderProvider, httpAdapter, extra);
 
 var handler = function(app) {
 	app.param('warehouse_id', warehouse.load);
@@ -151,10 +158,18 @@ function getLatLong(postcode,cb){
 		lng:""
 	};
 	if(!postcode) return cb(geo);
-	UKPostcodes.getPostcode(postcode, function (error, data) {
+	geocoder.geocode(postcode, function(error, result){
 		if(!error){
-			geo.lat = data.geo.lat;
-			geo.lng = data.geo.lng;
+			if (result && result.length > 0) {
+				geo.lat = result[0].latitude;
+				geo.lng = result[0].longitude;
+			} else { //we didn't get a result back from google.
+				
+			}
+		}else{
+			console.log ("in warehouse-handler.js");
+			console.log("error in Google Geolocation module:");
+			console.log(error);
 		}
 		return cb(geo);
 	});

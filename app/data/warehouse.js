@@ -71,15 +71,15 @@ warehouseSchema.statics = {
               // },
               // function(err,result){
               // }).populate({ path : "storage", match : {palletType : query.palletType} }).exec(cb);
-			  console.log(query.weight);
-			  console.log(query.height);
+			  console.log(query);
     this.find({
 			  "geo.lat":{ $gte:(query.geo.lat -80), $lte:(query.geo.lat + 80)},
               "geo.lng":{ $gte:(query.geo.lng -80), $lte:(query.geo.lng + 80)},
               "active": true
               }).populate({ path : "storage", match : {palletType : query.palletType,
 													   maxWeight : {$gte:query.weight},
-													   maxHeight : {$gte:query.height}
+													   maxHeight : {$gte:query.height},
+													   temp : query.temp
 													  }}).exec( function (err, result){
 				  if (err){
 					  console.log(err);
@@ -88,7 +88,7 @@ warehouseSchema.statics = {
 						  corrPallet = false;
 						  for (var j=0; j<result[i].storage.length; j++){
 							  if (result[i].storage[j].palletType === query.palletType && result[i].storage[j].maxWeight >= query.weight
-								  && result[i].storage[j].maxHeight >= query.height	){
+								  && result[i].storage[j].maxHeight >= query.height	&& result[i].storage[j].temp === query.temp){
 								  corrPallet = true;
 							  }
 						  }
@@ -114,6 +114,8 @@ function getNewsDistances(lat,lng,d){
 	var lonn;
 	var latt;
 	
+	d = d*1609.344;
+	
 	for (var i = 0; i < tc.length; i++){
 		latt = Math.asin(Math.sin(lat)*Math.cos(d)+Math.cos(lat)*Math.sin(d)*Math.cos(tc[i]));
 		if (Math.cos(lat)==0){
@@ -124,6 +126,8 @@ function getNewsDistances(lat,lng,d){
 		arr.push({lat:latt, lng:lonn});
 		
 	}
+	
+	console.log(arr);
 	
 	return arr;
 	

@@ -23,7 +23,6 @@ var handler = function(app) {
 
 function searchHandler(req,res){
     var resultsData = req.data.results;
-	console.log(resultsData);
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify(resultsData));
 }
@@ -33,9 +32,10 @@ function populateSearchData(req,res, next){
         var palletType = req.body["pallet-type"];
 		var weight = req.body.weight;
 		var height = req.body.height
-        var query = {"postcode" : postcode, "radius" : radius, "palletType" : palletType, "weight" : weight, "height" : height };
+		var temp = req.body.temperature;
+        var query = {"postcode" : postcode, "radius" : radius, "palletType" : palletType, "weight" : weight, "height" : height, "temp" : temp };
 		
-		req.session.whSC = populateSessionStateJSON(req,postcode,palletType,radius,weight,height);
+		req.session.whSC = populateSessionStateJSON(req,postcode,palletType,radius,weight,height,temp);
 		
         searchController.search_storage(query, function(error, results) {
             if (error) {
@@ -44,11 +44,11 @@ function populateSearchData(req,res, next){
             req.data.results = results; next(); 
         });
 }
-function populateSessionStateJSON(req,postcode,palletType,radius,weight,height){
+function populateSessionStateJSON(req,postcode,palletType,radius,weight,height,temp){
 	var srchJson = '{"sc":[' +
 	'{"palletType":"'+palletType +'","searchQty":"'+req.body.quantity+'","postcode":"'+postcode+
 	'","maxDistance":"'+radius+'","description":"'+req.body.description+
-	'","height":"'+height+'","weight":"'+weight+'","temp":"'+ req.body.temperature+'","startDate":"'+
+	'","height":"'+height+'","weight":"'+weight+'","temp":"'+temp+'","startDate":"'+
 	req.body["start-date"]+'","endDate":"'+req.body["end-date"]+'"} ]}';
 	
 	return JSON.parse(srchJson)

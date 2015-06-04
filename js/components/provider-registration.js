@@ -1,4 +1,4 @@
-define(["jquery","controllers/warehouse","loom/loom","templates/templates"], function ($,Warehouse,Loom,Templates) {
+define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom/loomAlerts"], function ($,Warehouse,Loom,Templates,Alerts) {
 	/*SINGLETON*/
 	
     function Class(data) {
@@ -60,8 +60,12 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates"], fun
 			var $registration = $('#registration');
 			$registration.on("submit",function(ev){
 				ev.preventDefault();
-				saveWarehouse(function(){
-					window.location = './provider-registration-2';
+				saveWarehouse(function(result){
+					if (result.data.geo.lat !== null && result.data.geo.lng !== null){
+						window.location = './provider-registration-2';
+					} else {
+						Alerts.showErrorMessage("Postcode Not Found");
+					}
 				});
 			});
 			$registration.find('.save').on("click",function(ev){
@@ -70,8 +74,8 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates"], fun
 			function saveWarehouse(cb){
 				if( lm.isFormValid($registration.attr('id')) ){
 					bindFormToObject($registration,warehouse);
-					Warehouse.update(warehouse,function(){
-						if(cb) cb();
+					Warehouse.update(warehouse,function(result){
+						if(cb) cb(result);
 					});
 				}
 			}

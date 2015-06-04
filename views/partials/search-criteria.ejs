@@ -10,7 +10,7 @@
 				<div class="input-field">
 					<label for="pallet-type">Pallet Type*</label>
 					<select name="pallet-type" id="pallet-type" required="required">
-						<%var palletTypes = ["Blue", "Euro", "Standard", "Anno", "Ant", "Other"];
+						<%var palletTypes = ["Blue", "Euro", "Standard", "Ano", "Ant", "Other"];
 						for (var i=0; i<palletTypes.length; i++){%>
 							<option value="<%=palletTypes[i]%>" <%if (session.whSC.sc[0].palletType === palletTypes[i]){%>
 																	selected
@@ -54,7 +54,7 @@
 				<div class="input-field">
 					<label for="temperature">Temp</label>
 					<select name="temperature">
-						<%var temps = ["Ambient", "Chilled", "Frozen"];
+						<%var temps = ["Ambient", "Chilled", "Frozen", "Outside", "Other"];
 						for (var i=0; i<temps.length; i++){%>
 								<option value="<%=temps[i]%>" <%if (session.whSC.sc[0].temp === temps[i]){%>
 																	selected

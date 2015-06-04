@@ -47,7 +47,7 @@ exports.search_storage = function(query, cb) {
 				geo.lng = result[0].longitude;
 			}else{
 				console.log ("in search.js");
-                console.log("error in UK postcodes module:");
+                console.log("error in Google Geolocation module:");
                 console.log(error);
 			}
 			return cb(null,geo);

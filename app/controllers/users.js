@@ -47,6 +47,7 @@ exports.register = function(user,cb){
 	//Activate each warehouse
 	//Dont need to wait for warehouses to update
 	user.getWarehouses(function(warehouses){
+		console.log(warehouse);
 		warehouses.forEach(function(warehouse){
 			warehouse.active=true;
 			warehouse.save();
