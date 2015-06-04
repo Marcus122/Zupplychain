@@ -36,6 +36,7 @@ app.use(express.static(__dirname));
 
 app.use(function(req, res, next){
 	res.locals.session = req.session;
+	res.locals.url = req.protocol + '://' + req.get('host') + req.originalUrl;
 	next()
 });
 

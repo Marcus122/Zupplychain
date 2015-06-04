@@ -67,14 +67,17 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
     
     var loom = new Loom();
     loom.addOnSuccessCallback("search-form", function(response){
+		var $searchResInfoBox = $(".search-result-info-box");
         var res = resultsMap.load(response.results);
         if (res) {
-            $(".search-result-info-box").fadeIn();
+            $searchResInfoBox.fadeIn();
             $(".continue-links").fadeIn();
             $(".search-results").fadeIn();
             $(".info-boxes").fadeOut();
             $(".testimonials").fadeOut();
-            
+            if (response.results.length === 1){
+				$searchResInfoBox.find('.controls').css('display', 'none');
+			}
             require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) { 
                 $.scrollTo("#results-area", {duration : 600, offset : -150 });
             });
@@ -86,7 +89,7 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
 			   $("#search-results-table tbody tr").remove();
                for (var i =0 ;i< lim;i++) {
                    response.results[i].num = i + 1;
-                   response.results[i].href = '/warehouse-profile/' + response.results[i]._id;
+                   response.results[i].href = '/warehouse-profile/' + response.results[i]._id + '?fromSearch=true';
                    var row = template.bind(response.results[i]);
                    $("#search-results-table tbody ").append(row);
                }

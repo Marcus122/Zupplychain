@@ -119,6 +119,20 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					}else{
 						$tr.find('.pricing').removeClass('error');
 					}
+					
+					if(!Storage || !Storage.discounts.length){
+						$tr.find('.discounts').addClass('error');
+						complete=false;
+					}else{
+						$tr.find('.discounts').removeClass('error');
+					}
+					
+					if(!Storage || !Storage.pallets.length){
+						$tr.find('.pallets').addClass('error');
+						complete=false;
+					}else{
+						$tr.find('.pallets').removeClass('error');
+					}
 				});
 				if(complete && lm.isFormValid($priceForm.attr('id')) ){
 					warehouse.id=$priceForm.find('input[name="warehouse"]').val();
@@ -145,11 +159,24 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					});
 				}
 			});
-			$(document).on("pricing-success",function(ev,id){
+			$(document).on("popup-form-success",function(ev,id){
+				var formId = $(ev.target.activeElement).parent('form').attr('id');
 				$priceForm.find('tbody tr').each(function(){
 					var $tr = $(this);
 					if( $tr.data('id') === id ){
-						$tr.find('.pricing').addClass('success');
+						switch(formId){
+							case 'pricing-form':
+								$tr.find('.pricing').addClass('success');
+								break;
+							case 'discount-form':
+								$tr.find('.discounts').addClass('success');
+								break;
+							case 'pallets-form':
+								$tr.find('.pallets').addClass('success');
+								break;
+							default:
+								return false;
+						}
 						return true;
 					}
 				});
@@ -243,7 +270,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				ev.preventDefault();
 				if( lm.isFormValid($(this).closest('form').attr('id')) ){
 					Storage.pricing=toArray();
-					$(document).trigger("pricing-success",Storage._id);
+					$(document).trigger("popup-form-success",Storage._id);
 					closePopup();
 				}
 			});
@@ -305,6 +332,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				ev.preventDefault();
 				if( lm.isFormValid($form.attr('id')) ){
 					Storage.pallets=toArray();
+					$(document).trigger("popup-form-success",Storage._id);
 					closePopup();
 				}
 			});
@@ -386,6 +414,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				ev.preventDefault();
 				if( lm.isFormValid($form.attr('id')) ){
 					Storage.discounts=toArray();
+					$(document).trigger("popup-form-success",Storage._id);
 					closePopup();
 				}
 			});

@@ -92,8 +92,15 @@
 					</div>
 				</div>
 			</div>
-			<div class="footer">
+			<div class="continue-links footer form-footer">
+				<div class="container">
 				<a href="/search" class="back button">Back</a>
+					<%var href = url;
+						var queryString = '?fromSearch=true';
+						if (href.indexOf(queryString) != -1){%>	
+							<a href="#" class="button action large next">Select this warehouse</a>
+					<%}%>
+				</div>
 			</div>
 		</section>
 	</main>

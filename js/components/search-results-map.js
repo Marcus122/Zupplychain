@@ -165,6 +165,9 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
             if (!data){
                 return;
             }
+			if (data.photos[0] == undefined){
+				data.photos[0] = 'warehouse-thumb.jpg'//Default image
+			}
             var resultsElem = $(RESULT_INFO_ELEM_SELECTOR);
             resultsElem.find('.js-name').html(data.name);
             resultsElem.find('.js-address').html(data.addressline1 + ", " + data.addressline2 + ", " + data.city + ", " + data.postcode );

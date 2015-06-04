@@ -100,19 +100,26 @@
 				</div><br/>
 				<div class="input-field">
 					<label for="start-date">Start Date</label>
-					<input type="date" name="start-date" value="2014-01-01"/>
+					<%var today = new Date();
+					  var toDate = new Date();
+					  if ((today.getFullYear() + 2) % 4 == 0 || (today.getFullYear() + 1) % 4 == 0){
+						toDate.setDate(today.getDate() + 731);
+					  }else{
+						toDate.setDate(today.getDate() + 730);
+					  }%>
+					<input type="date" name="start-date" value="<%=today.toISOString().substring(0, 10)%>"/>
 				</div>
 				<div class="input-field">
 					<label for="end-date">End Date</label>
-					<input type="date" name="end-date" value="2016-01-01"/>
+					<input type="date" name="end-date" value="<%=toDate.toISOString().substring(0, 10)%>"/>
 				</div>
 				<div class="input-field number">
 					<label for="height">Height (m)</label>
-					<input type="number" name="height" min="0" max="100" value="100"/>
+					<input type="number" name="height" min="0" max="100" value="10"/>
 				</div>
 				<div class="input-field number">
 					<label for="weight">Weight (kg)</label>
-					<input type="number" name="weight" min="0" max="2000" value="100"/>
+					<input type="number" name="weight" min="0" max="2000" value="10"/>
 				</div>
 				
 				<div class="input-field">
