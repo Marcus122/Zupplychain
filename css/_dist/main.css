@@ -5765,7 +5765,7 @@ body.wait #wait {
 }
 .tool-tip {
   cursor: help;
-  display: inliine-block;
+  display: inline-block;
   background-color: #9d9999;
   border-radius: 10px;
   height: 18px;

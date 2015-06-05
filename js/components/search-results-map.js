@@ -166,7 +166,7 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
                 return;
             }
 			if (data.photos[0] == undefined){
-				data.photos[0] = 'warehouse-thumb.jpg'//Default image
+				data.photos[0] = 'not-found.jpg'//Default image
 			}
             var resultsElem = $(RESULT_INFO_ELEM_SELECTOR);
             resultsElem.find('.js-name').html(data.name);
