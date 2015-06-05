@@ -51,7 +51,7 @@ warehouseSchema.statics = {
 		  .exec(cb); 
   },
   search_by_query: function(query, cb) {
-    var corrPallet = false;
+    var corrResult = false;
 	var corrResults = [];
 	
 	if (!query.weight){
@@ -71,7 +71,6 @@ warehouseSchema.statics = {
               // },
               // function(err,result){
               // }).populate({ path : "storage", match : {palletType : query.palletType} }).exec(cb);
-			  console.log(query);
     this.find({
 			  "geo.lat":{ $gte:(query.geo.lat -80), $lte:(query.geo.lat + 80)},
               "geo.lng":{ $gte:(query.geo.lng -80), $lte:(query.geo.lng + 80)},
@@ -79,20 +78,22 @@ warehouseSchema.statics = {
               }).populate({ path : "storage", match : {palletType : query.palletType,
 													   maxWeight : {$gte:query.weight},
 													   maxHeight : {$gte:query.height},
-													   temp : query.temp
-													  }}).exec( function (err, result){
+													   temp : query.temp,
+													   palletSpaces : query.totalPallets}
+			  }).exec( function (err, result){
 				  if (err){
 					  console.log(err);
 				  }else{
 					  for(var i in result){
-						  corrPallet = false;
+						  corrResult = false;
 						  for (var j=0; j<result[i].storage.length; j++){
 							  if (result[i].storage[j].palletType === query.palletType && result[i].storage[j].maxWeight >= query.weight
-								  && result[i].storage[j].maxHeight >= query.height	&& result[i].storage[j].temp === query.temp){
-								  corrPallet = true;
+								  && result[i].storage[j].maxHeight >= query.height	&& result[i].storage[j].temp === query.temp
+								  && result[i].storage[j].palletSpaces == query.totalPallets){
+								  corrResult = true;
 							  }
 						  }
-						if(corrPallet === true){
+						if(corrResult === true){
 							corrResults.push(result[i]);
 						}
 					  };
@@ -109,12 +110,11 @@ warehouseSchema.statics = {
 }
 
 function getNewsDistances(lat,lng,d){
-	var tc = [0,90,180,270];
+	var rad = Math.PI/180;
+	var tc = [rad*0,rad*90,rad*180,rad*270];
 	var arr = []
 	var lonn;
 	var latt;
-	
-	d = d*1609.344;
 	
 	for (var i = 0; i < tc.length; i++){
 		latt = Math.asin(Math.sin(lat)*Math.cos(d)+Math.cos(lat)*Math.sin(d)*Math.cos(tc[i]));
@@ -126,8 +126,6 @@ function getNewsDistances(lat,lng,d){
 		arr.push({lat:latt, lng:lonn});
 		
 	}
-	
-	console.log(arr);
 	
 	return arr;
 	

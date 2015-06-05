@@ -52,6 +52,7 @@ exports.search_storage = function(query, cb) {
 			}
 			return cb(null,geo);
 		});
+				
 		
     }
     
