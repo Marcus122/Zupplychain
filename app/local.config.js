@@ -33,8 +33,6 @@ exports.config = {
 		"Narrow Aisle Racking",
 		"Outdoor Storage",
         "Roll in Roll out unit storage",
-		"Bulk Storage"
-		
+		"Bulk Storage"	
 	],
-	
 };
