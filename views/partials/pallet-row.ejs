@@ -1,9 +1,16 @@
 <tr>
 	<td data-th="From" class="input-field no-success-validation-style">
-		<input required type="date" name="from" class="datepicker" data-bind-value="from"/>
+		<%var today = new Date(),
+		      toDate = new Date();
+		  if ((today.getFullYear() + 1) % 4 == 0){
+			toDate.setDate(today.getDate() + 366);
+		  }else{
+			toDate.setDate(today.getDate() + 365);
+		  }%>
+		<input required type="date" name="from" class="datepicker" data-bind-value="from" data-loom-add-controls="true" value="<%=today.toISOString().substring(0, 10)%>"/>
 	</td>
 	<td data-th="To" class="input-field no-success-validation-style">
-		<input required data-bind-value="to" type="date" name="to" class="datepicker"/>
+		<input required data-bind-value="to" type="date" name="to" class="datepicker" data-loom-add-controls="true" value="<%=toDate.toISOString().substring(0, 10)%>"/>
 	</td>
 	<td data-th="Total Pallets" class="input-field no-success-validation-style">
 		<input disabled required data-bind-value="total" name="total" type="number"/>

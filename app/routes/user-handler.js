@@ -15,8 +15,16 @@ var handler = function(app) {
 		}else{
 			createUser(req, res);
 		}
+    });
+  app.post('/get-user', function(req, res) {
+	  if(req.data.user){
+		  user = user_controller.user_by_id(req.body.cookie,function(err,user){
+			 setResponse(user,res);
+		  });
+	  }
   });
 };
+
 function createUser(req,res,cb){
 	user_controller.create_user(req.body,function(err,user){
 		setCookie(user,res);

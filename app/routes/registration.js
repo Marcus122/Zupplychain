@@ -36,14 +36,17 @@ function completeRegistration(req,res){
 	req.data.user.password = req.body.password;
 	req.data.user.contact = req.body.contact;
 	req.data.user.name = req.body.name;
-	User.register(req.data.user,function(err){
-		if(err){
-			var backURL=req.header('Referer') 
-			return backURL ? res.redirect(backURL) : redirectToStart(res);
-		}else{
-			return res.redirect('/dashboard');
-		}
-	})
+	req.data.user.confirm = req.body.confirm;
+	if (req.body.confirm == req.body.password){
+		User.register(req.data.user,function(err){
+			if(err){
+				var backURL=req.header('Referer') 
+				return backURL ? res.redirect(backURL) : redirectToStart(res);
+			}else{
+				res.send({redirect: '/dashboard'});
+			}
+		})
+	}
 	
 }
 function uploadFile(req,res,next){

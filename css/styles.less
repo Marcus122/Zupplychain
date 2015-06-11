@@ -8,6 +8,7 @@
 @import "header";
 @import "footer";
 @import "popup";
+@import "hint.css";
 
 //loom forms and alerts
 @import "loom/loom";
@@ -214,7 +215,7 @@
 	max-width: @max-width;
  }
  header {
-   .slight-shadow;
+   box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
    z-index:2;
    position: fixed;
 	width: 100%;
@@ -228,7 +229,7 @@
     .unit-padding(2);
  }
  main{
-    margin-top:130px;
+    margin-top:85px;
  }
  
  
@@ -299,6 +300,7 @@ span.highlight-bright{
         margin-bottom:0px;
     }
  }
+ 
  
  .large-bullets {
     li{

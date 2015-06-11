@@ -5,6 +5,7 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
     
         var MAP_ELEM_ID = "map-container"
         var RESULT_INFO_ELEM_SELECTOR = "#search-results-info";
+        var restrictions = {"country" : "UK"}; //https://developers.google.com/maps/documentation/geocoding/#ComponentFiltering
         var markers = []
         var selectedMarkerIndex =0;
         var map;
@@ -40,13 +41,13 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
           
           centerMapAtPostCode(postcode, map, radius);
           
-          function centerMapAtPostCode(address, map, radius) {
+          function centerMapAtPostCode(postcode, map, radius) {
               
               if (!radius) {
                   radius = 20;//default 20 miles;
               } //TODO: have a local API that we use for this.
                 geocoder = new google.maps.Geocoder();
-              geocoder.geocode( { 'address': postcode}, function(results, status) {
+              geocoder.geocode( { 'address': postcode, "componentRestrictions":restrictions}, function(results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
                   
                   var latlong = results[0].geometry.location;
@@ -164,6 +165,9 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
             if (!data){
                 return;
             }
+			if (data.photos[0] == undefined){
+				data.photos[0] = 'not-found.jpg'//Default image
+			}
             var resultsElem = $(RESULT_INFO_ELEM_SELECTOR);
             resultsElem.find('.js-name').html(data.name);
             resultsElem.find('.js-address').html(data.addressline1 + ", " + data.addressline2 + ", " + data.city + ", " + data.postcode );

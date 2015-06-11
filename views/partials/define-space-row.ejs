@@ -21,10 +21,10 @@
 				<%}%>
 			>Standard</option>
 			<option
-				<%if(row.palletType === 'Ano' ){%>
+				<%if(row.palletType === 'Anno' ){%>
 					selected="selected"
 				<%}%>
-			>Ano</option>
+			>Anno</option>
 			<option
 				<%if(row.palletType === 'Other' ){%>
 					selected="selected"
@@ -51,13 +51,13 @@
 		</select>
 	</td>
 	<td data-th="Max Weight" class="value input-field no-success-validation-style">
-		<input name="maxWeight" type="text" value="<%=row.maxWeight%>"/>
+		<input name="maxWeight" type="number" value="<%=row.maxWeight%>" placeholder="kg"/>
 	</td>
 	<td data-th="Max Height" class="value input-field no-success-validation-style">
-		<input name="maxHeight" type="text" value="<%=row.maxHeight%>"/>
+		<input name="maxHeight" type="number" value="<%=row.maxHeight%>" placeholder="m"/>
 	</td>
 	<td data-th="Pallet Spaces" class="value input-field no-success-validation-style">
-		<input required name="palletSpaces"  type="text" value="<%=row.palletSpaces%>"/>
+		<input required name="palletSpaces"  type="number" value="<%=row.palletSpaces%>"/>
 	</td>
 	<td data-th="Remove" class="action">
 		<button type="button" href="#" class="trash-button"><span>Delete</span></button>

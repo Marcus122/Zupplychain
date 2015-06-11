@@ -4,6 +4,7 @@ Created by Ben Sperry for the Ionic Framework, http://ionicons.com/
 https://twitter.com/benjsperry  https://twitter.com/ionicframework
 MIT License: https://github.com/driftyco/ionicons
 */
+@import "hint.css";
 @font-face {
   font-family: "Ionicons";
   src: url("/fonts/ionicons.eot?v=2.0.0");
@@ -3711,6 +3712,7 @@ form.storage-search .input-field.checkbox input {
 }
 .logo {
   max-width: 100%;
+  max-height: 85px;
 }
 .main-nav {
   box-sizing: border-box;
@@ -5426,6 +5428,9 @@ body.wait #wait {
 .find-storage-banner {
   margin-bottom: 0px;
 }
+.find-storage-banner.search-cached {
+  display: none;
+}
 .search-results-page .info-boxes {
   margin-bottom: 20px;
   margin-bottom: 2rem;
@@ -5604,7 +5609,7 @@ body.wait #wait {
 .search-result-info-box img {
   transition: transform 0.3s;
   max-width: 180px;
-  height: auto;
+  height: 125px;
 }
 .search-result-info-box .ratings {
   font-size: 16px;
@@ -5702,6 +5707,9 @@ body.wait #wait {
     display: block;
   }
 }
+.storage-matched {
+  outline: 1px solid #EFA430;
+}
 .start-selling {
   margin-bottom: 20px;
   margin-bottom: 2rem;
@@ -5754,6 +5762,17 @@ body.wait #wait {
 .start-selling p .button,
 .start-selling p button {
   padding: 0;
+}
+.tool-tip {
+  cursor: help;
+  display: inline-block;
+  background-color: #9d9999;
+  border-radius: 10px;
+  height: 18px;
+  width: 18px;
+  text-align: center;
+  font-size: 12px;
+  color: #fff;
 }
 .provider-form label {
   margin-right: 5%;
@@ -5883,6 +5902,20 @@ body.wait #wait {
   .provider-form .small-input input {
     width: 100%;
   }
+}
+.define-space tbody tr:first-child td:last-child button {
+  display: none;
+}
+form#define-space .header h3 {
+  display: inline;
+}
+form#define-space .header .form-header {
+  display: inline;
+  float: right;
+}
+form#define-space .header .form-header .reg-2-example {
+  height: 32px;
+  padding-top: 3px;
 }
 .dashboard section > .header {
   background-image: url('../images/grey-tiled.png');
@@ -6117,9 +6150,7 @@ main {
   max-width: 1200px;
 }
 header {
-  -webkit-box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.75);
-  box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3);
   z-index: 2;
   position: fixed;
   width: 100%;
@@ -6139,7 +6170,7 @@ footer {
   padding-bottom: 2rem;
 }
 main {
-  margin-top: 130px;
+  margin-top: 85px;
 }
 span.primary {
   color: #9bc11f;

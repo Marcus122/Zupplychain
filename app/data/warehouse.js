@@ -51,14 +51,58 @@ warehouseSchema.statics = {
 		  .exec(cb); 
   },
   search_by_query: function(query, cb) {
-      
+    var corrResult = false;
+	var corrResults = [];
+	
+	if (!query.weight){
+		query.weight = '100';
+	}
+	
+	if (!query.height){
+		query.height = '10';
+	}
+	
+	var newsDistances = getNewsDistances(query.geo.lat,query.geo.lng,query.radius);
+	
+    // this.find({
+              // "geo.lat":{ $gte:(query.geo.lat -80), $lte:(query.geo.lat + 80)},
+              // "geo.lng":{ $gte:(query.geo.lng -80), $lte:(query.geo.lng + 80)},
+              // "active": true
+              // },
+              // function(err,result){
+              // }).populate({ path : "storage", match : {palletType : query.palletType} }).exec(cb);
     this.find({
-              "geo.lat":{ $gte:(query.geo.lat -80), $lte:(query.geo.lat + 80)},
+			  "geo.lat":{ $gte:(query.geo.lat -80), $lte:(query.geo.lat + 80)},
               "geo.lng":{ $gte:(query.geo.lng -80), $lte:(query.geo.lng + 80)},
               "active": true
-              },
-              function(err,result){
-              }).populate({ path : "storage", match : {palletType : query.palletType} }).exec(cb);
+              }).populate({ path : "storage"/*, match : {palletType : query.palletType,
+													   maxWeight : {$gte:query.weight},
+													   maxHeight : {$gte:query.height},
+													   temp : query.temp,
+													   palletSpaces : query.totalPallets}*/
+			  }).exec( function (err, result){
+				  if (err){
+					  console.log(err);
+				  }else{
+					  for(var i in result){
+						  corrResult = false;
+                          for (var j=0; j<result[i].storage.length; j++){
+                              var palletTypeOK  = !query.palletType || result[i].storage[j].palletType === query.palletType; //!palletType means any
+                              var maxWeightOK   = !query.maxWeight || result[i].storage[j].maxWeight >= query.weight;
+                              var maxHeightOK   = !query.maxHeight || result[i].storage[j].maxHeight >= query.height;
+                              var tempOK        = result[i].storage[j].temp === query.temp;
+                              var spacesOK      = result[i].storage[j].palletSpaces >= query.totalPallets;
+                              if (palletTypeOK && maxWeightOK && maxHeightOK && tempOK && spacesOK){
+                                  corrResult = true;
+                              }
+						  }
+						if(corrResult === true){
+							corrResults.push(result[i]);
+						}
+					  };
+					  cb(err,corrResults);
+				  }
+			  });
   },
   availableServices: function(){
 	  return local.services;
@@ -66,6 +110,29 @@ warehouseSchema.statics = {
   availableSpecifications: function(){
 	  return local.specifications;
   }
+}
+
+function getNewsDistances(lat,lng,d){
+	var rad = Math.PI/180;
+	var tc = [rad*0,rad*90,rad*180,rad*270];
+	var arr = []
+	var lonn;
+	var latt;
+	
+	for (var i = 0; i < tc.length; i++){
+		latt = Math.asin(Math.sin(lat)*Math.cos(d)+Math.cos(lat)*Math.sin(d)*Math.cos(tc[i]));
+		if (Math.cos(lat)==0){
+			lonn = lng;
+		}else{
+			lonn = ((lng-Math.asin(Math.sin(tc[i])*Math.sin(d)/Math.cos(lat))+Math.PI)%(2*Math.PI))-Math.PI;
+		} 
+		arr.push({lat:latt, lng:lonn});
+		
+	}
+	
+	return arr;
+	
+	
 }
 
 module.exports = mongoose.model('warehouses', warehouseSchema);

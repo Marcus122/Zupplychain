@@ -28,10 +28,39 @@ function searchHandler(req,res){
 }
 function populateSearchData(req,res, next){
         var postcode = req.body.postcode;
-        var radius = req.body.distance;
+        var radius = req.body["max-distance"];
         var palletType = req.body["pallet-type"];
-        
-        var query = {"postcode" : postcode, "radius" : radius, "palletType" : palletType};
-        searchController.search_storage(query, function(results) { req.data.results = results; next(); });
+        if (palletType === "Any") {
+            palletType = "";
+        }
+		var weight = parseFloat(req.body.weight, 10);
+		var height = parseFloat(req.body.height, 10);
+        if (isNaN(weight)) {
+            weight = 0; //if it's blank or there's an error, set to 0, its compared to a maxWeight value so 0 is the same as ignore in the search.
+        }
+        if (isNaN(height)) {
+            height = 0; //ditto.
+        }
+        var temp = req.body.temperature;
+		var qty = req.body.quantity;
+        var query = {"postcode" : postcode, "radius" : radius, "palletType" : palletType, "weight" : weight, "height" : height, "temp" : temp, "totalPallets" : qty };
+		
+		req.session.whSC = populateSessionStateJSON(req,postcode,palletType,radius,weight,height,temp,qty);
+		
+        searchController.search_storage(query, function(error, results) {
+            if (error) {
+                req.data.error = error;
+            }
+            req.data.results = results; next(); 
+        });
+}
+function populateSessionStateJSON(req,postcode,palletType,radius,weight,height,temp,qty){
+	var srchJson = '{"sc":[' +
+	'{"palletType":"'+palletType +'","searchQty":"'+qty+'","postcode":"'+postcode+
+	'","maxDistance":"'+radius+'","description":"'+req.body.description+
+	'","height":"'+height+'","weight":"'+weight+'","temp":"'+temp+'","startDate":"'+
+	req.body["start-date"]+'","endDate":"'+req.body["end-date"]+'"} ]}';
+	
+	return JSON.parse(srchJson)
 }
 module.exports = handler;

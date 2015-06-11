@@ -25,7 +25,7 @@
 						<li class="four columns active checked">Step 3</li>
 					</ul>
 					<section class="tab-content">
-						<form id="price-and-availability" class="loom-form responsive-table" data-loom-no-submit="true" method="post" action="/provider-registration-complete" novalidate>
+						<form id="price-and-availability-user-data" class="loom-form responsive-table provider-form" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" action="/complete-registration" novalidate>
 							<div class="main">
 								<div class="content-box primary">
 									<div class="header">
@@ -49,12 +49,12 @@
 														<span><%=warehouse.storage[i].name%></span>
 													</td>
 													<td class="button-cell pricing" data-th="Pricing">
-														<div><button data-template="pricing" type="button" class="secondary popup mini">click here</button></div>
+														<button data-template="pricing" type="button" class="secondary popup mini">click here</button>
 													</td>
-													<td class="button-cell" data-th="Volume Discount">
+													<td class="button-cell discounts" data-th="Volume Discount">
 														<button data-template="volume"  type="button" class="secondary popup mini">click here</button>
 													</td>
-													<td class="button-cell" data-th="Available Pallets">
+													<td class="button-cell pallets" data-th="Available Pallets">
 														<button data-template="pallets" type="button" class="secondary popup mini">click here</button>
 													</td>
 											    </tr>
@@ -64,13 +64,43 @@
 										<div class="row">
 											<div class="columns five check checkbox input-field">
 												<input required type="checkbox" name="accept" id="accept"/>
-												<label for="accept">*I accept that the ZupplyChain commission is x%.</label>
+												<label for="accept">*I agree to the terms and conditions.</label>
 											</div>
 											<div class="columns four">
 												<button href="#" class="view tertiary forward mini">View list of Documentation</button>
 											</div>
 											<div class="columns three">
 												<button href="#" class="view tertiary forward mini">View Terms &amp; Conditions</button>
+											</div>
+										</div>
+									</fieldset>
+								</div>
+								<div class="content-box primary">
+									<div class="header">
+										<h3>Your Login Details</h3>
+									</div>
+									<fieldset class="main">
+										<div>
+											<div class="row">
+												<div class="input-field columns six">
+													<label for="name">Name*</label><input type="text" name="name" id="name" required>
+												</div>
+												<div class="input-field columns six">
+													<label for="email">Email*</label><input type="email" name="email" id="email" required>
+												</div>
+											</div>
+											<div class="row">
+												<div class="input-field columns six">
+													<label for="tel">Contact Number*</label><input type="tel" name="contact" id="tel" required>
+												</div>
+												<div class="input-field columns six">
+													<label for="password">Password*</label><input type="password" name="password" id="password" required>
+												</div>
+											</div>
+											<div class="row">
+												<div class="input-field columns six">
+													<label for="confirm-password">Confirm Password*</label><input type="password" name="confirm-password" id="confirm-password" required data-loom-confirm="password">
+												</div>
 											</div>
 										</div>
 									</fieldset>
@@ -90,7 +120,19 @@
 			<div class="popup-window">
 				<div class="inner">
 					<button class="close no-resize"><span>close</span></button>
-					<h2>Pricing</h2>
+					<h2>Basic Pricing</h2>
+                    <form id="default-pricing-form" class="loom-form" novalidate method="post" data-loom-no-submit="true">
+                        <table class="responsive-table data-title="Basic pricing">
+                            <thead><tr>
+                                <th>Price per pallet per week</th>
+                                <th>Handling charge per pallet (In and Out)</th>
+                                <th>Cost to reserve</th></tr>
+                            </thead>
+                        </table>
+                    </form>
+                    
+                    <h2>Date Range Pricing</h2>
+                    <p>You can add pricing conditions for different time periods</p>
 					<form id="pricing-form" class="loom-form" novalidate method="post" data-loom-no-submit="true">
 						<table class="show-title responsive-table" data-title="Pricing">
 							<thead>
@@ -112,6 +154,9 @@
 				</div>
 			</div>
 		 </script>
+		 <script type="text/template" id="basic-pricing-row">
+		    <% include ./partials/basic-pricing-row %> 
+		 </script>
 		 <script type="text/template" id="pricing-row">
 		    <% include ./partials/pricing-row %> 
 		 </script>
@@ -127,7 +172,6 @@
 								<th>From</th>
 								<th>To</th>
 								<th>% Discount</th>
-								<th>Discount Value</th>
 								<th/>
 							</thead>
 							<tbody>
@@ -169,5 +213,5 @@
 			</div>
 		 </script>
 		 <script type="text/template" id="pallet-row">
-		    <% include ./partials/pallet-row %> 
+		    <% include ./partials/pallet-row%> 
 		 </script>

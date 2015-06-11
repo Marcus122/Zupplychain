@@ -19,6 +19,12 @@ sb(line) - set breakpoint on specific line
 sb('script.js',1) - set breakpoint on first line of script.js
 cb() - clear breakpoint
 
+Debugging Express. More Info - http://expressjs.com/guide/debugging.html
+
+Windows Systems    - set DEBUG=express:* & node server
+UNIX Based Systems - DEBUG=express:* node server
+
+To Increase CMD's size to show more lines follow the instructions at - https://technet.microsoft.com/en-gb/library/bb491037.aspx
 
 To run MongoDB
 
@@ -79,3 +85,6 @@ db.collection.save() - Insert either a new document or update an existing docume
 db.collection.remove() - Delete documents from the collection.
 db.collection.drop() - Drops or removes completely the collection.
 db.collection.ensureIndex() - Create a new index on the collection if the index does not exist; otherwise, the operation has no effect.
+
+Google API Key
+The API Key for the Google Geolocation API should be stored in the object variable "extra" in app/controller/search.js line 4.

@@ -47,12 +47,12 @@ exports.warehouse_by_user = function (user,callback) {
 exports.warehouse_by_query = function(query,cb) {
     // do the actual search and return the warehouse data.
     Warehouse.search_by_query(query, function(err,result){
-        var data = {error: 'There were no results for your search'};
+        var error = "";
         if (err) {
-            data = {error: 'There were no results for your search'};
+            error = 'There were no results for your search';
         } else {
             data = {results : result};
         }
-        return cb(data);
+        return cb(error,data);
     });
 }
