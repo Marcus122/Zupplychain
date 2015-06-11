@@ -63,9 +63,7 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
         
         function setRadius(radiusInMiles) {
             var GLOBE_WIDTH = 256; // a constant in Google's map projection
-            //var west = sw.lng();
-            //var east = ne.lng();
-            var angle = radiusInMiles/69;//east - west;
+             var angle = radiusInMiles/69;//east - west;
             if (angle < 0) {
                 angle += 360;
             }
@@ -84,11 +82,9 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
                 center:map.getCenter(),
                 radius: miles * 1609.344
                 };
-                // Add the circle for this city to the map.
                 if (circle){
                     circle.setMap(null);
                 }
-                
                 circle = new google.maps.Circle(radiusOptions);
             
         }

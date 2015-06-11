@@ -51,6 +51,7 @@ function warehouseAuth(req,res,next){
 function createWarehouse(req,res){
 	getLatLong(req.body.postcode,function(latlng){
 		req.body.geo = latlng;
+        req.body.loc = { 'type' : 'Point', 'coordinates' : [latlng.lng, latlng.lat] };
 		warehouse.create(req.data.user,req.body,function(err,Warehouse){
 			if(err){
 				setErrorResponse(err,res);

@@ -32,10 +32,15 @@ var fields = {
 	geo: {
 		lat: { type: Number },
 		lng: { type: Number }
-	}
+	},
+    loc  :{
+        type : { type: String},
+        coordinates: [Number]
+    }
 };
 
 var warehouseSchema = new Schema(fields);
+warehouseSchema.index({ loc: '2dsphere' });
 
 warehouseSchema.statics = {
 	load: function (id, cb) {
@@ -62,18 +67,16 @@ warehouseSchema.statics = {
 		query.height = '10';
 	}
 	
-	var newsDistances = getNewsDistances(query.geo.lat,query.geo.lng,query.radius);
 	
-    // this.find({
-              // "geo.lat":{ $gte:(query.geo.lat -80), $lte:(query.geo.lat + 80)},
-              // "geo.lng":{ $gte:(query.geo.lng -80), $lte:(query.geo.lng + 80)},
-              // "active": true
-              // },
-              // function(err,result){
-              // }).populate({ path : "storage", match : {palletType : query.palletType} }).exec(cb);
     this.find({
-			  "geo.lat":{ $gte:(query.geo.lat -80), $lte:(query.geo.lat + 80)},
-              "geo.lng":{ $gte:(query.geo.lng -80), $lte:(query.geo.lng + 80)},
+			  /*"geo.lat":{ $gte:(query.geo.lat -80), $lte:(query.geo.lat + 80)},
+              "geo.lng":{ $gte:(query.geo.lng -80), $lte:(query.geo.lng + 80)},*/
+              "loc" : {
+                  $near : {
+                      $geometry :  query.loc,
+                      $maxDistance : query.radiusInMetres
+                  }
+              },
               "active": true
               }).populate({ path : "storage"/*, match : {palletType : query.palletType,
 													   maxWeight : {$gte:query.weight},
@@ -110,29 +113,6 @@ warehouseSchema.statics = {
   availableSpecifications: function(){
 	  return local.specifications;
   }
-}
-
-function getNewsDistances(lat,lng,d){
-	var rad = Math.PI/180;
-	var tc = [rad*0,rad*90,rad*180,rad*270];
-	var arr = []
-	var lonn;
-	var latt;
-	
-	for (var i = 0; i < tc.length; i++){
-		latt = Math.asin(Math.sin(lat)*Math.cos(d)+Math.cos(lat)*Math.sin(d)*Math.cos(tc[i]));
-		if (Math.cos(lat)==0){
-			lonn = lng;
-		}else{
-			lonn = ((lng-Math.asin(Math.sin(tc[i])*Math.sin(d)/Math.cos(lat))+Math.PI)%(2*Math.PI))-Math.PI;
-		} 
-		arr.push({lat:latt, lng:lonn});
-		
-	}
-	
-	return arr;
-	
-	
 }
 
 module.exports = mongoose.model('warehouses', warehouseSchema);

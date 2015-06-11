@@ -28,7 +28,8 @@ function searchHandler(req,res){
 }
 function populateSearchData(req,res, next){
         var postcode = req.body.postcode;
-        var radius = req.body["max-distance"];
+        var radius = parseInt(req.body["max-distance"],10);
+        var radiusInMetres = radius * 1609.344;
         var palletType = req.body["pallet-type"];
         if (palletType === "Any") {
             palletType = "";
@@ -43,7 +44,7 @@ function populateSearchData(req,res, next){
         }
         var temp = req.body.temperature;
 		var qty = req.body.quantity;
-        var query = {"postcode" : postcode, "radius" : radius, "palletType" : palletType, "weight" : weight, "height" : height, "temp" : temp, "totalPallets" : qty };
+        var query = {"postcode" : postcode, "radius" : radius, "palletType" : palletType, "weight" : weight, "height" : height, "temp" : temp, "totalPallets" : qty, "radiusInMetres" : radiusInMetres};
 		
 		req.session.whSC = populateSessionStateJSON(req,postcode,palletType,radius,weight,height,temp,qty);
 		

@@ -15,6 +15,7 @@ exports.search_storage = function(query, cb) {
     var postcode = query.postcode;
     getLatLong(postcode, function(error, geoData) {
        query.geo =  geoData;
+       query.loc = {"type" : "Point", "coordinates" : [query.geo.lng, query.geo.lat]} ; //always long then lat
        var result = warehouse.warehouse_by_query(query, function(error,res) {
            cb(null,res);
        });
