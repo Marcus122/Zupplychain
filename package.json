@@ -21,6 +21,8 @@
     "ejs": "^2.3.1",
     "express": "*",
     "express-session": "^1.11.2",
+    "grunt-scp": "^0.1.8",
+    "grunt-ssh": "^0.12.5",
     "less": "*",
     "mongodb": "~2.0.25",
     "mongoose": "~4.0.1",

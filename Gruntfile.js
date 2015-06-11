@@ -9,9 +9,14 @@
 
 //Grunt is just JavaScript running in node, after all...
 module.exports = function(grunt) {
-
+    
+    var time = new Date();
+    var stamp = time.toISOString().substring(0,19);
+    var dirpath = '/var/www-backup/Zupply-backup-' + stamp;
+  
   // All upfront config goes in a massive nested object.
   grunt.initConfig({
+      secret: grunt.file.readJSON('./secret.json'),
       requirejs: {
           compile: {
             options: {
@@ -24,7 +29,42 @@ module.exports = function(grunt) {
             }
           }
       },
-      
+      scp: {
+        options: {
+            host: '10.10.20.155',
+            username: 'root',
+            password: '<%= secret.rootpassword %>' //need a file in root of project called secret.json that contains this- { "rootpassword" : "thePassword"}
+        },
+        live: {
+            files: [{
+                cwd: './',
+                src: ["**/*", "!Gruntfile.js", "!**/node_modules/**", "!**/test/**", "!**/secret.json"],
+                filter: 'isFile',
+                // path on the server 
+                dest: '/var/www/'
+            }]
+        },
+      },
+    sshexec: {
+        backup : {
+            command: "mkdir '" + dirpath + "'; mv '/var/www/'* '" + dirpath  + "/'; cp -r /var/www-backup/DB/data /var/www/data ;"  ,
+            options: {
+              ignoreErrors: true,
+              host: '10.10.20.155',
+              username: 'root',
+              password: '<%= secret.rootpassword %>'
+            }
+          },
+          startServer: {
+            command: 'cd /var/www; npm install; nohup /var/www/server.sh; ps;',
+            options: {
+              host: '10.10.20.155',
+              username: 'root',
+              password: '<%= secret.rootpassword %>'
+            }
+          },
+          
+      },
       less: {
         compile: {
             options: {
@@ -48,13 +88,14 @@ module.exports = function(grunt) {
       
   });
   
-  
-  
+  grunt.loadNpmTasks('grunt-ssh');
+  grunt.loadNpmTasks('grunt-scp');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-watch');
   
   grunt.registerTask('build', ['requirejs', 'less']);
   grunt.registerTask('development', ['watch']);
-  
+  grunt.registerTask('deploy', ['requirejs', 'less', 'sshexec:backup','scp','sshexec:startServer' ]);
+  grunt.registerTask('ssh', ['sshexec']);
 };
