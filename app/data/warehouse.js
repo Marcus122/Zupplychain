@@ -75,23 +75,26 @@ warehouseSchema.statics = {
 			  "geo.lat":{ $gte:(query.geo.lat -80), $lte:(query.geo.lat + 80)},
               "geo.lng":{ $gte:(query.geo.lng -80), $lte:(query.geo.lng + 80)},
               "active": true
-              }).populate({ path : "storage", match : {palletType : query.palletType,
+              }).populate({ path : "storage"/*, match : {palletType : query.palletType,
 													   maxWeight : {$gte:query.weight},
 													   maxHeight : {$gte:query.height},
 													   temp : query.temp,
-													   palletSpaces : query.totalPallets}
+													   palletSpaces : query.totalPallets}*/
 			  }).exec( function (err, result){
 				  if (err){
 					  console.log(err);
 				  }else{
 					  for(var i in result){
 						  corrResult = false;
-						  for (var j=0; j<result[i].storage.length; j++){
-							  if (result[i].storage[j].palletType === query.palletType && result[i].storage[j].maxWeight >= query.weight
-								  && result[i].storage[j].maxHeight >= query.height	&& result[i].storage[j].temp === query.temp
-								  && result[i].storage[j].palletSpaces == query.totalPallets){
-								  corrResult = true;
-							  }
+                          for (var j=0; j<result[i].storage.length; j++){
+                              var palletTypeOK  = !query.palletType || result[i].storage[j].palletType === query.palletType; //!palletType means any
+                              var maxWeightOK   = !query.maxWeight || result[i].storage[j].maxWeight >= query.weight;
+                              var maxHeightOK   = !query.maxHeight || result[i].storage[j].maxHeight >= query.height;
+                              var tempOK        = result[i].storage[j].temp === query.temp;
+                              var spacesOK      = result[i].storage[j].palletSpaces >= query.totalPallets;
+                              if (palletTypeOK && maxWeightOK && maxHeightOK && tempOK && spacesOK){
+                                  corrResult = true;
+                              }
 						  }
 						if(corrResult === true){
 							corrResults.push(result[i]);

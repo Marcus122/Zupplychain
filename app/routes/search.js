@@ -30,9 +30,18 @@ function populateSearchData(req,res, next){
         var postcode = req.body.postcode;
         var radius = req.body["max-distance"];
         var palletType = req.body["pallet-type"];
-		var weight = req.body.weight;
-		var height = req.body.height
-		var temp = req.body.temperature;
+        if (palletType === "Any") {
+            palletType = "";
+        }
+		var weight = parseFloat(req.body.weight, 10);
+		var height = parseFloat(req.body.height, 10);
+        if (isNaN(weight)) {
+            weight = 0; //if it's blank or there's an error, set to 0, its compared to a maxWeight value so 0 is the same as ignore in the search.
+        }
+        if (isNaN(height)) {
+            height = 0; //ditto.
+        }
+        var temp = req.body.temperature;
 		var qty = req.body.quantity;
         var query = {"postcode" : postcode, "radius" : radius, "palletType" : palletType, "weight" : weight, "height" : height, "temp" : temp, "totalPallets" : qty };
 		
