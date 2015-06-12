@@ -15,15 +15,19 @@ var handler = function(app) {
 	app.post('/registration/upload',uploadFile,fileOutput);
 };
 function registrationHandler(req,res){
-	if(req.params.step > 1 && !req.data.user._id ){
-		redirectToStart(res)
+	//If active send to dashboard
+	if(req.data.user.active){
+		res.send({redirect: '/dashboard'});
+	}
+	else if(req.params.step > 1 && !req.data.user._id ){
+		redirectToStart(res);
 	}else{
 		res.render("registration" + "-" + req.params.step,req.data);
 	}
 }
 function populateUserData(req,res, next){
 	req.data.services = local.config.services;
-	req.data.specifications = local.config.specifications
+	req.data.specifications = local.config.specifications;
 	if(!req.data.user._id) return next();
 	req.data.user.getWarehouses(function(warehouses){
 		req.data.user.warehouses = warehouses;

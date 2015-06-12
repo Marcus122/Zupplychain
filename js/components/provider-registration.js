@@ -9,10 +9,34 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 		var lm = new Loom();
 		
 		function initialize() {
-			$('.new-pallet button').on("click",function(ev){
+			step1();
+			step2();
+			step3();
+		}
+		function step1(){
+			var $registration = $('#registration');
+			if(!$registration.length) return;
+			$registration.on("submit",function(ev){
 				ev.preventDefault();
-				addPallet();
+				saveWarehouse(function(result){
+					if (result.data.geo.lat !== null && result.data.geo.lng !== null){
+						window.location = './provider-registration-2';
+					} else {
+						Alerts.showErrorMessage("Postcode Not Found");
+					}
+				});
 			});
+			$registration.find('.save').on("click",function(ev){
+				saveWarehouse();
+			});
+			function saveWarehouse(cb){
+				if( lm.isFormValid($registration.attr('id')) ){
+					bindFormToObject($registration,warehouse);
+					Warehouse.update(warehouse,function(result){
+						if(cb) cb(result);
+					});
+				}
+			}
 			var $addPhoto = $('#add-photo');
 			var $uploadPhoto = $('#photos');
 			var $photoArea = $('#upload-photos');
@@ -36,16 +60,25 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				ev.preventDefault();
 				$(this).closest('.document').remove();
 			});
-			var $defineSpace = $('.define-space');
-			$defineSpace.on("click",".trash-button",function(ev){
+		}
+		function step2(){
+			var $defineSpaceTable = $('.define-space');
+			var $defineSpace = $('#define-space');
+			if(!$defineSpace.length) return;
+			$('.new-pallet button').on("click",function(ev){
+				ev.preventDefault();
+				addPallet();
+			});
+			$defineSpaceTable.on("click",".trash-button",function(ev){
 				ev.preventDefault();
 				$(this).closest('tr').remove();
+				rebindForm();
 			});
-			$defineSpace.on("click","tr",function(ev){
+			$defineSpaceTable.on("click","tr",function(ev){
 				ev.preventDefault();
 				$(this).toggleClass('active');
 			});
-			$("form#define-space").on("click",".reg-2-example",function(ev){
+			/*$defineSpace.find(".reg-2-example").on("click",function(ev){
 				ev.preventDefault();
 				var $form = $(this).closest('form');
 				var form = lm.getForm($form.attr("id"));
@@ -56,30 +89,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					$($form.find('table').find('tbody').find('tr')[i].children[4]).find('input[name="maxHeight"]').val(100);
 					$($form.find('table').find('tbody').find('tr')[i].children[5]).find('input[name="palletSpaces"]').val(100);
 				}
-			});
-			var $registration = $('#registration');
-			$registration.on("submit",function(ev){
-				ev.preventDefault();
-				saveWarehouse(function(result){
-					if (result.data.geo.lat !== null && result.data.geo.lng !== null){
-						window.location = './provider-registration-2';
-					} else {
-						Alerts.showErrorMessage("Postcode Not Found");
-					}
-				});
-			});
-			$registration.find('.save').on("click",function(ev){
-				saveWarehouse();
-			});
-			function saveWarehouse(cb){
-				if( lm.isFormValid($registration.attr('id')) ){
-					bindFormToObject($registration,warehouse);
-					Warehouse.update(warehouse,function(result){
-						if(cb) cb(result);
-					});
-				}
-			}
-			var $defineSpace = $('#define-space');
+			});*/
 			$defineSpace.on("submit",function(ev){
 				ev.preventDefault();
 				saveDefinedSpace(function(){
@@ -93,7 +103,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			function saveDefinedSpace(cb){
 				if( lm.isFormValid($defineSpace.attr('id')) ){
 					var storage=[];
-					$defineSpace.find('tbody tr').each(function(){
+					$defineSpaceTable.find('tbody tr').each(function(){
 						var s={};
 						bindFormToObject($(this),s);
 						storage.push(s);
@@ -105,7 +115,10 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					});
 				}
 			}
+		}
+		function step3(){
 			var $priceForm = $('#price-and-availability-user-data');
+			if(!$priceForm.length) return;
 			$priceForm.on("submit",function(ev){
 				ev.preventDefault();
 				//Check each storage has pricing
@@ -190,6 +203,13 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			data.name = storageNames[$('.define-space tbody tr').length];
 			var $element = template.bind(data);
 			$('.define-space tbody').append($element);
+			rebindForm();
+		}
+		function rebindForm(){
+			$('.loom-form').each(function(){
+				var $form = $(this);
+				lm.rebind($form);
+			});
 		}
 		function popups(){
 			$('.popup').on("click",function(){

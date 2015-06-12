@@ -12,6 +12,7 @@ var fields = {
 	maxWeight: {type: Number },
 	maxHeight: {type: Number },
 	palletSpaces: {type: Number },
+	sortOrder:{type: Number },
 	pricing: [{
 		from:Date,
 		to:Date,

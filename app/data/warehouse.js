@@ -14,6 +14,7 @@ var fields = {
 	addressline1: { type: String },
 	addressline2: { type: String },
 	addressline3: { type: String },
+	county: { type: String },
 	city: { type: String },
 	postcode: { type: String },
 	telephone: { type: String },
@@ -51,7 +52,12 @@ warehouseSchema.statics = {
   },
   loadByUser: function(user,cb){
 	 this.find({'user': user._id})
-		  .populate('storage')
+		  .populate({
+			  	path:'storage',
+				options:{
+					sort:'sortOrder'
+				}
+			})
 		  .populate('user')
 		  .exec(cb); 
   },

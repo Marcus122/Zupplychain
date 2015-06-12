@@ -92,7 +92,10 @@ function updateStorage(req,res,next){
 function batchStorage(req,res){
 	if(!req.warehouse) next();
 	var storageArr=[];
+	var sortOrder = 0;
 	async.each(req.body, function(_storage,callback){
+		sortOrder++;
+		_storage.sortOrder = sortOrder;
 		if(!_storage._id){
 			delete _storage._id;
 			storage.create(req.data.user,_storage,function(err,Storage){
