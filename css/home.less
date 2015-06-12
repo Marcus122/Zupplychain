@@ -24,14 +24,42 @@
         background-color:@tertiary;
         margin-bottom:0px;
         .unit-padding-bottom(3);
+        
  }
  
  #home-page .main-box-footer{
     background-color:@secondary;
+    color:@white;
+    .unit-margin-bottom(3);
+    border-radius: 0px 0px 20px 20px;
+    .unit-padding-horizontal(3);
+    .unit-padding-vertical(2);
+    blockquote{
+        position:relative;
+        margin:0px;
+        .unit-padding(4);
+                span {
+         color:@primary;
+
+        }
+
+    }
+    blockquote:before{
+        left:0px;
+        top:0px;
+    }
+    blockquote:after{
+    position:absolute;
+        right:0px;
+    }
  }
  
  #home-page .boxes{
     .unit-padding-horizontal(3);
+    .unit-margin-top(4);
+    .content-box{
+        box-shadow:10px 10px 10px rgba(0,0,0,0.2);
+    }
  }
  
  #home-page .banner{
@@ -48,8 +76,12 @@
     h1{
         .unit-margin-vertical(2);
         font-weight:600;
+        margin-bottom:10px;
+        margin-bottom:1rem;
     }
+            
  }
+ 
  
  
  #home-page .content-box.secondary{
@@ -74,7 +106,7 @@
         }
     }
     .footer{
-        text-align:right;
+        text-align:center;
         font-size:18px;
         font-size:1.8rem;
         text-transform:uppercase;
