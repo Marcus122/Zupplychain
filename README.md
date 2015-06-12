@@ -39,6 +39,18 @@ Need to set up config file or copy config.default.js into a new file called conf
 To run use command node app and go to http://localhost:8081
 
 
+Exporting/importing Mongo data to/from json.
+
+To export warehouse data:
+/PROGRA~1/MongoDB/Server/3.0/bin/mongoexport.exe /o warehouses.json /db ZupplyChain /collection warehouses /pretty
+
+To import warehouse data:
+/PROGRA~1/MongoDB/Server/3.0/bin/mongoimport.exe  /db ZupplyChain /collection warehouses warehouses.json
+
+
+
+
+
 Sharing Mongo databases for testing.
 
 mongodump

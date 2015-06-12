@@ -28,7 +28,7 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
         }
     });
     
-    $(document).on("click", "button.add-to-quote", function(evt){
+    /*$(document).on("click", "button.add-to-quote", function(evt){
         $button = $(evt.target);
         id = $button.data("id");
         $('#' + id).find('input').prop("checked",true);
@@ -56,7 +56,7 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
             $(".remove-from-quote[data-id='" + id + "']").hide();
             $(".add-to-quote[data-id='" + id + "']").show();
         }
-    });
+    });*/
 	
 	function triggerSearch(){
 		$postcode.trigger("blur")
@@ -76,12 +76,16 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
             $(".info-boxes").fadeOut();
             $(".testimonials").fadeOut();
             if (response.results.length === 1){
-				$searchResInfoBox.find('.controls').css('display', 'none');
-			}
+				$searchResInfoBox.find('.controls').hide();
+			} else {
+                $searchResInfoBox.find('.controls').show()
+            }
             require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) { 
                 $.scrollTo("#results-area", {duration : 600, offset : -150 });
             });
-            Alerts.showSuccessMessage("results loaded");
+            var numResults = response.results.length;
+            var resultsWord = numResults != 1 ? " results loaded" : " result loaded";
+            Alerts.showSuccessMessage(response.results.length + resultsWord);
             require(["templates/templates"], function(Templates){
                var templates = new Templates();
                var template = templates.getTemplate("result-table-row");

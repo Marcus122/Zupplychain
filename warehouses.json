@@ -1,0 +1,353 @@
+{
+	"__v": 93,
+	"_id": {
+		"$oid": "55254cae830a63a01a6c6fa9"
+	},
+	"active": true,
+	"addressline1": "test1",
+	"addressline2": "test",
+	"city": "test",
+	"contact": "test12",
+	"created": {
+		"$date": "2015-04-08T15:43:42.200Z"
+	},
+	"description": "test",
+	"documents": [],
+	"email": "testing@weave.com",
+	"geo": {
+		"lat": 53.59856884287244,
+		"lng": -2.2937348938599538
+	},
+	"mobile": "1234568798",
+	"name": "test13",
+	"photos": [
+		"avatar.jpg",
+		"powered-by-logo.png"
+	],
+	"postcode": "BL9 5BN",
+	"services": [
+		"Transport / Distribution",
+		"Pick \u0026 Pack",
+		"Product Disposal",
+		"Add. Product Insurance"
+	],
+	"specifications": [
+		"Perimeter Fencing",
+		"CCTV"
+	],
+	"storage": [
+		{
+			"$oid": "552e2c15ca1dfbdc17aa9fe6"
+		}
+	],
+	"telephone": "1234569789",
+	"user": {
+		"$oid": "552508042b0859b811e02ce7"
+	}
+}
+{
+	"__v": 1,
+	"_id": {
+		"$oid": "5527f7e46b04f8fc1939b238"
+	},
+	"active": false,
+	"addressline1": "5 Weave",
+	"addressline2": "",
+	"city": "Weave",
+	"contact": "Weaveability",
+	"created": {
+		"$date": "2015-04-10T16:18:44.569Z"
+	},
+	"description": "Test Weave",
+	"documents": [],
+	"email": "weave@weave.com",
+	"mobile": "9876543211",
+	"name": "Weave",
+	"photos": [],
+	"postcode": "W3 5V3",
+	"services": [
+		{
+			"_id": {
+				"$oid": "5527f870a67261d022721405"
+			},
+			"active": false,
+			"name": "Transport / Distribution"
+		}
+	],
+	"specifications": [],
+	"storage": [],
+	"telephone": "0123456789",
+	"user": {
+		"$oid": "5527f7e46b04f8fc1939b237"
+	}
+}
+{
+	"__v": 2,
+	"_id": {
+		"$oid": "5527f8eca67261d022721407"
+	},
+	"active": false,
+	"addressline1": "9 Eliza Street",
+	"addressline2": "",
+	"city": "Bury",
+	"contact": "Tom Nuttall",
+	"created": {
+		"$date": "2015-04-10T16:23:08.758Z"
+	},
+	"description": "Best warehouse in the world!",
+	"documents": [],
+	"email": "tom@weave.com",
+	"mobile": "",
+	"name": "My House",
+	"photos": [],
+	"postcode": "BL0 0AT",
+	"services": [
+		{
+			"_id": {
+				"$oid": "5527f8f5a67261d022721409"
+			},
+			"active": false,
+			"name": "Transport / Distribution"
+		}
+	],
+	"specifications": [],
+	"storage": [
+		{
+			"$oid": "5527f923a67261d02272140a"
+		},
+		{
+			"$oid": "5527f923a67261d02272140b"
+		}
+	],
+	"telephone": "0124587987",
+	"user": {
+		"$oid": "5527f8eca67261d022721406"
+	}
+}
+{
+	"__v": 33,
+	"_id": {
+		"$oid": "552e7529dd59347418731af3"
+	},
+	"active": true,
+	"addressline1": "Weaveability",
+	"addressline2": "79-81 Hornby Street",
+	"city": "Bury",
+	"contact": "Weaveability",
+	"created": {
+		"$date": "2015-04-15T14:26:49.584Z"
+	},
+	"description": "Weaveability's office",
+	"documents": [],
+	"email": "weave@weave.com",
+	"geo": {
+		"lat": 53.59856884287244,
+		"lng": -2.2937348938599538
+	},
+	"loc": {
+		"coordinates": [
+			-2.2937348938599538,
+			53.59856884287244
+		],
+		"type": "Point"
+	},
+	"mobile": "",
+	"name": "Warehouse 1",
+	"photos": [],
+	"postcode": "BL9 5BN",
+	"services": [
+		{
+			"_id": {
+				"$oid": "552e7529dd59347418731af4"
+			},
+			"active": false,
+			"name": "Transport / Distribution"
+		}
+	],
+	"specifications": [],
+	"storage": [
+		{
+			"$oid": "552e76c7f4c8ce4c2228ea43"
+		},
+		{
+			"$oid": "552e76c7f4c8ce4c2228ea44"
+		}
+	],
+	"telephone": "0123456987",
+	"user": {
+		"$oid": "552e7525dd59347418731af2"
+	}
+}
+{
+	"__v": 11,
+	"_id": {
+		"$oid": "5530dfeba34d0c5c22c0162c"
+	},
+	"active": true,
+	"addressline1": "Findel PLC",
+	"addressline2": "2 Gregory Street",
+	"city": "Hyde",
+	"contact": "David Smith",
+	"created": {
+		"$date": "2015-04-17T10:26:51.318Z"
+	},
+	"description": "Findel are a education company",
+	"documents": [],
+	"email": "david.smith@weavability.com",
+	"geo": {
+		"lat": 53.46414305538753,
+		"lng": -2.0756802718828635
+	},
+	"loc": {
+		"coordinates": [
+			-2.0756802718828635,
+			53.46414305538753
+		],
+		"type": "Point"
+	},
+	"mobile": "",
+	"name": "Findel",
+	"photos": [
+		"avatar.jpg"
+	],
+	"postcode": "SK14 4TH",
+	"services": [
+		"Transport / Distribution",
+		"Pallet network",
+		"Container Palletisation",
+		"Pick \u0026 Pack",
+		"Product Disposal",
+		"Add. Product Insurance",
+		"Bunded Warehouse"
+	],
+	"specifications": [
+		"CCTV",
+		"Sprinklers",
+		"Narrow .. racking",
+		"Outdoor storage",
+		"Roll in Roll unit storage"
+	],
+	"storage": [
+		{
+			"$oid": "5530e032a34d0c5c22c0162e"
+		},
+		{
+			"$oid": "5530e032a34d0c5c22c0162f"
+		},
+		{
+			"$oid": "5530e032a34d0c5c22c0162d"
+		}
+	],
+	"telephone": "0123456978",
+	"user": {
+		"$oid": "5530dfdca34d0c5c22c0162b"
+	}
+}
+{
+	"__v": 2,
+	"_id": {
+		"$oid": "55714955fd49594c12eafb61"
+	},
+	"active": true,
+	"addressline1": "123 Test Street",
+	"addressline2": "",
+	"addressline3": "Testing place",
+	"city": "Bury",
+	"company": "Toms Company Inc",
+	"created": {
+		"$date": "2015-06-05T07:01:41.155Z"
+	},
+	"description": "Just a short description",
+	"documents": [],
+	"geo": {
+		"lat": 53.6465972,
+		"lng": -2.3083942
+	},
+	"height": null,
+	"loc": {
+		"coordinates": [
+			-2.3083942,
+			53.6465972
+		],
+		"type": "Point"
+	},
+	"mobile": "",
+	"name": "1234 Test",
+	"officeHours": "",
+	"photos": [
+		"avatar.jpg"
+	],
+	"postcode": "BL0 0AT",
+	"services": [
+		"Transport / Distribution"
+	],
+	"size": null,
+	"specifications": [
+		"24hr Security"
+	],
+	"storage": [
+		{
+			"$oid": "5571496bfd49594c12eafb62"
+		},
+		{
+			"$oid": "5571496bfd49594c12eafb63"
+		}
+	],
+	"telephone": "012445012342",
+	"user": {
+		"$oid": "55714955fd49594c12eafb60"
+	}
+}
+{
+	"__v": 2,
+	"_id": {
+		"$oid": "5579944c13469ca01e2d0304"
+	},
+	"active": true,
+	"addressline1": "123 Bury Road",
+	"addressline2": "",
+	"addressline3": "",
+	"city": "Bury",
+	"company": "Test",
+	"created": {
+		"$date": "2015-06-11T13:59:40.207Z"
+	},
+	"description": "This is just a short description of my warehouse.",
+	"documents": [],
+	"geo": {
+		"lat": 53.5927523,
+		"lng": -2.4458693
+	},
+	"height": 50,
+	"loc": {
+		"coordinates": [
+			-2.4458693,
+			53.5927523
+		],
+		"type": "Point"
+	},
+	"mobile": "",
+	"name": "Test Warehouse",
+	"officeHours": "",
+	"photos": [],
+	"postcode": "BL1 1HG",
+	"services": [
+		"Transport / Distribution"
+	],
+	"size": 50,
+	"specifications": [
+		"24hr Security"
+	],
+	"storage": [
+		{
+			"$oid": "5579949813469ca01e2d0305"
+		},
+		{
+			"$oid": "5579949813469ca01e2d0306"
+		}
+	],
+	"telephone": "012412342132",
+	"user": {
+		"$oid": "5579944c13469ca01e2d0303"
+	}
+}

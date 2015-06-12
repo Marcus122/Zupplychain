@@ -89,11 +89,24 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
             
         }
         
+        function clear() {
+            //delete all the markers and reset the display area;
+            var lim = markers.length;
+            for (var i = 0; i< lim; markers[i++].setMap(null));
+            factoryData = {};
+           markers = [];
+           $('#search-results-info').fadeOut();
+            
+        }
+        
         function load(data) {
+           clear();
+           
            if (data.length < 1) {
                return false;
            }
           factoryData = data;
+          $('#search-results-info').fadeIn();
           var lim = data.length;
           for (var i =0;i<lim;i++) {
               var position = new google.maps.LatLng(data[i].geo.lat, data[i].geo.lng);
