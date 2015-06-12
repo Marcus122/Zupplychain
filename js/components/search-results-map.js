@@ -11,6 +11,7 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
         var map;
         var circle;
         var factoryData;
+        var centerLatLong;
         var normalIcon = {
               url  : "/images/map-icon.png"
           }
@@ -52,6 +53,7 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
                   
                   var latlong = results[0].geometry.location;
                     var loc2 = new google.maps.LatLng(latlong.latitude, latlong.longitude);
+                    centerLatLong = latlong;
                     map.setCenter(latlong);
                     setRadius(radius);
                 } else {
@@ -62,6 +64,7 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
         }
         
         function setRadius(radiusInMiles) {
+            
             var GLOBE_WIDTH = 256; // a constant in Google's map projection
              var angle = radiusInMiles/69;//east - west;
             if (angle < 0) {
@@ -79,7 +82,7 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
                 fillColor: '#c3eaf9',
                 fillOpacity: 0.35,
                 map: map,
-                center:map.getCenter(),
+                center:centerLatLong, //map.getCenter(),
                 radius: miles * 1609.344
                 };
                 if (circle){
