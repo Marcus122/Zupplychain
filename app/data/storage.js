@@ -13,6 +13,11 @@ var fields = {
 	maxHeight: {type: Number },
 	palletSpaces: {type: Number },
 	sortOrder:{type: Number },
+	basicPricing:{
+		price: { type: Number, set:setPrice },
+		charge:{ type: Number, default:0 },
+		reserve:{ type: Number, default:0 }
+	},
 	pricing: [{
 		from:Date,
 		to:Date,

@@ -6,15 +6,15 @@
 		<input required data-bind-value="to" type="date" name="to" class="datepicker" data-loom-add-controls="true"/>
 	</td>
 	<td data-th="Price per pallet per week" class="input-field no-success-validation-style">
-		<input required data-bind-value="price"  name="price"  placeholder="£" type="number"/>
+		<input data-bind-value="price" name="price" type="number"/>
 	</td>
 	<td data-th="Handling charge per pallet (In and Out)" class="input-field no-success-validation-style">
-		<input data-bind-value="charge" name="charge"  placeholder="£" type="number" required/>
+		<input data-bind-value="charge" name="charge" type="number"/>
 	</td>
 	<td data-th="Cost to reserve" class="input-field no-success-validation-style">
-		<input data-bind-value="reserve" name="reserve" placeholder="£" type="number"/>
+		<input data-bind-value="reserve" name="reserve" type="number"/>
 	</td>
-	<td data-th="Remove" class="input-field no-success-validation-style">
+	<td data-th="Remove" class="input-field no-success-validation-style remove-col">
 		<button type="button" class="trash-button"><span>Delete</span></button>
 	</td>
 </tr>

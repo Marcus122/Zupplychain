@@ -4,24 +4,23 @@
 	top:0;
 	 width: 100%;
 	.inner{
-		background:@white;
-		margin:10%;
+		margin:5%;
 		z-index: 100;
 		position: relative;
-		padding:3%;
 	}
 	.close{
 		  position: absolute;
 		  top: -6px;
 		  right: 5px;
 		  font-size: 40px;
+		  color:@white;
 	}
 	.input-field input{
 		width:100%;
 	}
-	table tbody tr:first-child td:last-child button{
+	/*table tbody tr:first-child td:last-child button{
 			display:none;
-	}
+	}*/
 }
 .popup-window:before{
 	font-size:0;
@@ -34,6 +33,29 @@
 	background:grey;
 	opacity:0.8;
 	content:"";
+}
+.popup-window .popup-buttons{
+	.unit-padding-vertical(1);
+	overflow:hidden;
+}
+.popup-window .popup-buttons div{
+	width:120px;
+	float:right;
+	text-align:center;
+}
+.popup-window .remove-col{
+	width:120px;
+	text-align:center;
+	padding:0;
+}
+.popup-window table{
+	margin-bottom:0;
+	width: 100%;
+}
+@media @full-width{
+	.popup-window .inner{
+		margin:40px;
+	}
 }
 @media @mobile{
 	.popup-window{

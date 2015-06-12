@@ -20,7 +20,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				ev.preventDefault();
 				saveWarehouse(function(result){
 					if (result.data.geo.lat !== null && result.data.geo.lng !== null){
-						window.location = './provider-registration-2';
+						window.location = $registration.attr('action');
 					} else {
 						Alerts.showErrorMessage("Postcode Not Found");
 					}
@@ -93,7 +93,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			$defineSpace.on("submit",function(ev){
 				ev.preventDefault();
 				saveDefinedSpace(function(){
-					window.location = './provider-registration-3';
+					window.location = $defineSpace.attr('action');
 				});
 			});
 			$defineSpace.find('.save').on("click",function(ev){
@@ -154,6 +154,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 						s.push(storage[i]);
 					}
 					Warehouse.updateStorageBatch(warehouse,s,function(){
+						return;
 						$.ajax({
 							url: '/complete-registration',
 							type: 'POST',
@@ -173,7 +174,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				}
 			});
 			$(document).on("popup-form-success",function(ev,id){
-				var formId = $(ev.target.activeElement).parent('form').attr('id');
+				var formId = $(ev.target.activeElement).closest('form').attr('id');
 				$priceForm.find('tbody tr').each(function(){
 					var $tr = $(this);
 					if( $tr.data('id') === id ){
@@ -190,6 +191,19 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 							default:
 								return false;
 						}
+						var progress=0;
+						if($tr.find('.pricing').hasClass('success')){
+							progress++;
+						}
+						if($tr.find('.discounts').hasClass('success')){
+							progress++;
+						}
+						if($tr.find('.pallets').hasClass('success')){
+							progress++;
+						}
+						$tr.find('.progress').removeClass(function(i,c){
+							return c.indexOf("fill-") > -1;
+						}).addClass("fill-"+String(progress));
 						return true;
 					}
 				});
@@ -218,8 +232,8 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				$('.popup-window').remove();
 				var templateName = $(this).data('template');
 				var template = templates.getTemplate(templateName);
-				var $element = template.getElement();
 				getStorage(id,function(Storage){
+					var $element = template.bind(Storage);
 					$('body').append($element);
 					switch( templateName ){
 						case 'pricing':
@@ -253,51 +267,59 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 		function closePopup(){
 			$('.popup-window').remove();
 		}
-		function doPricing(_Storage,$element){
+		function doPricing(_Storage,_$element){
+			var $element = _$element;
+			var $form = $element.find('form');
+			var $basicPricingTable = $('#default-pricing-table');
+			var $datePricingTable = $('#date-pricing-table');
 			var template = templates.getTemplate("pricing-row");
 			var Storage = _Storage;
-			var $form = $element.find('form');
-			var storageName;
-			if (Storage){
-				storageName = Storage.name;
-				if (storageName != 'undefined'){
-					$element.find('.close').before("<h2> Storage Name: " + storageName + "</h2>");
+			
+			function datePricing(){
+				if(!Storage.pricing || !Storage.pricing.length){
+					var data={};
+					var from = new Date(),
+						to = new Date();
+					to.setDate(from.getDate() + 364);
+					data.from = from.toISOString().substring(0, 10);
+					data.to = to.toISOString().substring(0, 10);
+					addPricingRow(data);
+				}else{
+					for(i in Storage.pricing){
+						Storage.pricing[i].from = new Date(Storage.pricing[i].from).toISOString().substring(0, 10);
+						Storage.pricing[i].to = new Date(Storage.pricing[i].to).toISOString().substring(0, 10);
+						var $row = template.bind( Storage.pricing[i] );
+						$datePricingTable.append($row);
+					}
 				}
 			}
-			if(!Storage.pricing || !Storage.pricing.length){
-				var data={};
-				var from = new Date(),
-					to = new Date();
-				to.setDate(from.getDate() + 364);
-				data.from = from.toISOString().substring(0, 10);
-				data.to = to.toISOString().substring(0, 10);
-				addPricingRow(data);
-			}else{
-				for(i in Storage.pricing){
-					Storage.pricing[i].from = new Date(Storage.pricing[i].from).toISOString().substring(0, 10);
-					Storage.pricing[i].to = new Date(Storage.pricing[i].to).toISOString().substring(0, 10);
-					var $row = template.bind( Storage.pricing[i] );
-					$element.find('tbody').append($row);
-				}
-			}
-			$element.find('.add').on("click",function(){
-				if( lm.isFormValid($(this).closest('form').attr('id')) ){
-					addPricingRow();
+			function events(){
+				$element.find('.add').on("click",function(){
+					if( lm.isFormValid($(this).closest('form').attr('id')) ){
+						addPricingRow();
+						lm.rebind($form);
+					}
+				});
+				$form.on("submit",function(ev){
+					ev.preventDefault();
+					if( lm.isFormValid($(this).closest('form').attr('id')) ){
+						Storage.basicPricing=getBasicPricing();
+						Storage.pricing=toArray();
+						$(document).trigger("popup-form-success",Storage._id);
+						closePopup();
+					}
+				});
+				$element.on('click','.trash-button',function(){
+					$(this).closest('tr').remove();
 					lm.rebind($form);
-				}
-			});
-			$form.on("submit",function(ev){
-				ev.preventDefault();
-				if( lm.isFormValid($(this).closest('form').attr('id')) ){
-					Storage.pricing=toArray();
-					$(document).trigger("popup-form-success",Storage._id);
-					closePopup();
-				}
-			});
-			$element.on('click','.trash-button',function(){
-				$(this).closest('tr').remove();
-				lm.rebind($form);
-			});
+				});
+			}
+			function basicPricing(){
+				var basicPricing = Storage.basicPricing ? Storage.basicPricing : {};
+				var basicPricingTemplate = templates.getTemplate("basic-pricing-row");
+				var $basicPricing = basicPricingTemplate.bind(basicPricing);
+				$basicPricingTable.find('tbody').append($basicPricing);
+			}
 			function addPricingRow(_data){
 				var data = _data || {};
 				if(!_data){
@@ -309,11 +331,17 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					}
 				}
 				var $newrow = template.bind(data);
-				$element.find('tbody').append($newrow);
+				$datePricingTable.append($newrow);
+			}
+			function getBasicPricing(){
+				var $pricing = $basicPricingTable.find('tbody tr').first();
+				var pricing = {};
+				bindFormToObject($pricing,pricing);
+				return pricing;
 			}
 			function toArray(){
 				var array=[];
-				$element.find('tbody tr').each(function(){
+				$datePricingTable.find('tbody tr').each(function(){
 					var price={};
 					bindFormToObject($(this),price);
 					price.from = new Date(price.from).toISOString();
@@ -322,17 +350,17 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				});
 				return array;
 			}
+			function init(){
+				events();
+				basicPricing();
+				datePricing();
+			}
+			init();
 		}
 		function doPallets(_Storage,$element){
 			var template = templates.getTemplate("pallet-row");
 			var Storage = _Storage;
 			var $form = $element.find('form');
-			if (Storage){
-				storageName = Storage.name;
-				if (storageName != 'undefined'){
-					$element.find('.close').before("<h2> Storage Name: " + storageName + "</h2>");
-				}
-			}
 			if(!Storage.pallets || !Storage.pallets.length){
 				addPalletRow();
 			}else{
@@ -411,12 +439,6 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			var template = templates.getTemplate("discount-row");
 			var Storage = _Storage;
 			var $form = $element.find('form');
-			if (Storage){
-				storageName = Storage.name;
-				if (storageName != 'undefined'){
-					$element.find('.close').before("<h2> Storage Name: " + storageName + "</h2>");
-				}
-			}
 			if(!Storage.discounts || !Storage.discounts.length){
 				addDiscountRow();
 			}else{

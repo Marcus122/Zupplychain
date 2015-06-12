@@ -39,6 +39,7 @@
 													<th>Pricing</th>
 													<th>Volume Discount</th>
 													<th>Availabile Pallets</th>
+													<th>Progress</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -57,16 +58,21 @@
 													<td class="button-cell pallets" data-th="Available Pallets">
 														<button data-template="pallets" type="button" class="secondary popup mini">click here</button>
 													</td>
+													<td>
+														<div class="progress">
+															<div class="progress-bar"/>
+														</div>
+													</td>
 											    </tr>
 											    <%}%>
 											</tbody>
 										</table>
 										<div class="row">
-											<div class="columns five check checkbox input-field">
+											<!--<div class="columns five check checkbox input-field">
 												<input required type="checkbox" name="accept" id="accept"/>
 												<label for="accept">*I agree to the terms and conditions.</label>
-											</div>
-											<div class="columns four">
+											</div>-->
+											<div class="columns four offset-by-five">
 												<button href="#" class="view tertiary forward mini">View list of Documentation</button>
 											</div>
 											<div class="columns three">
@@ -75,7 +81,7 @@
 										</div>
 									</fieldset>
 								</div>
-								<div class="content-box primary">
+								<!--<div class="content-box primary">
 									<div class="header">
 										<h3>Your Login Details</h3>
 									</div>
@@ -104,7 +110,7 @@
 											</div>
 										</div>
 									</fieldset>
-								</div>
+								</div>-->
 							</div>
 							<fieldset class="form-footer">
 								<input name="warehouse" type="hidden" value="<%=warehouse._id%>"/>
@@ -119,38 +125,55 @@
 		 <script type="text/template" id="pricing">
 			<div class="popup-window">
 				<div class="inner">
-					<button class="close no-resize"><span>close</span></button>
-					<h2>Basic Pricing</h2>
-                    <form id="default-pricing-form" class="loom-form" novalidate method="post" data-loom-no-submit="true">
-                        <table class="responsive-table data-title="Basic pricing">
-                            <thead><tr>
-                                <th>Price per pallet per week</th>
-                                <th>Handling charge per pallet (In and Out)</th>
-                                <th>Cost to reserve</th></tr>
-                            </thead>
-                        </table>
-                    </form>
-                    
-                    <h2>Date Range Pricing</h2>
-                    <p>You can add pricing conditions for different time periods</p>
-					<form id="pricing-form" class="loom-form" novalidate method="post" data-loom-no-submit="true">
-						<table class="show-title responsive-table" data-title="Pricing">
-							<thead>
-								<tr>
-									<th>From</th>
-									<th>To</th>
-									<th>Price per pallet per week</th>
-									<th>Handling charge per pallet (In and Out)</th>
-									<th>Cost to reserve</th>
-									<th/>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-						<button type="button" class="action add">add row</button>
-						<button class="action done">done</button>
-					</form>
+					<div class="popup-main content-box secondary">
+						<div class="header">
+							<h2>Pricing: Storage @name@</h2>
+						</div>
+						<button class="close no-resize"><span>close</span></button>
+						<form id="pricing-form" class="loom-form" novalidate method="post" data-loom-no-submit="true">
+							<div class="main">
+								<h2>Basic Pricing</h2>
+								<div class="row">
+									<table class="responsive-table columns seven" data-title="Basic pricing" id="default-pricing-table">
+										<thead><tr>
+											<th>Price per pallet per week (£)</th>
+											<th>Handling charge per pallet (In and Out) (£)</th>
+											<th>Cost to reserve (£)</th></tr>
+										</thead>
+										<tbody/>
+									</table>
+								</div>
+							</div>
+							<div class="main">
+								<h2>Date Range Pricing</h2>
+								<p>You can add pricing conditions for different time periods</p>
+								<table class="show-title responsive-table" data-title="Pricing" id="date-pricing-table">
+									<thead>
+										<tr>
+											<th>From</th>
+											<th>To</th>
+											<th>Price per pallet per week (£)</th>
+											<th>Handling charge per pallet (In and Out) (£)</th>
+											<th>Cost to reserve (£)</th>
+											<th class="remove-col"/>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+								<div class="popup-buttons">
+									<div class="add">
+										<button type="button" class="add-button"><span>add row</span></button>
+									</div>
+								</div>
+								<div class="popup-buttons">
+									<div class="save">
+										<button class="action done">save</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
 				</div>
 			</div>
 		 </script>
@@ -163,23 +186,38 @@
 		 <script type="text/template" id="volume">
 			<div class="popup-window">
 				<div class="inner">
-					<button class="close no-resize"><span>close</span></button>
-					<h2>Volume Discount</h2>
-					<p>If you want to specify variations to your prices per week per pallet for small or large quantities, use this table. If not, your prices will apply to any quantity.</p>
-					<form method="post" id="discount-form" class="loom-form" novalidate data-loom-no-submit="true">
-						<table class="show-title responsive-table" data-title="Volume Discount">
-							<thead>
-								<th>From</th>
-								<th>To</th>
-								<th>% Discount</th>
-								<th/>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-						<button type="button" class="action add">add row</button>
-						<button class="action done">done</button>
-					</form>
+					<div class="popup-main content-box secondary">
+						<div class="header">
+							<h2>Volume Discount: Storage @name@</h2>
+						</div>
+						<button class="close no-resize"><span>close</span></button>
+						<div class="main">
+							<h2>Volume Discount</h2>
+							<p>If you want to specify variations to your prices per week per pallet for small or large quantities, use this table. If not, your prices will apply to any quantity.</p>
+							<form method="post" id="discount-form" class="loom-form" novalidate data-loom-no-submit="true">
+								<table class="show-title responsive-table" data-title="Volume Discount">
+									<thead>
+										<th>From</th>
+										<th>To</th>
+										<th>% Discount</th>
+										<th class="remove-col"/>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+								<div class="popup-buttons">
+									<div class="add">
+										<button type="button" class="add-button"><span>add row</span></button>
+									</div>
+								</div>
+								<div class="popup-buttons">
+									<div class="save">
+										<button class="action done">save</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
 				</div>
 			</div>
 		 </script>
@@ -189,26 +227,41 @@
 		 <script type="text/template" id="pallets">
 			<div class="popup-window">
 				<div class="inner">
-					<button class="close no-resize"><span>close</span></button>
-					<h2>Available Pallets</h2>
-					<form method="post" id="pallets-form" class="loom-form" novalidate data-loom-no-submit="true">
-						<table class="show-title responsive-table" data-title="Available Pallets">
-							<thead>
-								<tr>
-									<th>From</th>
-									<th>To</th>
-									<th>Total Pallets</th>
-									<th>Estimated in Use</th>
-									<th>Estimated Free</th>
-									<th/>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-						<button type="button" class="action add">add row</button>
-						<button class="action done">done</button>
-					</form>
+					<div class="popup-main content-box secondary">
+						<div class="header">
+							<h2>Availability: Storage @name@</h2>
+						</div>
+						<button class="close no-resize"><span>close</span></button>
+						<div class="main">
+							<h2>Available Pallets</h2>
+							<form method="post" id="pallets-form" class="loom-form" novalidate data-loom-no-submit="true">
+								<table class="show-title responsive-table" data-title="Available Pallets">
+									<thead>
+										<tr>
+											<th>From</th>
+											<th>To</th>
+											<th>Total Pallets</th>
+											<th>Estimated in Use</th>
+											<th>Estimated Free</th>
+											<th class="remove-col"/>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+								<div class="popup-buttons">
+									<div class="add">
+										<button type="button" class="add-button"><span>add row</span></button>
+									</div>
+								</div>
+								<div class="popup-buttons">
+									<div class="save">
+										<button class="action done">save</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
 				</div>
 			</div>
 		 </script>
