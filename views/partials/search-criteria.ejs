@@ -28,7 +28,7 @@
 				</div>
 				<div class="input-field">
 					<label for="max-distance">Max Distance*</label>
-					<input type="number" name="max-distance" required="required" value="<%=session.whSC.sc[0].maxDistance%>"/>
+					<input type="number" step="10" name="max-distance" min="5" required="required" value="<%=session.whSC.sc[0].maxDistance%>"/>
 				</div>
 				<div class="input-field">
 					<label for="description">Product Description*</label>
@@ -43,11 +43,11 @@
 					<input type="date" name="end-date" value="<%=session.whSC.sc[0].endDate%>"/>
 				</div>
 				<div class="input-field number">
-					<label for="height">Height (m)</label>
-					<input type="number" name="height" min="0" max="100" value="<%=session.whSC.sc[0].height%>"/>
+					<label for="height">Pallet Height (m)</label>
+					<input type="number" name="height" min="0" max="100" step=".1" value="<%=session.whSC.sc[0].height%>" data-loom-type="decimal" data-loom-decimal-places="1" />
 				</div>
 				<div class="input-field number">
-					<label for="weight">Weight (kg)</label>
+					<label for="weight">Pallet Weight (kg)</label>
 					<input type="number" name="weight" min="0" max="2000" value="<%=session.whSC.sc[0].weight%>"/>
 				</div>
 				
@@ -88,11 +88,11 @@
 				</div>
 				<div class="input-field">
 					<label for="postcode">Target Postcode*</label>
-					<input type="text" name="postcode" required="required" data-loom-validators="UKPostCode"/>
+					<input type="text" name="postcode" required="required" minlength="2"/>
 				</div>
 				<div class="input-field">
 					<label for="max-distance">Max Distance*</label>
-					<input type="number" name="max-distance" required="required" value="100"/>
+					<input type="number" name="max-distance" min="5" required="required" step="10" value="100"/>
 				</div>
 				<div class="input-field">
 					<label for="description">Product Description*</label>
@@ -114,12 +114,12 @@
 					<input type="date" name="end-date" value="<%=toDate.toISOString().substring(0, 10)%>"/>
 				</div>
 				<div class="input-field number">
-					<label for="height">Height (m)</label>
-					<input type="number" name="height" min="0" max="100" value="10"/>
+					<label for="height">Pallet Height (m)</label>
+					<input type="number" name="height" min="0" max="100" value="" step=".1" data-loom-type="decimal" data-loom-decimal-places="1"/>
 				</div>
 				<div class="input-field number">
-					<label for="weight">Weight (kg)</label>
-					<input type="number" name="weight" min="0" max="2000" value="10"/>
+					<label for="weight">Pallet Weight (kg)</label>
+					<input type="number" name="weight" min="0" max="2000" value="" />
 				</div>
 				
 				<div class="input-field">

@@ -37,12 +37,10 @@ define(["jquery"],function($){
         }
         
         function showSuccessMessage(message, options) {
-            cleanUpDom();
             showMessage("success", message, options);
         }
         
         function showErrorMessage(message, options) {
-            cleanUpDom();
             showMessage("error", message, options);
         }
         
@@ -95,7 +93,7 @@ define(["jquery"],function($){
         }
         
         function cleanUpDom() {
-            $(".loom-alert:not(visible)").not("#wait").remove();
+            $(".loom-alert:hidden").not("#wait").remove();
         }
         
 		return {

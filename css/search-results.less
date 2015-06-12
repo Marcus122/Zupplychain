@@ -14,10 +14,16 @@
     .unit-margin-bottom(2);
 }
 
-
+.search-results-page .banner{
+    margin-top:0px;
+}
 
 .quote-form-section{
     .unit-margin-top(2);
+}
+
+.content-box.search-results .header{
+    border-radius:10px 10px 0px 0px;
 }
 
 .content-box.map-container {
@@ -63,11 +69,12 @@
 }
 
 .search-results .header{
+    position:relative;
     h2{
     display:inline;
 }    
     
-    span{
+    form{
         display:inline;
         float:right;
         padding-top:5px;
@@ -219,10 +226,10 @@
 .confirm-email{
     text-align:left;
     position:absolute;
-    left:0px;
-    top:0px;
+    right:0px;
+    top:4px;
     .unit-padding-top(3);
-    .unit-padding-left(2);
+    .unit-padding-right(2);
     width:auto;
     display:inline-block;
     

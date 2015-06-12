@@ -1,6 +1,3 @@
-// JUST SOME INHERITANCE TESTING CODE... CAN BE DELETED AND DOESN't BELONG IN PRODUCTION.
-
-
 // o1 inherits all o2's prototype methods.
 function inherit(o1, o2){
 	o1.prototype = Object.create(o2.prototype);

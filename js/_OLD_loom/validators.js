@@ -36,9 +36,6 @@ define({
 		return re.test(input);
 	},
 	number : function(input) {
-        if (input === "") { //blank inputs are always 'valid'
-            return true;
-        }
 		var re= /^[-+]?[0-9]*\.?[0-9]*/
 		return re.test(input);
 	},
@@ -76,13 +73,7 @@ define({
 	},
 	
 	// end HTML5 types
-	decimal : function(input) {
-        if (input === "") { //blank inputs are always 'valid'
-            return true;
-        }
-		var re= /^[-+]?[0-9]*\.?[0-9]*/
-		return re.test(input);
-    },
+	
 	name : function(input) {
 		var re = /^[-A-z ']+$/ // Alpha, hyphens, spaces, apostrophe's
 		return re.test(input);
@@ -111,15 +102,8 @@ define({
 		var longEnough = (input.length >= 8);
 		return (reHasUppercase.test(input) && reHasLowercase.test(input) && reNumber.test(input) && longEnough);
 	},
-    passwordPolicyNormal : function (input) { //8+ characters, > one num, > one Ucase letter, no spaces
-        if (!input) {
-            return false;
-        }
-        var re = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z]).{8,}$/;
-        var hasSpaces = input.indexOf(" ") != -1 ;
-        if (hasSpaces) {
-            return false;
-        }
+    passwordPolicyNormal : function (input) {
+        var re = /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{8,}$/;
         return re.test(input);
 
     },

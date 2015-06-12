@@ -3,23 +3,22 @@ define(["jquery", "./form"],function($, Form){
     //singleton.
     var instance;
     
-	return function Class() {
+	return function Class($config) {
         if (instance) {
             return instance;
         }
         
-        var config;
-        
-        require(["loom/loomConfig"], function(Config){
-            config = Config;
-        }, 
-        function(err) {
-            throw("Error : Could not require loom/loomConfig.. this version of loom requires a config file.");
-            
-        });
-        
-        
-		var forms={};	
+		var forms={};
+        var settings = $.extend({
+            option:'default-value'
+        }, $config)
+				
+		
+        // Config ignored at the moment.
+		var defaultConfig = {
+			validateOnBlur : false,
+			realtimeValidation : true
+		}
 		
 		function init() {
 			//intentionally left for backwards compatability with an older version.
@@ -42,13 +41,6 @@ define(["jquery", "./form"],function($, Form){
 			});
         }
         
-        function addOnInvalidCallback(id,callback) {
-            var thisForm = getForm(id);
-            if(thisForm){
-                ;//TODO
-            }
-        }
-        
         //TODO: would be nice if these took jquery elements rather than IDs
         function addOnSuccessCallback(id, callback) {
             var thisForm = getForm(id);
@@ -61,27 +53,6 @@ define(["jquery", "./form"],function($, Form){
             var thisForm = getForm(id);
             if (thisForm){
                 thisForm.addOnErrorCallback(callback);
-            }
-        }
-        
-        function addOnSoftErrorCallback(id, callback){
-            var thisForm = getForm(id);
-            if (thisForm){
-                thisForm.addOnSoftErrorCallback(callback);
-            }
-        }
-        
-        function addOnHardErrorCallback(id, callback){
-            var thisForm = getForm(id);
-            if (thisForm){
-                thisForm.addOnHardErrorCallback(callback);
-            }
-        }
-        
-        function reset(id, callback){
-            var thisForm = getForm(id);
-            if (thisForm) {
-                thisForm.reset();
             }
         }
         
@@ -105,13 +76,8 @@ define(["jquery", "./form"],function($, Form){
         //takes a jquery form element, or an ID, and returns the loomForm instance associated with that form (if one exists).
         function getForm(formOrId) {
             if (typeof formOrId == 'string') {
-                var lookupId = formOrId;
-                if (formOrId.indexOf("#") == 0) { //strip leading '#' from jquery style id's
-                    lookupId = formOrId.substring(1,formOrId.length);
-                }
-                
-                if (lookupId in forms) {
-                    return forms[lookupId];
+                if (formOrId in forms) {
+                    return forms[formOrId];
                 }
                 return false;
             } else {
@@ -138,13 +104,10 @@ define(["jquery", "./form"],function($, Form){
 			init:init,
             addOnSuccessCallback:addOnSuccessCallback,
             addOnErrorCallback:addOnErrorCallback,
-            addOnSoftErrorCallback:addOnSoftErrorCallback,
-            addOnHardErrorCallback:addOnHardErrorCallback,
             isFormValid:isFormValid,
             rebind:rebind,
             getForm:getForm,
-            trySubmitForm:trySubmitForm,
-            reset:reset
+            trySubmitForm:trySubmitForm
 		}
         return instance;
 	}
