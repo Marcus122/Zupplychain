@@ -9,15 +9,10 @@
 				}
 			%>
 			<main>
-				<div class="row carousel">
-					<img src="/images/provider-banner.png" alt="Complete your registration"/>
-					<h1 class="title large-font">
-						<span>Complete your</span>
-						<br/>
-						registration
-					</h1>
-					<p class="desc medium-font">Complete your registration &amp; help customers choose your warehouse</p>
+				<div class="banner">
+					<h1>Complete your registration</h1>
 				</div>
+				<p class="tag-line">Help customers choose your warehouse</p>
 				<div class="row">
 					<ul class="tabs">
 						<li class="four columns checked"><span>Step 1</span> - Warehouse details</li>
@@ -259,6 +254,36 @@
 										<button class="action done">save</button>
 									</div>
 								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		 </script>
+		 <script type="text/template" id="complete-registration">
+		 	<div class="popup-window">
+				<div class="small register complete">
+					<div class="popup-main content-box secondary">
+						<div class="header">
+							<h2>Complete your registration</h2>
+						</div>
+						<button class="close no-resize"><span>close</span></button>
+						<div class="main">
+							<form class="loom-form" action="/complete-registration" novalidate id="complete-registration-form">
+								<% if(user.email){%>
+									<p>Confirm your details</p>
+								<%}%>
+								<div class="input-field no-success-validation-style">
+									<input type="email" name="email" placeholder="Email" required value="<%=user.email%>"/>
+								</div>
+								<div class="input-field no-success-validation-style">
+									<input type="password" name="password" placeholder="Password" minlength="8" required/>
+								</div>
+								<div class="check checkbox input-field">
+									<input required type="checkbox" name="accept" id="accept"/>
+									<label for="accept">I agree to the terms and conditions.</label>
+								</div>
+								<button class="action done">finish</button>
 							</form>
 						</div>
 					</div>

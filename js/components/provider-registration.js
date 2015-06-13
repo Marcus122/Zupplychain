@@ -7,11 +7,48 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 		var storage=[];
 		var warehouse={};
 		var lm = new Loom();
+		var data={};
 		
 		function initialize() {
 			step1();
 			step2();
 			step3();
+			
+			$(document).on("click",".popup-window .close",function(){
+				closePopup();
+			});
+			
+		}
+		function closePopup(){
+			$('.popup-window').remove();
+		}
+		function saveRegistration(){
+			var saveTemplate = templates.getTemplate("save-registration");
+			var $popup = saveTemplate.bind(data);
+			$('body').append($popup);
+			var $form = $popup.find('form');
+			lm.rebind($form);
+			var form = lm.getForm($form.attr('id'));
+			form.addOnSuccessCallback(function(){
+				data.registered=true;
+				closePopup();
+			});
+		}
+		function completeRegistration(){
+			var completeTemplate = templates.getTemplate("complete-registration");
+			if(!completeTemplate) return;
+			var $popup = completeTemplate.getElement();
+			$('body').append($popup);
+			var $form = $popup.find('form');
+			lm.rebind($form);
+			var form = lm.getForm($form.attr('id'));
+			form.addOnSuccessCallback(function(data){
+				if (typeof data.redirect == 'string'){
+					window.location = data.redirect;
+				}else{
+					closePopup();
+				}
+			});
 		}
 		function step1(){
 			var $registration = $('#registration');
@@ -28,6 +65,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			});
 			$registration.find('.save').on("click",function(ev){
 				saveWarehouse();
+				saveRegistration();
 			});
 			function saveWarehouse(cb){
 				if( lm.isFormValid($registration.attr('id')) ){
@@ -68,11 +106,13 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			$('.new-pallet button').on("click",function(ev){
 				ev.preventDefault();
 				addPallet();
+				removeButtons();
 			});
 			$defineSpaceTable.on("click",".trash-button",function(ev){
 				ev.preventDefault();
 				$(this).closest('tr').remove();
 				rebindForm();
+				removeButtons();
 			});
 			$defineSpaceTable.on("click","tr",function(ev){
 				ev.preventDefault();
@@ -99,6 +139,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			$defineSpace.find('.save').on("click",function(ev){
 				ev.preventDefault();
 				saveDefinedSpace();
+				saveRegistration();
 			});
 			function saveDefinedSpace(cb){
 				if( lm.isFormValid($defineSpace.attr('id')) ){
@@ -113,6 +154,13 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					Warehouse.updateStorageBatch(warehouse,storage,function(){
 						if(cb) cb();
 					});
+				}
+			}
+			function removeButtons(){
+				if($defineSpaceTable.find('tbody tr').length === 1){
+					$defineSpaceTable.find('.trash-button').addClass('hidden');
+				}else{
+					$defineSpaceTable.find('.trash-button').removeClass('hidden');
 				}
 			}
 		}
@@ -154,6 +202,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 						s.push(storage[i]);
 					}
 					Warehouse.updateStorageBatch(warehouse,s,function(){
+						completeRegistration();
 						return;
 						$.ajax({
 							url: '/complete-registration',
@@ -250,9 +299,6 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					lm.rebind($element.find('form'));
 				});
 			});
-			$(document).on("click",".popup-window .close",function(){
-				closePopup();
-			});
 		}
 		function getStorage(id,cb){
 			if( storage[id] ){
@@ -263,9 +309,6 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					cb(storage[id]);
 				});
 			}
-		}
-		function closePopup(){
-			$('.popup-window').remove();
 		}
 		function doPricing(_Storage,_$element){
 			var $element = _$element;

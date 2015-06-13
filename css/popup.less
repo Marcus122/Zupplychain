@@ -15,7 +15,7 @@
 		  font-size: 40px;
 		  color:@white;
 	}
-	.input-field input{
+	.input-field input:not([type="checkbox"]){
 		width:100%;
 	}
 	/*table tbody tr:first-child td:last-child button{
@@ -52,6 +52,11 @@
 	margin-bottom:0;
 	width: 100%;
 }
+.popup-window .small{
+	margin:5% auto;
+	z-index: 100;
+	position:relative;
+}
 @media @full-width{
 	.popup-window .inner{
 		margin:40px;
@@ -67,7 +72,7 @@
 		bottom:0;
 		overflow-y: scroll;
 		position: fixed;
-		.inner{
+		.inner,.small{
 			min-height: 100%;
 			margin:0;
 			table{

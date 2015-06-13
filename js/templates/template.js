@@ -12,6 +12,13 @@ define(["jquery"],function($){
 			//Wrap template in tag
 			var $wrapper = $('<wrap>');
 			$wrapper.append($script.html());
+			//Remove anything that does not pass a display condition
+			$wrapper.find('*').each(function(){
+				var $this = $(this);
+				if(!passesCondition($this,"display",data)){
+					$this.remove();
+				}
+			});
 			//First attributes
 			$attrElements = getAttributeBindables($wrapper);
 			$attrElements.each(function(){
@@ -36,7 +43,7 @@ define(["jquery"],function($){
 				for(var i=0;i<binds.length;i++){
 					var bind = binds[i].replace(/@/g,"");
 					var value = getBindValue(data,bind);
-					$this.text($this.text().replace("@" + bind + "@",value));
+					$this.html($this.html().replace("@" + bind + "@",value));
 				}
 			});
 			return $wrapper.children();
@@ -48,13 +55,19 @@ define(["jquery"],function($){
 			var value = getBindValue(data,condition);
 			return value ? true : false;
 		}
-		function getBindValue(_data,text){
+		function getBindValue(_data,_text){
 			var data=_data;
+			var text = _text;
+			var inverse=false;
+			if(text.substring(0,1) === "!"){
+				text = text.substring(1,text.length);
+				inverse=true;
+			}
 			//For nested object attributes
 			var attrs = text.split(".");
 			for( i in attrs ){
 				if(Number(i)===attrs.length-1){
-					return data[attrs[i]];
+					return inverse ? !data[attrs[i]] : data[attrs[i]];
 				}else{
 					data = data[attrs[i]];
 				}

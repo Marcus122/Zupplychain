@@ -1,0 +1,32 @@
+<div class="popup-window">
+	<div class="small register">
+		<div class="popup-main content-box secondary">
+			<div class="header">
+				<h2>Save your details</h2>
+			</div>
+			<button class="close no-resize"><span>close</span></button>
+			<div class="main">
+				<%if(!user.email){%>
+					<form data-display-condition="!registered" class="loom-form" action="/save-registration" novalidate id="save-registration-form">
+						<div class="input-field no-success-validation-style">
+							<input type="email" name="email" placeholder="Email" required/>
+						</div>
+						<div class="input-field no-success-validation-style">
+							<input type="password" name="password" placeholder="Password" minlength="8" required/>
+						</div>
+						<span>We will email you a link to your details</span>
+						<button class="action done">save</button>
+					</form>
+					<div class="saved" data-display-condition="registered">
+						<span>Saved</span>
+					</div>
+				<%}%>
+				<%if(user.email){%>
+					<div class="saved">
+						<span>Saved</span>
+					</div>
+				<%}%>
+			</div>
+		</div>
+	</div>
+</div>

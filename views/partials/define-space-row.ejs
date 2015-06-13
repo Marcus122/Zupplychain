@@ -54,12 +54,16 @@
 		<input name="maxWeight" type="number" value="<%=row.maxWeight%>" placeholder="0"/>
 	</td>
 	<td data-th="Max Height" class="value input-field no-success-validation-style">
-		<input name="maxHeight" type="number" value="<%=row.maxHeight%>" placeholder="0.0" step="0.1"/>
+		<input data-loom-type="decimal" data-loom-decimal-places="1" name="maxHeight" type="number" value="<%=row.maxHeight%>" placeholder="0.0" step="0.1"/>
 	</td>
 	<td data-th="Pallet Spaces" class="value input-field no-success-validation-style">
 		<input required name="palletSpaces"  type="number" value="<%=row.palletSpaces%>"/>
 	</td>
 	<td data-th="Remove" class="action">
-		<button type="button" href="#" class="trash-button"><span>Delete</span></button>
+		<% if( warehouse.storage && warehouse.storage.length===1){%>
+			<button type="button" href="#" class="trash-button hidden"><span>Delete</span></button>
+		<%}else{%>
+			<button type="button" href="#" class="trash-button"><span>Delete</span></button>
+		<%}%>
 	</td>
 </tr>
