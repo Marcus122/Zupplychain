@@ -43,6 +43,10 @@ var fields = {
 var warehouseSchema = new Schema(fields);
 warehouseSchema.index({ loc: '2dsphere' });
 
+warehouseSchema.pre('init', function(next, data) {
+    next();
+});
+
 warehouseSchema.statics = {
 	load: function (id, cb) {
 		this.findOne({ _id : id })
@@ -63,6 +67,7 @@ warehouseSchema.statics = {
   },
   search_by_query: function(query, cb) {
     var corrResult = false;
+    var editableResult = null; //stores a toObject() version of the warehouse which we can add properties to etc.
 	var corrResults = [];
 	
 	if (!query.weight){
@@ -91,17 +96,21 @@ warehouseSchema.statics = {
 					  for(var i in result){
 						  corrResult = false;
                           for (var j=0; j<result[i].storage.length; j++){
+                              
                               var palletTypeOK  = !query.palletType || result[i].storage[j].palletType === query.palletType; //!palletType means any
                               var maxWeightOK   = !query.maxWeight || result[i].storage[j].maxWeight >= query.weight;
                               var maxHeightOK   = !query.maxHeight || result[i].storage[j].maxHeight >= query.height;
                               var tempOK        = result[i].storage[j].temp === query.temp;
                               var spacesOK      = result[i].storage[j].palletSpaces >= query.totalPallets;
+                              
                               if (palletTypeOK && maxWeightOK && maxHeightOK && tempOK && spacesOK){
                                   corrResult = true;
+                                  editableResult = result[i].toObject(); //turn warehouse into a nice place JS object.
+                                  editableResult.storageMatch = editableResult.storage[j];
                               }
-						  }
+						}
 						if(corrResult === true){
-							corrResults.push(result[i]);
+							corrResults.push(editableResult);
 						}
 					  };
 					  cb(err,corrResults);

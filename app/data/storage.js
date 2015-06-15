@@ -48,8 +48,10 @@ function setPrice(num){
 
 var storageSchema = new Schema(fields);
 
-//Just set the prices to 2 d.p.
-storageSchema.pre('init', function(next,data) {
+
+storageSchema.pre('init', function(next, data) {
+    
+    //This lot is just setting the prices to 2 d.p., also Null values converted to 0 
     var fieldsToConvert = ['price', 'reserve', 'charge'];
     var lim = fieldsToConvert.length;
     var numPrices = 0;
@@ -60,16 +62,21 @@ storageSchema.pre('init', function(next,data) {
         if (data.basicPricing) {
             if(data.basicPricing[fieldsToConvert[i]]) {
                 data.basicPricing[fieldsToConvert[i]] = data.basicPricing[fieldsToConvert[i]].toFixed(2);
+            } else {
+                data.basicPricing[fieldsToConvert[i]] = Number(0).toFixed(2);
             }
         }
         for (var j = 0; j < numPrices; j++) {
             if (data.pricing[j][fieldsToConvert[i]] != null) {
                 data.pricing[j][fieldsToConvert[i]] = data.pricing[j][fieldsToConvert[i]].toFixed(2);
+            } else {
+                data.pricing[j][fieldsToConvert[i]] = Number(0).toFixed(2);
             }
         }
     }
     
-    //loop through again, pull out the current price;
+    //loop through again, pull out the current price and store in .currentPricing.
+    data.currentPricing = data.basicPricing; //fallback if no date range match.
     var currentDate = new Date();
     for (var j = 0; j < numPrices; j++) {
             if (data.pricing[j].from < currentDate &&
