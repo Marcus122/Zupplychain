@@ -53,7 +53,7 @@
 													<td class="button-cell pallets" data-th="Available Pallets">
 														<button data-template="pallets" type="button" class="secondary popup mini">click here</button>
 													</td>
-													<td>
+													<td data-th="Progress">
 														<div class="progress">
 															<div class="progress-bar"/>
 														</div>
@@ -190,6 +190,10 @@
 							<h2>Volume Discount</h2>
 							<p>If you want to specify variations to your prices per week per pallet for small or large quantities, use this table. If not, your prices will apply to any quantity.</p>
 							<form method="post" id="discount-form" class="loom-form" novalidate data-loom-no-submit="true">
+								<div class="input-field">
+									<label for="no-disc">No discount on orders with up to</label>
+									<input type="number" min="0" data-bind-value="noDiscount"/>
+								</div>
 								<table class="show-title responsive-table" data-title="Volume Discount">
 									<thead>
 										<th>From</th>
@@ -276,6 +280,9 @@
 								<div class="input-field no-success-validation-style">
 									<input type="email" name="email" placeholder="Email" required value="<%=user.email%>"/>
 								</div>
+								<% if(user.email){%>
+									<p>Choose a password</p>
+								<%}%>
 								<div class="input-field no-success-validation-style">
 									<input type="password" name="password" placeholder="Password" minlength="8" required/>
 								</div>

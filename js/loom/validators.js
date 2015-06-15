@@ -163,7 +163,12 @@ define({
 			 return (otherInputField.getValue().toLowerCase() == thisInputValue.toLowerCase());
 				
 		}
-	}
-		
+	},
+	
+	getGreaterThanOtherField : function(otherInputField) {
+		return function(thisInputValue) {
+			return otherInputField.getValue() < thisInputValue;
+		}
+	}	
 	
 });

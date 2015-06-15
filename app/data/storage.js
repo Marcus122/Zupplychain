@@ -13,17 +13,18 @@ var fields = {
 	maxHeight: {type: Number },
 	palletSpaces: {type: Number },
 	sortOrder:{type: Number },
+	noDiscount:{type: Number },
 	basicPricing:{
-		price: { type: Number, set:setPrice },
-		charge:{ type: Number, default:0 },
-		reserve:{ type: Number, default:0 }
+		price: { type: Number, get:getPrice, set:setPrice },
+		charge:{ type: Number, default:0, get:getPrice },
+		reserve:{ type: Number, default:0, get:getPrice }
 	},
 	pricing: [{
 		from:Date,
 		to:Date,
-		price: { type: Number, set:setPrice },
-		charge:{ type: Number, default:0 },
-		reserve:{ type: Number, default:0 }
+		price: { type: Number, set:setPrice, get:getPrice },
+		charge:{ type: Number, default:0, get:getPrice },
+		reserve:{ type: Number, default:0, get:getPrice }
 	}],
 	discounts:[{
 		from:Number,
@@ -38,6 +39,9 @@ var fields = {
 		free:Number
 	}]
 };
+function getPrice(num){
+	return Number(num).toFixed(2);
+}
 function setPrice(num){
     return Number(num).toFixed(2);
 }

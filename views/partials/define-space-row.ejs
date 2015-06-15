@@ -54,7 +54,7 @@
 		<input name="maxWeight" type="number" value="<%=row.maxWeight%>" placeholder="0"/>
 	</td>
 	<td data-th="Max Height" class="value input-field no-success-validation-style">
-		<input data-loom-type="decimal" data-loom-decimal-places="1" name="maxHeight" type="number" value="<%=row.maxHeight%>" placeholder="0.0" step="0.1"/>
+		<input data-loom-type="decimal" data-loom-decimal-places="1" name="maxHeight" type="number" value="<%=Number(row.maxHeight).toFixed(1)%>" placeholder="0.0" step="0.1"/>
 	</td>
 	<td data-th="Pallet Spaces" class="value input-field no-success-validation-style">
 		<input required name="palletSpaces"  type="number" value="<%=row.palletSpaces%>"/>

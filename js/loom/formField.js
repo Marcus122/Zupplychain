@@ -25,6 +25,7 @@ function FormField($inputElement, $typeName) {
     this.COPY_ON_CHECK_TO_PREFIX_ATTR_NAME      = "data-loom-copy-on-check-to-prefix";
     this.POST_UP_COMBINED_AS_SEPARATE_ATTR_NAME = "data-loom-post-separately";
     this.DECIMAL_PLACES_ATTR_NAME               = "data-loom-decimal-places";
+    this.GREATER_THAN_ATTR_NAME                 = "data-loom-greater-than";
     
     //Class properties
     this.value                  = "";
@@ -138,6 +139,11 @@ FormField.prototype.getNameOfDependencyField = function(){
 			}
 			return false;
 		}
+
+FormField.prototype.getNameOfCompareField = function(){
+    var theAttr = this.element.attr(this.GREATER_THAN_ATTR_NAME);
+	return theAttr ? theAttr : false; //else attribute value is just a field name so return it.
+}
 		
 // returns the name of the field that the inputField requires to know about for purposes of confirmation validators. e.g. a confirm-email field.
 FormField.prototype.getNameOfConfirmField = function(){
@@ -252,6 +258,12 @@ FormField.prototype.setupFieldDependentValidators = function(otherField){
         return;
 	}
 			
+}
+
+FormField.prototype.setupFieldCompareValidators = function(otherField){
+	var validatorFunctionName = "compare-" + otherField.name;
+	var validatorFunction = ValidatorLib.getGreaterThanOtherField(otherField);
+	this.addValidator(validatorFunctionName, validatorFunction, true);		
 }
 		
 //removes the passed in prefix from the form field name.

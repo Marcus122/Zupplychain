@@ -6,25 +6,25 @@ define(["jquery", "./formField", "./loomConfig"],function($, FormField, Config){
         // Form level config options.
         config = Config;
         
-		var FORM_PENDING_CLASS  =  config.FORM_PENDING_CLASS || "form-pending";
-		var FORM_ERROR_CLASS    =  config.FORM_ERROR_CLASS || "form-error";
-		var FORM_SUCCESS_CLASS  =  config.FORM_SUCCESS_CLASS || "form-success";
+	var FORM_PENDING_CLASS  =  config.FORM_PENDING_CLASS || "form-pending";
+	var FORM_ERROR_CLASS    =  config.FORM_ERROR_CLASS || "form-error";
+	var FORM_SUCCESS_CLASS  =  config.FORM_SUCCESS_CLASS || "form-success";
         var FORM_SOFT_ERROR_CLASS = config.FORM_SUCCESS_CLASS || "form-soft-error";
         var FORM_HARD_ERROR_CLASS = config.FORM_SUCCESS_CLASS || "form-hard-error";
         var FORM_FIELD_CONTAINER_SELECTOR = config.FORM_FIELD_CONTAINER_SELECTOR || ".input-field";
 		
-		var VALIDATE_ON_BLUR                    = config.VALIDATE_ON_BLUR;
-		var MAY_NOT_PROGRESS_PAST_INVALID_FIELD = config.MAY_NOT_PROGRESS_PAST_INVALID_FIELD;
-		var REALTIME_VALIDATION                 = config.REALTIME_VALIDATION;
-		var JUMP_TO_INVALID_FIELD_ON_SUBMIT     = config.JUMP_TO_INVALID_FIELD_ON_SUBMIT;
-        
-        
-		var formElement = $();
-		var fields = [];
-		var url;
-		var action;
-		var dataType;
-		var prefix;
+	var VALIDATE_ON_BLUR                    = config.VALIDATE_ON_BLUR;
+	var MAY_NOT_PROGRESS_PAST_INVALID_FIELD = config.MAY_NOT_PROGRESS_PAST_INVALID_FIELD;
+	var REALTIME_VALIDATION                 = config.REALTIME_VALIDATION;
+	var JUMP_TO_INVALID_FIELD_ON_SUBMIT     = config.JUMP_TO_INVALID_FIELD_ON_SUBMIT;
+
+
+	var formElement = $();
+	var fields = [];
+	var url;
+	var action;
+	var dataType;
+	var prefix;
         var successCallbacks = [];
         
         var errorCallbacks = []; //called for any type of error
@@ -38,12 +38,12 @@ define(["jquery", "./formField", "./loomConfig"],function($, FormField, Config){
         var isIE;
 		var responseHandler;
         
-		// INIT
-		formElement 	= $($form);
-		url 			= formElement.attr("action");
-		action 			= formElement.attr("data-loom-action");
-		dataType 		= formElement.attr("data-loom-data-type");
-		prefix 			= formElement.attr("data-loom-field-prefix") || "";
+	// INIT
+	formElement 	= $($form);
+	url 			= formElement.attr("action");
+	action 			= formElement.attr("data-loom-action");
+	dataType 		= formElement.attr("data-loom-data-type");
+	prefix 			= formElement.attr("data-loom-field-prefix") || "";
         noAJAX          = formElement.attr("data-loom-no-ajax");
         noSubmit        = formElement.attr("data-loom-no-submit");
         disableOnLoad   = formElement.attr("data-loom-disabled"); //disable the form immediately, changing the submit button to an edit button
@@ -58,10 +58,11 @@ define(["jquery", "./formField", "./loomConfig"],function($, FormField, Config){
         
         formElement.attr("novalidate", "novalidate");
         
-		setupNormalInputs();
-		setupRadioInputs();
-		setupFieldDependentValidators();
-		setupConfirmationValidators();
+	setupNormalInputs();
+	setupRadioInputs();
+	setupFieldDependentValidators();
+	setupConfirmationValidators();
+        setupFieldCompareValidators();
         setupAutoPopulationOnSelection();
         setupCopyOnCheck();
         disableIfDisableOnLoadSet();
@@ -187,6 +188,17 @@ define(["jquery", "./formField", "./loomConfig"],function($, FormField, Config){
 					continue;
 				}
 				fields[i].setupFieldDependentValidators(getFieldByName(otherFieldName));
+			}
+		}
+                
+                function setupFieldCompareValidators() {
+			var lim = fields.length;
+			for(var i = 0;i < lim; i++) {
+				var otherFieldName = fields[i].getNameOfCompareField();
+				if (!otherFieldName) {
+					continue;
+				}
+				fields[i].setupFieldCompareValidators(getFieldByName(otherFieldName));
 			}
 		}
         
