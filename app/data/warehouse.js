@@ -75,21 +75,16 @@ warehouseSchema.statics = {
 	
 	
     this.find({
-			  /*"geo.lat":{ $gte:(query.geo.lat -80), $lte:(query.geo.lat + 80)},
-              "geo.lng":{ $gte:(query.geo.lng -80), $lte:(query.geo.lng + 80)},*/
-              "loc" : {
+			  "loc" : {
                   $near : {
                       $geometry :  query.loc,
                       $maxDistance : query.radiusInMetres
                   }
               },
               "active": true
-              }).populate({ path : "storage"/*, match : {palletType : query.palletType,
-													   maxWeight : {$gte:query.weight},
-													   maxHeight : {$gte:query.height},
-													   temp : query.temp,
-													   palletSpaces : query.totalPallets}*/
-			  }).exec( function (err, result){
+              }).populate({
+                path : "storage"
+              }).exec( function (err, result){
 				  if (err){
 					  console.log(err);
 				  }else{
