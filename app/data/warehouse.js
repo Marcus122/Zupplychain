@@ -70,13 +70,13 @@ warehouseSchema.statics = {
     var editableResult = null; //stores a toObject() version of the warehouse which we can add properties to etc.
 	var corrResults = [];
 	
-	if (!query.weight){
-		query.weight = '100';
+	/*if (!query.weight){
+		query.weight = '0';
 	}
 	
 	if (!query.height){
-		query.height = '10';
-	}
+		query.height = '0';
+	}*/
 	
 	
     this.find({
@@ -94,21 +94,28 @@ warehouseSchema.statics = {
 					  console.log(err);
 				  }else{
 					  for(var i in result){
+                          editableResult = result[i].toObject(); //turn warehouse into a nice place JS object.
 						  corrResult = false;
                           for (var j=0; j<result[i].storage.length; j++){
-                              
                               var palletTypeOK  = !query.palletType || result[i].storage[j].palletType === query.palletType; //!palletType means any
-                              var maxWeightOK   = !query.maxWeight || result[i].storage[j].maxWeight >= query.weight;
-                              var maxHeightOK   = !query.maxHeight || result[i].storage[j].maxHeight >= query.height;
+                              var maxWeightOK   = !query.weight || result[i].storage[j].maxWeight >= query.weight;
+                              var maxHeightOK   = !query.height || result[i].storage[j].maxHeight >= query.height;
                               var tempOK        = result[i].storage[j].temp === query.temp;
                               var spacesOK      = result[i].storage[j].palletSpaces >= query.totalPallets;
-                              
                               if (palletTypeOK && maxWeightOK && maxHeightOK && tempOK && spacesOK){
                                   corrResult = true;
-                                  editableResult = result[i].toObject(); //turn warehouse into a nice place JS object.
+                                  
+                                  if (editableResult.storageMatch) {
+                                      //if we already found a matching storage, only replace with this one if the price is lower
+                                      var currentResultPrice = editableResult.storageMatch.currentPricing.price;
+                                      var newResultPrice = editableResult.storage[j].currentPricing.price;
+                                      if (currentResultPrice <= newResultPrice) {
+                                          continue;
+                                      }
+                                  }
                                   editableResult.storageMatch = editableResult.storage[j];
                               }
-						}
+                            }
 						if(corrResult === true){
 							corrResults.push(editableResult);
 						}

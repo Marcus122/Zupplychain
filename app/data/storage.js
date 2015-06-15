@@ -56,6 +56,7 @@ storageSchema.pre('init', function(next, data) {
     var fieldsToConvert = ['price', 'reserve', 'charge'];
     var lim = fieldsToConvert.length;
     var numPrices = 0;
+    var numPalletEntries =0;
     if (data.pricing) {
         numPrices = data.pricing.length;
     }
@@ -77,6 +78,7 @@ storageSchema.pre('init', function(next, data) {
     }
     
     //loop through again, pull out the current price and store in .currentPricing.
+    
     data.currentPricing = data.basicPricing; //fallback if no date range match.
     var currentDate = new Date();
     for (var j = 0; j < numPrices; j++) {
@@ -85,6 +87,17 @@ storageSchema.pre('init', function(next, data) {
                 data.currentPricing = data.pricing[j];
             }
         }
+    
+    if (data.pallets) {
+        numPalletEntries = data.pallets.length;
+    }
+    data.currentPalletsAvailable = data.palletSpaces; 
+    for (var j =0;j < numPalletEntries; j++) {
+        if (data.pallets[j].from < currentDate &&
+        data.pallets[j].to > currentDate) {
+            data.currentPalletsAvailable = data.currentPalletsAvailable - data.pallets[j].inUse;
+        }
+    }
     next();
 });
 
