@@ -37,6 +37,31 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 		function closePopup(){
 			$('.popup-window').remove();
 		}
+		
+		function dateRanges(){
+			$(document).on('change','table input[type="date"]',function(){
+				var $row = $(this).closest('tr');
+				var $form = $row.closest('form');
+				if(lm.isFormValid($form.attr('id'))){
+					nextRow($row.closest('tbody'),$row.index());
+					lm.rebind($form);
+				}
+			});
+			function nextRow($tbody,index,min){
+				var $row = $tbody.find('tr').eq(index);
+				var $from = $row.find('input[name="from"]');
+				var $to = $row.find('input[name="to"]');
+				if(!$from.length || !$to.length) return;
+				if(min){
+					$from.attr('min',min);
+				}
+				$from.attr('max',$to.val());
+				$to.attr('min',$from.val());
+				if($row.index() != $row.closest('tbody').find('tr').length-1){
+					nextRow($tbody,index+1,$to.val());
+				}
+			}
+		}
 		function saveRegistration(){
 			var saveTemplate = templates.getTemplate("save-registration");
 			var $popup = saveTemplate.bind(data);
@@ -260,6 +285,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					}
 				});
 			});
+			dateRanges();
 			popups();
 		}
 		function addPallet(){
@@ -520,25 +546,27 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			});
 			$form.find('input[name="noDiscount"]').on("change",function(){
 				var $input = $(this);
+				Storage.noDiscount=$(this).val();
 				setNextRow(0,Number($(this).val())+1);
+				lm.rebind($form);
 			});
-			$form.find('input[name="to"]').on("change",function(){
+			$form.on("change",'input[name="to"]',function(){
 				var index = $(this).closest('tr').index();
 				setNextRow(index+1,Number($(this).val())+1);
+				lm.rebind($form);
 			});
 			function setNextRow(index,value){
 				var $row = $form.find('tbody tr').eq(index);
 				if(!$row.length) return;
 				var $from = $row.find('.discount-from');
 				$from.find('span').text( value );
-				$from.find('input').val( value );
-				$from.find('.discount-to input').attr('min',value);
-				lm.rebind($form);
+				$from.find('input').val( value ).attr('min',value).attr('max',value);
+				$row.find('.discount-to input').attr('min',value);
 			}
 			function addDiscountRow(_data){
 				var data = _data || {};
 				if(!_data){
-					data.from = Storage.noDiscount ? Storage.noDiscount + 1 : 1;
+					data.from = Storage.noDiscount ? Number(Storage.noDiscount ) + 1 : 1;
 					data.to = Storage.palletSpaces;
 					data.perc = 0;
 					var arr = toArray();

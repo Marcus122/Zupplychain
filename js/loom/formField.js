@@ -586,6 +586,9 @@ ADate.prototype.setupControls = function() {
             inline: true,
             dateFormat: dateFormat,
             onSelect: function(dateText, inst) {
+                if(dateText !== inst.lastVal){
+                    $(this).change();
+                }
                 that.setValueFromBoundInput(dateText);
                 that.isValid();
             }
