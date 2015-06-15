@@ -155,8 +155,10 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			});
 			$defineSpace.find('.save').on("click",function(ev){
 				ev.preventDefault();
-				saveDefinedSpace();
-				saveRegistration();
+				if( lm.isFormValid($defineSpace.attr('id')) ){
+					saveDefinedSpace();
+					saveRegistration();
+				}
 			});
 			function saveDefinedSpace(cb){
 				if( lm.isFormValid($defineSpace.attr('id')) ){
@@ -198,7 +200,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 						$tr.find('.pricing').removeClass('error');
 					}
 					
-					if(!Storage || !Storage.discounts.length){
+					if(!Storage || (!Storage.discounts.length || !Storage.noDiscount)){
 						$tr.find('.discounts').addClass('error');
 						complete=false;
 					}else{
@@ -516,6 +518,23 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				$(this).closest('tr').remove();
 				lm.rebind($form);
 			});
+			$form.find('input[name="noDiscount"]').on("change",function(){
+				var $input = $(this);
+				setNextRow(0,Number($(this).val())+1);
+			});
+			$form.find('input[name="to"]').on("change",function(){
+				var index = $(this).closest('tr').index();
+				setNextRow(index+1,Number($(this).val())+1);
+			});
+			function setNextRow(index,value){
+				var $row = $form.find('tbody tr').eq(index);
+				if(!$row.length) return;
+				var $from = $row.find('.discount-from');
+				$from.find('span').text( value );
+				$from.find('input').val( value );
+				$from.find('.discount-to input').attr('min',value);
+				lm.rebind($form);
+			}
 			function addDiscountRow(_data){
 				var data = _data || {};
 				if(!_data){

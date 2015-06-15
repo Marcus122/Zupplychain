@@ -15,16 +15,16 @@ var fields = {
 	sortOrder:{type: Number },
 	noDiscount:{type: Number },
 	basicPricing:{
-		price: { type: Number, get:getPrice, set:setPrice },
-		charge:{ type: Number, default:0, get:getPrice },
-		reserve:{ type: Number, default:0, get:getPrice }
+		price: { type: Number, default:0, get:getPrice, set:setPrice },
+		charge:{ type: Number, default:0, get:getPrice, set:setPrice },
+		reserve:{ type: Number, default:0, get:getPrice, set:setPrice }
 	},
 	pricing: [{
 		from:Date,
 		to:Date,
-		price: { type: Number, set:setPrice, get:getPrice },
-		charge:{ type: Number, default:0, get:getPrice },
-		reserve:{ type: Number, default:0, get:getPrice }
+		price: { type: Number, default:0, set:setPrice, get:getPrice },
+		charge:{ type: Number, default:0, get:getPrice, set:setPrice },
+		reserve:{ type: Number, default:0, get:getPrice, set:setPrice }
 	}],
 	discounts:[{
 		from:Number,
@@ -40,7 +40,8 @@ var fields = {
 	}]
 };
 function getPrice(num){
-	return Number(num).toFixed(2);
+	console.log("getPrice");
+	return num ? Number(num).toFixed(2) : Number(0).toFixed(2);
 }
 function setPrice(num){
     return Number(num).toFixed(2);

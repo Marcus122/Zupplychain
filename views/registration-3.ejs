@@ -188,12 +188,13 @@
 						<button class="close no-resize"><span>close</span></button>
 						<div class="main">
 							<h2>Volume Discount</h2>
-							<p>If you want to specify variations to your prices per week per pallet for small or large quantities, use this table. If not, your prices will apply to any quantity.</p>
 							<form method="post" id="discount-form" class="loom-form" novalidate data-loom-no-submit="true">
-								<div class="input-field">
+								<div class="input-field no-discount no-success-validation-style">
 									<label for="no-disc">No discount on orders with up to</label>
-									<input type="number" min="0" data-bind-value="noDiscount"/>
+									<input required type="number" name="noDiscount" min="0" data-bind-value="noDiscount" data-bind-max="palletSpaces"/>
+									<span>pallets</span>
 								</div>
+								<p>If you want to specify variations to your prices per week per pallet for small or large quantities, use this table. If not, your prices will apply to any quantity.</p>
 								<table class="show-title responsive-table" data-title="Volume Discount">
 									<thead>
 										<th>From</th>

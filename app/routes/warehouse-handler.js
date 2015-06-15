@@ -180,13 +180,15 @@ function getLatLong(postcode,cb){
 }
 function setResponse(req,res){
 	res.writeHead(200, {"Content-Type": "application/json"});
-    var output = { error: null, data: req.warehouse };
+    var output = { error: null, data: req.warehouse.toObject({
+		versionKey:false
+	}) };
     res.end(JSON.stringify(output) + "\n");
 }
 function setStorageResponse(req,res,next){
 	if(!req.storage) next();
 	res.writeHead(200, {"Content-Type": "application/json"});
-    var output = { error: null, data: req.storage };
+    var output = { error: null, data: req.storage.toObject({versionKey:false})};
     res.end(JSON.stringify(output) + "\n");
 }
 function setErrorResponse(err,res){

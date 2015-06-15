@@ -29,7 +29,7 @@ define(["jquery"],function($){
 							var attribute = property.replace(config.bind ,'').toLowerCase();
 							var bind = $this.data(property);
 							var value = getBindValue(data,bind);
-							if(value){
+							if(value != undefined){
 								$this.attr(attribute,value);
 							}
 						}
