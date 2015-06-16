@@ -39,28 +39,32 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 		}
 		
 		function dateRanges(){
-			$(document).on('change','table input[type="date"]',function(){
-				var $row = $(this).closest('tr');
-				var $form = $row.closest('form');
-				if(lm.isFormValid($form.attr('id'))){
-					nextRow($row.closest('tbody'),$row.index());
+			$(document).on('blur','table input[type="date"]',function(){
+				var $form = $(this).closest('form');
+				//if(lm.isFormValid($form.attr('id'))){
+					$form.find('table').each(function(){
+						sortDateMaxMin($(this));
+					});
 					lm.rebind($form);
-				}
+				//}
 			});
-			function nextRow($tbody,index,min){
-				var $row = $tbody.find('tr').eq(index);
-				var $from = $row.find('input[name="from"]');
-				var $to = $row.find('input[name="to"]');
-				if(!$from.length || !$to.length) return;
-				if(min){
-					$from.attr('min',min);
-				}
-				$from.attr('max',$to.val());
-				$to.attr('min',$from.val());
-				if($row.index() != $row.closest('tbody').find('tr').length-1){
-					nextRow($tbody,index+1,$to.val());
-				}
+		}
+		function nextRow($tbody,index,min){
+			var $row = $tbody.find('tr').eq(index);
+			var $from = $row.find('input[name="from"]');
+			var $to = $row.find('input[name="to"]');
+			if(!$from.length || !$to.length) return;
+			if(min){
+				$from.attr('min',min);
 			}
+			$from.attr('max',$to.val());
+			$to.attr('min',$from.val());
+			if($row.index() != $row.closest('tbody').find('tr').length-1){
+				nextRow($tbody,index+1,$to.val());
+			}
+		}
+		function sortDateMaxMin($table){
+			nextRow($table.find('tbody'),0);
 		}
 		function saveRegistration(){
 			var saveTemplate = templates.getTemplate("save-registration");
@@ -355,7 +359,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 						to = new Date();
 					to.setDate(from.getDate() + 364);
 					data.from = from.toISOString().substring(0, 10);
-					data.to = to.toISOString().substring(0, 10);
+					/*data.to = to.toISOString().substring(0, 10);*/
 					addPricingRow(data);
 				}else{
 					for(i in Storage.pricing){
@@ -373,7 +377,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				$element.find('.add').on("click",function(){
 					if( lm.isFormValid($(this).closest('form').attr('id')) ){
 						addPricingRow();
-						lm.rebind($form);
+						rebind();
 					}
 				});
 				$form.on("submit",function(ev){
@@ -387,7 +391,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				});
 				$element.on('click','.trash-button',function(){
 					$(this).closest('tr').remove();
-					lm.rebind($form);
+					rebind();
 				});
 			}
 			function basicPricing(){
@@ -428,6 +432,10 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					array.push(price);
 				});
 				return array;
+			}
+			function rebind(){
+				sortDateMaxMin($datePricingTable);
+				lm.rebind($form);
 			}
 			function init(){
 				events();
@@ -512,6 +520,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			}
 			function rebind(){
 				lm.rebind($form);
+				sortDateMaxMin($form.find('table'));
 			}
 			
 		}

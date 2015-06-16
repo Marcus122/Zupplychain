@@ -1,9 +1,16 @@
 <tr>
+	<%var today = new Date(),
+      toDate = new Date();
+	  if ((today.getFullYear() + 1) % 4 == 0){
+		toDate.setDate(today.getDate() + 366);
+	  }else{
+		toDate.setDate(today.getDate() + 365);
+	  }%>
 	<td data-th="From" class="input-field no-success-validation-style">
 		<input data-bind-max="to" required type="date" name="from" class="datepicker" data-bind-value="from" data-loom-add-controls="true"/>
 	</td>
 	<td data-th="To" class="input-field no-success-validation-style">
-		<input data-bind-min="from" required data-bind-value="to" type="date" name="to" class="datepicker" data-loom-add-controls="true"/>
+		<input data-bind-min="from" required data-bind-value="to" type="date" name="to" class="datepicker" data-loom-add-controls="true" max="<%=toDate.toISOString().substring(0, 10)%>" value="<%=toDate.toISOString().substring(0, 10)%>"/>
 	</td>
 	<td data-th="Price per pallet per week" class="input-field no-success-validation-style">
 		<input data-bind-value="price" name="price" type="number"/>
