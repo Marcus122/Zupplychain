@@ -229,7 +229,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 						$tr.find('.pricing').removeClass('error');
 					}
 					
-					if(!Storage || (!Storage.discounts.length || !Storage.noDiscount)){
+					if(!Storage || !(Storage.discounts.length || Storage.noDiscount)){
 						$tr.find('.discounts').addClass('error');
 						complete=false;
 					}else{
