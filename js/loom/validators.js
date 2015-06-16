@@ -16,7 +16,7 @@ define({
 	getMinValidator : function (minVal, fieldType){
        if (fieldType == "date") {
             return function(input) {
-                return input >= maxVal;
+                return input >= minVal;
             }
         }
 		return function(input) {
