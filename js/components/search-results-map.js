@@ -26,7 +26,6 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
           
         
         function initialize(postcode, radius) {
-            
           var loc1 = new google.maps.LatLng(0,0);
           var mapOptions = {
             center: loc1,

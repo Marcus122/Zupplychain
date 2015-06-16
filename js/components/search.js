@@ -9,7 +9,7 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
 		
     //on postcode entry, load up the map centered on that postcode.
     $postcode.blur(function(){
-        if ($("input[name='postcode']").val().length <=4){
+        if ($("input[name='postcode']").val().length <=2){
             return;
         }
         resultsMap = new ResultsMap($("input[name='postcode']").val(), $("input[name='max-distance']").val());
