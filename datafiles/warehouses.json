@@ -1,0 +1,54 @@
+{
+	"__v": 2,
+	"_id": {
+		"$oid": "557eed5b549d22bc14864f6a"
+	},
+	"active": true,
+	"addressline1": "11 Bridge street",
+	"addressline2": "",
+	"addressline3": "",
+	"city": "Bury",
+	"company": "Tom's Warehouses",
+	"county": "Lancs",
+	"created": {
+		"$date": "2015-06-15T15:20:59.775Z"
+	},
+	"description": "",
+	"documents": [],
+	"geo": {
+		"lat": 53.6465972,
+		"lng": -2.3083942
+	},
+	"height": null,
+	"loc": {
+		"coordinates": [
+			-2.3083942,
+			53.6465972
+		],
+		"type": "Point"
+	},
+	"mobile": "",
+	"name": "Tom's Warehouse",
+	"officeHours": "9:00-17:00",
+	"photos": [],
+	"postcode": "BL0 0AT",
+	"services": [
+		"Transport / Distribution"
+	],
+	"size": null,
+	"specifications": [
+		"24hr Security"
+	],
+	"storage": [
+		{
+			"$oid": "557eed7d549d22bc14864f6b"
+		},
+		{
+			"$oid": "557eed7d549d22bc14864f6c"
+		}
+	],
+	"telephone": "01204536123",
+	"user": {
+		"$oid": "557eed5b549d22bc14864f69"
+	}
+}

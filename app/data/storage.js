@@ -40,7 +40,6 @@ var fields = {
 	}]
 };
 function getPrice(num){
-	console.log("getPrice");
 	return num ? Number(num).toFixed(2) : Number(0).toFixed(2);
 }
 function setPrice(num){

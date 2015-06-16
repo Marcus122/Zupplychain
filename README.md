@@ -41,12 +41,20 @@ To run use command node app and go to http://localhost:8081
 
 Exporting/importing Mongo data to/from json.
 
-To export warehouse data:
-/PROGRA~1/MongoDB/Server/3.0/bin/mongoexport.exe /o warehouses.json /db ZupplyChain /collection warehouses /pretty
+To export warehouse data: cd into the /datafiles directory.
+mongoexport.exe /o warehouses.json /db ZupplyChain /collection warehouses /pretty
+mongoexport.exe /o storages.json /db ZupplyChain /collection storages /pretty
+mongoexport.exe /o users.json /db ZupplyChain /collection users /pretty
 
-To import warehouse data:
-/PROGRA~1/MongoDB/Server/3.0/bin/mongoimport.exe  /db ZupplyChain /collection warehouses warehouses.json
 
+To destroy the database
+mongo.exe ZupplyChain --eval "db.dropDatabase();"
+
+
+To import warehouse data: cd into the datafiles directory
+mongoimport.exe  /db ZupplyChain /collection warehouses warehouses.json
+mongoimport.exe  /db ZupplyChain /collection storages storages.json
+mongoimport.exe  /db ZupplyChain /collection users users.json
 
 
 

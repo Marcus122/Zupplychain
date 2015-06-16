@@ -1,0 +1,126 @@
+{
+	"__v": 1,
+	"_id": {
+		"$oid": "557eed7d549d22bc14864f6b"
+	},
+	"basicPricing": {
+		"charge": 1,
+		"price": 6,
+		"reserve": 0.5
+	},
+	"discounts": [
+		{
+			"_id": {
+				"$oid": "557eee64549d22bc14864f6e"
+			},
+			"from": 1,
+			"perc": 0,
+			"to": 250
+		}
+	],
+	"maxHeight": 0.5,
+	"maxWeight": 50,
+	"name": "Main Area",
+	"palletSpaces": 250,
+	"palletType": "Blue",
+	"pallets": [
+		{
+			"_id": {
+				"$oid": "557eee64549d22bc14864f6f"
+			},
+			"free": 250,
+			"from": {
+				"$date": "2015-05-15T00:00:00.000Z"
+			},
+			"inUse": 10,
+			"to": {
+				"$date": "2016-06-15T00:00:00.000Z"
+			},
+			"total": 250
+		}
+	],
+	"pricing": [
+		{
+			"_id": {
+				"$oid": "557eee64549d22bc14864f6d"
+			},
+			"charge": 2,
+			"from": {
+				"$date": "2015-06-19T00:00:00.000Z"
+			},
+			"price": 8,
+			"reserve": 0.7,
+			"to": {
+				"$date": "2016-06-22T00:00:00.000Z"
+			}
+		}
+	],
+	"sortOrder": 1,
+	"temp": "Ambient",
+	"user": {
+		"$oid": "557eed5b549d22bc14864f69"
+	}
+}
+{
+	"__v": 1,
+	"_id": {
+		"$oid": "557eed7d549d22bc14864f6c"
+	},
+	"basicPricing": {
+		"charge": 1,
+		"price": 2,
+		"reserve": 0.5
+	},
+	"discounts": [
+		{
+			"_id": {
+				"$oid": "557eee64549d22bc14864f71"
+			},
+			"from": 1,
+			"perc": 0,
+			"to": 500
+		}
+	],
+	"maxHeight": 0.6,
+	"maxWeight": 75,
+	"name": "Back Room",
+	"palletSpaces": 500,
+	"palletType": "Blue",
+	"pallets": [
+		{
+			"_id": {
+				"$oid": "557eee64549d22bc14864f72"
+			},
+			"free": 500,
+			"from": {
+				"$date": "2015-06-15T00:00:00.000Z"
+			},
+			"inUse": 0,
+			"to": {
+				"$date": "2016-06-15T00:00:00.000Z"
+			},
+			"total": 500
+		}
+	],
+	"pricing": [
+		{
+			"_id": {
+				"$oid": "557eee64549d22bc14864f70"
+			},
+			"charge": 1,
+			"from": {
+				"$date": "2015-06-15T00:00:00.000Z"
+			},
+			"price": 8,
+			"reserve": 0.5,
+			"to": {
+				"$date": "2016-06-13T00:00:00.000Z"
+			}
+		}
+	],
+	"sortOrder": 2,
+	"temp": "Ambient",
+	"user": {
+		"$oid": "557eed5b549d22bc14864f69"
+	}
+}

@@ -1,0 +1,124 @@
+{
+	"__v": 0,
+	"_id": {
+		"$oid": "552508042b0859b811e02ce7"
+	},
+	"active": true,
+	"contact": "0123456787",
+	"created": {
+		"$date": "2015-04-08T10:50:44.358Z"
+	},
+	"email": "marcus.atty@weaveability.com",
+	"name": "Marcus Atty",
+	"password": "sha1$ca0de724$1$195f9578f4b7d82688f859c31309dc54699e6ce9"
+}
+{
+	"__v": 0,
+	"_id": {
+		"$oid": "5527f7e46b04f8fc1939b237"
+	},
+	"active": false,
+	"created": {
+		"$date": "2015-04-10T16:18:44.557Z"
+	}
+}
+{
+	"__v": 0,
+	"_id": {
+		"$oid": "5527f8eca67261d022721406"
+	},
+	"active": false,
+	"created": {
+		"$date": "2015-04-10T16:23:08.751Z"
+	}
+}
+{
+	"__v": 0,
+	"_id": {
+		"$oid": "552e7525dd59347418731af2"
+	},
+	"active": true,
+	"contact": "0123456877",
+	"created": {
+		"$date": "2015-04-15T14:26:45.696Z"
+	},
+	"email": "weave@weave.com",
+	"name": "Weaveability",
+	"password": "sha1$2525b821$1$7afa9a72d581dda6b5d83c3cd891ee853de8ffe3"
+}
+{
+	"__v": 0,
+	"_id": {
+		"$oid": "5530dfdca34d0c5c22c0162b"
+	},
+	"active": true,
+	"contact": "0123456878",
+	"created": {
+		"$date": "2015-04-17T10:26:36.587Z"
+	},
+	"email": "david.smith@weaveability.com",
+	"name": "David Smith",
+	"password": "sha1$29239f6b$1$41e224f39817032b97414721a00cc161a6379926"
+}
+{
+	"__v": 0,
+	"_id": {
+		"$oid": "5555d549d5ca2c041d8f1179"
+	},
+	"active": false,
+	"created": {
+		"$date": "2015-05-15T11:15:21.757Z"
+	}
+}
+{
+	"__v": 0,
+	"_id": {
+		"$oid": "55714955fd49594c12eafb60"
+	},
+	"active": true,
+	"contact": "01204123456",
+	"created": {
+		"$date": "2015-06-05T07:01:41.046Z"
+	},
+	"email": "tomnut@gmail.com",
+	"name": "TomN",
+	"password": "sha1$b24f679b$1$3f7ea138551b9cfea58a5b74df7b22447ae17bd5"
+}
+{
+	"__v": 0,
+	"_id": {
+		"$oid": "5579944c13469ca01e2d0303"
+	},
+	"active": true,
+	"contact": "1234567845",
+	"created": {
+		"$date": "2015-06-11T13:59:40.059Z"
+	},
+	"email": "tomnuttall1@gmailmail.com",
+	"name": "Tom",
+	"password": "sha1$07ab8a13$1$cdc7aa4897b7a13c4e6e7fc21f6b8992c021397d"
+}
+{
+	"__v": 0,
+	"_id": {
+		"$oid": "557ea3aa573dbc5416eede1a"
+	},
+	"active": true,
+	"created": {
+		"$date": "2015-06-15T10:06:34.815Z"
+	},
+	"email": "tom@test.com",
+	"password": "sha1$928bd2f0$1$60f1db181a5985f2a1467a1002a8d5c28d83738d"
+}
+{
+	"__v": 0,
+	"_id": {
+		"$oid": "557eed5b549d22bc14864f69"
+	},
+	"active": true,
+	"created": {
+		"$date": "2015-06-15T15:20:59.688Z"
+	},
+	"email": "tom.nuttall@test.com",
+	"password": "sha1$8df844d5$1$c3bfd15b6d57550f21598852271a85cdd4099400"
+}
