@@ -67,22 +67,22 @@ FormField.prototype.assignValidators = function(){
 FormField.prototype.addHTML5AttributeBasedValidators = function() {
     if (this.element.attr("max")) {
 			var maxValue = this.element.attr("max");
-			this.addValidator("max", ValidatorLib.getMaxValidator(maxValue));
+			this.addValidator("max", ValidatorLib.getMaxValidator(maxValue, this.type));
 		}
 		
 		if (this.element.attr("min")) {
 			var minValue = this.element.attr("min");
-			this.addValidator("min", ValidatorLib.getMinValidator(minValue));
+			this.addValidator("min", ValidatorLib.getMinValidator(minValue, this.type));
 		}
 		
 		if (this.element.attr("maxlength")) {
 			var maxValue = this.element.attr("maxlength");
-			this.addValidator("maxlength", ValidatorLib.getMaxlengthValidator(maxValue));
+			this.addValidator("maxlength", ValidatorLib.getMaxlengthValidator(maxValue, this.type));
 		}
 		
 		if (this.element.attr("minlength")) {
 			var minValue = this.element.attr("minlength");
-			this.addValidator("minlength", ValidatorLib.getMinlengthValidator(minValue));
+			this.addValidator("minlength", ValidatorLib.getMinlengthValidator(minValue, this.type));
 		}
 }
 
@@ -484,7 +484,6 @@ function Numeric($elem) {
 }
 
 inherit(Numeric, FormField);
-
 
 Numeric.prototype.setupControls = function() {
     //TODO create a + and - button and add in a DIV after the input, then wire up onclicks.

@@ -69,7 +69,6 @@ define(["jquery", "./formField", "./loomConfig"],function($, FormField, Config){
         
         //TODO if we try to submit an invalid form, an invalid message appears.
         // if we then fill out the fields correctly, when we come back to the bottom of the form the messages is still there.
-        // basically on any validation we should check the whole form, and if it's invalid we should 
 		
 		if (REALTIME_VALIDATION) {
 			var lim = fields.length;
@@ -110,6 +109,8 @@ define(["jquery", "./formField", "./loomConfig"],function($, FormField, Config){
                 var code = (e.keyCode ? e.keyCode : e.which);
                 if (code == 9) {
                     return;
+                } else if (code == 13) {
+                    e.preventDefault();
                 }
                 func();
             }

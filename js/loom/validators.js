@@ -1,6 +1,11 @@
 define({
 	
-	getMaxValidator : function(maxVal){
+	getMaxValidator : function(maxVal, fieldType){
+        if (fieldType == "date") { //expecing a date format of yyyy-mm-dd, this way simple string comparison will work
+            return function(input) {
+                return input <= maxVal;
+            }
+        }
 		return function(input) {
 			if (input === undefined || input === NaN || input === "") {
 				return true;
@@ -8,7 +13,12 @@ define({
 			return parseInt(input,10) <= parseInt(maxVal,10);
 		}
 	},
-	getMinValidator : function (minVal){
+	getMinValidator : function (minVal, fieldType){
+       if (fieldType == "date") {
+            return function(input) {
+                return input >= maxVal;
+            }
+        }
 		return function(input) {
 			if (input === undefined || input === NaN || input === "") {
 				return true;
@@ -16,12 +26,12 @@ define({
 			return parseInt(input,10) >= parseInt(minVal,10);
 		}
 	},
-	getMaxlengthValidator : function (maxLength){
+	getMaxlengthValidator : function (maxLength, fieldType){
 		return function(input) {
 			return input.length <= maxLength;
 		}
 	},
-	getMinlengthValidator : function (minLength){
+	getMinlengthValidator : function (minLength, fieldType){
 		return function(input) {
 			return input.length >= minLength;
 		}
