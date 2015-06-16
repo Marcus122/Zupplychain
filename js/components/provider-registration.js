@@ -429,7 +429,9 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					bindFormToObject($(this),price);
 					price.from = new Date(price.from).toISOString();
 					price.to = new Date(price.to).toISOString();
-					array.push(price);
+					if(price.price || price.charge || price.reserve){
+						array.push(price);
+					}
 				});
 				return array;
 			}
@@ -528,6 +530,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			var template = templates.getTemplate("discount-row");
 			var Storage = _Storage;
 			var $form = $element.find('form');
+			var $table =  $form.find('table');
 			if(!Storage.discounts || !Storage.discounts.length){
 				addDiscountRow();
 			}else{
@@ -537,8 +540,14 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			}
 			$element.find('.add').on("click",function(){
 				if( lm.isFormValid($form.attr('id')) ){
-					addDiscountRow();
-					lm.rebind($form);
+					var max = $table.find('tbody tr').last().find('input[name="to"]').val();
+					if(Number(Storage.noDiscount) === Number(Storage.palletSpaces) || 
+						Number(max) === Number(Storage.palletSpaces) ){
+						
+					}else{
+						addDiscountRow();
+						lm.rebind($form);
+					}
 				}
 			});
 			$form.on("submit",function(ev){
@@ -556,7 +565,11 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			$form.find('input[name="noDiscount"]').on("change",function(){
 				var $input = $(this);
 				Storage.noDiscount=$(this).val();
-				setNextRow(0,Number($(this).val())+1);
+				if(Number($input.val()) === Number(Storage.palletSpaces)){
+					$table.find('tbody').empty();
+				}else{
+					setNextRow(0,Number($(this).val())+1);
+				}
 				lm.rebind($form);
 			});
 			$form.on("change",'input[name="to"]',function(){
