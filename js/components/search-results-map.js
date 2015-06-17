@@ -97,6 +97,7 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
             for (var i = 0; i< lim; markers[i++].setMap(null));
             factoryData = {};
            markers = [];
+           selectedMarkerIndex = 0;
            $('#search-results-info').fadeOut();
             
         }
@@ -157,7 +158,7 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
             }); 
         }
         
-        function setPrevNextOnClick(map, markers, data, highlightIcon, normalIcon) {
+        function setPrevNextOnClick(map, IGNOREmrkers, data, highlightIcon, normalIcon) {
             $("#map-next-result").click(function() {
                 selectedMarkerIndex++;
                 selectedMarkerIndex = selectedMarkerIndex % ( markers.length );

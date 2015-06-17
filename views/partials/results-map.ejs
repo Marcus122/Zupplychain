@@ -12,7 +12,7 @@
                             <hr/>
                             <img class="js-image" src="/images/warehouse-thumb.jpg" alt="an external view of a warehouse " />
                             <div class="info">
-                                <a class="button mini action view-details">View details</a>
+                                <a class="button mini action view-details <%= user.email ? "" : "register-before-click " %>view-warehouse-link">View details</a>
                                 <div class="ratings js-rating">
                                     <span class="ion-android-star rating"><em class="sr-only">*</em></span>
                                     <span class="ion-android-star rating"><em class="sr-only">*</em></span>

@@ -24,7 +24,7 @@
 				</div>
 				<div class="input-field">
 					<label for="postcode">Target Postcode/City*</label>
-					<input type="text" name="postcode" required="required" data-loom-validators="UKPostCode" value="<%=session.whSC.sc[0].postcode%>"/>
+					<input type="text" name="postcode" required="required" minlength="2" value="<%=session.whSC.sc[0].postcode%>"/>
 				</div>
 				<div class="input-field">
 					<label for="max-distance">Max Distance*</label>
@@ -40,7 +40,7 @@
 				</div>
 				<div class="input-field">
 					<label for="end-date">End Date</label>
-					<input type="date" name="end-date" value="<%=session.whSC.sc[0].endDate%>"/>
+					<input type="date" name="end-date" data-loom-greater-than="start-date" value="<%=session.whSC.sc[0].endDate%>"/>
 				</div>
 				<div class="input-field number">
 					<label for="height">Pallet Height (m)</label>
@@ -111,7 +111,7 @@
 				</div>
 				<div class="input-field">
 					<label for="end-date">End Date</label>
-					<input type="date" name="end-date" value="<%=toDate.toISOString().substring(0, 10)%>"/>
+					<input type="date" name="end-date" data-loom-greater-than="start-date" value="<%=toDate.toISOString().substring(0, 10)%>"/>
 				</div>
 				<div class="input-field number">
 					<label for="height">Pallet Height (m)</label>
