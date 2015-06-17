@@ -99,7 +99,8 @@ warehouseSchema.statics = {
 					  console.log(err);
 				  }else{
 					  for(var i in result){
-                          editableResult = result[i].toObject(); //turn warehouse into a nice place JS object.
+                          var matchingStorages = [];
+                          editableResult = result[i].toObject(); //turn warehouse into a nice plane JS object.
 						  corrResult = false;
                           for (var j=0; j<result[i].storage.length; j++){
                               var palletTypeOK  = !query.palletType || result[i].storage[j].palletType === "Any" ||result[i].storage[j].palletType === query.palletType; //!palletType means any
@@ -109,7 +110,6 @@ warehouseSchema.statics = {
                               var spacesOK      = result[i].storage[j].palletSpaces >= query.totalPallets;
                               if (palletTypeOK && maxWeightOK && maxHeightOK && tempOK && spacesOK){
                                   corrResult = true;
-                                  
                                   if (editableResult.storageMatch) {
                                       //if we already found a matching storage, only replace with this one if the price is lower
                                       var currentResultPrice = editableResult.storageMatch.currentPricing.price;
@@ -118,11 +118,13 @@ warehouseSchema.statics = {
                                           continue;
                                       }
                                   }
+                                  matchingStorages.push(editableResult.storage[i]);
                                   editableResult.storageMatch = editableResult.storage[j];
                                   editableResult.distanceFromSearch = distanceInMiles(editableResult.geo , query.geo );
                               }
                             }
 						if(corrResult === true){
+                            editableResult.storage = matchingStorages;
 							corrResults.push(editableResult);
 						}
 					  };

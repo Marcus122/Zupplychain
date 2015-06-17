@@ -182,7 +182,7 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
 			}
             var resultsElem = $(RESULT_INFO_ELEM_SELECTOR);
             resultsElem.find('.js-name').html(data.name);
-            resultsElem.find('.js-address').html(data.addressline1 + ", " + data.addressline2 + ", " + data.city + ", " + data.postcode );
+            resultsElem.find('.js-address').html(data.city + ", " + data.postcode );
             resultsElem.find('.js-name').html(data.name);
             resultsElem.find('.js-image').addClass("rotateY90");
             resultsElem.find('.add-to-quote').data("id", data._id);

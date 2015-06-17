@@ -8,7 +8,7 @@
 		<div class="main">
 			<form class="storage-search loom-form" action="/search" id="search-form" novalidate>
 				<div class="input-field">
-					<label for="pallet-type">Pallet Type*</label>
+					<label for="pallet-type">Pallet Type</label>
 					<select name="pallet-type" id="pallet-type" required="required">
 						<%var palletTypes = ["Blue", "Euro", "Standard", "Ano", "Any", "Other"];
 						for (var i=0; i<palletTypes.length; i++){%>
@@ -19,19 +19,19 @@
 					</select>
 				</div>
 				<div class="input-field number">
-					<label for="quantity">Qty*</label>
+					<label for="quantity">Qty</label>
 					<input type="number" name="quantity" min="1" max="2000" required="required" value="<%=session.whSC.sc[0].searchQty%>"/>
 				</div>
 				<div class="input-field">
-					<label for="postcode">Target Postcode/City*</label>
+					<label for="postcode">Target Postcode/City</label>
 					<input type="text" name="postcode" required="required" minlength="2" value="<%=session.whSC.sc[0].postcode%>"/>
 				</div>
 				<div class="input-field">
-					<label for="max-distance">Max Distance*</label>
+					<label for="max-distance">Max Distance</label>
 					<input type="number" step="10" name="max-distance" min="5" required="required" value="<%=session.whSC.sc[0].maxDistance%>"/>
 				</div>
 				<div class="input-field">
-					<label for="description">Product Description*</label>
+					<label for="description">Product Description</label>
 					<input type="text" name="description" minlength="0" maxlength="100" placeholder="" required="required" value="<%=session.whSC.sc[0].description%>"/>
 				</div><br/>
 				<div class="input-field">
@@ -72,7 +72,7 @@
 		<div class="main">
 			<form class="storage-search loom-form" action="/search" id="search-form" novalidate>
 				<div class="input-field">
-					<label for="pallet-type">Pallet Type*</label>
+					<label for="pallet-type">Pallet Type</label>
 					<select name="pallet-type" id="pallet-type" required="required">
 						<option value="Blue">Blue</option>
 						<option value="Euro">Euro</option>
@@ -83,19 +83,19 @@
 					</select>
 				</div>
 				<div class="input-field number">
-					<label for="quantity">Qty*</label>
+					<label for="quantity">Qty</label>
 					<input type="number" name="quantity" min="1" max="2000" required="required" value="10"/>
 				</div>
 				<div class="input-field">
-					<label for="postcode">Target Postcode/City*</label>
+					<label for="postcode">Target Postcode/City</label>
 					<input type="text" name="postcode" required="required" minlength="2"/>
 				</div>
 				<div class="input-field">
-					<label for="max-distance">Max Distance*</label>
+					<label for="max-distance">Max Distance</label>
 					<input type="number" name="max-distance" min="5" required="required" step="10" value="25"/>
 				</div>
 				<div class="input-field">
-					<label for="description">Product Description*</label>
+					<label for="description">Product Description</label>
 					<input type="text" name="description" minlength="0" maxlength="100" placeholder="" required="required"/>
 				</div><br/>
 				<div class="input-field">
