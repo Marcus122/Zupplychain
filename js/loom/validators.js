@@ -10,7 +10,7 @@ define({
 			if (input === undefined || input === NaN || input === "") {
 				return true;
 			}
-			return parseInt(input,10) <= parseInt(maxVal,10);
+			return parseFloat(input,10) <= parseFloat(maxVal,10);
 		}
 	},
 	getMinValidator : function (minVal, fieldType){
@@ -23,7 +23,7 @@ define({
 			if (input === undefined || input === NaN || input === "") {
 				return true;
 			}
-			return parseInt(input,10) >= parseInt(minVal,10);
+			return parseFloat(input,10) >= parseFloat(minVal,10);
 		}
 	},
 	getMaxlengthValidator : function (maxLength, fieldType){

@@ -1,10 +1,11 @@
 <tr class="active" data-tr="Expand" data-tr-closed="Collapse">
 	<td data-th="Storage Name" class="text input-field no-success-validation-style">
 		<input type="hidden" value="<%=row.id%>" name="_id"/>
-		<input type="text" data-bind-value="name" data-bind-value-condition="name" required  value="<%=row.name%>" name="name"/>
+		<input type="text" data-bind-value="name" data-bind-value-condition="name" required  value="<%=row.name%>" name="name" data-bind-placeholder="placeholder"/>
 	</td>
 	<td data-th="Pallet Type" class="select input-field no-success-validation-style">
 		<select name="palletType">
+			<option value=""/>
 			<option
 				<%if(row.palletType === 'Blue' ){%>
 					selected="selected"
@@ -39,15 +40,32 @@
 	</td>
 	<td data-th="Storage Temp" class="select input-field no-success-validation-style">
 		<select name="temp">
-			<option>Ambient</option>
+			<option value=""/>
+			<option
+				<%if(row.temp === 'Ambient' ){%>
+					selected="selected"
+				<%}%>
+			>Ambient</option>
 			<option
 				<%if(row.temp === 'Chilled' ){%>
 					selected="selected"
 				<%}%>
 			>Chilled</option>
-			<option>Frozen</option>
-			<option>Outside</option>
-			<option>Other</option>
+			<option
+				<%if(row.temp === 'Frozen' ){%>
+					selected="selected"
+				<%}%>
+			>Frozen</option>
+			<option
+				<%if(row.temp === 'Outside' ){%>
+					selected="selected"
+				<%}%>
+			>Outside</option>
+			<option
+				<%if(row.temp === 'Other' ){%>
+					selected="selected"
+				<%}%>
+			>Other</option>
 		</select>
 	</td>
 	<td data-th="Max Weight" class="value input-field no-success-validation-style">

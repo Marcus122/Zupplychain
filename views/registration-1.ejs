@@ -81,20 +81,16 @@
 									<textarea id="description" name="description" placeholder="A short description about your warehouse"><%=warehouse.description%></textarea>
 								</div>
 								<div class="row">
-									<div class="input-field columns six small-input">
+									<div class="input-field columns four small-input">
 										<%if(!warehouse.officeHours){
 											warehouse.officeHours = '9:00-17:00';
 										}%>
 										<label for="officeHours">Office Hours (Mon-Fri)</label><input id="officeHours" name="officeHours" type="text" value="<%=warehouse.officeHours%>"/>
 									</div>
-								</div>
-								<div class="row">
-									<div class="input-field columns six small-input">
+									<div class="input-field columns four small-input">
 										<label for="size">Size (sq m)</label><input id="size "name="size" type="number"/>
 									</div>
-								</div>
-								<div class="row">
-									<div class="columns six input-field small-input">
+									<div class="columns four input-field small-input">
 										<label for="height">Height (m)</label><input id="height" name="height" type="number"/>
 									</div>
 								</div>

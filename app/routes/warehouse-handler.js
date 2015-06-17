@@ -36,7 +36,7 @@ var handler = function(app) {
 	app.post('/warehouse/:warehouse_id/storage/batch',batchStorage);
 	
 	app.param('storage_id', storage.load);
-	app.post('/stroage/:storage_id', storageAuth,  updateStorage );
+	app.post('/warehouse/:warehouse_id/storage/:storage_id', warehouseAuth,  updateStorage );
 	app.get('/storage/:storage_id', setStorageResponse );
 };
 function createUser(req,res){
