@@ -17,7 +17,7 @@ exports.config = {
 	
 	services: [
 		"Transport / Distribution",
-		"Pallet Network",
+		"Pallet Network Member",
 		"Container Destaffing",
 		"Pick & Pack",
 		"Home Delivery",
