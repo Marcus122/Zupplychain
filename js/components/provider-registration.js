@@ -600,7 +600,6 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 						data.from = Storage.noDiscount ? Number(Storage.noDiscount ) + 1 : 1;
 						data.to = Storage.palletSpaces;
 						data.perc = 0;
-						data.noDiscount=0;
 						var arr = toArray();
 						if(arr.length){
 							data.from=Number(arr[arr.length-1].to )+1;
