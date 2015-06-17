@@ -91,6 +91,19 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
 			   $(".continue-links.footer.form-footer .button.action.large.next").attr("href", response.results[0].href);
             });
             
+            require(["loomTable/Table"], function(loomTable) {
+                var LoomTable = new loomTable($('#search-results-table'), {
+                    fields : {
+                        'rating' : {
+                            getValue:function($td) {
+                                return parseInt($td.data("rating"), 10);
+                            }
+                        }
+                    }
+                    
+                    
+                });
+            });
             
         } else {
             Alerts.showErrorMessage("No results found for your search");

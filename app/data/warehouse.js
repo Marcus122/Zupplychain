@@ -70,14 +70,19 @@ warehouseSchema.statics = {
     var editableResult = null; //stores a toObject() version of the warehouse which we can add properties to etc.
 	var corrResults = [];
 	
-	/*if (!query.weight){
-		query.weight = '0';
-	}
-	
-	if (!query.height){
-		query.height = '0';
-	}*/
-	
+	function distanceInMiles(point1, point2) {
+        function toRadians(degrees) {
+            return degrees * Math.PI / 180;
+        }
+        var lat1 = point1.lat;
+        var lat2 = point2.lat;
+        var lon1 = point1.lng;
+        var lon2 = point2.lng;
+        var φ1 = toRadians(lat1), φ2 = toRadians(lat2), Δλ = toRadians(lon2-lon1), R = 6371000; // gives d in metres
+        var d = Math.acos( Math.sin(φ1)*Math.sin(φ2) + Math.cos(φ1)*Math.cos(φ2) * Math.cos(Δλ) ) * R;
+       
+        return Math.round(d * 0.0006213711);
+    }    
 	
     this.find({
 			  "loc" : {
@@ -97,7 +102,7 @@ warehouseSchema.statics = {
                           editableResult = result[i].toObject(); //turn warehouse into a nice place JS object.
 						  corrResult = false;
                           for (var j=0; j<result[i].storage.length; j++){
-                              var palletTypeOK  = !query.palletType || result[i].storage[j].palletType === query.palletType; //!palletType means any
+                              var palletTypeOK  = !query.palletType || result[i].storage[j].palletType === "Any" ||result[i].storage[j].palletType === query.palletType; //!palletType means any
                               var maxWeightOK   = !query.weight || result[i].storage[j].maxWeight >= query.weight;
                               var maxHeightOK   = !query.height || result[i].storage[j].maxHeight >= query.height;
                               var tempOK        = result[i].storage[j].temp === query.temp;
@@ -114,13 +119,17 @@ warehouseSchema.statics = {
                                       }
                                   }
                                   editableResult.storageMatch = editableResult.storage[j];
+                                  editableResult.distanceFromSearch = distanceInMiles(editableResult.geo , query.geo );
                               }
                             }
 						if(corrResult === true){
 							corrResults.push(editableResult);
 						}
 					  };
-					  cb(err,corrResults);
+                      corrResults.sort(function(a,b) {
+                          return a.distanceFromSearch-b.distanceFromSearch;
+                      });
+					  cb(err,corrResults) ;
 				  }
 			  });
   },

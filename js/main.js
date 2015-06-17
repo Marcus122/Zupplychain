@@ -25,6 +25,7 @@ require(["jquery"], function($) {
             require(["components/search"], function(Search) {
                Search();
             });
+            
         }
 		if (onPage("provider-registration-1") || onPage("provider-registration-2") || onPage("provider-registration-3")){
 			require(["components/provider-registration"],function(Registration){

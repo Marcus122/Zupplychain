@@ -289,5 +289,26 @@
     color:#fff;
     transform:rotateZ(-90deg);
     width:56px;
-    
 }
+#search-results-table thead th:first-child{
+    z-index:-1;
+}
+#search-results-table th,
+#search-results-table tr  {
+       position:relative;
+}
+#search-results-table .sortable{
+    cursor:pointer;
+    padding-right:35px;
+    padding-right:3.5rem;
+    &:after{
+        content: '\f271';
+        .ion;
+        position:absolute;
+        right:4px;
+        transform:rotateZ(90deg);
+        top:40%;
+    }
+}
+
+
