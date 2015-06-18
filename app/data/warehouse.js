@@ -65,8 +65,24 @@ warehouseSchema.statics = {
 		  .populate('user')
 		  .exec(cb); 
   },
+  
+  filterStorageOnQuery: function(storage, query) {
+    var matchingStorages = [];
+    for (var j=0; j<storage.length; j++){
+        var palletTypeOK  = !query.palletType || storage[j].palletType === "Any" || storage[j].palletType === query.palletType; //!palletType means any
+        var maxWeightOK   = !query.weight || storage[j].maxWeight >= query.weight;
+        var maxHeightOK   = !query.height || storage[j].maxHeight >= query.height;
+        var tempOK        = storage[j].temp === query.temp;
+        var spacesOK      = storage[j].palletSpaces >= query.totalPallets;
+        if (palletTypeOK && maxWeightOK && maxHeightOK && tempOK && spacesOK){
+            matchingStorages.push(storage[j].toObject());
+        }
+    }
+    return matchingStorages;       
+  },
+  
   search_by_query: function(query, cb) {
-    var corrResult = false;
+    var warehouseAPI = this;
     var editableResult = null; //stores a toObject() version of the warehouse which we can add properties to etc.
 	var corrResults = [];
 	
@@ -100,33 +116,15 @@ warehouseSchema.statics = {
 				  }else{
 					  for(var i in result){
                           var matchingStorages = [];
-                          editableResult = result[i].toObject(); //turn warehouse into a nice plane JS object.
-						  corrResult = false;
-                          for (var j=0; j<result[i].storage.length; j++){
-                              var palletTypeOK  = !query.palletType || result[i].storage[j].palletType === "Any" ||result[i].storage[j].palletType === query.palletType; //!palletType means any
-                              var maxWeightOK   = !query.weight || result[i].storage[j].maxWeight >= query.weight;
-                              var maxHeightOK   = !query.height || result[i].storage[j].maxHeight >= query.height;
-                              var tempOK        = result[i].storage[j].temp === query.temp;
-                              var spacesOK      = result[i].storage[j].palletSpaces >= query.totalPallets;
-                              if (palletTypeOK && maxWeightOK && maxHeightOK && tempOK && spacesOK){
-                                  corrResult = true;
-                                  if (editableResult.storageMatch) {
-                                      //if we already found a matching storage, only replace with this one if the price is lower
-                                      var currentResultPrice = editableResult.storageMatch.currentPricing.price;
-                                      var newResultPrice = editableResult.storage[j].currentPricing.price;
-                                      if (currentResultPrice <= newResultPrice) {
-                                          continue;
-                                      }
-                                  }
-                                  matchingStorages.push(editableResult.storage[i]);
-                                  editableResult.storageMatch = editableResult.storage[j];
-                                  editableResult.distanceFromSearch = distanceInMiles(editableResult.geo , query.geo );
-                              }
-                            }
-						if(corrResult === true){
-                            editableResult.storage = matchingStorages;
-							corrResults.push(editableResult);
-						}
+                          editableResult = result[i].toObject(); //turn warehouse into a nice plain JS object.
+                          var matchingStorage = warehouseAPI.filterStorageOnQuery(result[i].storage, query);
+                          if (matchingStorage.length > 0) {
+                              matchingStorage.sort(function(a,b){return a.currentPricing.price - b.currentPricing.price});
+                              editableResult.storageMatch = matchingStorage[0]; //this 'storageMatch' is the one who's details we show on the search page.
+                              editableResult.storage = matchingStorage;//limit the storage to ones that match.
+						      editableResult.distanceFromSearch = distanceInMiles(editableResult.geo , query.geo );
+                        	  corrResults.push(editableResult);
+						  }
 					  };
                       corrResults.sort(function(a,b) {
                           return a.distanceFromSearch-b.distanceFromSearch;

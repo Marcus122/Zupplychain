@@ -187,7 +187,7 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
             resultsElem.find('.js-image').addClass("rotateY90");
             resultsElem.find('.add-to-quote').data("id", data._id);
             resultsElem.find('.remove-from-quote').data("id", data._id);
-            resultsElem.find('.view-details').attr("href" , "/warehouse-profile/" + data._id);
+            resultsElem.find('.view-details').attr("href" , "/warehouse-profile/" + data._id + "?fromSearch=true");
             setTimeout(function(){resultsElem.find('.js-image').prop("src", "/images/" + data.photos[0]).removeClass("rotateY90");}, 300 );
         }
 

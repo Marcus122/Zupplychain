@@ -57,7 +57,7 @@ function populateSearchData(req,res, next){
 }
 function populateSessionStateJSON(req,postcode,palletType,radius,weight,height,temp,qty){
 	var srchJson = '{"sc":[' +
-	'{"palletType":"'+palletType +'","searchQty":"'+qty+'","postcode":"'+postcode+
+	'{"palletType":"'+palletType +'","totalPallets":"'+qty+'","postcode":"'+postcode+
 	'","maxDistance":"'+radius+'","description":"'+req.body.description+
 	'","height":"'+height+'","weight":"'+weight+'","temp":"'+temp+'","startDate":"'+
 	req.body["start-date"]+'","endDate":"'+req.body["end-date"]+'"} ]}';

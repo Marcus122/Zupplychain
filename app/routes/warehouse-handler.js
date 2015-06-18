@@ -19,6 +19,15 @@ var handler = function(app) {
 	
 	app.get('/warehouse-profile/:warehouse_id', function(req,res){
 		req.data.warehouse = req.warehouse;
+        if (req.query.fromSearch && req.session.whSC && req.session.whSC.sc && req.session.whSC.sc.length > 0) {
+            //tidy up the query so that ints are parsed as such, we'll get strings back from session.
+            var query = req.session.whSC.sc[0];
+            query.height = Number(query.height);
+            query.weight = Number(query.weight);
+            query.searchQty = Number(query.quantity);
+            
+            req.data.warehouse = limitStorageToMatching(req.warehouse, query);
+        }
 		res.render("warehouse-profile",req.data);
 	});
 	
@@ -39,6 +48,13 @@ var handler = function(app) {
 	app.post('/warehouse/:warehouse_id/storage/:storage_id', warehouseAuth,  updateStorage );
 	app.get('/storage/:storage_id', setStorageResponse );
 };
+
+function limitStorageToMatching(thiswarehouse, query) {
+    var newStorage = warehouse.limitStorageToMatching(thiswarehouse.storage, query);
+    thiswarehouse.storage = newStorage;
+    return thiswarehouse;
+}
+
 function createUser(req,res){
 	user.create(req,res,{},function(err,user){
 		createWarehouse(req,res);

@@ -20,7 +20,7 @@
 				</div>
 				<div class="input-field number">
 					<label for="quantity">Qty</label>
-					<input type="number" name="quantity" min="1" max="2000" required="required" value="<%=session.whSC.sc[0].searchQty%>"/>
+					<input type="number" name="quantity" min="1" max="2000" required="required" value="<%=session.whSC.sc[0].totalPallets%>"/>
 				</div>
 				<div class="input-field">
 					<label for="postcode">Target Postcode/City</label>
@@ -36,19 +36,19 @@
 				</div><br/>
 				<div class="input-field">
 					<label for="start-date">Start Date</label>
-					<input type="date" name="start-date" value="<%=session.whSC.sc[0].startDate%>"/>
+					<input type="date" name="start-date" required="required" value="<%=session.whSC.sc[0].startDate%>"/>
 				</div>
 				<div class="input-field">
 					<label for="end-date">End Date</label>
-					<input type="date" name="end-date" data-loom-greater-than="start-date" value="<%=session.whSC.sc[0].endDate%>"/>
+					<input type="date" name="end-date" required="required" data-loom-greater-than="start-date" value="<%=session.whSC.sc[0].endDate%>"/>
 				</div>
 				<div class="input-field number">
 					<label for="height">Pallet Height (m)</label>
-					<input type="number" name="height" min="0" max="100" step=".1" value="<%=session.whSC.sc[0].height%>" data-loom-type="decimal" data-loom-decimal-places="1" />
+					<input type="number" name="height" min="0" required="required" max="100" step=".1" value="<%=session.whSC.sc[0].height%>" data-loom-type="decimal" data-loom-decimal-places="1" />
 				</div>
 				<div class="input-field number">
 					<label for="weight">Pallet Weight (kg)</label>
-					<input type="number" name="weight" min="0" max="2000" value="<%=session.whSC.sc[0].weight%>"/>
+					<input type="number" name="weight" required="required" min="0" max="2000" value="<%=session.whSC.sc[0].weight%>"/>
 				</div>
 				
 				<div class="input-field">
@@ -107,19 +107,19 @@
 					  }else{
 						toDate.setDate(today.getDate() + 730);
 					  }%>
-					<input type="date" name="start-date" value="<%=today.toISOString().substring(0, 10)%>"/>
+					<input type="date" required="required" name="start-date" value="<%=today.toISOString().substring(0, 10)%>"/>
 				</div>
 				<div class="input-field">
-					<label for="end-date">End Date</label>
-					<input type="date" name="end-date" data-loom-greater-than="start-date" value="<%=toDate.toISOString().substring(0, 10)%>"/>
+					<label for="end-date"></label>
+					<input type="date" name="end-date" required="required" data-loom-greater-than="start-date" value="<%=toDate.toISOString().substring(0, 10)%>"/>
 				</div>
 				<div class="input-field number">
 					<label for="height">Pallet Height (m)</label>
-					<input type="number" name="height" min="0" max="100" value="" step=".1" data-loom-type="decimal" data-loom-decimal-places="1"/>
+					<input type="number" name="height" required="required" min="0" max="100" value="" step=".1" data-loom-type="decimal" data-loom-decimal-places="1"/>
 				</div>
 				<div class="input-field number">
 					<label for="weight">Pallet Weight (kg)</label>
-					<input type="number" name="weight" min="0" max="2000" value="" />
+					<input type="number" name="weight" required="required" min="0" max="2000" value="" />
 				</div>
 				
 				<div class="input-field">
