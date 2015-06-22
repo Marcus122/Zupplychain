@@ -35,27 +35,43 @@
 	opacity:0.8;
 	content:"";
 }
-.popup-window .popup-buttons{
-	.unit-padding-vertical(1);
-	overflow:hidden;
-}
-.popup-window .popup-buttons div{
-	width:120px;
-	float:right;
-	text-align:center;
-}
-.popup-window .remove-col{
-	width:100px;
-	text-align:center;
-}
-.popup-window table{
-	margin-bottom:0;
-	width: 100%;
-}
-.popup-window .small{
-	margin:5% auto;
-	z-index: 100;
-	position:relative;
+.popup-window{
+	 .popup-buttons{
+		.unit-padding-vertical(1);
+		overflow:hidden;
+	}
+	.popup-buttons{
+		padding-right:20px;
+		 div{
+			float:right;
+			display:inline-block;
+		}
+		.add{
+			margin-right:25px;
+			text-transform: uppercase;
+			button{
+				margin-left:10px;
+			}
+		}
+		.save{
+			button{
+				margin-left:20px;
+			}
+		}
+	}
+	.remove-col{
+		width:100px;
+		text-align:center;
+	}
+	table{
+		margin-bottom:0;
+		width: 100%;
+	}
+	.small{
+		margin:5% auto;
+		z-index: 100;
+		position:relative;
+	}
 }
 
 #register-email-popup{

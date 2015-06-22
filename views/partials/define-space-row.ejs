@@ -4,7 +4,7 @@
 		<input type="text" data-bind-value="name" data-bind-value-condition="name" required  value="<%=row.name%>" name="name" data-bind-placeholder="placeholder"/>
 	</td>
 	<td data-th="Pallet Type" class="select input-field no-success-validation-style">
-		<select name="palletType">
+		<select name="palletType" required>
 			<option value=""/>
 			<option
 				<%if(row.palletType === 'Blue' ){%>
@@ -39,7 +39,7 @@
 		</select>
 	</td>
 	<td data-th="Storage Temp" class="select input-field no-success-validation-style">
-		<select name="temp">
+		<select name="temp" required>
 			<option value=""/>
 			<option
 				<%if(row.temp === 'Ambient' ){%>

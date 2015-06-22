@@ -84,6 +84,11 @@ FormField.prototype.addHTML5AttributeBasedValidators = function() {
 			var minValue = this.element.attr("minlength");
 			this.addValidator("minlength", ValidatorLib.getMinlengthValidator(minValue, this.type));
 		}
+        
+        if (this.element.data("pattern")) {
+			var pattern = this.element.data("pattern");
+			this.addValidator("pattern", ValidatorLib.getPatternValidator(pattern));
+		}
 }
 
 FormField.prototype.addTypeBasedValidator = function(){
@@ -580,7 +585,14 @@ ADate.prototype.setupControls = function() {
     if (this.doesBrowserSupportDateField()) { //if the browser supports HTML5 date type, we need to use the spec format of yyyy-mm-dd;
         dateFormat = "yy-mm-dd"
     }
+    var minDate = this.element.attr('min') ? new Date(this.element.attr('min')) : null;
+    var maxDate = this.element.attr('max') ? new Date(this.element.attr('max')) : null;
     //require(["loom/jquery-ui"], function(ui){ //already included in define now... if load times become a problem uncomment this.
+        //debugger;
+        if(this.element.hasClass('hasDatepicker')){
+            this.element.datepicker( "option", "minDate", minDate );
+            this.element.datepicker( "option", "maxDate", maxDate );
+        }
         that.element.datepicker({
             inline: true,
             dateFormat: dateFormat,
@@ -590,7 +602,9 @@ ADate.prototype.setupControls = function() {
                 }
                 that.setValueFromBoundInput(dateText);
                 that.isValid();
-            }
+            },
+            minDate: minDate,
+            maxDate: maxDate
      //    });
     });
 }
@@ -700,6 +714,25 @@ Decimal.prototype.setValueFromBoundInput = function(){
     this.element.val(this.value); //read back out our nice decimalled value.
 };
 
+function Integer($elem){
+    FormField.call(this, $elem, "integer");
+}
+inherit(Integer, FormField);
+Integer.prototype.setValueFromBoundInput = function(){
+    var asString = this.element.val();
+    var asInt = parseInt(asString, 10);
+    this.value = asInt;
+    if (isNaN(asInt)) {
+        this.value=""; //don't allow an invalid input to get into the 'value', just default to blank.
+    }
+     if (this.element.is(":focus")) {
+        if (isNaN(asInt)) {
+            this.value = NaN; //and it it was invalid, set the internal value to something that will fail the decimal validator.
+        }
+        return;
+    }
+    this.element.val(this.value);
+}
  
 // the factory.
 

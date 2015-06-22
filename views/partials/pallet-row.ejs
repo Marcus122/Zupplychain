@@ -2,21 +2,17 @@
 	<td data-th="From" class="input-field no-success-validation-style">
 		<%var today = new Date(),
 		      toDate = new Date();
-		  if ((today.getFullYear() + 1) % 4 == 0){
-			toDate.setDate(today.getDate() + 366);
-		  }else{
-			toDate.setDate(today.getDate() + 365);
-		  }%>
-		<input required type="date" name="from" class="datepicker" data-bind-value="from" data-loom-add-controls="true" value="<%=today.toISOString().substring(0, 10)%>"/>
+		  toDate.setYear(today.getFullYear() + 1);%>
+		<input disabled required type="date" name="from" class="datepicker" data-bind-value="from" data-loom-add-controls="true" value="<%=today.toISOString().substring(0, 10)%>"/>
 	</td>
 	<td data-th="To" class="input-field no-success-validation-style">
-		<input required data-bind-value="to" type="date" name="to" class="datepicker" data-loom-add-controls="true" max="<%=toDate.toISOString().substring(0, 10)%>" value="<%=toDate.toISOString().substring(0, 10)%>"/>
+		<input required data-bind-value="to" type="date" name="to" class="datepicker" data-loom-add-controls="true" max="<%=toDate.toISOString().substring(0, 10)%>" data-bind-min="from" min="<%=today.toISOString().substring(0, 10)%>"/>
 	</td>
 	<td data-th="Total Pallets" class="input-field no-success-validation-style">
 		<input disabled required data-bind-value="total" name="total" type="number"/>
 	</td>
 	<td data-th="Estimated in Use" class="input-field no-success-validation-style">
-		<input required data-bind-value="inUse" data-bind-max="total" name="inUse" type="number" data-loom-validators="integer"/>
+		<input data-loom-type="integer" required data-bind-value="inUse" data-bind-max="total" name="inUse" type="number" data-loom-validators="integer"/>
 	</td>
 	<td data-th="Estimated Free" class="input-field no-success-validation-style">
 		<input disabled required data-bind-value="free" name="free" type="number"/>

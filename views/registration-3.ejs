@@ -31,8 +31,9 @@
 											<thead>
 												<tr>
 													<th>Storage Name</th>
+													<th>Pallet Spaces</th>
 													<th>Pricing</th>
-													<th>Volume Discount</th>
+													<!--<th>Volume Discount</th>-->
 													<th>Availabile Pallets</th>
 													<th>Progress</th>
 												</tr>
@@ -44,12 +45,15 @@
 													<td class="text" data-th="Storage Name">
 														<span><%=warehouse.storage[i].name%></span>
 													</td>
+													<td class="text" data-th="Pallet Spaces">
+														<span><%=warehouse.storage[i].palletSpaces%></span>
+													</td>
 													<td class="button-cell pricing" data-th="Pricing">
 														<button data-template="pricing" type="button" class="secondary popup mini">click here</button>
 													</td>
-													<td class="button-cell discounts" data-th="Volume Discount">
+													<!--<td class="button-cell discounts" data-th="Volume Discount">
 														<button data-template="volume"  type="button" class="secondary popup mini">click here</button>
-													</td>
+													</td>-->
 													<td class="button-cell pallets" data-th="Available Pallets">
 														<button data-template="pallets" type="button" class="secondary popup mini">click here</button>
 													</td>
@@ -62,18 +66,18 @@
 											    <%}%>
 											</tbody>
 										</table>
-										<div class="row">
+										<!--<div class="row">
 											<!--<div class="columns five check checkbox input-field">
 												<input required type="checkbox" name="accept" id="accept"/>
 												<label for="accept">*I agree to the terms and conditions.</label>
 											</div>-->
-											<div class="columns four offset-by-five">
+											<!--<div class="columns four offset-by-five">
 												<button href="#" class="view tertiary forward mini">View list of Documentation</button>
 											</div>
 											<div class="columns three">
 												<button href="#" class="view tertiary forward mini">View Terms &amp; Conditions</button>
 											</div>
-										</div>
+										</div>-->
 									</fieldset>
 								</div>
 								<!--<div class="content-box primary">
@@ -127,7 +131,7 @@
 						<button class="close no-resize"><span>close</span></button>
 						<form id="pricing-form" class="loom-form" novalidate method="post" data-loom-no-submit="true">
 							<div class="main">
-								<h2>Basic Pricing</h2>
+								<h2>Core Pricing</h2>
 								<div class="row">
 									<table class="responsive-table columns seven" data-title="Basic pricing" id="default-pricing-table">
 										<thead><tr>
@@ -141,7 +145,7 @@
 							</div>
 							<div class="main">
 								<h2>Date Range Pricing</h2>
-								<p>You can add pricing conditions for different time periods</p>
+								<p>You can add pricing conditions for different time periods, this will override your core pricing</p>
 								<table class="show-title responsive-table" data-title="Pricing" id="date-pricing-table">
 									<thead>
 										<tr>
@@ -158,11 +162,13 @@
 								</table>
 								<div class="popup-buttons">
 									<div class="add">
+										<span>Add new date range</span>
 										<button type="button" class="add-button"><span>add row</span></button>
 									</div>
 								</div>
 								<div class="popup-buttons">
 									<div class="save">
+										<button data-bind-value="_id" type="button" class="action add-volume">Add volume discount</button>
 										<button class="action done">save</button>
 									</div>
 								</div>
@@ -181,41 +187,46 @@
 		 <script type="text/template" id="volume">
 			<div class="popup-window">
 				<div class="inner">
-					<div class="popup-main content-box secondary">
+					<div class="popup-main content-box secondary discount-popup">
 						<div class="header">
 							<h2>Volume Discount: Storage @name@</h2>
 						</div>
 						<button class="close no-resize"><span>close</span></button>
 						<div class="main">
-							<h2>Volume Discount</h2>
-							<form method="post" id="discount-form" class="loom-form" novalidate data-loom-no-submit="true">
-								<div class="input-field no-discount no-success-validation-style">
-									<label for="no-disc">No discount on orders with up to</label>
-									<input required type="number" value="0" name="noDiscount" min="0" data-bind-value="noDiscount" data-bind-max="palletSpaces"/>
-									<span>pallets</span>
+							<div class="discount-inner">
+								<div class="discount-header">
+									<h2>Volume Discount</h2>
+									<span>Max number of pallets: <strong>@palletSpaces@</strong></span>
 								</div>
-								<p>If you want to specify variations to your prices per week per pallet for small or large quantities, use this table. If not, your prices will apply to any quantity.</p>
-								<table class="show-title responsive-table" data-title="Volume Discount">
-									<thead>
-										<th>From</th>
-										<th>To</th>
-										<th>% Discount</th>
-										<th class="remove-col"/>
-									</thead>
-									<tbody>
-									</tbody>
-								</table>
-								<div class="popup-buttons">
-									<div class="add">
-										<button type="button" class="add-button"><span>add row</span></button>
+								<form method="post" id="discount-form" class="loom-form" novalidate data-loom-no-submit="true">
+									<div class="input-field no-discount no-success-validation-style">
+										<label for="no-disc">No discount on orders with up to</label>
+										<input required type="number" value="0" name="noDiscount" min="0" data-bind-value="noDiscount" data-bind-max="palletSpaces"/>
+										<span>pallets</span>
 									</div>
-								</div>
-								<div class="popup-buttons">
-									<div class="save">
-										<button class="action done">save</button>
+									<p>If you want to specify variations to your prices per week per pallet for small or large quantities, use this table. If not, your prices will apply to any quantity.</p>
+									<table class="show-title responsive-table" data-title="Volume Discount">
+										<thead>
+											<th>From</th>
+											<th>To</th>
+											<th class="discount-value">% Discount</th>
+											<th class="remove-col"/>
+										</thead>
+										<tbody>
+										</tbody>
+									</table>
+									<div class="popup-buttons">
+										<div class="add">
+											<button type="button" class="add-button"><span>add row</span></button>
+										</div>
 									</div>
-								</div>
-							</form>
+									<div class="popup-buttons">
+										<div class="save">
+											<button class="action done">save</button>
+										</div>
+									</div>
+								</form>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -234,8 +245,9 @@
 						<button class="close no-resize"><span>close</span></button>
 						<div class="main">
 							<h2>Available Pallets</h2>
+							<p>Specify your pallet availability for the next year</p>
 							<form method="post" id="pallets-form" class="loom-form" novalidate data-loom-no-submit="true">
-								<table class="show-title responsive-table" data-title="Available Pallets">
+								<table class="show-title responsive-table availability-table" data-title="Available Pallets">
 									<thead>
 										<tr>
 											<th>From</th>
@@ -251,6 +263,7 @@
 								</table>
 								<div class="popup-buttons">
 									<div class="add">
+										<span>Add new date range</span>
 										<button type="button" class="add-button"><span>add row</span></button>
 									</div>
 								</div>
@@ -260,6 +273,41 @@
 									</div>
 								</div>
 							</form>
+							<div class="availability-progress">
+								<table>
+									<thead>
+										<tr>
+											<% 
+												var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
+												  "July", "Aug", "Sep", "Oct", "Nov", "Dec"
+												];
+												var i = 0;
+												var date = new Date();
+												while(i<13){%>
+													<th><%=monthNames[date.getMonth()].toUpperCase()%> <%=String(date.getFullYear()).substring(2,4)%></th>
+													<%
+														date.setMonth(date.getMonth()+1);
+														i++;
+												}
+											%>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<%
+												i=0;
+												while(i<13){%>
+													<td/>
+													<%i++;
+												}
+											%>
+										</tr>
+										<tr class="progress-row">
+											<td colspan="12"/>
+										</tr>
+									</tbody>
+								</table>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -285,7 +333,7 @@
 									<p>Choose a password</p>
 								<%}%>
 								<div class="input-field no-success-validation-style">
-									<input type="password" name="password" placeholder="Password" minlength="8" required/>
+									<input data-pattern="(?=.*[A-Z])(?=.*[0-9])" type="password" name="password" placeholder="Password" minlength="8" required/>
 								</div>
 								<div class="check checkbox input-field">
 									<input required type="checkbox" name="accept" id="accept"/>

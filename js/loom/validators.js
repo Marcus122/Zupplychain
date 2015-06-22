@@ -36,6 +36,13 @@ define({
 			return input.length >= minLength;
 		}
 	},
+	getPatternValidator : function (pattern){
+		return function(input) {
+			if(!input) return true;
+			var regex = new RegExp(pattern.replace('((','{').replace('))','}'));
+			return regex.test(input);
+		}
+	},
 	
 	//HTML5 validator types, these are looked up by the 'type' of the input so names must match HTML5 spec input types.
 	email : function(input) {
@@ -98,8 +105,8 @@ define({
 		return re.test(input);
 	},
     integer : function(input) {
-        var n = ~~Number(input);
-        return String(n) === input && n >= 0;
+        var n = Number(input);
+        return n === Math.floor(n) && n >= 0;
     },
 	mobileNumber : function(input) {
 		return input;

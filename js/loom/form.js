@@ -36,14 +36,14 @@ define(["jquery", "./formField", "./loomConfig"],function($, FormField, Config){
         var noSubmit;
         var resetOnSuccess;
         var isIE;
-		var responseHandler;
+	var responseHandler;
         
 	// INIT
 	formElement 	= $($form);
-	url 			= formElement.attr("action");
-	action 			= formElement.attr("data-loom-action");
-	dataType 		= formElement.attr("data-loom-data-type");
-	prefix 			= formElement.attr("data-loom-field-prefix") || "";
+        url 		= formElement.attr("action");
+        action 		= formElement.attr("data-loom-action");
+        dataType 	= formElement.attr("data-loom-data-type");
+        prefix 		= formElement.attr("data-loom-field-prefix") || "";
         noAJAX          = formElement.attr("data-loom-no-ajax");
         noSubmit        = formElement.attr("data-loom-no-submit");
         disableOnLoad   = formElement.attr("data-loom-disabled"); //disable the form immediately, changing the submit button to an edit button
@@ -112,7 +112,9 @@ define(["jquery", "./formField", "./loomConfig"],function($, FormField, Config){
                 } else if (code == 13) {
                     e.preventDefault();
                 }
-                func();
+                if($(this).closest('.input-field').hasClass('error')){
+        	       func();
+		}
             }
         }
         
@@ -122,7 +124,7 @@ define(["jquery", "./formField", "./loomConfig"],function($, FormField, Config){
             reset();
         });
 		
-		formElement.on("submit", function(evt){ 
+		formElement.off("submit.loom").on("submit.loom", function(evt){ 
 			onSubmit(evt);
 		});
         

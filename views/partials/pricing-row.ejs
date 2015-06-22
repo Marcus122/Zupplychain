@@ -13,13 +13,13 @@
 		<input data-bind-min="from" required data-bind-value="to" type="date" name="to" class="datepicker" data-loom-add-controls="true" max="<%=toDate.toISOString().substring(0, 10)%>" value="<%=toDate.toISOString().substring(0, 10)%>"/>
 	</td>
 	<td data-th="Price per pallet per week" class="input-field no-success-validation-style">
-		<input data-bind-value="price" name="price" type="number"/>
+		<input data-loom-type="decimal" data-loom-decimal-places="2" data-bind-value="price" name="price" type="number"/>
 	</td>
 	<td data-th="Handling charge per pallet (In and Out)" class="input-field no-success-validation-style">
-		<input data-bind-value="charge" name="charge" type="number"/>
+		<input data-loom-type="decimal" data-loom-decimal-places="2" data-bind-value="charge" name="charge" type="number"/>
 	</td>
 	<td data-th="Cost to reserve" class="input-field no-success-validation-style">
-		<input data-bind-value="reserve" name="reserve" type="number"/>
+		<input data-loom-type="decimal" data-loom-decimal-places="2" data-bind-value="reserve" name="reserve" type="number"/>
 	</td>
 	<td data-th="Remove" class="input-field no-success-validation-style remove-col">
 		<button type="button" class="trash-button"><span>Delete</span></button>

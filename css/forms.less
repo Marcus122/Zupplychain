@@ -8,7 +8,6 @@
  }
  input:not([type='checkbox']), select{
     width:100%;
-    .unit-margin-bottom(0.5);
  }
 input[type="email"], input[type="number"], input[type="search"], input[type="text"], input[type="tel"], input[type="url"], input[type="date"], input[type="password"]{
 	.border-radius(2px,2px,2px,2px);
@@ -104,6 +103,83 @@ input[type="checkbox"]{
 }
 .form-footer button.back:hover{
 	color:@light-text;
+}
+.input-field .messages{
+  max-height: 0;
+  transition: max-height .2s ease-out;
+  -webkit-transition: max-height .2s ease-out;
+  overflow: hidden;
+  padding:0 !important;
+  margin:0 !important;
+  height:auto;
+  font-size:12px;
+    list-style: none;
+     li{
+    	padding: .3em 1em .5em;
+        margin:0;
+    }
+    .msg-alert,
+    .msg-error{
+    	display:none;
+    }
+    .msg-alert {
+      background-color: #fdf8ec;
+    }
+    .msg-error {
+      background-color: #fbedec;
+    }
+    .msg-success{
+    	background-color: #edf8f0;
+    }
+}
+.input-field.error .messages,
+.input-field.invalid .messages {
+    max-height: 500px;
+}
+.input-field.invalid input, .input-field.invalid select {
+  border-color: #dd4a3e;
+}
+.input-field.alert input, .input-field.alert select {
+  border-color: #edb648;
+}
+.input-field input:focus ~ .messages, .input-field select:focus ~ .messages {
+  max-height: 500px;
+  transition: max-height .4s ease-in;
+  -webkit-transition: max-height .4s ease-in;
+}
+.input-field.error-required .msg-alert {
+  display: block;
+}
+.input-field.error .msg-error {
+  display: block;
+}
+.input-field .messages .msg-info {
+  background-color: #e8f5fb;
+  position: relative;
+}
+.input-field .msg-info:before {
+	color: #009cda;
+	margin-right: .5em;
+	left: 8px;
+	position: absolute;
+	top: 5px;
+}
+.input-field.error .msg-info ,
+.input-field.success .msg-info {
+  display: none;
+}
+.input-field.success .messages .msg-info {
+	display:none;
+}
+.input-field.error-required .msg-info, .input-field.error-required .msg-error {
+  display: none;
+}
+.input-field.error.error-required input, .input-field.error.error-required select, .input-field.error.error-required textarea{
+  border-color: #edb648;
+  background-color:#fff;
+}
+.input-field.error input, .input-field.error select, .input-field.error textarea{
+	border-color:#dd4a3e;
 }
 @media @mobile {
 	.form-footer{

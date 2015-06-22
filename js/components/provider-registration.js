@@ -15,7 +15,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			step3();
 			
 			$(document).on("click",".popup-window .close",function(){
-				closePopup();
+				$(this).closest('.popup-window').remove();
 			});
 			
 		}
@@ -39,7 +39,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 		}
 		
 		function dateRanges(){
-			$(document).on('blur','table input[type="date"]',function(){
+			/*$(document).on('change','table input[type="date"]',function(){
 				var $form = $(this).closest('form');
 				//if(lm.isFormValid($form.attr('id'))){
 					$form.find('table').each(function(){
@@ -47,7 +47,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					});
 					lm.rebind($form);
 				//}
-			});
+			});*/
 		}
 		function nextRow($tbody,index,min){
 			var $row = $tbody.find('tr').eq(index);
@@ -166,42 +166,48 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				rebindForm();
 				removeButtons();
 			});
-			$defineSpaceTable.on("click","tr",function(ev){
-				ev.preventDefault();
-				$(this).toggleClass('active');
-			});
-			/*$defineSpace.find(".reg-2-example").on("click",function(ev){
-				ev.preventDefault();
-				var $form = $(this).closest('form');
-				var form = lm.getForm($form.attr("id"));
-				var formLim = $form.find('table').find('tbody').find('tr').length;
-				for (i = 0; i < formLim; i++){
-					$($form.find('table').find('tbody').find('tr')[i].children[0]).find('input[name="name"]').val(storageNames[i]);
-					$($form.find('table').find('tbody').find('tr')[i].children[3]).find('input[name="maxWeight"]').val(100);
-					$($form.find('table').find('tbody').find('tr')[i].children[4]).find('input[name="maxHeight"]').val(100);
-					$($form.find('table').find('tbody').find('tr')[i].children[5]).find('input[name="palletSpaces"]').val(100);
-				}
-			});*/
+			$defineSpace.on("click",".next",updateForm);
 			$defineSpace.on("submit",function(ev){
 				ev.preventDefault();
+				ev.stopPropagation();
+				updateForm();
 				saveDefinedSpace(function(){
 					window.location = $defineSpace.attr('action');
 				});
 			});
 			$defineSpace.find('.save').on("click",function(ev){
 				ev.preventDefault();
+				updateForm();
 				if( lm.isFormValid($defineSpace.attr('id')) ){
 					saveDefinedSpace();
 					saveRegistration();
 				}
 			});
+			function updateForm(){
+				var rebind=false;
+				$defineSpaceTable.find('tbody tr').each(function(){
+					var s={};
+					bindFormToObject($(this),s);
+					for(var i in s){
+						if(s[i]) return true;
+					}
+					$(this).find('input,select').removeAttr('required');
+					rebind=true;
+				});
+				if(rebind){
+					lm.rebind($defineSpace);
+				}
+			}
 			function saveDefinedSpace(cb){
 				if( lm.isFormValid($defineSpace.attr('id')) ){
 					var storage=[];
 					$defineSpaceTable.find('tbody tr').each(function(){
 						var s={};
 						bindFormToObject($(this),s);
-						storage.push(s);
+						for(var i in s){
+							if(s[i]) storage.push(s);
+							return true;
+						}
 					});
 					var warehouse={};
 					warehouse.id = $defineSpace.find('input[name="warehouse_id"]').val();
@@ -218,7 +224,6 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				}
 			}
 			function addPallet(){
-				$('.define-space .active').removeClass('active');
 				var template = templates.getTemplate("define-space-row");
 				var data={};
 				data.placeholder = storageNames[$('.define-space tbody tr').length];
@@ -244,12 +249,12 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 						$tr.find('.pricing').removeClass('error');
 					}
 					
-					if(!Storage || !(Storage.discounts.length || Storage.noDiscount)){
+					/*if(!Storage || !(Storage.discounts.length || Storage.noDiscount)){
 						$tr.find('.discounts').addClass('error');
 						complete=false;
 					}else{
 						$tr.find('.discounts').removeClass('error');
-					}
+					}*/
 					
 					if(!Storage || !Storage.pallets.length){
 						$tr.find('.pallets').addClass('error');
@@ -322,25 +327,31 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					var id = $(this).closest('tr').data('id');
 					$('.popup-window').remove();
 					var templateName = $(this).data('template');
-					var template = templates.getTemplate(templateName);
-					getStorage(id,function(Storage){
-						var $element = template.bind(Storage);
-						$('body').append($element);
-						switch( templateName ){
-							case 'pricing':
-								doPricing(Storage,$element);
-								break;
-							case 'pallets':
-								doPallets(Storage,$element);
-								break;
-							case 'volume':
-								doDiscount(Storage,$element);
-								break;
-							
-						}
-						lm.rebind($element.find('form'));
-						centerPopup($element);
-					});
+					showPopup(id,templateName);
+				});
+				$(document).on("click",".add-volume",function(){
+					showPopup($(this).val(),'volume');
+				});
+			}
+			function showPopup(storageId,templateName){
+				var template = templates.getTemplate(templateName);
+				getStorage(storageId,function(Storage){
+					var $element = template.bind(Storage);
+					$('body').append($element);
+					switch( templateName ){
+						case 'pricing':
+							doPricing(Storage,$element);
+							break;
+						case 'pallets':
+							doPallets(Storage,$element);
+							break;
+						case 'volume':
+							doDiscount(Storage,$element);
+							break;
+						
+					}
+					lm.rebind($element.find('form'));
+					centerPopup($element);
 				});
 			}
 			function getStorage(id,cb){
@@ -459,6 +470,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				var template = templates.getTemplate("pallet-row");
 				var Storage = _Storage;
 				var $form = $element.find('form');
+				var $availTable = $element.find('.availability-table');
 				if(!Storage.pallets || !Storage.pallets.length){
 					addPalletRow();
 				}else{
@@ -470,8 +482,11 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				}
 				$element.find('.add').on("click",function(){
 					if( lm.isFormValid($form.attr('id')) ){
-						addPalletRow();
-						rebind();
+						var lastTo = $availTable.find('tbody').find('tr').last().find('input[name="to"]');
+						if(lastTo.val() != lastTo.attr('max')){
+							addPalletRow();
+							rebind();
+						}
 					}
 				});
 				$form.on("submit",function(ev){
@@ -486,15 +501,41 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					$(this).closest('tr').remove();
 					rebind();
 				});
+				$form.on("change",'input',calcProgress);
 				$form.on("change",'input[name="inUse"]',function(){
 					var $tr = $(this).closest('tr');
 					var obj={};
 					bindFormToObject($tr,obj);
 					obj.free=obj.total-obj.inUse;
-					var $row = template.bind( obj );
+					$tr.find('input[name="free"]').val(obj.free);
+					/*var $row = template.bind( obj );
 					$tr.replaceWith($row);
-					rebind();
+					rebind();*/
 				});
+				$form.on("change",'input[name="to"]',function(){
+					//if( lm.isFormValid($form.attr('id')) ){
+						var index = $(this).closest('tr').index();
+						setNextRow(index+1,$(this).val());
+						rebind();
+					//}
+				});
+				function setNextRow(index,value){
+					var $row = $availTable.find('tbody tr').eq(index);
+					if(!$row.length) return;
+					var $from = $row.find('input[name="from"]');
+					var $to = $row.find('input[name="to"]');
+					var diff = (new Date($to.val()) - new Date($from.val())) /(1000*60*60*24);
+					var from = new Date(value);
+					from.setDate(from.getDate() + 1);
+					$from.val(from.toISOString().substring(0, 10));
+					if(!isNaN(diff)){
+						var to = new Date($from.val());
+						to.setDate(to.getDate() + diff);
+						$to.val(to.toISOString().substring(0, 10))
+					}
+					$to.attr('min',from.toISOString().substring(0, 10));
+					setNextRow(index+1,$to.val());
+				}
 				function addPalletRow(_data){
 					var data = _data || {};
 					if(!_data){
@@ -512,15 +553,32 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 							}else{
 								dateTo.setDate(dateTo.getDate()+365);
 							}
-							data.to = dateTo.toISOString().substring(0, 10);
+							//data.to = dateTo.toISOString().substring(0, 10);
 						}
 					}
 					var $row = template.bind( data );
-					$element.find('tbody').append($row);
+					$availTable.find('tbody').append($row);
+				}
+				function calcProgress(){
+					var $progress = $('.progress-row');
+					var today = new Date();
+					var left = today.getDate() * 100 / (365+30);
+					var maxDate = new Date();
+					$availTable.find('tbody tr').each(function(){
+						var $tr = $(this);
+						var date = $tr.find('input[name="to"]').val();
+						if(date) maxDate = new Date(date);
+					});
+					var dayDiff = (maxDate - today)/(1000*60*60*24);
+					var width = (dayDiff) * 100 / (365+30);
+					$progress.css({
+						width:width + '%',
+						left:left + '%'
+					});				
 				}
 				function toArray(){
 					var array=[];
-					$element.find('tbody tr').each(function(){
+					$availTable.find('tbody tr').each(function(){
 						var pallet={};
 						bindFormToObject($(this),pallet);
 						pallet.from = new Date(pallet.from).toISOString();
@@ -531,16 +589,20 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				}
 				function rebind(){
 					lm.rebind($form);
-					sortDateMaxMin($form.find('table'));
+					calcProgress();
+					$availTable.find('.trash-button').addClass('hidden');
+					if($availTable.find('tbody tr').length>1){
+						$availTable.find('.trash-button').last().removeClass('hidden');
+					}
 				}
-				
+				rebind();
 			}
 			function doDiscount(_Storage,$element){
 				var template = templates.getTemplate("discount-row");
 				var Storage = _Storage;
 				var $form = $element.find('form');
 				var $table =  $form.find('table');
-				if(!Storage.discounts || !Storage.discounts.length){
+				if((!Storage.discounts || !Storage.discounts.length) && Storage.noDiscount != Storage.palletSpaces){
 					addDiscountRow();
 				}else{
 					for(i in Storage.discounts){
@@ -564,7 +626,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					if( lm.isFormValid($form.attr('id')) ){
 						Storage.discounts=toArray();
 						$(document).trigger("popup-form-success",Storage._id);
-						closePopup();
+						$form.closest('.popup-window').remove();
 					}
 				});
 				$element.on('click','.trash-button',function(){
