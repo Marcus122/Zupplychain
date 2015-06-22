@@ -2,4 +2,74 @@
     .banner{
         margin-bottom:0px;
     }
+    .pricing-and-availability-row{
+        padding:40px 20px;
+    }
+    table {
+        width:100%;
+        text-align:left;
+        .availability-marker{
+            height:1000px;
+            position:absolute;
+            right:10px;
+            top:45px;
+            div {
+                width:3px;
+                background-color:@highlight;
+                height:1000px;
+            }
+            span {
+                position:absolute;
+                top:-1.4em;
+                display:block;
+                color:@highlight;
+            }
+        }
+        table  {
+            margin-bottom:0px;
+            td {
+                text-align:left;
+            }
+            td.bar {
+                width:200px;
+                padding:2px;
+            }
+            td.bar .bar{
+                height:38px;
+                line-height: 2.5em;
+                font-weight:bold;
+                padding-left:10px;
+                &.full{
+                   width:100%;
+                   color: darken( #d4e6a5, 20);
+                   background-color:#d4e6a5;
+                }
+                &.not-full{
+                    color:darken(#f0dfa6, 20);
+                    background-color:#f0dfa6;
+                }
+            }
+        }
+        .header {
+            background-color:@light-grey;
+            text-align:left;
+            h2{
+                font-size:20px;
+                font-size:2rem;
+                color:@dark-text;
+                font-weight:bold;
+            }
+        }
+        .main {
+            .unit-padding(0);
+            position:relative;
+            overflow:hidden;
+        }
+        .price {
+            background-color:#d4e6a5;
+            text-align:right;
+        }
+    }
+    
+    
 }

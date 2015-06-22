@@ -44,8 +44,95 @@
                                         <td>
                                             <%= storage.palletSpaces %>
                                         </td>
-										<td class="button-cell"><button data-template="volume" type="button" class="secondary popup mini">click here</button></td>
+										<td class="button-cell"><button data-id="<%=storage._id %>" data-template="pricing-and-availability" type="button" class="secondary popup mini">click here</button></td>
 									</tr>
+                                    <% if (session.whSC != undefined) { %>
+                                    <tr style="display:none" class="pricing-and-availability-<%=storage._id %>">
+                                        <td colspan="5">
+                                            <div class="pricing-and-availability-row row">
+                                                <div class="columns six pricing box">                                                    
+                                                    <div class="header">
+                                                        <h2>Pricing</h2>
+                                                    </div>
+                                                    <div class="main">
+                                                        <table class="pricing-table"><tbody>
+                                                            <tr>
+                                                            <td colspan="2">Prices per pallet</td>
+                                                            </tr>
+                                                            <tr>
+                                                            <td class="date">01/06/2011 - 01/06/2011</td>
+                                                            <td class="price">£1.50</td>
+                                                            </tr>
+                                                            <tr>
+                                                            <td>01/06/2012 - 01/06/2011</td>
+                                                            <td class="price">£2.50</td>
+                                                            </tr>
+                                                        </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="columns six availability box">
+                                                    <div class="header">
+                                                        <h2>Availability</h2>
+                                                    </div>
+                                                    <% 
+                                                    var totalPallets = parseInt(session.whSC.sc[0].totalPallets,10);
+                                                    var maxAvailability = Math.ceil(totalPallets / 50)*50 ;
+                                                    var thisAvailability = storage.palletSpaces;
+                                                    var startDate = new Date(session.whSC.sc[0].startDate);
+                                                    var endDate = new Date();
+                                                    endDate.setDate(startDate.getDate() + 365);
+                                                    %>
+                                                    <div class="main">
+                                                        <div class="availability-marker"><span class="number"><%=session.whSC.sc[0].totalPallets;%>
+                                                        </span><div></div></div>
+                                                        <table class="availability-table" data-max-availability="<%= maxAvailability %>" ><tbody>
+                                                            <tr>
+                                                            <td colspan="2">Availability for this storage space</td>
+                                                            </tr>
+                                                        <% 
+                                                        var lastEndDate = new Date(0); //end date of the previous record.
+                                                        var lim = storage.pallets.length;
+                                                        for (var i = 0; i< lim;i++)
+                                                        {
+                                                            var thisAvailability = storage.pallets[i];
+                                                            if (lastEndDate < thisAvailability.startDate){
+                                                                //we need to add an interveening row to cover the time inbetween.
+                                                                var newRowStartDate = lastEndDate;
+                                                                var newRowEndDate = new Date()
+                                                                if (i+1 < lim) {//there are still rows so use the start date of the next as our end date
+                                                                    newRowEndDate = storage.pallets[i+1].startDate;
+                                                                } else { //use the end date of the search.
+                                                                    newRowEndDate.setDate(endDate.getDate());
+                                                                    newRowFree = storage.palletSpaces;
+                                                                }
+                                                                //insert our new row
+                                                                %>
+                                                                <tr>
+                                                                    <td class="date"><%=newRowStartDate.getDate() + "/" + newRowStartDate.getMonth()%> - <%=newRowEndDate%></td>
+                                                                    <td class="bar">
+                                                                    <div data-value="<%=newRowFree%>" class="bar <%=newRowFree > totalPallets ? "full" : "not-full" %>">
+                                                                    <%=newRowFree > totalPallets ? "OK" : newRowFree %></div>
+                                                                    </td>
+                                                                </tr>
+                                                            <%
+                                                            }
+                                                            lastEndDate = new Date(thisAvailability.to.valueOf());
+                                                            lastEndDate.setDate(lastEndDate.getDate() + 1);
+                                                        %>
+                                                            <tr>
+                                                            <td class="date"><%=thisAvailability.from.getDate() + "/"  + parseInt(thisAvailability.from.getMonth(),10)+ "/" + thisAvailability.from.getFullYear() %> - <%=thisAvailability.to.getDate() + "/" + parseInt(thisAvailability.to.getMonth(),10) + "/" + thisAvailability.to.getFullYear() %></td>
+                                                            <td class="bar"><div data-value="<%=thisAvailability.free%>" class="bar <%= thisAvailability.free > totalPallets ? "full" :  "not-full" %>"><%= thisAvailability.free > totalPallets ? "OK" : thisAvailability.free%></div></td>
+                                                            </tr>
+                                                        <% } %>
+                                                        </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <%}%>
 								<%}%>
 							</tbody>
 						</table>
@@ -95,5 +182,6 @@
 			</div>
 		</section>
 	</main>
+    
  <% include ./partials/bottom%>
  
