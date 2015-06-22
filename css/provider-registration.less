@@ -120,7 +120,20 @@
 		vertical-align:middle;
 	}
 }
-.price-and-availability{ 
+.price-and-availability{
+	button.popup{
+		background:@primary;
+		padding: 2px 7px;
+		margin-left:1rem;
+		margin-left:10px;
+	}
+	button.popup:after{
+		font-size:2rem;
+		.ion;
+		content:@ionicon-var-android-add;
+		color:@white;
+		margin:0;
+	}
 	td.error{
 		background-image: url('/css/loom/images/icon-warning.png');
 		background-repeat:no-repeat;
@@ -131,7 +144,16 @@
 		background-image: url('/css/loom/images/icon-success.png');
 		background-repeat:no-repeat;
 		background-position: 95% 50%;
-		  background-color: #dff2bf;
+		background-color: #dff2bf;
+		button.popup:after{
+			content:@ionicon-var-android-create;
+		}
+		.edit-data:before{
+			content:'EDIT ';
+		}
+	}
+	.edit-data:before{
+		content:'ADD ';
 	}
 }
 .progress {
@@ -290,17 +312,18 @@ form#define-space{
 	.progress-row{
 		position:absolute;
 		bottom:10px;
-		width:0;
-		max-width:100%;
-		transition:1s width;
+		height:12px;
+		width:100%;
 		td{
 			background:@primary;
 			height:8px;
-			width:100%;
+			max-width:100%;
 			display:block;
 			border:0;
 			opacity:0.8;
 			transition:0.1s;
+			position:absolute;
+			min-width: 0.1%;
 		}
 	}
 }

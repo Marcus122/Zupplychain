@@ -35,33 +35,58 @@
 													<th>Pricing</th>
 													<!--<th>Volume Discount</th>-->
 													<th>Availabile Pallets</th>
-													<th>Progress</th>
+													<!--<th>Progress</th>-->
 												</tr>
 											</thead>
 											<tbody>
-												<%for( var i=0; i<warehouse.storage.length;i++ ){%>
-												<tr data-id="<%=warehouse.storage[i]._id %>">
-													
+												<%for( var i=0; i<warehouse.storage.length;i++ ){
+													var storage = warehouse.storage[i];
+													var pricingComplete=false;
+													var palletsComplete=false;
+													if(Number(storage.basicPricing.price) > 0){
+														pricingComplete=true;
+													}
+													if(storage.pallets && storage.pallets.length > 0){
+														palletsComplete=true;
+													}
+												%>
+												<tr data-id="<%=storage._id %>">
 													<td class="text" data-th="Storage Name">
-														<span><%=warehouse.storage[i].name%></span>
+														<span><%=storage.name%></span>
 													</td>
 													<td class="text" data-th="Pallet Spaces">
-														<span><%=warehouse.storage[i].palletSpaces%></span>
+														<span><%=storage.palletSpaces%></span>
 													</td>
-													<td class="button-cell pricing" data-th="Pricing">
-														<button data-template="pricing" type="button" class="secondary popup mini">click here</button>
-													</td>
+													<%if(pricingComplete){%>
+														<td class="button-cell pricing success" data-th="Pricing">
+															<span class="edit-data">DATA</span>
+															<button data-template="pricing" type="button" class="popup mini"/>
+														</td>
+													<%}else{%>
+														<td class="button-cell pricing" data-th="Pricing">
+															<span class="edit-data">DATA</span>
+															<button data-template="pricing" type="button" class="popup mini"/>
+														</td>
+													<%}%>
 													<!--<td class="button-cell discounts" data-th="Volume Discount">
 														<button data-template="volume"  type="button" class="secondary popup mini">click here</button>
 													</td>-->
-													<td class="button-cell pallets" data-th="Available Pallets">
-														<button data-template="pallets" type="button" class="secondary popup mini">click here</button>
-													</td>
-													<td data-th="Progress">
+													<%if(palletsComplete){%>
+														<td class="button-cell pallets success" data-th="Available Pallets">
+															<span class="edit-data">DATA</span>
+															<button data-template="pallets" type="button" class="popup mini"/>
+														</td>
+													<%}else{%>
+														<td class="button-cell pallets" data-th="Available Pallets">
+															<span class="edit-data">DATA</span>
+															<button data-template="pallets" type="button" class="popup mini"/>
+														</td>
+													<%}%>
+													<!--<td data-th="Progress">
 														<div class="progress">
 															<div class="progress-bar"/>
 														</div>
-													</td>
+													</td>-->
 											    </tr>
 											    <%}%>
 											</tbody>
@@ -303,7 +328,7 @@
 											%>
 										</tr>
 										<tr class="progress-row">
-											<td colspan="12"/>
+											<td/>
 										</tr>
 									</tbody>
 								</table>

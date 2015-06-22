@@ -41,12 +41,16 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 		function dateRanges(){
 			/*$(document).on('change','table input[type="date"]',function(){
 				var $form = $(this).closest('form');
-				//if(lm.isFormValid($form.attr('id'))){
-					$form.find('table').each(function(){
-						sortDateMaxMin($(this));
-					});
-					lm.rebind($form);
-				//}
+				var $row = $(this).closest('tr');
+				var $from = $row.find('input[name="from"]');
+				var $to = $row.find('input[name="to"]');
+				if($from.val()){
+					$to.attr('min',$from.val());
+				}
+				if($to.val()){
+					$from.attr('max',$to.val());
+				}
+				lm.rebind($form);
 			});*/
 		}
 		function nextRow($tbody,index,min){
@@ -238,35 +242,43 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			$priceForm.on("submit",function(ev){
 				ev.preventDefault();
 				//Check each storage has pricing
-				var complete=true;
-				$priceForm.find('tbody tr').each(function(){
+				var completed;
+				var $rows = $priceForm.find('tbody tr');
+				var i=0;
+				$rows.each(function(){
 					var $tr=$(this);
-					var Storage = storage[$tr.data('id')];
-					if(!Storage || !Storage.basicPricing.price){
-						$tr.find('.pricing').addClass('error');
-						complete=false;
-					}else{
-						$tr.find('.pricing').removeClass('error');
-					}
-					
-					/*if(!Storage || !(Storage.discounts.length || Storage.noDiscount)){
-						$tr.find('.discounts').addClass('error');
-						complete=false;
-					}else{
-						$tr.find('.discounts').removeClass('error');
-					}*/
-					
-					if(!Storage || !Storage.pallets.length){
-						$tr.find('.pallets').addClass('error');
-						complete=false;
-					}else{
-						$tr.find('.pallets').removeClass('error');
-					}
+					getStorage($tr.data('id'),function(Storage){
+						finish(isStorageComplete(Storage,$tr));
+					});
 				});
-				if(complete && lm.isFormValid($priceForm.attr('id')) ){
-					saveStorage(completeRegistration);
+				function finish(complete){
+					if(complete){
+						i++;
+					}
+					if(i === $rows.length ){
+						if(lm.isFormValid($priceForm.attr('id')) ){
+							saveStorage(completeRegistration);
+						}
+					}
 				}
 			});
+			
+			function isStorageComplete(Storage,$tr){
+				var complete=true;
+				if(!Storage || Number(Storage.basicPricing.price) <= 0 ){
+					$tr.find('.pricing').addClass('error');
+					complete=false;
+				}else{
+					$tr.find('.pricing').removeClass('error');
+				}
+				if(!Storage || !Storage.pallets.length){
+					$tr.find('.pallets').addClass('error');
+					complete=false;
+				}else{
+					$tr.find('.pallets').removeClass('error');
+				}
+				return complete;
+			}
 			$(document).on("popup-form-success",function(ev,id){
 				updateStorage(id);
 				var formId = $(ev.target.activeElement).closest('form').attr('id');
@@ -286,24 +298,10 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 							default:
 								return false;
 						}
-						var progress=0;
-						if($tr.find('.pricing').hasClass('success')){
-							progress++;
-						}
-						if($tr.find('.discounts').hasClass('success')){
-							progress++;
-						}
-						if($tr.find('.pallets').hasClass('success')){
-							progress++;
-						}
-						$tr.find('.progress').removeClass(function(i,c){
-							return c.indexOf("fill-") > -1;
-						}).addClass("fill-"+String(progress));
-						return true;
 					}
+					return false;
 				});
 			});
-			dateRanges();
 			popups();
 			function updateStorage(id){
 				if(storage[id]){
@@ -413,6 +411,18 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 						$(this).closest('tr').remove();
 						rebind();
 					});
+					$form.on("change",'input[name="from"],input[name="to"]',function(){
+						var $row = $(this).closest('tr');
+						var $from = $row.find('input[name="from"]');
+						var $to = $row.find('input[name="to"]');
+						if($from.val()){
+							$to.attr('min',$from.val());
+						}
+						if($to.val()){
+							$from.attr('max',$to.val());
+						}
+						rebind();
+					});
 				}
 				function basicPricing(){
 					var basicPricing = Storage.basicPricing ? Storage.basicPricing : {};
@@ -456,7 +466,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					return array;
 				}
 				function rebind(){
-					sortDateMaxMin($datePricingTable);
+					//sortDateMaxMin($datePricingTable);
 					lm.rebind($form);
 				}
 				function init(){
@@ -480,46 +490,55 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 						addPalletRow( Storage.pallets[i] );
 					}
 				}
-				$element.find('.add').on("click",function(){
-					if( lm.isFormValid($form.attr('id')) ){
-						var lastTo = $availTable.find('tbody').find('tr').last().find('input[name="to"]');
-						if(lastTo.val() != lastTo.attr('max')){
-							addPalletRow();
-							rebind();
+				function events(){
+					$element.find('.add').on("click",function(){
+						if( lm.isFormValid($form.attr('id')) ){
+							//var lastTo = $availTable.find('tbody').find('tr').last().find('input[name="to"]');
+							//if(lastTo.val() != lastTo.attr('max')){
+								addPalletRow();
+								rebind();
+							//}
 						}
-					}
-				});
-				$form.on("submit",function(ev){
-					ev.preventDefault();
-					if( lm.isFormValid($form.attr('id')) ){
-						Storage.pallets=toArray();
-						$(document).trigger("popup-form-success",Storage._id);
-						closePopup();
-					}
-				});
-				$element.on('click','.trash-button',function(){
-					$(this).closest('tr').remove();
-					rebind();
-				});
-				$form.on("change",'input',calcProgress);
-				$form.on("change",'input[name="inUse"]',function(){
-					var $tr = $(this).closest('tr');
-					var obj={};
-					bindFormToObject($tr,obj);
-					obj.free=obj.total-obj.inUse;
-					$tr.find('input[name="free"]').val(obj.free);
-					/*var $row = template.bind( obj );
-					$tr.replaceWith($row);
-					rebind();*/
-				});
-				$form.on("change",'input[name="to"]',function(){
-					//if( lm.isFormValid($form.attr('id')) ){
-						var index = $(this).closest('tr').index();
-						setNextRow(index+1,$(this).val());
+					});
+					$form.on("submit",function(ev){
+						ev.preventDefault();
+						if( lm.isFormValid($form.attr('id')) ){
+							Storage.pallets=toArray();
+							$(document).trigger("popup-form-success",Storage._id);
+							closePopup();
+						}
+					});
+					$element.on('click','.trash-button',function(){
+						$(this).closest('tr').remove();
 						rebind();
-					//}
-				});
+					});
+					$form.on("change",'input',calcProgress);
+					$form.on("change",'input[name="inUse"]',function(){
+						var $tr = $(this).closest('tr');
+						var obj={};
+						bindFormToObject($tr,obj);
+						obj.free=obj.total-obj.inUse;
+						$tr.find('input[name="free"]').val(obj.free);
+						/*var $row = template.bind( obj );
+						$tr.replaceWith($row);
+						rebind();*/
+					});
+					$form.on("change",'input[name="from"],input[name="to"]',function(){
+						var $row = $(this).closest('tr');
+						var $from = $row.find('input[name="from"]');
+						var $to = $row.find('input[name="to"]');
+						if($from.val()){
+							$to.attr('min',$from.val());
+						}
+						if($to.val()){
+							$from.attr('max',$to.val());
+						}
+						rebind();
+					});
+				}
+
 				function setNextRow(index,value){
+					return;
 					var $row = $availTable.find('tbody tr').eq(index);
 					if(!$row.length) return;
 					var $from = $row.find('input[name="from"]');
@@ -561,20 +580,30 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				}
 				function calcProgress(){
 					var $progress = $('.progress-row');
-					var today = new Date();
-					var left = today.getDate() * 100 / (365+30);
-					var maxDate = new Date();
+					$progress.empty();
 					$availTable.find('tbody tr').each(function(){
-						var $tr = $(this);
-						var date = $tr.find('input[name="to"]').val();
-						if(date) maxDate = new Date(date);
-					});
-					var dayDiff = (maxDate - today)/(1000*60*60*24);
-					var width = (dayDiff) * 100 / (365+30);
-					$progress.css({
-						width:width + '%',
-						left:left + '%'
-					});				
+						var $row = $(this);
+						var $from = $row.find('input[name="from"]');
+						var $to = $row.find('input[name="to"]');
+						var today = new Date();
+						var from = new Date($from.val());
+						var date = $to.val();
+						if(!date){
+							return true;
+						}
+						var to = new Date(date);
+						var dayDiff = (from - today)/(1000*60*60*24);
+						var left = today.getDate() * 100 / (365+30);
+						left+= dayDiff * 100 / (365+30);
+						dayDiff = (to - from)/(1000*60*60*24);
+						var width = dayDiff * 100 / (365+30);
+						var $td = $('<td/>');
+						$td.css({
+							width:width + '%',
+							left:left + '%'
+						});
+						$progress.append($td);
+					});			
 				}
 				function toArray(){
 					var array=[];
@@ -590,12 +619,22 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				function rebind(){
 					lm.rebind($form);
 					calcProgress();
-					$availTable.find('.trash-button').addClass('hidden');
-					if($availTable.find('tbody tr').length>1){
-						$availTable.find('.trash-button').last().removeClass('hidden');
+					trashButton();
+				}
+				function trashButton(){
+					if($availTable.find('tbody tr').length==1){
+						$availTable.find('.trash-button').addClass('hidden');
+					}else{
+						$availTable.find('.trash-button').removeClass('hidden');
 					}
 				}
-				rebind();
+				function init(){
+					trashButton();
+					calcProgress();
+					events();
+					lm.rebind($form);
+				}
+				init();
 			}
 			function doDiscount(_Storage,$element){
 				var template = templates.getTemplate("discount-row");
