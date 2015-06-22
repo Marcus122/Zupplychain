@@ -18,7 +18,7 @@ exports.config = {
 	services: [
 		"Transport / Distribution",
 		"Pallet Network Member",
-		"Container Destaffing",
+		"Container De-stuffing",
 		"Pick & Pack",
 		"Home Delivery",
 		"Product Disposal",
@@ -32,7 +32,7 @@ exports.config = {
 		"Sprinklers",
 		"Narrow Aisle Racking",
 		"Outdoor Storage",
-        "Roll in Roll out unit storage",
+        "Roll in Roll out storage",
 		"Bulk Storage"	
 	],
 };

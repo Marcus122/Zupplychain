@@ -1,11 +1,8 @@
  <% include ./partials/top%>   
-	<main>
-		<div class="row carousel">
-			<img src="/images/provider-banner.png" alt="Start your registration"/>
-			<h1 class="title large-font">
-				<span><%=warehouse.name%></span>
-				<br/>
-				profile
+	<main class="warehouse-profile">
+		<div class="banner">
+			<h1>
+				<span><%=warehouse.name%></span> profile
 			</h1>
 		</div>
 		<section>
@@ -19,10 +16,9 @@
 							<thead>
 								<tr>
 									<th>Storage Name</th>
-									<th>Pallet Type</th>
-									<th>Storage Temp</th>
 									<th>Max Weight (kg)</th>
 									<th>Max Height (m)</th>
+                                    <th>Pallets Available</th>
 									<th>Price/Availability</th>
 								</tr>
 							</thead>
@@ -37,22 +33,7 @@
 											<%}%>
 										<%}%>>
 										<td><%=storage.name%></td>
-										<td><%=storage.palletType%></td>
-										<td>
-											<%switch( storage.temp ){
-												case "Ambient": %>
-													<span class="ion-thermometer hot icon-box"></span>
-											  <%	break;
-												case "Frozen": %>
-													<span class="ion-ios-snowy cold icon-box"></span>
-												<%	break;
-												case "Chilled": %>
-													<span class="ion-thermometer cold icon-box"></span>
-												<% break;
-											}%>
-										<%=storage.temp%></td>
 										<td><%=storage.maxWeight%></td>
-										
 										<td>
 											<%if( storage.maxHeight ){%>
 												<%=storage.maxHeight%>
@@ -60,6 +41,9 @@
 												N/A
 											<%}%>
 										</td>
+                                        <td>
+                                            <%= storage.palletSpaces %>
+                                        </td>
 										<td class="button-cell"><button data-template="volume" type="button" class="secondary popup mini">click here</button></td>
 									</tr>
 								<%}%>
@@ -76,6 +60,13 @@
 						<h2>About the warehouse</h2>
 					</div>
 					<div class="main">
+                        <div class="carousel">
+                            <ul>
+                            <% for (var i = 0; i < warehouse.photos.length; i++) { %>
+                                <li><img src="<%= warehouse.photos[i] %>" alt="an image of the warehouse"/></li>
+                            <%}%>
+                            </ul>
+                        </div>
 						<p><%=warehouse.description%></p>
 					</div>
 				</div>
