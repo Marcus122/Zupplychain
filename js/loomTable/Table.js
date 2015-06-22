@@ -55,7 +55,7 @@ define(["jquery","./Datasource"],function($,Datasource){
 			sort(field,sortBy);
 		}
 		function setEvents(){
-			$table.on("click","thead th",function(){
+			$table.off("click.loomSort").on("click.loomSort","thead th",function(){
 				doSort($(this));
 			});
 		}

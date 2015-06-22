@@ -439,12 +439,14 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				function addPricingRow(_data){
 					var data = _data || {};
 					if(!_data){
-						var arr = toArray();
-						if(arr.length){
-							var date = new Date(arr[arr.length-1].to);
+						var to = $datePricingTable.find('tbody tr').last().find('input[name="to"]').val();
+						if(to){
+							date = new Date(to);
 							date.setDate(date.getDate()+1);
-							data.from = date.toISOString().substring(0, 10)
+						}else{
+							date = new Date();
 						}
+						data.from = date.toISOString().substring(0, 10);
 					}
 					var $newrow = template.bind(data);
 					$datePricingTable.append($newrow);
@@ -516,11 +518,12 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 						rebind();
 					});
 					$form.on("change",'input',calcProgress);
-					$form.on("change",'input[name="inUse"]',function(){
+					$form.on("change keyup",'input[name="inUse"]',function(){
 						var $tr = $(this).closest('tr');
 						var obj={};
 						bindFormToObject($tr,obj);
-						obj.free=obj.total-obj.inUse;
+						obj.free=obj.total>=obj.inUse ? obj.total-obj.inUse : 0;
+						
 						$tr.find('input[name="free"]').val(obj.free);
 						/*var $row = template.bind( obj );
 						$tr.replaceWith($row);
@@ -675,7 +678,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					$(this).closest('tr').remove();
 					lm.rebind($form);
 				});
-				$form.find('input[name="noDiscount"]').on("change",function(){
+				$form.find('input[name="noDiscount"]').on("change keyup",function(){
 					var $input = $(this);
 					Storage.noDiscount=$(this).val();
 					if(Number($input.val()) === Number(Storage.palletSpaces)){
