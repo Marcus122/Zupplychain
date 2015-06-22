@@ -1,7 +1,7 @@
 <tr class="active" data-tr="Expand" data-tr-closed="Collapse">
 	<td data-th="Storage Name" class="text input-field no-success-validation-style">
 		<input type="hidden" value="<%=row.id%>" name="_id"/>
-		<input type="text" data-bind-value="name" data-bind-value-condition="name" required  value="<%=row.name%>" name="name" data-bind-placeholder="placeholder"/>
+		<input type="text" data-bind-value="name" data-bind-value-condition="name" required  value="<%=row.name%>" name="name" data-bind-placeholder="placeholder" placeholder="<%=row.placeholder%>"/>
 	</td>
 	<td data-th="Pallet Type" class="select input-field no-success-validation-style">
 		<select name="palletType" required>
@@ -32,7 +32,7 @@
 				<%}%>
 			>Other</option>
 			<option
-				<%if(row.palletType === 'Ant' ){%>
+				<%if(row.palletType === 'Any' ){%>
 					selected="selected"
 				<%}%>
 			>Any</option>

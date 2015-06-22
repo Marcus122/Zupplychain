@@ -359,6 +359,10 @@
 								<%}%>
 								<div class="input-field no-success-validation-style">
 									<input data-pattern="(?=.*[A-Z])(?=.*[0-9])" type="password" name="password" placeholder="Password" minlength="8" required/>
+									<ul class="messages">
+										 <li class="msg-info">Password must be at least 8 characters in length and contain at least one number and one uppercase letter.</li>
+										 <li class="msg-error">Password must be at least 8 characters in length and contain at least one number and one uppercase letter.</li>
+									 </ul>
 								</div>
 								<div class="check checkbox input-field">
 									<input required type="checkbox" name="accept" id="accept"/>

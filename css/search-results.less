@@ -287,12 +287,30 @@
     padding-right:35px;
     padding-right:3.5rem;
     &:after{
-        content: '\f271';
+        content: '\f123';
         .ion;
         position:absolute;
         right:4px;
-        transform:rotateZ(90deg);
+        top:50%;
+        font-size: 1rem;
+    }
+    &:before{
+        content: '\f126';
+        .ion;
+        position:absolute;
+        right:4px;
         top:40%;
+        font-size: 1rem;
+    }
+}
+#search-results-table .sortable.descending{
+    &:after{
+        color:#000;
+    }
+}
+#search-results-table .sortable.ascending{
+    &:before{
+        color:#000;
     }
 }
 

@@ -189,6 +189,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			});
 			function updateForm(){
 				var rebind=false;
+				if($defineSpaceTable.find('tbody tr').length === 1) return;
 				$defineSpaceTable.find('tbody tr').each(function(){
 					var s={};
 					bindFormToObject($(this),s);
@@ -209,8 +210,10 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 						var s={};
 						bindFormToObject($(this),s);
 						for(var i in s){
-							if(s[i]) storage.push(s);
-							return true;
+							if(s[i]){
+								storage.push(s);
+								return true;
+							}
 						}
 					});
 					var warehouse={};
@@ -298,8 +301,8 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 							default:
 								return false;
 						}
+						return false;
 					}
-					return false;
 				});
 			});
 			popups();
