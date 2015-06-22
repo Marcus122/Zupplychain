@@ -77,11 +77,10 @@
                                                     </div>
                                                     <% 
                                                     var totalPallets = parseInt(session.whSC.sc[0].totalPallets,10);
-                                                    var maxAvailability = Math.ceil(totalPallets / 50)*50 ;
+                                                    var maxAvailability = Math.ceil(totalPallets / 50)*50 + 50 ;
                                                     var thisAvailability = storage.palletSpaces;
                                                     var startDate = new Date(session.whSC.sc[0].startDate);
-                                                    var endDate = new Date();
-                                                    endDate.setDate(startDate.getDate() + 365);
+                                                    var endDate = new Date(session.whSC.sc[0].endDate);
                                                     %>
                                                     <div class="main">
                                                         <div class="availability-marker"><span class="number"><%=session.whSC.sc[0].totalPallets;%>
@@ -91,40 +90,54 @@
                                                             <td colspan="2">Availability for this storage space</td>
                                                             </tr>
                                                         <% 
-                                                        var lastEndDate = new Date(0); //end date of the previous record.
+                                                        var stopThisTime = false;
+                                                        var lastEndDate = new Date(session.whSC.sc[0].startDate); //end date of the previous record.
                                                         var lim = storage.pallets.length;
-                                                        for (var i = 0; i< lim;i++)
+                                                        var adjustedLim = lim + 1; //we want to go through the loop one more time to add a row at the end.
+                                                        for (var i = 0; i< adjustedLim && !stopThisTime;i++)
                                                         {
                                                             var thisAvailability = storage.pallets[i];
-                                                            if (lastEndDate < thisAvailability.startDate){
+                                                            if (thisAvailability &&  endDate < thisAvailability.to) {
+                                                                thisAvailability.to = endDate;
+                                                                stopThisTime = true;
+                                                            }
+                                                            if (i >= lim) {
+                                                                stopThisTime = true;
+                                                            }
+                                                            if (i >= lim || lastEndDate < thisAvailability.from){
                                                                 //we need to add an interveening row to cover the time inbetween.
                                                                 var newRowStartDate = lastEndDate;
                                                                 var newRowEndDate = new Date()
-                                                                if (i+1 < lim) {//there are still rows so use the start date of the next as our end date
-                                                                    newRowEndDate = storage.pallets[i+1].startDate;
+                                                                var newRowFree = storage.palletSpaces;
+                                                                if (i < lim && !stopThisTime) {
+                                                                    newRowEndDate = new Date(storage.pallets[i].from.valueOf());
+                                                                    newRowEndDate.setDate(newRowEndDate.getDate() - 1);
                                                                 } else { //use the end date of the search.
-                                                                    newRowEndDate.setDate(endDate.getDate());
-                                                                    newRowFree = storage.palletSpaces;
+                                                                    newRowEndDate.setDate(endDate.getDate()); 
                                                                 }
                                                                 //insert our new row
                                                                 %>
                                                                 <tr>
-                                                                    <td class="date"><%=newRowStartDate.getDate() + "/" + newRowStartDate.getMonth()%> - <%=newRowEndDate%></td>
+                                                                    <td class="added date"><%=newRowStartDate.getDate() + "/" + newRowStartDate.getMonth() + "/" + newRowStartDate.getFullYear() %> - <%=newRowEndDate.getDate() + "/" + newRowEndDate.getMonth() + "/" + newRowEndDate.getFullYear()%></td>
                                                                     <td class="bar">
-                                                                    <div data-value="<%=newRowFree%>" class="bar <%=newRowFree > totalPallets ? "full" : "not-full" %>">
-                                                                    <%=newRowFree > totalPallets ? "OK" : newRowFree %></div>
+                                                                    <div data-value="<%=newRowFree%>" class="bar <%=newRowFree >= totalPallets ? "full" : "not-full" %>">
+                                                                    <%=newRowFree >= totalPallets ? "OK" : newRowFree %></div>
                                                                     </td>
                                                                 </tr>
                                                             <%
                                                             }
-                                                            lastEndDate = new Date(thisAvailability.to.valueOf());
-                                                            lastEndDate.setDate(lastEndDate.getDate() + 1);
+                                                            if (i < lim) {
+                                                                lastEndDate = new Date(thisAvailability.to.valueOf());
+                                                                lastEndDate.setDate(lastEndDate.getDate() + 1);
+                                                            
                                                         %>
-                                                            <tr>
-                                                            <td class="date"><%=thisAvailability.from.getDate() + "/"  + parseInt(thisAvailability.from.getMonth(),10)+ "/" + thisAvailability.from.getFullYear() %> - <%=thisAvailability.to.getDate() + "/" + parseInt(thisAvailability.to.getMonth(),10) + "/" + thisAvailability.to.getFullYear() %></td>
-                                                            <td class="bar"><div data-value="<%=thisAvailability.free%>" class="bar <%= thisAvailability.free > totalPallets ? "full" :  "not-full" %>"><%= thisAvailability.free > totalPallets ? "OK" : thisAvailability.free%></div></td>
-                                                            </tr>
-                                                        <% } %>
+                                                                <tr>
+                                                                <td class="date"><%=thisAvailability.from.getDate() + "/"  + parseInt(thisAvailability.from.getMonth(),10)+ "/" + thisAvailability.from.getFullYear() %> - <%=thisAvailability.to.getDate() + "/" + parseInt(thisAvailability.to.getMonth(),10) + "/" + thisAvailability.to.getFullYear() %></td>
+                                                                <td class="bar"><div data-value="<%=thisAvailability.free%>" class="bar <%= thisAvailability.free >= totalPallets ? "full" :  "not-full" %>"><%= thisAvailability.free >= totalPallets ? "OK" : thisAvailability.free%></div></td>
+                                                                </tr>
+                                                        <% 
+                                                            }//end if
+                                                        }//end for %>
                                                         </tbody>
                                                         </table>
                                                     </div>
