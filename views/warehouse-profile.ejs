@@ -42,9 +42,10 @@
                                         <span class="title">Start date</span>
                                         <span><%=session.whSC.sc[0].startDate.substring(8,10)%>/<%=session.whSC.sc[0].startDate.substring(5,7)%>/<%=session.whSC.sc[0].startDate.substring(0,4)%></span> 
                                     </li>
-                                    <!--<li>
-                                        end date is now minDuration which is an int.
-                                    </li>-->
+                                    <li>
+                                        <span class="title">Min Duration</span>
+                                        <span><%=minDurationOptions[parseInt(session.whSC.sc[0].minDuration,10)]%></span> 
+                                    </li>
                                     <li>
                                         <span class="title">Height (m)</span>
                                         <span><%=session.whSC.sc[0].height%></span> 
@@ -103,7 +104,7 @@
                                         <td>
                                             <%= storage.palletSpaces %>
                                         </td>
-										<td class="button-cell"><button data-id="<%=storage._id %>" data-template="pricing-and-availability" type="button" class="secondary popup mini">show / hide</button></td>
+										<td class="button-cell"><button data-id="<%=storage._id %>" data-template="pricing-and-availability" type="button" class="action popup mini">show / hide</button></td>
 									</tr>
                                     <% if (session.whSC != undefined) { %>
                                     <tr style="display:none" class="pricing-and-availability-<%=storage._id %>">
@@ -275,8 +276,14 @@
                                                         }//end for %>
                                                         </tbody>
                                                         </table>
+                                                        <div class="key">
+                                                            
+                                                        </div>
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div class="row button-row">
+                                                <button class="next action">Choose this Storage</button> 
                                             </div>
                                         </td>
                                     </tr>
@@ -332,11 +339,7 @@
 			<div class="continue-links footer form-footer">
 				<div class="container">
 				<a href="/search" class="back button">Back</a>
-					<%var href = url;
-						var queryString = '?fromSearch=true';
-						if (href.indexOf(queryString) != -1){%>	
-							<a href="#" class="button action large next">Select this warehouse</a>
-					<%}%>
+
 				</div>
 			</div>
 		</section>

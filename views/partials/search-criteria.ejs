@@ -12,6 +12,10 @@
         <% } %>
 		<div class="main">
 			<form class="storage-search loom-form" action="/search" id="search-form" novalidate>
+            <div class="input-field">
+					<label for="postcode">Target Postcode/City</label>
+					<input type="text" name="postcode" required="required" minlength="2" value="<%= session.whSC ? session.whSC.sc[0].postcode : " "%>"/>
+				</div>
 				<div class="input-field">
 					<label for="pallet-type">Pallet Type</label>
 					<select name="pallet-type" id="pallet-type" required="required">
@@ -23,17 +27,14 @@
 						<%}%>
 					</select>
 				</div>
-                <div class="input-field">
-					<label for="postcode">Target Postcode/City</label>
-					<input type="text" name="postcode" required="required" minlength="2" value="<%= session.whSC ? session.whSC.sc[0].postcode : " "%>"/>
-				</div>
+                
 				<div class="input-field number">
 					<label for="quantity">Qty</label>
 					<input type="number" name="quantity" min="1" max="2000" required="required" value="<%= session.whSC ? session.whSC.sc[0].totalPallets : 10%>"/>
 				</div>
 				
 				<div class="input-field number" >
-					<label for="max-distance">Max Distance</label>
+					<label for="max-distance">Max Distance (miles)</label>
 					<input type="number" step="10" name="max-distance" min="5" required="required" value="<%=session.whSC ? session.whSC.sc[0].maxDistance : 25 %>"/>
 				</div>
 				<div class="input-field">
@@ -48,14 +49,7 @@
 					<label for="minDuration">Minimum Duration</label>
 					<select name="minDuration" required="required">
                     <%
-                    var options = {
-                        7 : "1 Week",
-                        14 : "2 weeks",
-                        21 : "3 weeks",
-                        28 : "1 Month",
-                        56 : "2 Months",
-                        84 : "3 Months"
-                    };
+                    var options = minDurationOptions;
                     for (var key in options) {
                     %>
                         <option value="<%= key %>" 
