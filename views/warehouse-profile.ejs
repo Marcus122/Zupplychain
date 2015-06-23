@@ -107,7 +107,7 @@
 										<td class="button-cell"><button data-id="<%=storage._id %>" data-template="pricing-and-availability" type="button" class="action popup mini">show / hide</button></td>
 									</tr>
                                     <% if (session.whSC != undefined) { %>
-                                    <tr style="display:none" class="pricing-and-availability-<%=storage._id %>">
+                                    <tr style="<%= numStorages != 1 ? "display:none" : ""%>" class="pricing-and-availability-<%=storage._id %>">
                                         <td colspan="5">
                                             <div class="pricing-and-availability-row row">
                                                 <div class="columns six pricing box">                                                    
@@ -123,7 +123,7 @@
                                                     <div class="main">
                                                         <table class="pricing-table"><tbody>
                                                             <tr>
-                                                            <td colspan="2">Prices per pallet</td>
+                                                            <td colspan="2">Price per pallet</td>
                                                             </tr>
                                                             <%
                                                             var stopThisTime = false;
