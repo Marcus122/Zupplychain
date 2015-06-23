@@ -18,7 +18,7 @@
 				</div>
                 <div class="input-field number" >
 					<label for="max-distance">Max Distance (miles)</label>
-					<input type="number" step="5" name="max-distance" min="1" required="required" value="<%=session.whSC ? session.whSC.sc[0].maxDistance : 25 %>"/>
+					<input type="number"  step="5" name="max-distance" min="1" required="required" value="<%=session.whSC ? session.whSC.sc[0].maxDistance : 25 %>"/>
 				</div>
 				<div class="input-field">
 					<label for="pallet-type">Pallet Type</label>
@@ -34,7 +34,7 @@
                 
 				<div class="input-field number">
 					<label for="quantity">Qty</label>
-					<input type="number" name="quantity" min="1" max="2000" required="required" value="<%= session.whSC ? session.whSC.sc[0].totalPallets : 10%>"/>
+					<input type="text" data-loom-type="number" name="quantity" min="1" max="2000" required="required" value="<%= session.whSC ? session.whSC.sc[0].totalPallets : 10%>"/>
 				</div>
 				
 				
@@ -65,11 +65,11 @@
 				</div>
 				<div class="input-field number">
 					<label for="height">Pallet Height (m)</label>
-					<input type="number" name="height" min="0" required="required" max="100" step=".1" value="<%=session.whSC ? session.whSC.sc[0].height : ""%>" data-loom-type="decimal" data-loom-decimal-places="1" />
+					<input type="text" name="height" min="0" required="required" max="100" step=".1" value="<%=session.whSC ? session.whSC.sc[0].height : ""%>" data-loom-type="decimal" data-loom-decimal-places="1" />
 				</div>
 				<div class="input-field number">
 					<label for="weight">Pallet Weight (kg)</label>
-					<input type="number" name="weight" required="required" min="0" max="2000" value="<%=session.whSC ? session.whSC.sc[0].weight : "" %>"/>
+					<input type="text" data-loom-type="decimal" data-loom-decimal-places="1" name="weight" required="required" min="0" max="2000" value="<%=session.whSC ? session.whSC.sc[0].weight : "" %>"/>
 				</div>
 				
 				<div class="input-field">
