@@ -32,6 +32,7 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
         evt.preventDefault();
         var requestedUrl = $(evt.target).prop("href");
         var $popup = $("#register-email-popup");
+        $popup.find("input[name='email']").focus(); //focus the first input.
         //bind up an onsuccess for the popup form that redirects to requested url once they've registered.
         loom.addOnSuccessCallback("#register-email-form", function(response){
             window.location.href = requestedUrl;
@@ -99,9 +100,7 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
                                 return parseInt($td.data("rating"), 10);
                             }
                         }
-                    }
-                    
-                    
+                    } 
                 });
             });
             

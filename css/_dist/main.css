@@ -2986,6 +2986,18 @@ button {
   padding-right: 20px;
   padding-right: 2rem;
 }
+.button.tiny,
+button.tiny {
+  padding-top: 2px;
+  padding-top: 0.2rem;
+  padding-bottom: 2px;
+  padding-bottom: 0.2rem;
+  padding-left: 5px;
+  padding-left: 0.5rem;
+  padding-right: 5px;
+  padding-right: 0.5rem;
+  border-radius: 4px;
+}
 .button.mini,
 button.mini {
   padding-top: 5px;
@@ -3189,6 +3201,21 @@ button.back:before {
   margin-right: 10px;
   margin-right: 1rem;
 }
+button.view:after,
+.button.view:after {
+  display: inline-block;
+  font-family: "Ionicons";
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  text-rendering: auto;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 2.5rem;
+}
 .button:hover:after,
 .button:hover:before,
 button:hover:after,
@@ -3301,6 +3328,10 @@ button.down:after {
 .button.down:hover:after,
 button.down:hover:after {
   transform: rotateX(0deg) rotateY(360deg);
+}
+.button.view:after,
+button.view:after {
+  content: "\f133";
 }
 /* mini icon buttons add delete etc. */
 button.add-button,
@@ -3625,7 +3656,7 @@ form.storage-search .input-field label {
   width: 100%;
 }
 form.storage-search .input-field.number {
-  width: 122px;
+  width: 155px;
 }
 form.storage-search .input-field.last {
   float: right;
@@ -3848,8 +3879,6 @@ header aside {
   position: absolute;
   right: 0px;
   top: 0px;
-  width: 330px;
-  width: 33rem;
 }
 /** header elements **/
 .contact-info {
@@ -3877,6 +3906,7 @@ header aside {
 .user-links {
   margin-right: 20px;
   margin-right: 2rem;
+  float: right;
 }
 .user-links * {
   margin-bottom: 0px;
@@ -6520,18 +6550,85 @@ form#define-space .header .form-header .reg-2-example {
 .dashboard .notifications-table .desc {
   text-align: left;
 }
+.warehouse-profile .search-header {
+  text-align: right;
+}
+.warehouse-profile .search-header .search-criteria {
+  position: relative;
+}
+.warehouse-profile .search-header .search-criteria .button-text {
+  line-height: 44px;
+}
+.warehouse-profile .search-header .search-criteria button {
+  margin-left: 1rem;
+}
+.warehouse-profile .search-header .search-criteria:hover .my-search-criteria {
+  max-height: 500px;
+}
+.warehouse-profile .search-header .search-criteria .my-search-criteria {
+  max-height: 0px;
+  overflow: hidden;
+  position: absolute;
+  width: 350px;
+  transition: 0.5s all;
+  z-index: 1;
+  right: -6px;
+  top: 25px;
+}
+.warehouse-profile .search-header .search-criteria ul {
+  margin-top: 21px;
+  list-style: none;
+  text-align: left;
+  padding-left: 20px;
+  padding-left: 2rem;
+  padding-right: 20px;
+  padding-right: 2rem;
+  padding-top: 20px;
+  padding-top: 2rem;
+  padding-bottom: 20px;
+  padding-bottom: 2rem;
+  background: #fefefe;
+  border-radius: 10px;
+  border: 4px solid #cccccc;
+}
+.warehouse-profile .search-header .search-criteria ul .title {
+  width: 65%;
+  display: inline-block;
+  font-weight: bold;
+}
+.warehouse-profile .search-header .search-criteria ul li {
+  margin: 0 0 5px 0;
+}
+.warehouse-profile .search-header .search-criteria ul:before {
+  display: inline-block;
+  font-family: "Ionicons";
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  text-rendering: auto;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: "\f365";
+  color: #fefefe;
+  position: absolute;
+  top: 0;
+  right: 10px;
+  font-size: 40px;
+}
 .warehouse-profile .banner {
   margin-bottom: 0px;
 }
 .warehouse-profile .pricing-and-availability-row {
-  padding: 40px 20px;
+  padding: 40px 20px 20px 20px;
+}
+.warehouse-profile .added {
+  background-color: #fefefe;
 }
 .warehouse-profile table {
   width: 100%;
-  text-align: left;
-}
-.warehouse-profile table .added {
-  background-color: #ddd;
 }
 .warehouse-profile table .availability-marker {
   z-index: 50 !important;
@@ -6552,6 +6649,7 @@ form#define-space .header .form-header .reg-2-example {
   color: #f28711;
 }
 .warehouse-profile table table {
+  text-align: left;
   margin-bottom: 0px;
 }
 .warehouse-profile table table td {
@@ -6566,6 +6664,7 @@ form#define-space .header .form-header .reg-2-example {
   line-height: 2.5em;
   font-weight: bold;
   padding-left: 10px;
+  box-sizing: border-box;
 }
 .warehouse-profile table table td.bar .bar.full {
   width: 100%;
@@ -6601,6 +6700,21 @@ form#define-space .header .form-header .reg-2-example {
 .warehouse-profile table .price {
   background-color: #d4e6a5;
   text-align: right;
+}
+.warehouse-profile table .button-row button {
+  float: right;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+.warehouse-profile .warehouse-features.content-box .main {
+  padding-left: 40px;
+  padding-left: 4rem;
+  padding-right: 40px;
+  padding-right: 4rem;
+  padding-top: 40px;
+  padding-top: 4rem;
+  padding-bottom: 40px;
+  padding-bottom: 4rem;
 }
 /*
 
@@ -6643,7 +6757,7 @@ To add a note use
   transition: 0.5s height, 0.5s padding;
   box-sizing: border-box;
   line-height: 1.4em;
-  font-family: 'Futura', 'Open Sans';
+  font-family: 'Open Sans';
   height: 0px;
   position: fixed;
   font-size: 14px;
@@ -6804,7 +6918,7 @@ span.highlight-bright {
   border: 0;
 }
 body {
-  font-family: 'Futura', 'Open Sans';
+  font-family: 'Open Sans';
   color: #857668;
 }
 h1,
