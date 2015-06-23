@@ -37,12 +37,12 @@ exports.config = {
 	],
     
     minDurationOptions : { // numDays : textDescription
-        7 : "1 Week",
+        7 : "1 week",
         14 : "2 weeks",
         21 : "3 weeks",
-        28 : "1 Month",
-        56 : "2 Months",
-        84 : "3 Months",
+        28 : "1 month",
+        56 : "2 months",
+        84 : "3 months",
         180 : "6 months",
         365 : "12 months"
     }
