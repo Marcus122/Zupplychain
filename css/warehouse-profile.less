@@ -1,4 +1,56 @@
 .warehouse-profile{
+    .search-header{
+        text-align:right;
+        .search-criteria {
+                position:relative;
+                .button-text{
+                    line-height:44px;
+                }
+                button{
+                    margin-left:1rem;  
+                }
+                &:hover .my-search-criteria{
+                    max-height:500px;
+                }
+                .my-search-criteria{
+                    max-height:0px;
+                    overflow:hidden;
+                    position:absolute;
+                    width:350px;
+                    transition: 0.5s all;
+                    z-index:1;
+                    right: -6px;
+                    top: 25px;
+                }
+                ul{
+                   // display:none;
+                   margin-top:21px;
+                    list-style:none;
+                    text-align:left;
+                    .unit-padding(2);
+                    background:@white;
+                    border-radius:10px;
+                    border:4px solid @light-grey;
+                    .title{
+                        width:65%;
+                        display:inline-block;
+                        font-weight:bold;
+                    }
+                    li{
+                        margin:0 0 5px 0;
+                    }
+                     &:before{
+                        .ion;
+                        content:@ionicon-var-android-arrow-dropup;
+                        color:@white;
+                        position:absolute;
+                        top: 0;
+                        right: 10px;
+                        font-size: 40px;
+                    }
+                }
+        }
+    }
     .banner{
         margin-bottom:0px;
     }
@@ -75,6 +127,9 @@
             background-color:#d4e6a5;
             text-align:right;
         }
+    }
+    .warehouse-features.content-box .main{
+        .unit-padding(4);
     }
     
     

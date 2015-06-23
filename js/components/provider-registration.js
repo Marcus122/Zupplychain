@@ -522,7 +522,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 						var $tr = $(this).closest('tr');
 						var obj={};
 						bindFormToObject($tr,obj);
-						obj.free=obj.total>=obj.inUse ? obj.total-obj.inUse : 0;
+						obj.free=Number(obj.total)>=Number(obj.inUse) ? obj.total-obj.inUse : 0;
 						
 						$tr.find('input[name="free"]').val(obj.free);
 						/*var $row = template.bind( obj );

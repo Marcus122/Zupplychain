@@ -7,6 +7,65 @@
 		</div>
 		<section>
 			<div class="main">
+                <%if (session.whSC != undefined){%>
+                    <div class="search-header row"">
+                        <div class="search-criteria columns three offset-by-six">
+                            <span class="button-text">MY SEARCH CRITERIA</span>
+                            <button class="view primary tiny"></button>
+                            <div class="my-search-criteria">
+                                <ul>
+                                    <li>
+                                       <span class="title">Pallet type</span>
+                                       <%if(session.whSC.sc[0].palletType){%>
+                                            <span><%=session.whSC.sc[0].palletType%></span>
+                                       <%}else{%>
+                                           <span>Any</span>
+                                       <%}%>
+                                    </li>
+                                    <li>
+                                        <span class="title">Quantity</span>
+                                        <span><%=session.whSC.sc[0].totalPallets%></span> 
+                                    </li>
+                                    <li>
+                                        <span class="title">Target postcode</span>
+                                        <span><%=session.whSC.sc[0].postcode%></span> 
+                                    </li>
+                                    <li>
+                                        <span class="title">Max distance</span>
+                                        <span><%=session.whSC.sc[0].maxDistance%></span> 
+                                    </li>
+                                    <li>
+                                        <span class="title">Product description</span>
+                                        <span><%=session.whSC.sc[0].description%></span> 
+                                    </li>
+                                    <li>
+                                        <span class="title">Start date</span>
+                                        <span><%=session.whSC.sc[0].startDate.substring(8,10)%>/<%=session.whSC.sc[0].startDate.substring(5,7)%>/<%=session.whSC.sc[0].startDate.substring(0,4)%></span> 
+                                    </li>
+                                    <li>
+                                        <span class="title">End date</span>
+                                        <span><%=session.whSC.sc[0].endDate.substring(8,10)%>/<%=session.whSC.sc[0].endDate.substring(5,7)%>/<%=session.whSC.sc[0].endDate.substring(0,4)%></span> 
+                                    </li>
+                                    <li>
+                                        <span class="title">Height (m)</span>
+                                        <span><%=session.whSC.sc[0].height%></span> 
+                                    </li>
+                                    <li>
+                                        <span class="title">Weight (kg)</span>
+                                        <span><%=session.whSC.sc[0].weight%></span> 
+                                    </li>
+                                    <li>
+                                        <span class="title">Temp</span>
+                                        <span><%=session.whSC.sc[0].temp%></span> 
+                                    </li>
+                                </ul>
+                             </div>
+                        </div>
+                        <div class="columns three back-to-search">
+                            <a href="/search" class="button action">Back to search</a>
+                        </div>
+                    </div>
+                 <%}%>
 				<div class="content-box primary">
 					<div class="header">
 						<h2>Pricing and availability</h2>
@@ -183,16 +242,27 @@
 						<p><%=warehouse.description%></p>
 					</div>
 				</div>
-				<div class="content-box columns six">
+				<div class="content-box columns six warehouse-features">
 					<div class="header">
 						<h2>Warehouse features</h2>
 					</div>
-					<div class="main">
-						<ul>
-							<% for( var i= 0; i<warehouse.specifications.length;i++ ){%>
-								<li><%=warehouse.specifications[i]%></li>
-							<%}%>
-						</ul>
+					<div class="main row">
+                        <div class="columns six">
+                            <h4>Services</h4>
+    						<ul>
+    							<% for( var i= 0; i<warehouse.services.length;i++ ){%>
+    								<li><%=warehouse.services[i]%></li>
+    							<%}%>
+    						</ul>
+                        </div>
+                        <div class="columns six">
+                            <h4>Specifications</h4>
+    						<ul>
+    							<% for( var i= 0; i<warehouse.specifications.length;i++ ){%>
+    								<li><%=warehouse.specifications[i]%></li>
+    							<%}%>
+    						</ul>
+                        </div>
 					</div>
 				</div>
 			</div>
