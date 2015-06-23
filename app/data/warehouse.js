@@ -79,8 +79,6 @@ warehouseSchema.statics = {
             matchingStorages.push(storage[j].toObject());
         }
     }
-    console.log("in warehouse data.js");
-    console.log(matchingStorages.length);
     return matchingStorages;       
   },
   

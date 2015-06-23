@@ -114,19 +114,80 @@
                                                     <div class="header">
                                                         <h2>Pricing</h2>
                                                     </div>
+                                                    <%
+                                                    var startDate = new Date(session.whSC.sc[0].startDate);
+                                                    var endDate = new Date();
+                                                    endDate.setDate(startDate.getDate() + parseInt(session.whSC.sc[0].minDuration,10) )
+                                                    
+                                                    %>
                                                     <div class="main">
                                                         <table class="pricing-table"><tbody>
                                                             <tr>
                                                             <td colspan="2">Prices per pallet</td>
                                                             </tr>
-                                                            <tr>
-                                                            <td class="date">01/06/2011 - 01/06/2011</td>
-                                                            <td class="price">£1.50</td>
-                                                            </tr>
-                                                            <tr>
-                                                            <td>01/06/2012 - 01/06/2011</td>
-                                                            <td class="price">£2.50</td>
-                                                            </tr>
+                                                            <%
+                                                            var stopThisTime = false;
+                                                            var lastEndDate = new Date(session.whSC.sc[0].startDate);
+                                                            var priceLim = storage.pricing.length;
+                                                            var basicPrice = parseFloat(storage.basicPricing.price,10).toFixed(2);
+                                                            var adjustedPriceLim = priceLim + 1;
+                                                            for (var m = 0; m < adjustedPriceLim && !stopThisTime; m++) {
+                                                                var pricing = storage.pricing[m];
+                                                    
+                                                                
+                                                                if (pricing &&  endDate < pricing.to) {
+                                                                pricing.to = endDate;
+                                                                stopThisTime = true;
+                                                                }
+                                                                if (m >= priceLim) {
+                                                                    stopThisTime = true;
+                                                                }
+                                                                if (m >= priceLim || lastEndDate < pricing.from){
+                                                                    //we need to add an interveening row to cover the time inbetween.
+                                                                    var newRowStartDate = lastEndDate;
+                                                                    var newRowEndDate = new Date()
+                                                                    var newRowFree = storage.palletSpaces;
+                                                                    if (m < priceLim ) {
+                                                                        newRowEndDate = new Date(storage.pricing[m].from.valueOf());
+                                                                        newRowEndDate.setDate(newRowEndDate.getDate() - 1);
+                                                                    } else { //use the end date of the search.
+                                                                        newRowEndDate = new Date(endDate.valueOf());
+                                                                    }
+                                                                    //insert our new row
+                                                                    %>
+                                                                    <tr>
+                                                                        <td class="added date"><%=
+                                                                        ("0" + newRowStartDate.getDate()).slice(-2) + "/" 
+                                                                        + ("0" + (newRowStartDate.getMonth() + 1)).slice(-2) + "/" 
+                                                                        + newRowStartDate.getFullYear() %> - <%=("0" + newRowEndDate.getDate()).slice(-2) + "/" 
+                                                                        + ("0" + (newRowEndDate.getMonth() + 1)).slice(-2) + "/" 
+                                                                        + newRowEndDate.getFullYear()%></td>
+                                                                        <td class="price">£<%=basicPrice%>
+                                                                        </td>
+                                                                    </tr>
+                                                                <%
+                                                                }
+                                                               if (m < priceLim && pricing.from < endDate) {
+                                                                    lastEndDate = new Date(pricing.to.valueOf());
+                                                                    lastEndDate.setDate(lastEndDate.getDate() + 1);
+                                                                if (m == 0 && pricing.from < startDate) {
+                                                                    pricing.from = startDate; //on first time just show our start date.
+                                                                }
+                                                                %>
+                                                                <tr>
+                                                                <td class="date"><%=
+                                                                    ("0" + pricing.from.getDate()).slice(-2) + "/"
+                                                                    + ("0" + (pricing.from.getMonth() + 1)).slice(-2) + "/" 
+                                                                    + pricing.from.getFullYear() %> 
+                                                                    - <%= ("0" + pricing.to.getDate()).slice(-2) + "/" 
+                                                                    +("0" + (pricing.to.getMonth() + 1)).slice(-2) + "/" 
+                                                                    + pricing.to.getFullYear() %></td>
+                                                                <td class="price">£<%=parseFloat(pricing.price,10).toFixed(2)%></td>
+                                                                </tr>
+                                                            <%
+                                                            }//endif
+                                                            }//end for
+                                                            %>
                                                         </tbody>
                                                         </table>
                                                     </div>
@@ -138,7 +199,7 @@
                                                     <% 
                                                     var totalPallets = parseInt(session.whSC.sc[0].totalPallets,10);
                                                     var maxAvailability = totalPallets * 2; //Math.ceil(totalPallets / 50)*50 + Math.min(50, totalPallets * 2) ;
-                                                    var thisAvailability = storage.palletSpaces;
+                                                    //var thisAvailability = storage.palletSpaces;
                                                     var startDate = new Date(session.whSC.sc[0].startDate);
                                                     var endDate = new Date();
                                                     endDate.setDate(startDate.getDate() + parseInt(session.whSC.sc[0].minDuration,10) )
@@ -170,7 +231,7 @@
                                                                 var newRowStartDate = lastEndDate;
                                                                 var newRowEndDate = new Date()
                                                                 var newRowFree = storage.palletSpaces;
-                                                                if (i < lim && !stopThisTime) {
+                                                                if (i < lim ) {
                                                                     newRowEndDate = new Date(storage.pallets[i].from.valueOf());
                                                                     newRowEndDate.setDate(newRowEndDate.getDate() - 1);
                                                                 } else { //use the end date of the search.
@@ -195,6 +256,9 @@
                                                             if (i < lim && thisAvailability.from < endDate) {
                                                                 lastEndDate = new Date(thisAvailability.to.valueOf());
                                                                 lastEndDate.setDate(lastEndDate.getDate() + 1);
+                                                                if (i == 0 && thisAvailability.from < startDate) {
+                                                                    thisAvailability.from = startDate; //on first time just show our start date.
+                                                                }
                                                             
                                                         %>
                                                                 <tr>
