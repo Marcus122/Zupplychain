@@ -35,4 +35,15 @@ exports.config = {
         "Roll in Roll out storage",
 		"Bulk Storage"	
 	],
+    
+    minDurationOptions : { // numDays : textDescription
+        7 : "1 Week",
+        14 : "2 weeks",
+        21 : "3 weeks",
+        28 : "1 Month",
+        56 : "2 Months",
+        84 : "3 Months",
+        180 : "6 months",
+        365 : "12 months"
+    }
 };

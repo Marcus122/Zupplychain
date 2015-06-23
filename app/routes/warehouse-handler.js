@@ -21,6 +21,7 @@ var handler = function(app) {
 		req.data.warehouse = req.warehouse;
         if (req.query.fromSearch && req.session.whSC && req.session.whSC.sc && req.session.whSC.sc.length > 0) {
             //tidy up the query so that ints are parsed as such, we'll get strings back from session.
+            req.data.minDurationOptions = local.config.minDurationOptions;
             var query = req.session.whSC.sc[0];
             query.height = Number(query.height);
             query.weight = Number(query.weight);

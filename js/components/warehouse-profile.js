@@ -1,4 +1,4 @@
-define(["jquery","loom/loom","templates/templates","loom/loomAlerts"], function ($,Loom,Templates,Alerts) {
+define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!https://maps.googleapis.com/maps/api/js'], function ($,Loom,Templates,Alerts,GM) {
 	/*SINGLETON*/
 	
     function Class() {
@@ -11,6 +11,7 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts"], function 
                 $(".pricing-and-availability-" + id).slideToggle();
             });
             initAllAvailabilityBars();
+            $('.see-on-map').on("hover",showMap);
 		}
         function initAllAvailabilityBars(){
             var $theTables = $(".availability-table");
@@ -38,6 +39,28 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts"], function 
             var markerRight = barWidth - (barWidth /maxValue) * markerValue;
             $theMarker.css("right", markerRight);       
             
+        }
+        
+        function showMap(){
+            var $map = $('#profile-map');
+            var highlightIcon = { url  : "/images/map-icon-highlight.png" };
+            if(!$map.hasClass('loaded')){
+                var loc1 = new google.maps.LatLng($map.data('lat'),$map.data('lng'));
+                var mapOptions = {
+                    center: loc1,
+                    zoom: 14
+                };
+                var map = new google.maps.Map( $map[0], mapOptions);
+                
+                var markerOptions = {
+                    icon: highlightIcon,
+                    map:map,
+                    position:loc1,
+                    animation:'DROP'
+                };
+                var thisMarker = new google.maps.Marker(markerOptions);
+                $map.addClass('loaded');
+            }
         }
         
         
