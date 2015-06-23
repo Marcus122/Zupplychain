@@ -157,6 +157,7 @@
 						<form id="pricing-form" class="loom-form" novalidate method="post" data-loom-no-submit="true">
 							<div class="main">
 								<h2>Core Pricing</h2>
+								<p>This is the price you will be charging for all periods except those specified in date range pricing.</p>
 								<div class="row">
 									<table class="responsive-table columns seven" data-title="Basic pricing" id="default-pricing-table">
 										<thead><tr>
@@ -170,7 +171,7 @@
 							</div>
 							<div class="main">
 								<h2>Date Range Pricing</h2>
-								<p>You can add pricing conditions for different time periods, this will override your core pricing</p>
+								<p>You can specify alternative pricing for specific time periods. This will overide your core pricing for these time periods.</p>
 								<table class="show-title responsive-table" data-title="Pricing" id="date-pricing-table">
 									<thead>
 										<tr>
@@ -229,7 +230,7 @@
 										<input required type="number" value="0" name="noDiscount" min="0" data-bind-value="noDiscount" data-bind-max="palletSpaces"/>
 										<span>pallets</span>
 									</div>
-									<p>If you want to specify variations to your prices per week per pallet for small or large quantities, use this table. If not, your prices will apply to any quantity.</p>
+									<p>If you want to specify variations to your prices for large quantities, use this table. If not, your prices will apply to any quantity.</p>
 									<table class="show-title responsive-table" data-title="Volume Discount">
 										<thead>
 											<th>From</th>
@@ -270,7 +271,7 @@
 						<button class="close no-resize"><span>close</span></button>
 						<div class="main">
 							<h2>Available Pallets</h2>
-							<p>Specify your pallet availability for the next year</p>
+							<p>Specify your pallet availability for up to the next 12 months.</p>
 							<form method="post" id="pallets-form" class="loom-form" novalidate data-loom-no-submit="true">
 								<table class="show-title responsive-table availability-table" data-title="Available Pallets">
 									<thead>

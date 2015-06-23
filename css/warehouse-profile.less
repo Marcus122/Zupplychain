@@ -1,11 +1,14 @@
 .warehouse-profile{
     .search-header{
+        background: @tertiary;
         text-align:right;
+        .unit-padding-horizontal(2);
+        .unit-padding-top(2);
+        .button-text{
+            line-height:44px;
+        }
         .search-criteria {
                 position:relative;
-                .button-text{
-                    line-height:44px;
-                }
                 button{
                     margin-left:1rem;  
                 }
@@ -23,7 +26,6 @@
                     top: 25px;
                 }
                 ul{
-                   // display:none;
                    margin-top:21px;
                     list-style:none;
                     text-align:left;
@@ -35,9 +37,16 @@
                         width:65%;
                         display:inline-block;
                         font-weight:bold;
+                        float:left;
+                    }
+                    .search-value{
+                        width:35%;
+                        display:inline-block;
+                        float:right;
                     }
                     li{
                         margin:0 0 5px 0;
+                        overflow:hidden;
                     }
                      &:before{
                         .ion;
@@ -131,7 +140,5 @@
     }
     .warehouse-features.content-box .main{
         .unit-padding(4);
-    }
-    
-    
+    } 
 }
