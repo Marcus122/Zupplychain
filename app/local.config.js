@@ -44,7 +44,7 @@ exports.config = {
         4 : "1.2mx1.2m", 
         5 : "0.8mx0.6m",
         6 : "Other" 
-     }
+    },
     
     minDurationOptions : { // numDays : textDescription
         7 : "1 week",
