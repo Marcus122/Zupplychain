@@ -7,66 +7,75 @@
 		</div>
 		<section>
             <%if (session.whSC != undefined){%>
-                <div class="search-header row">
-                    <div class="see-on-map columns offset-by-three three">
-                        <span class="button-text">SEE ON MAP</span>
-                        <button class="map primary tiny"></button>
-                        <div id="profile-map" data-lat="<%=warehouse.geo.lat%>" data-lng="<%=warehouse.geo.lng%>"></div>
-                    </div>
-                    <div class="search-criteria columns three">
-                        <span class="button-text">MY SEARCH CRITERIA</span>
-                        <button class="view primary tiny"></button>
-                        <div class="my-search-criteria">
-                            <ul>
-                                <li>
-                                   <span class="title">Pallet type</span>
-                                   <%if(session.whSC.sc[0].palletType){%>
-                                        <span class="search-value"><%=session.whSC.sc[0].palletType%></span>
-                                   <%}else{%>
-                                       <span class="search-value">Any</span>
-                                   <%}%>
-                                </li>
-                                <li>
-                                    <span class="title">Quantity</span>
-                                    <span class="search-value"><%=session.whSC.sc[0].totalPallets%></span> 
-                                </li>
-                                <li>
-                                    <span class="title">Target postcode</span>
-                                    <span class="search-value"><%=session.whSC.sc[0].postcode%></span> 
-                                </li>
-                                <li>
-                                    <span class="title">Max distance</span>
-                                    <span class="search-value"><%=session.whSC.sc[0].maxDistance%></span> 
-                                </li>
-                                <li>
-                                    <span class="title">Product description</span>
-                                    <span class="search-value"><%=session.whSC.sc[0].description%></span> 
-                                </li>
-                                <li>
-                                    <span class="title">Start date</span>
-                                    <span class="search-value"><%=session.whSC.sc[0].startDate.substring(8,10)%>/<%=session.whSC.sc[0].startDate.substring(5,7)%>/<%=session.whSC.sc[0].startDate.substring(0,4)%></span> 
-                                </li>
-                                <li>
-                                    <span class="title">Min Duration</span>
-                                    <span><%=minDurationOptions[parseInt(session.whSC.sc[0].minDuration,10)]%></span> 
-                                </li>
-                                <li>
-                                    <span class="title">Height (m)</span>
-                                    <span class="search-value"><%=session.whSC.sc[0].height%></span> 
-                                </li>
-                                <li>
-                                    <span class="title">Weight (kg)</span>
-                                    <span class="search-value"><%=session.whSC.sc[0].weight%></span> 
-                                </li>
-                                <li>
-                                    <span class="title">Temp</span>
-                                    <span class="search-value"><%=session.whSC.sc[0].temp%></span> 
-                                </li>
-                            </ul>
-                         </div>
-                    </div>
-                    <div class="columns three back-to-search">
-                        <a href="/search" class="button action">Back to search</a>
+                <div class="search-header">
+                    <div class="row">
+                        <div class="columns three back-to-search">
+                            <a href="/search" class="button action">Back to search results</a>
+                        </div>
+                        <div class="search-criteria columns three">
+                            <span class="button-text">MY SEARCH CRITERIA</span>
+                            <button class="view primary tiny"></button>
+                            <div class="my-search-criteria">
+                                <div class="critera-popup">
+                                    <ul>
+                                        <li>
+                                           <span class="title">Pallet type</span>
+                                           <%if(session.whSC.sc[0].palletType){%>
+                                                <span class="search-value"><%=session.whSC.sc[0].palletType%></span>
+                                           <%}else{%>
+                                               <span class="search-value">Any</span>
+                                           <%}%>
+                                        </li>
+                                        <li>
+                                            <span class="title">Quantity</span>
+                                            <span class="search-value"><%=session.whSC.sc[0].totalPallets%></span> 
+                                        </li>
+                                        <li>
+                                            <span class="title">Target postcode</span>
+                                            <span class="search-value"><%=session.whSC.sc[0].postcode%></span> 
+                                        </li>
+                                        <li>
+                                            <span class="title">Max distance</span>
+                                            <span class="search-value"><%=session.whSC.sc[0].maxDistance%></span> 
+                                        </li>
+                                        <li>
+                                            <span class="title">Product description</span>
+                                            <span class="search-value"><%=session.whSC.sc[0].description%></span> 
+                                        </li>
+                                        <li>
+                                            <span class="title">Start date</span>
+                                            <span class="search-value"><%=session.whSC.sc[0].startDate.substring(8,10)%>/<%=session.whSC.sc[0].startDate.substring(5,7)%>/<%=session.whSC.sc[0].startDate.substring(0,4)%></span> 
+                                        </li>
+                                        <li>
+                                            <span class="title">Min Duration</span>
+                                            <span><%=minDurationOptions[parseInt(session.whSC.sc[0].minDuration,10)]%></span> 
+                                        </li>
+                                        <li>
+                                            <span class="title">Height (m)</span>
+                                            <span class="search-value"><%=session.whSC.sc[0].height%></span> 
+                                        </li>
+                                        <li>
+                                            <span class="title">Weight (kg)</span>
+                                            <span class="search-value"><%=session.whSC.sc[0].weight%></span> 
+                                        </li>
+                                        <li>
+                                            <span class="title">Temp</span>
+                                            <span class="search-value"><%=session.whSC.sc[0].temp%></span> 
+                                        </li>
+                                    </ul>
+                                    <div class="edit-search">
+                                        <a href="/search" class="button action">Edit search criteria</a>
+                                    </div>
+                                </div>
+                             </div>
+                        </div>
+                        <div class="see-on-map columns three">
+                            <span class="button-text">VIEW LOCATION ON A MAP</span>
+                            <button class="map primary tiny"></button>
+                            <div id="profile-map-container">
+                                <div id="profile-map" data-lat="<%=warehouse.geo.lat%>" data-lng="<%=warehouse.geo.lng%>"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
              <%}%>

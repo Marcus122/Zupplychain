@@ -11,7 +11,7 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
                 $(".pricing-and-availability-" + id).slideToggle();
             });
             initAllAvailabilityBars();
-            $('.see-on-map').on("hover",showMap);
+            $('.see-on-map').on("mouseover",showMap);
 		}
         function initAllAvailabilityBars(){
             var $theTables = $(".availability-table");
