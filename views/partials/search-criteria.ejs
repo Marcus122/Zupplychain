@@ -44,7 +44,7 @@
 				</div><br/>
 				<div class="input-field">
 					<label for="start-date">Start Date</label>
-					<input type="date" name="start-date" required="required" value="<%= session.whSC ? session.whSC.sc[0].startDate : today.toISOString().substring(0, 10)%>"/>
+					<input type="date" name="start-date" data-loom-add-controls="true" readonly required="required" value="<%= session.whSC ? session.whSC.sc[0].startDate : today.toISOString().substring(0, 10)%>"/>
 				</div>
 				<div class="input-field">
 					<label for="minDuration">Minimum Duration</label>
