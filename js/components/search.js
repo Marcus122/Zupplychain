@@ -16,9 +16,9 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
         resultsMap = new ResultsMap($("input[name='postcode']").val(), $("input[name='max-distance']").val());
         $(".js-map-results-container").slideDown(); //needs to be visible for map to load successfully.
         $(".js-page-banner").slideUp(300,function(){$(".search-top-section").css("height", "auto");
-         require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) {
-            $.scrollTo("#search-area",{ duration: 200, offset : -200});
-         });
+             require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) {
+                //$.scrollTo("#search-area",{ duration: 200, offset : -200});
+             });
         });
         
     });
@@ -72,9 +72,13 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
 			} else {
                 $searchResInfoBox.find('.controls').show()
             }
-            require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) { 
-                $.scrollTo("#results-area", {duration : 600, offset : -150 });
-            });
+            if (window.location.hash == "#search-area") { //if they came back via an edit search link, don't scroll down.
+                (window.location.hash = "");
+            } else {
+                require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) { 
+                    $.scrollTo("#results-area", {duration : 600, offset : -150 });
+                });
+            }
             var numResults = response.results.length;
             var resultsWord = numResults != 1 ? " results loaded" : " result loaded";
             Alerts.showSuccessMessage(response.results.length + resultsWord);

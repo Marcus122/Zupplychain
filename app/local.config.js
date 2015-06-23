@@ -36,6 +36,16 @@ exports.config = {
 		"Bulk Storage"	
 	],
     
+    palletTypes : { //maps a numeric ID to the string.
+        0 : "Any",
+        1 : "Standard Two way (1mx1.2m)",
+        2 : "Standard 4 way (1mx1.2m)",
+        3 : "Euro (0.8mx1.2m)",
+        4 : "1.2mx1.2m", 
+        5 : "0.8mx0.6m",
+        6 : "Other" 
+     }
+    
     minDurationOptions : { // numDays : textDescription
         7 : "1 week",
         14 : "2 weeks",
