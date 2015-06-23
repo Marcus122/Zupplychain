@@ -25,7 +25,6 @@ var handler = function(app) {
             query.height = Number(query.height);
             query.weight = Number(query.weight);
             query.searchQty = Number(query.quantity);
-            
             req.data.warehouse = limitStorageToMatching(req.warehouse, query);
         }
 		res.render("warehouse-profile",req.data);
@@ -52,6 +51,7 @@ var handler = function(app) {
 function limitStorageToMatching(thiswarehouse, query) {
     var newStorage = warehouse.limitStorageToMatching(thiswarehouse.storage, query);
     thiswarehouse.storage = newStorage;
+
     return thiswarehouse;
 }
 

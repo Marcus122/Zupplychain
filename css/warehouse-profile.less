@@ -5,10 +5,10 @@
     .pricing-and-availability-row{
         padding:40px 20px;
     }
+    .added {
+        background-color:#ccc;
+    }
     table {
-        .added {
-            background-color:#ddd;
-        }
         width:100%;
         text-align:left;
         .availability-marker{
@@ -37,12 +37,14 @@
             td.bar {
                 width:200px;
                 padding:2px;
+                
             }
             td.bar .bar{
                 height:38px;
                 line-height: 2.5em;
                 font-weight:bold;
                 padding-left:10px;
+                box-sizing:border-box;
                 &.full{
                    width:100%;
                    color: darken( #d4e6a5, 20);

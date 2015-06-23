@@ -45,8 +45,28 @@
 					<input type="date" name="start-date" required="required" value="<%= session.whSC ? session.whSC.sc[0].startDate : today.toISOString().substring(0, 10)%>"/>
 				</div>
 				<div class="input-field">
-					<label for="end-date">End Date</label>
-					<input type="date" name="end-date" required="required" data-loom-greater-than="start-date" value="<%= session.whSC ?session.whSC.sc[0].endDate : toDate.toISOString().substring(0, 10) %>"/>
+					<label for="minDuration">Minimum Duration</label>
+					<select name="minDuration" required="required">
+                    <%
+                    var options = {
+                        7 : "1 Week",
+                        14 : "2 weeks",
+                        21 : "3 weeks",
+                        28 : "1 Month",
+                        56 : "2 Months",
+                        84 : "3 Months"
+                    };
+                    for (var key in options) {
+                    %>
+                        <option value="<%= key %>" 
+                        <% if (session.whSC && key == session.whSC.sc[0].minDuration) { %>
+                            selected="selected"
+                        <% } %>
+                        ><%= options[key] %> </option>
+                    <%
+                    }
+                    %>
+                    </select>
 				</div>
 				<div class="input-field number">
 					<label for="height">Pallet Height (m)</label>

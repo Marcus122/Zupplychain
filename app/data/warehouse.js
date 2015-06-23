@@ -68,6 +68,7 @@ warehouseSchema.statics = {
   
   filterStorageOnQuery: function(storage, query) {
     var matchingStorages = [];
+    var k = 0;
     for (var j=0; j<storage.length; j++){
         var palletTypeOK  = !query.palletType || storage[j].palletType === "Any" || storage[j].palletType === query.palletType; //!palletType means any
         var maxWeightOK   = !query.weight || storage[j].maxWeight >= query.weight;
@@ -78,6 +79,8 @@ warehouseSchema.statics = {
             matchingStorages.push(storage[j].toObject());
         }
     }
+    console.log("in warehouse data.js");
+    console.log(matchingStorages.length);
     return matchingStorages;       
   },
   

@@ -34,6 +34,7 @@ function populateSearchData(req,res, next){
         if (palletType === "Any") {
             palletType = "";
         }
+        var minDuration = parseInt(req.body.minDuration,10);
 		var weight = parseFloat(req.body.weight, 10);
 		var height = parseFloat(req.body.height, 10);
         if (isNaN(weight)) {
@@ -44,7 +45,7 @@ function populateSearchData(req,res, next){
         }
         var temp = req.body.temperature;
 		var qty = req.body.quantity;
-        var query = {"postcode" : postcode, "radius" : radius, "palletType" : palletType, "weight" : weight, "height" : height, "temp" : temp, "totalPallets" : qty, "radiusInMetres" : radiusInMetres};
+        var query = {"postcode" : postcode, "radius" : radius, "palletType" : palletType, "weight" : weight, "height" : height, "temp" : temp, "totalPallets" : qty, "radiusInMetres" : radiusInMetres, "minDuration" : minDuration};
 		
 		req.session.whSC = populateSessionStateJSON(req,postcode,palletType,radius,weight,height,temp,qty);
 		
@@ -60,7 +61,7 @@ function populateSessionStateJSON(req,postcode,palletType,radius,weight,height,t
 	'{"palletType":"'+palletType +'","totalPallets":"'+qty+'","postcode":"'+postcode+
 	'","maxDistance":"'+radius+'","description":"'+req.body.description+
 	'","height":"'+height+'","weight":"'+weight+'","temp":"'+temp+'","startDate":"'+
-	req.body["start-date"]+'","endDate":"'+req.body["end-date"]+'"} ]}';
+	req.body["start-date"]+'","minDuration":"'+req.body["minDuration"]+'"} ]}';
 	
 	return JSON.parse(srchJson)
 }
