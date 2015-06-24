@@ -74,7 +74,24 @@ warehouseSchema.statics = {
         var maxWeightOK   = !query.weight || storage[j].maxWeight >= query.weight;
         var maxHeightOK   = !query.height || storage[j].maxHeight >= query.height;
         var tempOK        = storage[j].temp === query.temp;
-        var spacesOK      = storage[j].palletSpaces >= query.totalPallets;
+        if (storage[j].palletSpaces < query.totalPallets) {
+            continue; //we can bail out early if the totalPallet space is too small for our query.
+        }
+        
+        var spacesOK      = false;
+        for (var k in storage[j].pallets) {  //check that there is availability at the query start date.
+            var startDate = query.startDate;
+            if (! (query.startDate instanceof Date))
+            {
+                startDate = new Date(query.startDate);
+            } 
+            if (storage[j].pallets[k].from <= startDate 
+                &&  storage[j].pallets[k].to >= startDate 
+                && storage[j].pallets[k].free > query.totalPallets) {
+                    spacesOK = true;
+                    break;
+                }
+        }
         if (palletTypeOK && maxWeightOK && maxHeightOK && tempOK && spacesOK){
             matchingStorages.push(storage[j].toObject());
         }

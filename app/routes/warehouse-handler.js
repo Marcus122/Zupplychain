@@ -25,7 +25,9 @@ var handler = function(app) {
             var query = req.session.whSC.sc[0];
             query.height = Number(query.height);
             query.weight = Number(query.weight);
-            query.searchQty = Number(query.quantity);
+            //query.searchQty = Number(query.quantity);
+            query.totalPallets = Number(query.totalPallets);
+            query.startDate = query.startDate;
             req.data.warehouse = limitStorageToMatching(req.warehouse, query);
         }
 		res.render("warehouse-profile",req.data);

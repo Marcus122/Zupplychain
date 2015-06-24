@@ -35,11 +35,12 @@ function populateSearchData(req,res, next){
         var radiusInMetres = radius * 1609.344;
         var palletType = req.body["pallet-type"];
         if (palletType === "Any") {
-            palletType = "";
+            palletType = ""; //This is to be removed after the demo, Any should match "Any" just like any other pallet type
         }
         var minDuration = parseInt(req.body.minDuration,10);
 		var weight = parseFloat(req.body.weight, 10);
 		var height = parseFloat(req.body.height, 10);
+        var startDate = new Date(req.body["start-date"]);
         if (isNaN(weight)) {
             weight = 0; //if it's blank or there's an error, set to 0, its compared to a maxWeight value so 0 is the same as ignore in the search.
         }
@@ -48,7 +49,7 @@ function populateSearchData(req,res, next){
         }
         var temp = req.body.temperature;
 		var qty = req.body.quantity;
-        var query = {"postcode" : postcode, "radius" : radius, "palletType" : palletType, "weight" : weight, "height" : height, "temp" : temp, "totalPallets" : qty, "radiusInMetres" : radiusInMetres, "minDuration" : minDuration};
+        var query = {"postcode" : postcode, "radius" : radius, "palletType" : palletType, "weight" : weight, "height" : height, "temp" : temp, "totalPallets" : qty, "radiusInMetres" : radiusInMetres, "minDuration" : minDuration, "startDate" : startDate};
 		
 		req.session.whSC = populateSessionStateJSON(req,postcode,palletType,radius,weight,height,temp,qty);
 		
