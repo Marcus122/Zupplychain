@@ -64,6 +64,7 @@ define(["jquery","./Datasource"],function($,Datasource){
 			datasource.sort(field,sortDirection);
 			var items = datasource.getRows();
 			draw(items);
+			$table.trigger('loomSort');
 			if(cb) cb();
 		}
 		function filter(field,value,cb){

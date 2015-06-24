@@ -32,7 +32,6 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
         evt.preventDefault();
         var requestedUrl = $(evt.target).prop("href");
         var $popup = $("#register-email-popup");
-        $popup.find("input[name='email']").focus(); //focus the first input.
         //bind up an onsuccess for the popup form that redirects to requested url once they've registered.
         loom.addOnSuccessCallback("#register-email-form", function(response){
             window.location.href = requestedUrl;
@@ -43,6 +42,15 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
         });
         //show the popup.
         $popup.show();
+        $popup.find("input[name='email']").focus(); //focus the first input.
+    });
+    
+    $('#search-results-table').on("loomSort",function(){
+        var $table = $(this);
+        $table.find('tbody tr').each(function(i){
+           var $row = $(this);
+           $row.find('td').first().text(String(Number(i) + 1) + '.'); 
+        });
     });
     
     $maxDistance.change(function(){
