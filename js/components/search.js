@@ -38,6 +38,7 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
             window.location.href = requestedUrl;
         });
         loom.addOnErrorCallback("#register-email-form", function(response){
+            Alerts.showErrorMessage("There was an error storing your details");
             window.location.href = requestedUrl;
         });
         //show the popup.
