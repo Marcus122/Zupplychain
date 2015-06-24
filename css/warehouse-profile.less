@@ -139,10 +139,12 @@
                 
             }
             td.bar .bar{
+                width:50%;
+                transition:  width 0.5s;
                 height:38px;
                 line-height: 2.5em;
                 font-weight:bold;
-                padding-left:10px;
+                padding-left:4px;
                 box-sizing:border-box;
                 &.full{
                    width:100%;
@@ -152,6 +154,9 @@
                 &.not-full{
                     color:darken(#f0dfa6, 20);
                     background-color:#f0dfa6;
+                }
+                span{
+                margin-left:4px;
                 }
             }
         }
