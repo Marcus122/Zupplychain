@@ -21,8 +21,12 @@ process.argv.forEach(function (val, index, array) {
 		data.live=true;
         port = live_port;
         bind_address = live_bind_address;
-		console.log('live');
-	}
+		console.log('live - JS and CSS using built versions, binding server to external IP');
+	} else if (val.toLowerCase() ==='qa') {
+        data.live=true;// live versions of JS and CSS
+        //but bind addresses etc stay the same.
+        console.log("QA - JS and CSS using built versions");
+    }
 });
 
 app.set('view engine', 'ejs');
