@@ -8,7 +8,7 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
 		function initialize() {	
 			$('.popup').on("click",function(){
                 var id = $(this).data("id");
-                $(".pricing-and-availability-" + id).slideToggle();
+                $(".pricing-and-availability-" + id).toggle();
             });
             initAllAvailabilityBars();
             $('.see-on-map').on("mouseover",showMap);
