@@ -1,4 +1,28 @@
 .warehouse-profile{
+    .key dl {
+        margin-left:10px;
+        text-align:left;
+        * {
+            display:inline;
+        }
+        dd {
+            margin-left:10px;
+            margin-right:20px;
+        }
+        dt{
+            display:inline-block;
+            height:15px;
+            width:15px;
+            &.required-space {
+                background-color:@highlight;
+            }
+            &.available-space {
+                background-color:#d4e6a5;
+            }   
+        }
+    
+    }
+
     .search-header{
         background: @tertiary;
         .unit-padding-horizontal(2);

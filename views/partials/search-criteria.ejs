@@ -23,8 +23,8 @@
 				<div class="input-field">
 					<label for="pallet-type">Pallet Type</label>
 					<select name="pallet-type" id="pallet-type" required="required">
-						<%var palletTypes = ["Any", "Blue", "Euro", "Standard", "Ano",  "Other"];
-						for (var i=0; i<palletTypes.length; i++){%>
+						<%
+						for (var i in palletTypes){%>
 							<option value="<%=palletTypes[i]%>" <%if (session.whSC && session.whSC.sc[0].palletType === palletTypes[i]){%>
 																	selected
 																<%}%>><%=palletTypes[i]%></option>

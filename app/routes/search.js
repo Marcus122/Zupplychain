@@ -19,6 +19,7 @@ var handler = function(app) {
     
     app.get('/search', function (req,res) {
         req.data.minDurationOptions = local.config.minDurationOptions;
+        req.data.palletTypes = local.config.palletTypes;
 		res.render("find-storage",req.data);
 	});
 };

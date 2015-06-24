@@ -8,8 +8,8 @@ var handler = function(app) {
 	app.get('/provider-registration', function(req,res){
 		res.render("registration",req.data);
 	});
-	app.get('/provider-registration/:step', populateUserData, registrationHandler);
-	app.get('/provider-registration-:step', populateUserData, registrationHandler);
+	app.get('/provider-registration/:step', populateData, registrationHandler);
+	app.get('/provider-registration-:step', populateData, registrationHandler);
 	app.post('/provider-registration-:step', registrationHandler);
 	app.post('/complete-registration',completeRegistration);
 	app.post('/save-registration',saveRegistration);
@@ -26,8 +26,9 @@ function registrationHandler(req,res){
 		res.render("registration" + "-" + req.params.step,req.data);
 	}
 }
-function populateUserData(req,res, next){
+function populateData(req,res, next){
 	req.data.services = local.config.services;
+    req.data.palletTypes = local.config.palletTypes;
 	req.data.specifications = local.config.specifications;
 	if(!req.data.user._id) return next();
 	req.data.user.getWarehouses(function(warehouses){

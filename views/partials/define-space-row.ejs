@@ -5,37 +5,14 @@
 	</td>
 	<td data-th="Pallet Type" class="select input-field no-success-validation-style">
 		<select name="palletType" required>
-			<option value=""/>
-			<option
-				<%if(row.palletType === 'Blue' ){%>
-					selected="selected"
-				<%}%>
-			>Blue</option>
-			<option 
-				<%if(row.palletType === 'Euro' ){%>
-					selected="selected"
-				<%}%>
-			>Euro</option>
-			<option
-				<%if(row.palletType === 'Standard' ){%>
-					selected="selected"
-				<%}%>
-			>Standard</option>
-			<option
-				<%if(row.palletType === 'Anno' ){%>
-					selected="selected"
-				<%}%>
-			>Anno</option>
-			<option
-				<%if(row.palletType === 'Other' ){%>
-					selected="selected"
-				<%}%>
-			>Other</option>
-			<option
-				<%if(row.palletType === 'Any' ){%>
-					selected="selected"
-				<%}%>
-			>Any</option>
+        			<option value=""/>
+        <% for (i in palletTypes) { %>
+            <option <%= row.palletType == palletTypes[i] ? "selected='selected'" : "" %> >
+            <%= palletTypes[i] %>
+            </option>
+            <%
+            } //end for palletTypes
+            %>
 		</select>
 	</td>
 	<td data-th="Storage Temp" class="select input-field no-success-validation-style">
