@@ -126,9 +126,8 @@
                                                     </div>
                                                     <%
                                                     var startDate = new Date(session.whSC.sc[0].startDate);
-                                                    var endDate = new Date();
-                                                    endDate.setDate(startDate.getDate() + 365 );
-                                                    
+                                                    var endDate = new Date(startDate.getTime());
+                                                    endDate.setYear(startDate.getFullYear() + 1);
                                                     %>
                                                     <div class="main">
                                                         <table class="pricing-table"><tbody>
@@ -143,7 +142,6 @@
                                                             var adjustedPriceLim = priceLim + 1;
                                                             for (var m = 0; m < adjustedPriceLim && !stopThisTime; m++) {
                                                                 var pricing = storage.pricing[m];
-                                                    
                                                                 
                                                                 if (pricing &&  endDate < pricing.to) {
                                                                 pricing.to = endDate;
@@ -211,8 +209,8 @@
                                                     var maxAvailability = totalPallets * 2; //Math.ceil(totalPallets / 50)*50 + Math.min(50, totalPallets * 2) ;
                                                     //var thisAvailability = storage.palletSpaces;
                                                     var startDate = new Date(session.whSC.sc[0].startDate);
-                                                    var endDate = new Date();
-                                                    endDate.setDate(startDate.getDate() + 365 );
+                                                    var endDate = new Date(startDate.getTime());
+                                                    endDate.setYear(startDate.getFullYear() + 1);
                                                     %>
                                                     <div class="main">
                                                         <div class="availability-marker"><span class="number"><%=session.whSC.sc[0].totalPallets;%>
