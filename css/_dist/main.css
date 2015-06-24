@@ -7330,6 +7330,9 @@ body.wait #wait {
   position: relative;
   background-color: rgba(80, 77, 77, 0.9);
   color: #ffffff;
+  border-radius: 10px;
+}
+.search-result-info-box .inner-box {
   padding-left: 20px;
   padding-left: 2rem;
   padding-right: 20px;
@@ -7338,7 +7341,6 @@ body.wait #wait {
   padding-top: 2rem;
   padding-bottom: 20px;
   padding-bottom: 2rem;
-  border-radius: 10px;
 }
 .search-result-info-box em {
   font-style: normal;
@@ -7424,9 +7426,10 @@ body.wait #wait {
   .search-result-info-box.fixed {
     left: inherit;
     right: 0px;
-    top: 57px;
+    top: 0px;
     width: 320px;
     position: absolute;
+    height: 100%;
   }
 }
 .confirm-email {
@@ -7456,6 +7459,8 @@ body.wait #wait {
 }
 #map-container {
   height: 352px;
+  min-height: 352px;
+  max-height: 1000px;
 }
 .warehouse-pricing {
   overflow-x: scroll !important;
@@ -7465,6 +7470,26 @@ body.wait #wait {
 }
 .rotateY90 {
   transform: rotateY(90deg);
+}
+.resize * {
+  cursor: n-resize;
+}
+#results-area {
+  position: relative;
+  padding-bottom: 50px;
+}
+#results-area .main {
+  position: relative;
+}
+#results-area .footer {
+  position: relative;
+}
+#results-area .map-resize {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 5px;
+  cursor: n-resize;
 }
 @media only screen and (max-width: 549px) {
   .content-box.map-container small {
@@ -8136,11 +8161,13 @@ form#define-space .header .form-header .reg-2-example {
   width: 100%;
 }
 .warehouse-profile table .availability-marker {
+  transition: 0.4s right;
   z-index: 50 !important;
   height: 1000px;
   position: absolute;
   right: 10px;
   top: 45px;
+  transition: 1s right;
 }
 .warehouse-profile table .availability-marker div {
   width: 3px;
@@ -8165,10 +8192,12 @@ form#define-space .header .form-header .reg-2-example {
   padding: 2px;
 }
 .warehouse-profile table table td.bar .bar {
+  width: 50%;
+  transition: width 0.5s;
   height: 38px;
   line-height: 2.5em;
   font-weight: bold;
-  padding-left: 10px;
+  padding-left: 4px;
   box-sizing: border-box;
 }
 .warehouse-profile table table td.bar .bar.full {
@@ -8179,6 +8208,9 @@ form#define-space .header .form-header .reg-2-example {
 .warehouse-profile table table td.bar .bar.not-full {
   color: #e1c04f;
   background-color: #f0dfa6;
+}
+.warehouse-profile table table td.bar .bar span {
+  margin-left: 4px;
 }
 .warehouse-profile table .header {
   background-color: #cccccc;
