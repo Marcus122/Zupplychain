@@ -9,20 +9,15 @@
 				}
 			%>
 			<main>
-				<div class="row carousel">
-					<img src="/images/provider-banner.png" alt="Complete your registration"/>
-					<h1 class="title large-font">
-						<span>Complete your</span>
-						<br/>
-						registration
-					</h1>
-					<p class="desc medium-font">Complete your registration &amp; help customers choose your warehouse</p>
+				<div class="banner">
+					<h1>Complete your registration</h1>
 				</div>
+				<p class="tag-line">Help customers choose your warehouse</p>
 				<div class="row">
 					<ul class="tabs">
-						<li class="four columns checked">Step 1</li>
-						<li class="four columns checked">Step 2</li>
-						<li class="four columns active checked">Step 3</li>
+						<li class="four columns checked"><span>Step 1</span> - Warehouse details</li>
+                        <li class="four columns checked"><span>Step 2</span> - Define your space</li>
+                        <li class="four columns active checked"><span>Step 3</span> - Price and availability</li>
 					</ul>
 					<section class="tab-content">
 						<form id="price-and-availability-user-data" class="loom-form responsive-table provider-form" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" action="/complete-registration" novalidate>
@@ -36,46 +31,81 @@
 											<thead>
 												<tr>
 													<th>Storage Name</th>
+													<th>Pallet Spaces</th>
 													<th>Pricing</th>
-													<th>Volume Discount</th>
+													<!--<th>Volume Discount</th>-->
 													<th>Availabile Pallets</th>
+													<!--<th>Progress</th>-->
 												</tr>
 											</thead>
 											<tbody>
-												<%for( var i=0; i<warehouse.storage.length;i++ ){%>
-												<tr data-id="<%=warehouse.storage[i]._id %>">
-													
+												<%for( var i=0; i<warehouse.storage.length;i++ ){
+													var storage = warehouse.storage[i];
+													var pricingComplete=false;
+													var palletsComplete=false;
+													if(Number(storage.basicPricing.price) > 0){
+														pricingComplete=true;
+													}
+													if(storage.pallets && storage.pallets.length > 0){
+														palletsComplete=true;
+													}
+												%>
+												<tr data-id="<%=storage._id %>">
 													<td class="text" data-th="Storage Name">
-														<span><%=warehouse.storage[i].name%></span>
+														<span><%=storage.name%></span>
 													</td>
-													<td class="button-cell pricing" data-th="Pricing">
-														<button data-template="pricing" type="button" class="secondary popup mini">click here</button>
+													<td class="text" data-th="Pallet Spaces">
+														<span><%=storage.palletSpaces%></span>
 													</td>
-													<td class="button-cell discounts" data-th="Volume Discount">
+													<%if(pricingComplete){%>
+														<td class="button-cell pricing success" data-th="Pricing">
+															<span class="edit-data">DATA</span>
+															<button data-template="pricing" type="button" class="popup mini"/>
+														</td>
+													<%}else{%>
+														<td class="button-cell pricing" data-th="Pricing">
+															<span class="edit-data">DATA</span>
+															<button data-template="pricing" type="button" class="popup mini"/>
+														</td>
+													<%}%>
+													<!--<td class="button-cell discounts" data-th="Volume Discount">
 														<button data-template="volume"  type="button" class="secondary popup mini">click here</button>
-													</td>
-													<td class="button-cell pallets" data-th="Available Pallets">
-														<button data-template="pallets" type="button" class="secondary popup mini">click here</button>
-													</td>
+													</td>-->
+													<%if(palletsComplete){%>
+														<td class="button-cell pallets success" data-th="Available Pallets">
+															<span class="edit-data">DATA</span>
+															<button data-template="pallets" type="button" class="popup mini"/>
+														</td>
+													<%}else{%>
+														<td class="button-cell pallets" data-th="Available Pallets">
+															<span class="edit-data">DATA</span>
+															<button data-template="pallets" type="button" class="popup mini"/>
+														</td>
+													<%}%>
+													<!--<td data-th="Progress">
+														<div class="progress">
+															<div class="progress-bar"/>
+														</div>
+													</td>-->
 											    </tr>
 											    <%}%>
 											</tbody>
 										</table>
-										<div class="row">
-											<div class="columns five check checkbox input-field">
+										<!--<div class="row">
+											<!--<div class="columns five check checkbox input-field">
 												<input required type="checkbox" name="accept" id="accept"/>
 												<label for="accept">*I agree to the terms and conditions.</label>
-											</div>
-											<div class="columns four">
+											</div>-->
+											<!--<div class="columns four offset-by-five">
 												<button href="#" class="view tertiary forward mini">View list of Documentation</button>
 											</div>
 											<div class="columns three">
 												<button href="#" class="view tertiary forward mini">View Terms &amp; Conditions</button>
 											</div>
-										</div>
+										</div>-->
 									</fieldset>
 								</div>
-								<div class="content-box primary">
+								<!--<div class="content-box primary">
 									<div class="header">
 										<h3>Your Login Details</h3>
 									</div>
@@ -104,7 +134,7 @@
 											</div>
 										</div>
 									</fieldset>
-								</div>
+								</div>-->
 							</div>
 							<fieldset class="form-footer">
 								<input name="warehouse" type="hidden" value="<%=warehouse._id%>"/>
@@ -119,38 +149,58 @@
 		 <script type="text/template" id="pricing">
 			<div class="popup-window">
 				<div class="inner">
-					<button class="close no-resize"><span>close</span></button>
-					<h2>Basic Pricing</h2>
-                    <form id="default-pricing-form" class="loom-form" novalidate method="post" data-loom-no-submit="true">
-                        <table class="responsive-table data-title="Basic pricing">
-                            <thead><tr>
-                                <th>Price per pallet per week</th>
-                                <th>Handling charge per pallet (In and Out)</th>
-                                <th>Cost to reserve</th></tr>
-                            </thead>
-                        </table>
-                    </form>
-                    
-                    <h2>Date Range Pricing</h2>
-                    <p>You can add pricing conditions for different time periods</p>
-					<form id="pricing-form" class="loom-form" novalidate method="post" data-loom-no-submit="true">
-						<table class="show-title responsive-table" data-title="Pricing">
-							<thead>
-								<tr>
-									<th>From</th>
-									<th>To</th>
-									<th>Price per pallet per week</th>
-									<th>Handling charge per pallet (In and Out)</th>
-									<th>Cost to reserve</th>
-									<th/>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-						<button type="button" class="action add">add row</button>
-						<button class="action done">done</button>
-					</form>
+					<div class="popup-main content-box secondary">
+						<div class="header">
+							<h2>Pricing: Storage @name@</h2>
+						</div>
+						<button class="close no-resize"><span>close</span></button>
+						<form id="pricing-form" class="loom-form" novalidate method="post" data-loom-no-submit="true">
+							<div class="main">
+								<h2>Core Pricing</h2>
+								<p>This is the price you will be charging for all periods except those specified in date range pricing.</p>
+								<div class="row">
+									<table class="responsive-table columns seven" data-title="Basic pricing" id="default-pricing-table">
+										<thead><tr>
+											<th>Price per pallet per week (£)</th>
+											<th>Handling charge per pallet (In and Out) (£)</th>
+											<th>Cost to reserve (£)</th></tr>
+										</thead>
+										<tbody/>
+									</table>
+								</div>
+							</div>
+							<div class="main">
+								<h2>Date Range Pricing</h2>
+								<p>You can specify alternative pricing for specific time periods. This will overide your core pricing for these time periods.</p>
+								<table class="show-title responsive-table" data-title="Pricing" id="date-pricing-table">
+									<thead>
+										<tr>
+											<th>From</th>
+											<th>To</th>
+											<th>Price per pallet per week (£)</th>
+											<th>Handling charge per pallet (In and Out) (£)</th>
+											<th>Cost to reserve (£)</th>
+											<th class="remove-col"/>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+								<div class="popup-buttons">
+									<div class="add">
+										<span>Add new date range</span>
+										<button type="button" class="add-button"><span>add row</span></button>
+									</div>
+								</div>
+								<div class="popup-buttons">
+									<div class="save">
+										<button data-bind-value="_id" type="button" class="action add-volume">Add volume discount</button>
+										<button class="action done">save</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
 				</div>
 			</div>
 		 </script>
@@ -163,23 +213,48 @@
 		 <script type="text/template" id="volume">
 			<div class="popup-window">
 				<div class="inner">
-					<button class="close no-resize"><span>close</span></button>
-					<h2>Volume Discount</h2>
-					<p>If you want to specify variations to your prices per week per pallet for small or large quantities, use this table. If not, your prices will apply to any quantity.</p>
-					<form method="post" id="discount-form" class="loom-form" novalidate data-loom-no-submit="true">
-						<table class="show-title responsive-table" data-title="Volume Discount">
-							<thead>
-								<th>From</th>
-								<th>To</th>
-								<th>% Discount</th>
-								<th/>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-						<button type="button" class="action add">add row</button>
-						<button class="action done">done</button>
-					</form>
+					<div class="popup-main content-box secondary discount-popup">
+						<div class="header">
+							<h2>Volume Discount: Storage @name@</h2>
+						</div>
+						<button class="close no-resize"><span>close</span></button>
+						<div class="main">
+							<div class="discount-inner">
+								<div class="discount-header">
+									<h2>Volume Discount</h2>
+									<span>Max number of pallets: <strong>@palletSpaces@</strong></span>
+								</div>
+								<form method="post" id="discount-form" class="loom-form" novalidate data-loom-no-submit="true">
+									<div class="input-field no-discount no-success-validation-style">
+										<label for="no-disc">No discount on orders with up to</label>
+										<input required type="number" value="0" name="noDiscount" min="0" data-bind-value="noDiscount" data-bind-max="palletSpaces"/>
+										<span>pallets</span>
+									</div>
+									<p>If you want to specify variations to your prices for large quantities, use this table. If not, your prices will apply to any quantity.</p>
+									<table class="show-title responsive-table" data-title="Volume Discount">
+										<thead>
+											<th>From</th>
+											<th>To</th>
+											<th class="discount-value">% Discount</th>
+											<th class="remove-col"/>
+										</thead>
+										<tbody>
+										</tbody>
+									</table>
+									<div class="popup-buttons">
+										<div class="add">
+											<button type="button" class="add-button"><span>add row</span></button>
+										</div>
+									</div>
+									<div class="popup-buttons">
+										<div class="save">
+											<button class="action done">save</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		 </script>
@@ -189,26 +264,115 @@
 		 <script type="text/template" id="pallets">
 			<div class="popup-window">
 				<div class="inner">
-					<button class="close no-resize"><span>close</span></button>
-					<h2>Available Pallets</h2>
-					<form method="post" id="pallets-form" class="loom-form" novalidate data-loom-no-submit="true">
-						<table class="show-title responsive-table" data-title="Available Pallets">
-							<thead>
-								<tr>
-									<th>From</th>
-									<th>To</th>
-									<th>Total Pallets</th>
-									<th>Estimated in Use</th>
-									<th>Estimated Free</th>
-									<th/>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-						<button type="button" class="action add">add row</button>
-						<button class="action done">done</button>
-					</form>
+					<div class="popup-main content-box secondary">
+						<div class="header">
+							<h2>Availability: Storage @name@</h2>
+						</div>
+						<button class="close no-resize"><span>close</span></button>
+						<div class="main">
+							<h2>Available Pallets</h2>
+							<p>Specify your pallet availability for up to the next 12 months.</p>
+							<form method="post" id="pallets-form" class="loom-form" novalidate data-loom-no-submit="true">
+								<table class="show-title responsive-table availability-table" data-title="Available Pallets">
+									<thead>
+										<tr>
+											<th>From</th>
+											<th>To</th>
+											<th>Total Pallets</th>
+											<th>Estimated in Use</th>
+											<th>Estimated Free</th>
+											<th class="remove-col"/>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+								<div class="popup-buttons">
+									<div class="add">
+										<span>Add new date range</span>
+										<button type="button" class="add-button"><span>add row</span></button>
+									</div>
+								</div>
+								<div class="popup-buttons">
+									<div class="save">
+										<button class="action done">save</button>
+									</div>
+								</div>
+							</form>
+							<div class="availability-progress">
+								<table>
+									<thead>
+										<tr>
+											<% 
+												var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
+												  "July", "Aug", "Sep", "Oct", "Nov", "Dec"
+												];
+												var i = 0;
+												var date = new Date();
+												while(i<13){%>
+													<th><%=monthNames[date.getMonth()].toUpperCase()%> <%=String(date.getFullYear()).substring(2,4)%></th>
+													<%
+														date.setMonth(date.getMonth()+1);
+														i++;
+												}
+											%>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<%
+												i=0;
+												while(i<13){%>
+													<td/>
+													<%i++;
+												}
+											%>
+										</tr>
+										<tr class="progress-row">
+											<td/>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		 </script>
+		 <script type="text/template" id="complete-registration">
+		 	<div class="popup-window">
+				<div class="small register complete">
+					<div class="popup-main content-box secondary">
+						<div class="header">
+							<h2>Complete your registration</h2>
+						</div>
+						<button class="close no-resize"><span>close</span></button>
+						<div class="main">
+							<form class="loom-form" action="/complete-registration" novalidate id="complete-registration-form">
+								<% if(user.email){%>
+									<p>Confirm your details</p>
+								<%}%>
+								<div class="input-field no-success-validation-style">
+									<input type="email" name="email" placeholder="Email" required value="<%=user.email%>"/>
+								</div>
+								<% if(user.email){%>
+									<p>Choose a password</p>
+								<%}%>
+								<div class="input-field no-success-validation-style">
+									<input data-pattern="(?=.*[A-Z])(?=.*[0-9])" type="password" name="password" placeholder="Password" minlength="8" required/>
+									<ul class="messages">
+										 <li class="msg-info">Password must be at least 8 characters in length and contain at least one number and one uppercase letter.</li>
+										 <li class="msg-error">Password must be at least 8 characters in length and contain at least one number and one uppercase letter.</li>
+									 </ul>
+								</div>
+								<div class="check checkbox input-field">
+									<input required type="checkbox" name="accept" id="accept"/>
+									<label for="accept">I agree to the terms and conditions.</label>
+								</div>
+								<button class="action done">finish</button>
+							</form>
+						</div>
+					</div>
 				</div>
 			</div>
 		 </script>

@@ -8,22 +8,28 @@ var handler = function(app) {
 	app.get('/provider-registration', function(req,res){
 		res.render("registration",req.data);
 	});
-	app.get('/provider-registration/:step', populateUserData, registrationHandler);
-	app.get('/provider-registration-:step', populateUserData, registrationHandler);
+	app.get('/provider-registration/:step', populateData, registrationHandler);
+	app.get('/provider-registration-:step', populateData, registrationHandler);
 	app.post('/provider-registration-:step', registrationHandler);
 	app.post('/complete-registration',completeRegistration);
+	app.post('/save-registration',saveRegistration);
 	app.post('/registration/upload',uploadFile,fileOutput);
 };
 function registrationHandler(req,res){
-	if(req.params.step > 1 && !req.data.user._id ){
-		redirectToStart(res)
+	//If active send to dashboard
+	if(req.data.user.active){
+		res.redirect('/dashboard');
+	}
+	else if(req.params.step > 1 && !req.data.user._id ){
+		redirectToStart(res);
 	}else{
 		res.render("registration" + "-" + req.params.step,req.data);
 	}
 }
-function populateUserData(req,res, next){
+function populateData(req,res, next){
 	req.data.services = local.config.services;
-	req.data.specifications = local.config.specifications
+    req.data.palletTypes = local.config.palletTypes;
+	req.data.specifications = local.config.specifications;
 	if(!req.data.user._id) return next();
 	req.data.user.getWarehouses(function(warehouses){
 		req.data.user.warehouses = warehouses;
@@ -36,18 +42,32 @@ function completeRegistration(req,res){
 	req.data.user.password = req.body.password;
 	req.data.user.contact = req.body.contact;
 	req.data.user.name = req.body.name;
-	req.data.user.confirm = req.body.confirm;
-	if (req.body.confirm == req.body.password){
-		User.register(req.data.user,function(err){
-			if(err){
-				var backURL=req.header('Referer') 
-				return backURL ? res.redirect(backURL) : redirectToStart(res);
-			}else{
-				res.send({redirect: '/dashboard'});
-			}
-		})
+	User.register(req.data.user,function(err){
+		if(err){
+			var backURL=req.header('Referer') 
+			return backURL ? res.redirect(backURL) : redirectToStart(res);
+		}else{
+			res.send({redirect: '/dashboard'});
+		}
+	});
+}
+function saveRegistration(req,res){
+	if(!req.data.user._id) return redirectToStart(res);
+	if(!req.body.email || !req.body.email){
+		res.writeHead(200, {"Content-Type": "application/json"});
+		res.end(JSON.stringify({error:"required fields"}));
+		return;
 	}
-	
+	req.data.user.email = req.body.email;
+	req.data.user.password = req.body.password;
+	User.update(req.data.user,function(err){
+		res.writeHead(200, {"Content-Type": "application/json"});
+		if(err){
+			res.end(JSON.stringify(err));
+		}else{
+			res.end(JSON.stringify({error:false}));
+		}
+	});
 }
 function uploadFile(req,res,next){
 	var form = new multiparty.Form();

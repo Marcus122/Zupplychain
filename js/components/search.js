@@ -6,55 +6,56 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
     var resultsMap;
 	var $postcode = $("input[name='postcode']");
 	var $maxDistance = $("input[name='max-distance']");
-		
+	var loom = new Loom();
+	
     //on postcode entry, load up the map centered on that postcode.
     $postcode.blur(function(){
-        if ($("input[name='postcode']").val().length <=4){
+        if ($("input[name='postcode']").val().length <=2){
             return;
         }
         resultsMap = new ResultsMap($("input[name='postcode']").val(), $("input[name='max-distance']").val());
         $(".js-map-results-container").slideDown(); //needs to be visible for map to load successfully.
         $(".js-page-banner").slideUp(300,function(){$(".search-top-section").css("height", "auto");
-         require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) {
-            $.scrollTo("#search-area",{ duration: 200, offset : -200});
-         });
+             require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) {
+                //$.scrollTo("#search-area",{ duration: 200, offset : -200});
+             });
         });
         
+    });
+    
+    
+    $("#register-email-popup .close").click(function() {
+        $("#register-email-popup").hide();
+    });
+    
+    $(document).on("click", ".register-before-click", function(evt){
+        evt.preventDefault();
+        var requestedUrl = $(evt.target).prop("href");
+        var $popup = $("#register-email-popup");
+        //bind up an onsuccess for the popup form that redirects to requested url once they've registered.
+        loom.addOnSuccessCallback("#register-email-form", function(response){
+            window.location.href = requestedUrl;
+        });
+        loom.addOnErrorCallback("#register-email-form", function(response){
+            Alerts.showErrorMessage("There was an error storing your details");
+            window.location.href = requestedUrl;
+        });
+        //show the popup.
+        $popup.show();
+        $popup.find("input[name='email']").focus(); //focus the first input.
+    });
+    
+    $('#search-results-table').on("loomSort",function(){
+        var $table = $(this);
+        $table.find('tbody tr').each(function(i){
+           var $row = $(this);
+           $row.find('td').first().text(String(Number(i) + 1) + '.'); 
+        });
     });
     
     $maxDistance.change(function(){
         if (resultsMap) {
             resultsMap.setRadius($("input[name='max-distance']").val());
-        }
-    });
-    
-    $(document).on("click", "button.add-to-quote", function(evt){
-        $button = $(evt.target);
-        id = $button.data("id");
-        $('#' + id).find('input').prop("checked",true);
-        $button.hide();
-        $button.parent().find(".remove-from-quote").show();
-    });
-    
-    $(document).on("click", "button.remove-from-quote", function(evt){
-        $button = $(evt.target);
-        id = $button.data("id");
-        $('#' + id).find('input').prop("checked", false);
-        $button.hide();
-        $button.parent().find(".add-to-quote").show();
-    });
-    
-    $(document).on("change", "#search-results-table input", function(evt){
-        var check = $(evt.target).is(":checked");
-        var id = $(evt.target).closest("tr").attr("id");
-        debugger;
-        if (check){
-            var test = ".remove-from-quote[data-id='" + id + "']";
-            $(".remove-from-quote[data-id='" + id + "']").show();
-            $(".add-to-quote[data-id='" + id + "']").hide();
-        } else {
-            $(".remove-from-quote[data-id='" + id + "']").hide();
-            $(".add-to-quote[data-id='" + id + "']").show();
         }
     });
 	
@@ -65,7 +66,7 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
 	}
     
     
-    var loom = new Loom();
+    
     loom.addOnSuccessCallback("search-form", function(response){
 		var $searchResInfoBox = $(".search-result-info-box");
         var res = resultsMap.load(response.results);
@@ -76,12 +77,20 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
             $(".info-boxes").fadeOut();
             $(".testimonials").fadeOut();
             if (response.results.length === 1){
-				$searchResInfoBox.find('.controls').css('display', 'none');
-			}
-            require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) { 
-                $.scrollTo("#results-area", {duration : 600, offset : -150 });
-            });
-            Alerts.showSuccessMessage("results loaded");
+				$searchResInfoBox.find('.controls').hide();
+			} else {
+                $searchResInfoBox.find('.controls').show()
+            }
+            if (window.location.hash == "#search-area") { //if they came back via an edit search link, don't scroll down.
+                (window.location.hash = "");
+            } else {
+                require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) { 
+                    $.scrollTo("#results-area", {duration : 600, offset : -150 });
+                });
+            }
+            var numResults = response.results.length;
+            var resultsWord = numResults != 1 ? " results loaded" : " result loaded";
+            Alerts.showSuccessMessage(response.results.length + resultsWord);
             require(["templates/templates"], function(Templates){
                var templates = new Templates();
                var template = templates.getTemplate("result-table-row");
@@ -96,6 +105,17 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
 			   $(".continue-links.footer.form-footer .button.action.large.next").attr("href", response.results[0].href);
             });
             
+            require(["loomTable/Table"], function(loomTable) {
+                var LoomTable = new loomTable($('#search-results-table'), {
+                    fields : {
+                        'rating' : {
+                            getValue:function($td) {
+                                return parseInt($td.data("rating"), 10);
+                            }
+                        }
+                    } 
+                });
+            });
             
         } else {
             Alerts.showErrorMessage("No results found for your search");

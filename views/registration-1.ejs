@@ -1,6 +1,6 @@
  <% include ./partials/top%>   
 	<main>
-		<div class="row carousel">
+		<!--<div class="row carousel">
 			<img src="/images/provider-banner.png" alt="Start your registration"/>
 			<h1 class="title large-font">
 				<span>Start your</span>
@@ -8,12 +8,18 @@
 				registration
 			</h1>
 			<p class="desc medium-font">Follow our simple 3 step process to complete your registration</p>
+		</div>-->
+		<div class="banner">
+			<h1>Start your registration</h1>
 		</div>
+		<p class="tag-line">
+			Follow our simple 3 step process to complete your registration
+		</p>
 		<div class="row">
 			<ul class="tabs">
-				<li class="four columns active checked">Step 1</li>
-				<li class="four columns">Step 2</li>
-				<li class="four columns">Step 3</li>
+				<li class="four columns active checked"><span>Step 1</span> - Warehouse details</li>
+				<li class="four columns"><span>Step 2</span> - Define your space</li>
+				<li class="four columns"><span>Step 3</span> - Price and availability</li>
 			</ul>
 			<%
 				warehouse={};
@@ -57,6 +63,9 @@
 										<label for="city">Town/City*</label><input type="text" name="city" id="city" required value="<%=warehouse.city%>"/>
 									</div>
 									<div class="input-field">
+										<label for="county">County</label><input type="text" name="county" id="county" value="<%=warehouse.county%>"/>
+									</div>
+									<div class="input-field">
 										<label for="postcode">Postcode*</label><input type="text" name="postcode" id="postcode" required value="<%=warehouse.postcode%>" data-loom-validators="UKPostCode"/>
 									</div>
 								</div>
@@ -72,18 +81,17 @@
 									<textarea id="description" name="description" placeholder="A short description about your warehouse"><%=warehouse.description%></textarea>
 								</div>
 								<div class="row">
-									<div class="input-field columns six small-input">
-										<label for="officeHours">Office Hours (Mon-Fri)</label><input id="officeHours" name="officeHours" type="text" placeholder="9:00-17:00"/>
+									<div class="input-field columns four small-input">
+										<%if(!warehouse.officeHours){
+											warehouse.officeHours = '9:00-17:00';
+										}%>
+										<label for="officeHours">Office Hours (Mon-Fri)</label><input id="officeHours" name="officeHours" type="text" value="<%=warehouse.officeHours%>"/>
 									</div>
-								</div>
-								<div class="row">
-									<div class="input-field columns six small-input">
-										<label for="size">Size (sq m)</label><input id="size "name="size" type="number" placeholder="m"/>
+									<div class="input-field columns four small-input">
+										<label for="size">Size (sq m)</label><input id="size "name="size" type="number"/>
 									</div>
-								</div>
-								<div class="row">
-									<div class="columns six input-field small-input">
-										<label for="height">Height (m)</label><input id="height" name="height" type="number" placeholder="m"/>
+									<div class="columns four input-field small-input">
+										<label for="height">Height (m)</label><input id="height" name="height" type="number"/>
 									</div>
 								</div>
 								<div class="specifications">
@@ -193,5 +201,8 @@
 			</div>
 		</div>
 	 </script>
+	  <script type="text/template" id="save-registration">
+	  	 <% include ./partials/save-registration%>
+	  </script>
  <% include ./partials/bottom%>
  

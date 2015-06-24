@@ -41,6 +41,19 @@ define(["jquery"], function ($) {
 				}
 			});
 		}
+		function updateStorage(warehouse,storage,cb){
+			var new_url = url + '/'+ warehouse.id + '/storage/' + storage._id;
+			$.ajax({
+				url: new_url,
+				type:'POST',
+				data: JSON.stringify(storage),
+				contentType: 'application/json; charset=utf-8',
+				dataType: 'json',
+				success:function(response){
+					if(cb) cb(response);
+				}
+			});
+		}
 		function getStorage(id,cb){
 			var new_url = '/storage/' + id;
 			$.ajax({
@@ -57,7 +70,8 @@ define(["jquery"], function ($) {
 		return{
 			update :update,
 			updateStorageBatch:updateStorageBatch,
-			getStorage:getStorage
+			getStorage:getStorage,
+			updateStorage:updateStorage
 		}
 	}
 		

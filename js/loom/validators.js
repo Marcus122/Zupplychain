@@ -1,29 +1,46 @@
 define({
 	
-	getMaxValidator : function(maxVal){
+	getMaxValidator : function(maxVal, fieldType){
+        if (fieldType == "date") { //expecing a date format of yyyy-mm-dd, this way simple string comparison will work
+            return function(input) {
+                return input <= maxVal;
+            }
+        }
 		return function(input) {
 			if (input === undefined || input === NaN || input === "") {
 				return true;
 			}
-			return parseInt(input,10) <= parseInt(maxVal,10);
+			return parseFloat(input,10) <= parseFloat(maxVal,10);
 		}
 	},
-	getMinValidator : function (minVal){
+	getMinValidator : function (minVal, fieldType){
+       if (fieldType == "date") {
+            return function(input) {
+                return input >= minVal;
+            }
+        }
 		return function(input) {
 			if (input === undefined || input === NaN || input === "") {
 				return true;
 			}
-			return parseInt(input,10) >= parseInt(minVal,10);
+			return parseFloat(input,10) >= parseFloat(minVal,10);
 		}
 	},
-	getMaxlengthValidator : function (maxLength){
+	getMaxlengthValidator : function (maxLength, fieldType){
 		return function(input) {
 			return input.length <= maxLength;
 		}
 	},
-	getMinlengthValidator : function (minLength){
+	getMinlengthValidator : function (minLength, fieldType){
 		return function(input) {
 			return input.length >= minLength;
+		}
+	},
+	getPatternValidator : function (pattern){
+		return function(input) {
+			if(!input) return true;
+			var regex = new RegExp(pattern.replace('((','{').replace('))','}'));
+			return regex.test(input);
 		}
 	},
 	
@@ -36,6 +53,9 @@ define({
 		return re.test(input);
 	},
 	number : function(input) {
+        if (input === "") { //blank inputs are always 'valid'
+            return true;
+        }
 		var re= /^[-+]?[0-9]*\.?[0-9]*/
 		return re.test(input);
 	},
@@ -73,14 +93,20 @@ define({
 	},
 	
 	// end HTML5 types
-	
+	decimal : function(input) {
+        if (input === "") { //blank inputs are always 'valid'
+            return true;
+        }
+		var re= /^[-+]?[0-9]*\.?[0-9]*/
+		return re.test(input);
+    },
 	name : function(input) {
 		var re = /^[-A-z ']+$/ // Alpha, hyphens, spaces, apostrophe's
 		return re.test(input);
 	},
     integer : function(input) {
-        var n = ~~Number(input);
-        return String(n) === input && n >= 0;
+        var n = Number(input);
+        return n === Math.floor(n) && n >= 0;
     },
 	mobileNumber : function(input) {
 		return input;
@@ -102,8 +128,15 @@ define({
 		var longEnough = (input.length >= 8);
 		return (reHasUppercase.test(input) && reHasLowercase.test(input) && reNumber.test(input) && longEnough);
 	},
-    passwordPolicyNormal : function (input) {
-        var re = /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{8,}$/;
+    passwordPolicyNormal : function (input) { //8+ characters, > one num, > one Ucase letter, no spaces
+        if (!input) {
+            return false;
+        }
+        var re = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z]).{8,}$/;
+        var hasSpaces = input.indexOf(" ") != -1 ;
+        if (hasSpaces) {
+            return false;
+        }
         return re.test(input);
 
     },
@@ -147,7 +180,12 @@ define({
 			 return (otherInputField.getValue().toLowerCase() == thisInputValue.toLowerCase());
 				
 		}
-	}
-		
+	},
+	
+	getGreaterThanOtherField : function(otherInputField) {
+		return function(thisInputValue) {
+			return otherInputField.getValue() < thisInputValue;
+		}
+	}	
 	
 });

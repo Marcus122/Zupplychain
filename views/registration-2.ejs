@@ -6,20 +6,15 @@
 				}
 			%>
 			<main>
-				<div class="row carousel">
-					<img src="/images/provider-banner.png" alt="Continue your registration"/>
-					<h1 class="title large-font">
-						<span>Continue your</span>
-						<br/>
-						registration
-					</h1>
-					<p class="desc medium-font">Continue your registration &amp; help customers choose your warehouse</p>
+				<div class="banner">
+					<h1>Continue your registration</h1>
 				</div>
+				<p class="tag-line">Help customers choose your warehouse</p>
 				<div class="row">
 					<ul class="tabs">
-						<li class="four columns checked">Step 1</li>
-						<li class="four columns active checked">Step 2</li>
-						<li class="four columns">Step 3</li>
+						<li class="four columns checked"><span>Step 1</span> - Warehouse details</li>
+				<li class="four columns active checked"><span>Step 2</span> - Define your space</li>
+				<li class="four columns"><span>Step 3</span> - Price and availability</li>
 					</ul>
 					<section class="tab-content">
 						<form class="loom-form" data-loom-no-submit="true" method="post" action="/provider-registration-3" id="define-space" novalidate>
@@ -40,8 +35,8 @@
 														<th>Storage Name</th>
 														<th>Pallet Type</th>
 														<th>Storage Temp</th>
-														<th>Max Weight <br/> (kg)</th>
-														<th>Max Height <br/> (m)</th>
+														<th>Max Pallet Weight <br/> (kg)</th>
+														<th>Max Pallet Height <br/> (m)</th>
 														<th>Total Pallet Spaces</th>
 														<th><img src="../images/delete.png" alt="delete"/></th>
 													</tr>
@@ -50,10 +45,10 @@
 													<%
 													if( !warehouse.storage || !warehouse.storage.length ){
 														var row = {};
-														row.name = "A";%>
+														row.placeholder = "A";%>
 														<% include ./partials/define-space-row %>
 														<%row = {};
-														row.name = "B";%>
+														row.placeholder = "B";%>
 														<% include ./partials/define-space-row %>
 													<%}else{
 														for( var i=0; i < warehouse.storage.length; i++ ){
@@ -64,7 +59,7 @@
 												</tbody>
 											</table>
 											<p class="new-pallet">
-												<span class="primary">Add new storage</span>
+												<span class="primary">Add additional storage name</span>
 												<button class="add-button"><span>add</span></button>
 											</p>
 										</fieldset>
@@ -85,4 +80,7 @@
 			<% var row = {}; %>
 			<% include ./partials/define-space-row %> 
 		 </script>
+		 <script type="text/template" id="save-registration">
+	  	 	<% include ./partials/save-registration%>
+	     </script>
          <% include ./partials/bottom %> 

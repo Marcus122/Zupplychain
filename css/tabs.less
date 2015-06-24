@@ -14,13 +14,15 @@
 	position:relative;
 	margin-bottom:0;
 	font-size:20px;font-size:2rem;
+    padding-bottom:200px;
+    margin-bottom:-190px;
 }
 .tabs li:after{
 	content : @ionicon-var-android-checkbox-blank;
 	font-size: 26px;
 	position: absolute;
 	right: @unit-px;
-	top: 8px;
+	top: 12px;
 	.ion;
 }
 .tabs li.checked:after{
@@ -28,6 +30,9 @@
 }
 .tabs li.active{
 	background: @highlight;
+}
+.tabs li span{
+    font-weight:bold;
 }
 .tabs {.four.columns { width: 30.6666666667%; }
 	.column,

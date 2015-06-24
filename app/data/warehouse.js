@@ -14,6 +14,7 @@ var fields = {
 	addressline1: { type: String },
 	addressline2: { type: String },
 	addressline3: { type: String },
+	county: { type: String },
 	city: { type: String },
 	postcode: { type: String },
 	telephone: { type: String },
@@ -32,10 +33,19 @@ var fields = {
 	geo: {
 		lat: { type: Number },
 		lng: { type: Number }
-	}
+	},
+    loc  :{
+        type : { type: String},
+        coordinates: [Number]
+    }
 };
 
 var warehouseSchema = new Schema(fields);
+warehouseSchema.index({ loc: '2dsphere' });
+
+warehouseSchema.pre('init', function(next, data) {
+    next();
+});
 
 warehouseSchema.statics = {
 	load: function (id, cb) {
@@ -46,61 +56,81 @@ warehouseSchema.statics = {
   },
   loadByUser: function(user,cb){
 	 this.find({'user': user._id})
-		  .populate('storage')
+		  .populate({
+			  	path:'storage',
+				options:{
+					sort:'sortOrder'
+				}
+			})
 		  .populate('user')
 		  .exec(cb); 
   },
+  
+  filterStorageOnQuery: function(storage, query) {
+    var matchingStorages = [];
+    var k = 0;
+    for (var j=0; j<storage.length; j++){
+        var palletTypeOK  = !query.palletType || storage[j].palletType === "Any" || storage[j].palletType === query.palletType; //!palletType means any
+        var maxWeightOK   = !query.weight || storage[j].maxWeight >= query.weight;
+        var maxHeightOK   = !query.height || storage[j].maxHeight >= query.height;
+        var tempOK        = storage[j].temp === query.temp;
+        var spacesOK      = storage[j].palletSpaces >= query.totalPallets;
+        if (palletTypeOK && maxWeightOK && maxHeightOK && tempOK && spacesOK){
+            matchingStorages.push(storage[j].toObject());
+        }
+    }
+    return matchingStorages;       
+  },
+  
   search_by_query: function(query, cb) {
-    var corrResult = false;
+    var warehouseAPI = this;
+    var editableResult = null; //stores a toObject() version of the warehouse which we can add properties to etc.
 	var corrResults = [];
 	
-	if (!query.weight){
-		query.weight = '100';
-	}
+	function distanceInMiles(point1, point2) {
+        function toRadians(degrees) {
+            return degrees * Math.PI / 180;
+        }
+        var lat1 = point1.lat;
+        var lat2 = point2.lat;
+        var lon1 = point1.lng;
+        var lon2 = point2.lng;
+        var φ1 = toRadians(lat1), φ2 = toRadians(lat2), Δλ = toRadians(lon2-lon1), R = 6371000; // gives d in metres
+        var d = Math.acos( Math.sin(φ1)*Math.sin(φ2) + Math.cos(φ1)*Math.cos(φ2) * Math.cos(Δλ) ) * R;
+       
+        return Math.round(d * 0.0006213711);
+    }    
 	
-	if (!query.height){
-		query.height = '10';
-	}
-	
-	var newsDistances = getNewsDistances(query.geo.lat,query.geo.lng,query.radius);
-	
-    // this.find({
-              // "geo.lat":{ $gte:(query.geo.lat -80), $lte:(query.geo.lat + 80)},
-              // "geo.lng":{ $gte:(query.geo.lng -80), $lte:(query.geo.lng + 80)},
-              // "active": true
-              // },
-              // function(err,result){
-              // }).populate({ path : "storage", match : {palletType : query.palletType} }).exec(cb);
     this.find({
-			  "geo.lat":{ $gte:(query.geo.lat -80), $lte:(query.geo.lat + 80)},
-              "geo.lng":{ $gte:(query.geo.lng -80), $lte:(query.geo.lng + 80)},
+			  "loc" : {
+                  $near : {
+                      $geometry :  query.loc,
+                      $maxDistance : query.radiusInMetres
+                  }
+              },
               "active": true
-              }).populate({ path : "storage"/*, match : {palletType : query.palletType,
-													   maxWeight : {$gte:query.weight},
-													   maxHeight : {$gte:query.height},
-													   temp : query.temp,
-													   palletSpaces : query.totalPallets}*/
-			  }).exec( function (err, result){
+              }).populate({
+                path : "storage"
+              }).exec( function (err, result){
 				  if (err){
 					  console.log(err);
 				  }else{
 					  for(var i in result){
-						  corrResult = false;
-                          for (var j=0; j<result[i].storage.length; j++){
-                              var palletTypeOK  = !query.palletType || result[i].storage[j].palletType === query.palletType; //!palletType means any
-                              var maxWeightOK   = !query.maxWeight || result[i].storage[j].maxWeight >= query.weight;
-                              var maxHeightOK   = !query.maxHeight || result[i].storage[j].maxHeight >= query.height;
-                              var tempOK        = result[i].storage[j].temp === query.temp;
-                              var spacesOK      = result[i].storage[j].palletSpaces >= query.totalPallets;
-                              if (palletTypeOK && maxWeightOK && maxHeightOK && tempOK && spacesOK){
-                                  corrResult = true;
-                              }
+                          var matchingStorages = [];
+                          editableResult = result[i].toObject(); //turn warehouse into a nice plain JS object.
+                          var matchingStorage = warehouseAPI.filterStorageOnQuery(result[i].storage, query);
+                          if (matchingStorage.length > 0) {
+                              matchingStorage.sort(function(a,b){return a.currentPricing.price - b.currentPricing.price});
+                              editableResult.storageMatch = matchingStorage[0]; //this 'storageMatch' is the one who's details we show on the search page.
+                              editableResult.storage = matchingStorage;//limit the storage to ones that match.
+						      editableResult.distanceFromSearch = distanceInMiles(editableResult.geo , query.geo );
+                        	  corrResults.push(editableResult);
 						  }
-						if(corrResult === true){
-							corrResults.push(result[i]);
-						}
 					  };
-					  cb(err,corrResults);
+                      corrResults.sort(function(a,b) {
+                          return a.distanceFromSearch-b.distanceFromSearch;
+                      });
+					  cb(err,corrResults) ;
 				  }
 			  });
   },
@@ -110,29 +140,6 @@ warehouseSchema.statics = {
   availableSpecifications: function(){
 	  return local.specifications;
   }
-}
-
-function getNewsDistances(lat,lng,d){
-	var rad = Math.PI/180;
-	var tc = [rad*0,rad*90,rad*180,rad*270];
-	var arr = []
-	var lonn;
-	var latt;
-	
-	for (var i = 0; i < tc.length; i++){
-		latt = Math.asin(Math.sin(lat)*Math.cos(d)+Math.cos(lat)*Math.sin(d)*Math.cos(tc[i]));
-		if (Math.cos(lat)==0){
-			lonn = lng;
-		}else{
-			lonn = ((lng-Math.asin(Math.sin(tc[i])*Math.sin(d)/Math.cos(lat))+Math.PI)%(2*Math.PI))-Math.PI;
-		} 
-		arr.push({lat:latt, lng:lonn});
-		
-	}
-	
-	return arr;
-	
-	
 }
 
 module.exports = mongoose.model('warehouses', warehouseSchema);

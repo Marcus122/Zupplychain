@@ -3,8 +3,9 @@ echo 'killing running server processes'
 forever stop server.js
 pkill nano
 pkill mongod
+rm -f /var/www/data/mongod.lock
 echo 'starting mongod'
-mongod --dbpath="/var/www/data" >> /var/mongo.log 2>&1 &
+mongod --dbpath="/root/data" >> /var/mongo.log 2>&1 &
 echo 'done'
 echo 'forever is starting server.js'
 forever server.js live >> /var/node.log 2>&1 &

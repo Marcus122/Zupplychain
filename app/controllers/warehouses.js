@@ -43,11 +43,15 @@ exports.warehouse_by_user = function (user,callback) {
 		}
 	});
 };
-
+exports.limitStorageToMatching = function(storage, query) {
+    var result = Warehouse.filterStorageOnQuery(storage,query);
+    return result;
+};
 exports.warehouse_by_query = function(query,cb) {
     // do the actual search and return the warehouse data.
     Warehouse.search_by_query(query, function(err,result){
         var error = "";
+		var data;
         if (err) {
             error = 'There were no results for your search';
         } else {
@@ -55,4 +59,4 @@ exports.warehouse_by_query = function(query,cb) {
         }
         return cb(error,data);
     });
-}
+};

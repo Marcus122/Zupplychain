@@ -1,12 +1,12 @@
 <tr>
-	<td data-th="Price per pallet per week" class="input-field no-success-validation-style">
-		<input required type="number" name="price" data-bind-value="price" placeholder="£"/>
+	<td data-th="Price per pallet per week (£)" class="input-field no-success-validation-style">
+		<input data-loom-type="decimal" data-loom-decimal-places="2" required type="number" name="price" data-bind-value="price" required min="0.01"/>
 	</td>
-	<td data-th="Handling charge per pallet (In and Out)" class="input-field no-success-validation-style">
-		<input data-bind-value="charge" name="charge"  placeholder="£" type="number" required/>
+	<td data-th="Handling charge per pallet (In and Out) (£)" class="input-field no-success-validation-style">
+		<input data-loom-type="decimal" data-loom-decimal-places="2" data-bind-value="charge" name="charge" type="number" required/>
 	</td>
-	<td data-th="Cost to reserve" class="input-field no-success-validation-style">
-		<input data-bind-value="reserve" name="reserve" placeholder="£" type="number"/>
+	<td data-th="Cost to reserve (£)" class="input-field no-success-validation-style">
+		<input data-loom-type="decimal" data-loom-decimal-places="2" data-bind-value="reserve" name="reserve" type="number"/>
 	</td>
 </tr>
 	

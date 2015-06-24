@@ -1,0 +1,28 @@
+<%if(!user.email){%>
+<div class="popup-window " id="register-email-popup" style="display:none">
+	<div class="small register">
+		<div class="popup-main content-box secondary">
+			<div class="header">
+				<h2>Register to continue</h2>
+			</div>
+			<button class="close no-resize"><span>close</span></button>
+			<div class="main">
+					<form  class="loom-form" action="/update-user" novalidate id="register-email-form">
+						<div class="input-field no-success-validation-style">
+							<input type="email" name="email" placeholder="Email" required/>
+						</div>
+						<div class="input-field no-success-validation-style with-message">
+							<input type="password" name="password" placeholder="Password" minlength="8" required/>
+							<ul class="messages">
+								 <li class="msg-info">Contain at least 8 characters in length and at least one number.</li>
+								 <li class="msg-error">Contain at least 8 characters in length and at least one number.</li>
+							 </ul>
+						</div>
+						<span>You will be taken to the result page</span>
+						<button class="action done">save</button>
+					</form>
+			</div>
+		</div>
+	</div>
+</div>
+	<%}%>

@@ -1,65 +1,74 @@
-define(["jquery", "./formField"],function($, FormField){
+define(["jquery", "./formField", "./loomConfig"],function($, FormField, Config){
 
 	// MODEL OBJECT
-	return function Class($form, config) {
+	return function Class($form) {
 		
         // Form level config options.
-        if (config == undefined) config = {};
+        config = Config;
         
-		var FORM_PENDING_CLASS  =  config.FORM_PENDING_CLASS || "form-pending";
-		var FORM_ERROR_CLASS    =  config.FORM_ERROR_CLASS || "form-error";
-		var FORM_SUCCESS_CLASS  =  config.FORM_SUCCESS_CLASS || "form-success";
+	var FORM_PENDING_CLASS  =  config.FORM_PENDING_CLASS || "form-pending";
+	var FORM_ERROR_CLASS    =  config.FORM_ERROR_CLASS || "form-error";
+	var FORM_SUCCESS_CLASS  =  config.FORM_SUCCESS_CLASS || "form-success";
+        var FORM_SOFT_ERROR_CLASS = config.FORM_SUCCESS_CLASS || "form-soft-error";
+        var FORM_HARD_ERROR_CLASS = config.FORM_SUCCESS_CLASS || "form-hard-error";
         var FORM_FIELD_CONTAINER_SELECTOR = config.FORM_FIELD_CONTAINER_SELECTOR || ".input-field";
 		
-		var VALIDATE_ON_BLUR                    = config.VALIDATE_ON_BLUR || false;
-		var MAY_NOT_PROGRESS_PAST_INVALID_FIELD = config.MAY_NOT_PROGRESS_PAST_INVALID_FIELD || false;
-		var REALTIME_VALIDATION                 = config.REALTIME_VALIDATION || true;
-		var JUMP_TO_INVALID_FIELD_ON_SUBMIT     = config.JUMP_TO_INVALID_FIELD_ON_SUBMIT || true;
-        
-        
-		var formElement = $();
-		var fields = [];
-		var url;
-		var action;
-		var dataType;
-		var prefix;
+	var VALIDATE_ON_BLUR                    = config.VALIDATE_ON_BLUR;
+	var MAY_NOT_PROGRESS_PAST_INVALID_FIELD = config.MAY_NOT_PROGRESS_PAST_INVALID_FIELD;
+	var REALTIME_VALIDATION                 = config.REALTIME_VALIDATION;
+	var JUMP_TO_INVALID_FIELD_ON_SUBMIT     = config.JUMP_TO_INVALID_FIELD_ON_SUBMIT;
+
+
+	var formElement = $();
+	var fields = [];
+	var url;
+	var action;
+	var dataType;
+	var prefix;
         var successCallbacks = [];
-        var errorCallbacks = [];
+        
+        var errorCallbacks = []; //called for any type of error
+        var softErrorCallbacks = []; //called for soft error (server response tells us there's an error
+        var hardErrorCallbacks = []; // called for hard errors (404,401 error parsing response, timeout etc.).
+        
         var disableOnSuccess;
         var noAJAX;
         var noSubmit;
         var resetOnSuccess;
-		var preventDefault;
-		
-		// INIT
-		formElement 	= $($form);
-		url 			= formElement.attr("action");
-		action 			= formElement.attr("data-loom-action");
-		dataType 		= formElement.attr("data-loom-data-type");
-		prefix 			= formElement.attr("data-loom-field-prefix") || "";
+        var isIE;
+	var responseHandler;
+        
+	// INIT
+	formElement 	= $($form);
+        url 		= formElement.attr("action");
+        action 		= formElement.attr("data-loom-action");
+        dataType 	= formElement.attr("data-loom-data-type");
+        prefix 		= formElement.attr("data-loom-field-prefix") || "";
         noAJAX          = formElement.attr("data-loom-no-ajax");
         noSubmit        = formElement.attr("data-loom-no-submit");
-        preventDefault  = formElement.attr("data-loom-prevent-default") ? JSON.parse(formElement.attr("data-loom-prevent-default")) : true;
         disableOnLoad   = formElement.attr("data-loom-disabled"); //disable the form immediately, changing the submit button to an edit button
         disableOnSuccess= formElement.attr("data-loom-disable-on-success"); //TODO : being implemented
         resetOnSuccess  = formElement.attr("data-loom-reset-on-success"); //TODO : being implemented
-        //canGoBackAndEdit= formElement.attr("data-loom-can-go-back-and-edit"); //TODO : being implemented
-		
+        isIE = (navigator.appName == 'Microsoft Internet Explorer' || (!(window.ActiveXObject) && "ActiveXObject" in window));
+        isSafari = (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1);
         if (!dataType) {
             dataType="json";
         }
         
-		setupNormalInputs();
-		setupRadioInputs();
-		setupFieldDependentValidators();
-		setupConfirmationValidators();
+        
+        formElement.attr("novalidate", "novalidate");
+        
+	setupNormalInputs();
+	setupRadioInputs();
+	setupFieldDependentValidators();
+	setupConfirmationValidators();
+        setupFieldCompareValidators();
         setupAutoPopulationOnSelection();
         setupCopyOnCheck();
         disableIfDisableOnLoadSet();
         
         //TODO if we try to submit an invalid form, an invalid message appears.
         // if we then fill out the fields correctly, when we come back to the bottom of the form the messages is still there.
-        // basically on any validation we should check the whole form, and if it's invalid we should 
 		
 		if (REALTIME_VALIDATION) {
 			var lim = fields.length;
@@ -100,8 +109,12 @@ define(["jquery", "./formField"],function($, FormField){
                 var code = (e.keyCode ? e.keyCode : e.which);
                 if (code == 9) {
                     return;
+                } else if (code == 13) {
+                    e.preventDefault();
                 }
-                func();
+                if($(this).closest('.input-field').hasClass('error')){
+        	       func();
+		}
             }
         }
         
@@ -111,18 +124,18 @@ define(["jquery", "./formField"],function($, FormField){
             reset();
         });
 		
-		formElement.on("submit", function(evt){ 
+		formElement.off("submit.loom").on("submit.loom", function(evt){ 
 			onSubmit(evt);
 		});
-		
+        
         function onSubmit(evt) {
+            if (evt) {
+                evt.preventDefault();
+            }
 			clearStateMessages();
 			clearValidationMessages();
 			loadFormValuesIntoModelFields();
 			var isValid = validateFormAndReturnTrueIfValid();
-			if(evt && (!isValid || preventDefault)){
-				evt.preventDefault();
-			}
 			if (!isValid){
 				showValidationMessage();
 				if (JUMP_TO_INVALID_FIELD_ON_SUBMIT) {
@@ -180,6 +193,17 @@ define(["jquery", "./formField"],function($, FormField){
 				fields[i].setupFieldDependentValidators(getFieldByName(otherFieldName));
 			}
 		}
+                
+                function setupFieldCompareValidators() {
+			var lim = fields.length;
+			for(var i = 0;i < lim; i++) {
+				var otherFieldName = fields[i].getNameOfCompareField();
+				if (!otherFieldName) {
+					continue;
+				}
+				fields[i].setupFieldCompareValidators(getFieldByName(otherFieldName));
+			}
+		}
         
         function setupCopyOnCheck() {
             var lim = fields.length;
@@ -229,6 +253,7 @@ define(["jquery", "./formField"],function($, FormField){
             var lim = fieldsAsPairsOfCopyFromCopyTo.length;
             for (var i = 0; i<lim;i++) {
                 var thisPair = fieldsAsPairsOfCopyFromCopyTo[i];
+                thisPair[0].setValueFromBoundInput();
                 var fromValue = thisPair[0].value;
                 thisPair[1].value = fromValue;
                 thisPair[1].element.val(fromValue);
@@ -282,17 +307,43 @@ define(["jquery", "./formField"],function($, FormField){
 			}
 		}
 		
+        function IEXmlResponseFix(response) {
+                //append to the dom and read back. This forces IE to turn the XML into something it can handle as it has to create nodes for the DOM.
+                $("#loom-IE-fix").remove();
+                var $div = $('<div id="loom-IE-fix" style="display:none"></div>');
+                $('body').append($div);
+                $div.html($(response.documentElement));
+                $div.html($div.html());
+                var $returnedHTML = $("#loom-IE-fix");
+                $("#loom-IE-fix").remove();
+                return $returnedHTML; 
+        }
+        
 		function formSubmissionCallback(response){
+            if (dataType == "xml" &&  (isIE || isSafari)) {
+                response = IEXmlResponseFix(response);
+            } 
+            if (responseHandler) { //depending on config responseHandler module might not be loaded.
+                response = responseHandler.processServerReponse(response);
+            }
             var callbacksToDo = [];
-            var err = response.error;
+            var err = (response.error && (typeof(response.error) != "function")); //TODO : check for error nodes in XML too?
 			if (err) {
 				clearStateMessages();
 				setStateError();
-                callbacksToDo = errorCallbacks;
+                callbacksToDo = errorCallbacks.slice();//copy the array
+                if (response.errorType == "hard_error") {
+                    callbacksToDo.push.apply(callbacksToDo, hardErrorCallbacks);
+                    setStateHardError();
+                } else { //softerror
+                    callbacksToDo.push.apply(callbacksToDo, softErrorCallbacks);
+                    setStateSoftError();
+                }
+                
 			} else {
 				clearStateMessages();
 				setStateSuccess();
-                callbacksToDo = successCallbacks;
+                callbacksToDo = successCallbacks.slice();//copy the array
 
 			}
             var lim = callbacksToDo.length;
@@ -354,15 +405,20 @@ define(["jquery", "./formField"],function($, FormField){
 		
 		function doFormSubmission(){
 			var result = {};
-			var params;
+			var params = "";
 			var lim = fields.length;
 			for (var i = 0; i < lim; i++) {
 				if (fields[i].noPost) {
 					continue;
 				}
-				var name = fields[i].getName(prefix);
-				var val = fields[i].getValue();
-				params = appendFormField(name, val, params);
+                var formFieldAsString = fields[i].getFormDataString();
+                if(!formFieldAsString){
+                    continue;
+                }
+                if (params) {
+                    params += "&"
+                }
+                params = params + formFieldAsString;
 			}
 			params = appendFormField("action", action, params);
 			$.ajax({
@@ -373,8 +429,10 @@ define(["jquery", "./formField"],function($, FormField){
 			}).done(function(response){
 				formSubmissionCallback(response);
 			}).error(function(xhr,error,thrown){
-				result["error"] = true;
-				formSubmissionCallback(result);
+				result["error"] = error;
+                result["xhr"] = xhr;
+                result["thrown"] = thrown;
+                formSubmissionCallback(result);
 			});
 		}
 		
@@ -382,21 +440,36 @@ define(["jquery", "./formField"],function($, FormField){
 			formElement.removeClass(FORM_PENDING_CLASS);
 			formElement.removeClass(FORM_ERROR_CLASS);
 			formElement.removeClass(FORM_SUCCESS_CLASS);
+            formElement.removeClass(FORM_SOFT_ERROR_CLASS);
+            formElement.removeClass(FORM_HARD_ERROR_CLASS);
+            $('body').removeClass('wait');
 		}
 		
 		
 		function setStatePending(){
+            $('body').addClass('wait');
 			formElement.addClass(FORM_PENDING_CLASS);
 		}
 		function setStateError(){
 			formElement.addClass(FORM_ERROR_CLASS);
+            $('body').removeClass('wait');
 		}
+        function setStateSoftError(){
+            formElement.addClass(FORM_SOFT_ERROR_CLASS);
+            $('body').removeClass('wait');
+        }
+        function setStateHardError(){
+            formElement.addClass(FORM_HARD_ERROR_CLASS);
+            $('body').removeClass('wait');
+        }
 		function setStateSuccess(){
 			formElement.addClass(FORM_SUCCESS_CLASS);
+            $('body').removeClass('wait');
 		}
 		
 		function clearValidationMessages(){
 			formElement.removeClass("invalid");
+            $('body').removeClass('wait');
 		}
 		
 		function showValidationMessage(){
@@ -433,8 +506,18 @@ define(["jquery", "./formField"],function($, FormField){
         function addOnErrorCallback(callback) {
             errorCallbacks.push(callback);
         }
+        
+        function addOnSoftErrorCallback(callback) {
+            softErrorCallbacks.push(callback);
+        }
+        
+        function addOnHardErrorCallback(callback) {
+            hardErrorCallbacks.push(callback);
+        }
 		
-		return {
+		returnObject =  {
+            url:url,
+            dataType:dataType,
 			showValidationMessage:showValidationMessage,
 			clearValidationMessages:clearValidationMessages,
 			setStatePending:setStatePending,
@@ -450,6 +533,8 @@ define(["jquery", "./formField"],function($, FormField){
             formElement:formElement,
             addOnSuccessCallback:addOnSuccessCallback,
             addOnErrorCallback:addOnErrorCallback,
+            addOnSoftErrorCallback:addOnSoftErrorCallback,
+            addOnHardErrorCallback:addOnHardErrorCallback,
             successCallbacks:successCallbacks,
             errorCallbacks:errorCallbacks,
             disable:disable,
@@ -458,6 +543,13 @@ define(["jquery", "./formField"],function($, FormField){
             onSubmit:onSubmit,
             disableIfDisableOnLoadSet:disableIfDisableOnLoadSet
 		};
+        if (Config.USE_LOOM_RESPONSE_HANDLER_BY_DEFAULT) { //TODO add a per form attribute to activate / deactivate this too.
+            require(["loom/loomResponseHandler"], function(ResponseHandler){
+                responseHandler = new ResponseHandler(returnObject);
+            });
+        }
+        
+        return returnObject;
 	}
 });
 

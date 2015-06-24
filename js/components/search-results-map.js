@@ -11,6 +11,7 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
         var map;
         var circle;
         var factoryData;
+        var centerLatLong;
         var normalIcon = {
               url  : "/images/map-icon.png"
           }
@@ -25,7 +26,6 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
           
         
         function initialize(postcode, radius) {
-            
           var loc1 = new google.maps.LatLng(0,0);
           var mapOptions = {
             center: loc1,
@@ -52,6 +52,7 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
                   
                   var latlong = results[0].geometry.location;
                     var loc2 = new google.maps.LatLng(latlong.latitude, latlong.longitude);
+                    centerLatLong = latlong;
                     map.setCenter(latlong);
                     setRadius(radius);
                 } else {
@@ -62,10 +63,9 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
         }
         
         function setRadius(radiusInMiles) {
+            
             var GLOBE_WIDTH = 256; // a constant in Google's map projection
-            //var west = sw.lng();
-            //var east = ne.lng();
-            var angle = radiusInMiles/69;//east - west;
+             var angle = radiusInMiles/69;//east - west;
             if (angle < 0) {
                 angle += 360;
             }
@@ -81,23 +81,35 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
                 fillColor: '#c3eaf9',
                 fillOpacity: 0.35,
                 map: map,
-                center:map.getCenter(),
+                center:centerLatLong, //map.getCenter(),
                 radius: miles * 1609.344
                 };
-                // Add the circle for this city to the map.
                 if (circle){
                     circle.setMap(null);
                 }
-                
                 circle = new google.maps.Circle(radiusOptions);
             
         }
         
+        function clear() {
+            //delete all the markers and reset the display area;
+            var lim = markers.length;
+            for (var i = 0; i< lim; markers[i++].setMap(null));
+            factoryData = {};
+           markers = [];
+           selectedMarkerIndex = 0;
+           $('#search-results-info').fadeOut();
+            
+        }
+        
         function load(data) {
+           clear();
+           
            if (data.length < 1) {
                return false;
            }
           factoryData = data;
+          $('#search-results-info').fadeIn();
           var lim = data.length;
           for (var i =0;i<lim;i++) {
               var position = new google.maps.LatLng(data[i].geo.lat, data[i].geo.lng);
@@ -146,7 +158,7 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
             }); 
         }
         
-        function setPrevNextOnClick(map, markers, data, highlightIcon, normalIcon) {
+        function setPrevNextOnClick(map, IGNOREmrkers, data, highlightIcon, normalIcon) {
             $("#map-next-result").click(function() {
                 selectedMarkerIndex++;
                 selectedMarkerIndex = selectedMarkerIndex % ( markers.length );
@@ -170,12 +182,14 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
 			}
             var resultsElem = $(RESULT_INFO_ELEM_SELECTOR);
             resultsElem.find('.js-name').html(data.name);
-            resultsElem.find('.js-address').html(data.addressline1 + ", " + data.addressline2 + ", " + data.city + ", " + data.postcode );
+            resultsElem.find('.js-address').html(data.city + ", " + data.postcode );
             resultsElem.find('.js-name').html(data.name);
             resultsElem.find('.js-image').addClass("rotateY90");
             resultsElem.find('.add-to-quote').data("id", data._id);
+            var milePluralOrSingle = data.distanceFromSearch == "1" || data.distanceFromSearch == 1 ? " mile" : " miles" ;
+            resultsElem.find('.distance').html("<span class='miles'>" + data.distanceFromSearch + "</span>" + milePluralOrSingle + " from search");
             resultsElem.find('.remove-from-quote').data("id", data._id);
-            resultsElem.find('.view-details').attr("href" , "/warehouse-profile/" + data._id);
+            resultsElem.find('.view-details').attr("href" , "/warehouse-profile/" + data._id + "?fromSearch=true");
             setTimeout(function(){resultsElem.find('.js-image').prop("src", "/images/" + data.photos[0]).removeClass("rotateY90");}, 300 );
         }
 

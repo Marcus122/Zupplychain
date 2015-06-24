@@ -1,4 +1,4 @@
-define(["jquery", "./validators" , "./jquery-ui"],function($, ValidatorLib, ui){
+define(["jquery", "./validators" , "./jquery-ui", "./loomConfig"],function($, ValidatorLib, ui, Config){
 
 
 
@@ -11,7 +11,7 @@ function FormField($inputElement, $typeName) {
 	
 
 	// 'Constants'
-    this.VALIDATION_ELEMENT_SELECTOR            = ".input-field";
+    this.VALIDATION_ELEMENT_SELECTOR            = Config.VALIDATION_ELEMENT_SELECTOR || ".input-field";
     this.NO_POST_ATTRIBUTE_NAME                 = "data-loom-no-post";
     this.VALIDATION_FUNCTIONS_ATTRIBUTE_NAME    = "data-loom-validators";
     this.REQUIRED_WHEN_ATTRIBUTE_NAME           = "data-loom-required-when";
@@ -23,6 +23,9 @@ function FormField($inputElement, $typeName) {
     this.COPY_ON_CHECK_ATTR_NAME                = "data-loom-copy-on-check";
     this.COPY_ON_CHECK_FROM_PREFIX_ATTR_NAME    = "data-loom-copy-on-check-from-prefix";
     this.COPY_ON_CHECK_TO_PREFIX_ATTR_NAME      = "data-loom-copy-on-check-to-prefix";
+    this.POST_UP_COMBINED_AS_SEPARATE_ATTR_NAME = "data-loom-post-separately";
+    this.DECIMAL_PLACES_ATTR_NAME               = "data-loom-decimal-places";
+    this.GREATER_THAN_ATTR_NAME                 = "data-loom-greater-than";
     
     //Class properties
     this.value                  = "";
@@ -64,22 +67,27 @@ FormField.prototype.assignValidators = function(){
 FormField.prototype.addHTML5AttributeBasedValidators = function() {
     if (this.element.attr("max")) {
 			var maxValue = this.element.attr("max");
-			this.addValidator("max", ValidatorLib.getMaxValidator(maxValue));
+			this.addValidator("max", ValidatorLib.getMaxValidator(maxValue, this.type));
 		}
 		
 		if (this.element.attr("min")) {
 			var minValue = this.element.attr("min");
-			this.addValidator("min", ValidatorLib.getMinValidator(minValue));
+			this.addValidator("min", ValidatorLib.getMinValidator(minValue, this.type));
 		}
 		
 		if (this.element.attr("maxlength")) {
 			var maxValue = this.element.attr("maxlength");
-			this.addValidator("maxlength", ValidatorLib.getMaxlengthValidator(maxValue));
+			this.addValidator("maxlength", ValidatorLib.getMaxlengthValidator(maxValue, this.type));
 		}
 		
 		if (this.element.attr("minlength")) {
 			var minValue = this.element.attr("minlength");
-			this.addValidator("minlength", ValidatorLib.getMinlengthValidator(minValue));
+			this.addValidator("minlength", ValidatorLib.getMinlengthValidator(minValue, this.type));
+		}
+        
+        if (this.element.data("pattern")) {
+			var pattern = this.element.data("pattern");
+			this.addValidator("pattern", ValidatorLib.getPatternValidator(pattern));
 		}
 }
 
@@ -136,6 +144,11 @@ FormField.prototype.getNameOfDependencyField = function(){
 			}
 			return false;
 		}
+
+FormField.prototype.getNameOfCompareField = function(){
+    var theAttr = this.element.attr(this.GREATER_THAN_ATTR_NAME);
+	return theAttr ? theAttr : false; //else attribute value is just a field name so return it.
+}
 		
 // returns the name of the field that the inputField requires to know about for purposes of confirmation validators. e.g. a confirm-email field.
 FormField.prototype.getNameOfConfirmField = function(){
@@ -251,6 +264,12 @@ FormField.prototype.setupFieldDependentValidators = function(otherField){
 	}
 			
 }
+
+FormField.prototype.setupFieldCompareValidators = function(otherField){
+	var validatorFunctionName = "compare-" + otherField.name;
+	var validatorFunction = ValidatorLib.getGreaterThanOtherField(otherField);
+	this.addValidator(validatorFunctionName, validatorFunction, true);		
+}
 		
 //removes the passed in prefix from the form field name.
 FormField.prototype.getName = function(prefixToRemove){ 
@@ -334,6 +353,16 @@ FormField.prototype.enable = function(){
     }
     
     
+FormField.prototype.getFormDataString = function() {
+            var name = this.getName();
+			var object = {};
+			object[name] = this.getValue();  
+			var string = jQuery.param(object);
+			return string;
+	}
+
+    
+    
 // helper to handle the inheritance.   
 function inherit(o1, o2){
 	o1.prototype =  new o2(); //Object.create(o2.prototype);//ie 8 falls over on create
@@ -344,7 +373,7 @@ function inherit(o1, o2){
 // ***********  Child Classes of FormField. *********************** //
 
 
-// ************  Radio Button TODO: NOT WORKING CURRENTLY NEED TO HAVE A LOOK
+// ************  Radio Button TODO: handle multiples?
 
 function RadioButton($elem) {
   FormField.call(this,$elem, "radio"); // call super constructor.
@@ -367,6 +396,13 @@ RadioButton.prototype.disable = function(){
        $(this).element.removeAttr("disabled");
     });
  }
+ 
+ RadioButton.prototype.getFormDataString = function(){
+    if($(this.element).is(':checked')){
+        return FormField.prototype.getFormDataString.apply(this);
+    }
+}
+
 
  // ************* Checkbox 
  
@@ -401,13 +437,14 @@ CreditCardNumber.prototype.setValueFromBoundInput = function() {
 
 function MonthAndYear($elem) {
     FormField.call(this, $elem, "monthAndYear");
-    // We assume the first input is 'year' so we'll just try and strip a trailing month.
+    // We assume the first input is 'month' so we'll just try and strip a trailing month.
     var nameSuffixLocation = this.name.indexOf("-month");
     if(nameSuffixLocation != -1) {
         this.name = this.name.slice(0,nameSuffixLocation);
     }
-    this.monthElement = $($elem[0]);
+    this.monthElement = $($elem[0]); 
     this.yearElement = $($elem[1]);
+    this.postSeparately =  this.element.is("[" + this.POST_UP_COMBINED_AS_SEPARATE_ATTR_NAME + "]");
 }
 
 inherit(MonthAndYear, FormField );
@@ -415,6 +452,25 @@ inherit(MonthAndYear, FormField );
 MonthAndYear.prototype.setValueFromBoundInput = function() {  
     // We need to take a month and year and concatenate them into the format expected. YYYY-MM, We use the ISO format for month from the html5 spec 
     this.value = this.yearElement.val() + "-" + this.monthElement.val();
+}
+
+
+MonthAndYear.prototype.getFormDataString = function() {
+    if (this.postSeparately) {
+        var monthName = this.monthElement.attr("name");
+        var monthValue = this.monthElement.val();
+        var yearName = this.yearElement.attr("name");
+        var yearValue = this.yearElement.val();
+        
+        var object = {};
+		object[monthName] = monthValue;
+        object[yearName] = yearValue;
+		var string = jQuery.param(object);
+		return string;
+    }
+    else {
+        return FormField.prototype.getFormDataString.apply(this); //call the parent method, business as usual.
+    }
 }
 
 // ************* Numeric
@@ -433,7 +489,6 @@ function Numeric($elem) {
 }
 
 inherit(Numeric, FormField);
-
 
 Numeric.prototype.setupControls = function() {
     //TODO create a + and - button and add in a DIV after the input, then wire up onclicks.
@@ -479,6 +534,16 @@ Numeric.prototype.getButtonClickFunction = function(numberToAdd) {
     }
 }
 
+// ************  Sap Date
+function sapDate($elem){
+                FormField.call(this, $elem, "sapDate");
+}
+inherit(sapDate,FormField);
+sapDate.prototype.setValueFromBoundInput = function() {  
+                var value = this.element.val();
+                this.value = value.substring(6,10) + value.substring(3,5) + value.substring(0,2);
+}
+
 
 // ************* Date
 
@@ -520,14 +585,26 @@ ADate.prototype.setupControls = function() {
     if (this.doesBrowserSupportDateField()) { //if the browser supports HTML5 date type, we need to use the spec format of yyyy-mm-dd;
         dateFormat = "yy-mm-dd"
     }
+    var minDate = this.element.attr('min') ? new Date(this.element.attr('min')) : null;
+    var maxDate = this.element.attr('max') ? new Date(this.element.attr('max')) : null;
     //require(["loom/jquery-ui"], function(ui){ //already included in define now... if load times become a problem uncomment this.
+        //debugger;
+        if(this.element.hasClass('hasDatepicker')){
+            this.element.datepicker( "option", "minDate", minDate );
+            this.element.datepicker( "option", "maxDate", maxDate );
+        }
         that.element.datepicker({
             inline: true,
             dateFormat: dateFormat,
             onSelect: function(dateText, inst) {
+                if(dateText !== inst.lastVal){
+                    $(this).change();
+                }
                 that.setValueFromBoundInput(dateText);
                 that.isValid();
-            }
+            },
+            minDate: minDate,
+            maxDate: maxDate
      //    });
     });
 }
@@ -540,8 +617,6 @@ ADate.prototype.setupControls = function() {
 function Select($elem) {
     FormField.call(this, $elem, "select");
     this.fieldsToPopulate = {};
-    var test = this.getNamesOfPopulationFields();
-    var t = 2;
 }
 
 inherit(Select, FormField);
@@ -607,16 +682,60 @@ Select.prototype.onChangePopulateFields = function(that){
             thisField.element.val(thisFieldValue);
             thisField.isValid();
         }
-        //should we disable the field?
     }
 }
 
+// Decimal
 
+function Decimal($elem) {
+    FormField.call(this, $elem, "decimal");
+    var rawNum = this.element.attr(this.DECIMAL_PLACES_ATTR_NAME);
+    var parsedNum = parseInt(rawNum,10);
+    this.dp = isNaN(parsedNum) ? 2 : parsedNum; //default to 2 if we don't get a number back.
+}
+
+inherit(Decimal, FormField);
+
+Decimal.prototype.setValueFromBoundInput = function(){
+    //read the value and parse to float, then set it to the d.p.
+    
+    var asString = this.element.val();
+    var asFloat = parseFloat(asString, 10);
+    this.value = asFloat.toFixed(this.dp);
+    if (isNaN(asFloat)) {
+        this.value=""; //don't allow an invalid input to get into the 'value', just default to blank.
+    }
+    if (this.element.is(":focus")) { //if we're still editing the value, then don't read it back out, so the user can edit it.
+        if (isNaN(asFloat)) {
+            this.value = NaN; //and it it was invalid, set the internal value to something that will fail the decimal validator.
+        }
+        return;
+    }
+    this.element.val(this.value); //read back out our nice decimalled value.
+};
+
+function Integer($elem){
+    FormField.call(this, $elem, "integer");
+}
+inherit(Integer, FormField);
+Integer.prototype.setValueFromBoundInput = function(){
+    var asString = this.element.val();
+    var asInt = parseInt(asString, 10);
+    this.value = asInt;
+    if (isNaN(asInt)) {
+        this.value=""; //don't allow an invalid input to get into the 'value', just default to blank.
+    }
+     if (this.element.is(":focus")) {
+        if (isNaN(asInt)) {
+            this.value = NaN; //and it it was invalid, set the internal value to something that will fail the decimal validator.
+        }
+        return;
+    }
+    this.element.val(this.value);
+}
  
 // the factory.
- 
- 
- 
+
 function getFormField($formFieldContainer) {
 	
 	var FIELD_TYPE_ATTR_NAME = "data-loom-type";
@@ -627,6 +746,7 @@ function getFormField($formFieldContainer) {
 	var typesToConstructors = {
         'hidden' : FormField,
 		'text' : FormField,
+        'textarea' : FormField,
 		'date' : ADate,
 		'month' : FormField,
 		'select' : Select,
@@ -634,19 +754,24 @@ function getFormField($formFieldContainer) {
         'checkbox' : Checkbox,
 		'creditCardNumber' : CreditCardNumber,
 		'monthAndYear' : MonthAndYear,
-        'number' : Numeric
+        'number' : Numeric,
+        "sapDate" : sapDate,
+        "decimal" : Decimal
 	}
     
     var $inputElement = $($formFieldContainer).find("input");
     //if there's more than one input in the container, getType should still work fine.    
     //and we'll be passing a list of inputs into a FormField child type that's expecting a list so everything should still work fine.
     
-    // If we didnt' find an input then there should be a select in there so grab that instead.
     if (!$inputElement.length){
         $inputElement = $($formFieldContainer).find("select");
     }
     
-    //if still notrhing then its an empty div so just return null
+    if (!$inputElement.length) {
+        $inputElement = $($formFieldContainer).find("textarea");
+    }
+    
+    //if still nothing then its an empty div so just return null
     if (!$inputElement.length) {
         return null;
     }
@@ -662,11 +787,15 @@ function getFormField($formFieldContainer) {
     return formField;
     
     function determineType(inputElement){
-        
 		// Top priority check if someone set a data-loom-field-type.
         if (inputElement.is("["+ FIELD_TYPE_ATTR_NAME+"]")) {
 			return  inputElement.attr(FIELD_TYPE_ATTR_NAME);
 		}
+        
+        if (inputElement.is("textarea")) {
+            return "textarea";
+        }
+        
 		//Next we look at the type of the first input 
 		if (inputElement.is("[type]")) {
 			return inputElement.attr("type");

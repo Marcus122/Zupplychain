@@ -1,22 +1,25 @@
 var searchController= require("../controllers/search.js");
 
 
-//?	local = require("../local.config.js");
+local = require("../local.config.js");
 
 
 // GET /search returns the combined search & results form
 // POST /search returns the json for the results.
 
 var handler = function(app) {
-	app.get('/find-storage', function(req,res){
+	/*app.get('/find-storage', function(req,res){
+        req.data.minDurationOptions = local.minDurationOptions;
 		res.render("find-storage",req.data);
-	});
+	});*/
 	
     app.post('/search', populateSearchData, function (req,res) {
 		searchHandler(req,res);
 	});
     
     app.get('/search', function (req,res) {
+        req.data.minDurationOptions = local.config.minDurationOptions;
+        req.data.palletTypes = local.config.palletTypes;
 		res.render("find-storage",req.data);
 	});
 };
@@ -28,11 +31,13 @@ function searchHandler(req,res){
 }
 function populateSearchData(req,res, next){
         var postcode = req.body.postcode;
-        var radius = req.body["max-distance"];
+        var radius = parseInt(req.body["max-distance"],10);
+        var radiusInMetres = radius * 1609.344;
         var palletType = req.body["pallet-type"];
         if (palletType === "Any") {
             palletType = "";
         }
+        var minDuration = parseInt(req.body.minDuration,10);
 		var weight = parseFloat(req.body.weight, 10);
 		var height = parseFloat(req.body.height, 10);
         if (isNaN(weight)) {
@@ -43,7 +48,7 @@ function populateSearchData(req,res, next){
         }
         var temp = req.body.temperature;
 		var qty = req.body.quantity;
-        var query = {"postcode" : postcode, "radius" : radius, "palletType" : palletType, "weight" : weight, "height" : height, "temp" : temp, "totalPallets" : qty };
+        var query = {"postcode" : postcode, "radius" : radius, "palletType" : palletType, "weight" : weight, "height" : height, "temp" : temp, "totalPallets" : qty, "radiusInMetres" : radiusInMetres, "minDuration" : minDuration};
 		
 		req.session.whSC = populateSessionStateJSON(req,postcode,palletType,radius,weight,height,temp,qty);
 		
@@ -56,10 +61,10 @@ function populateSearchData(req,res, next){
 }
 function populateSessionStateJSON(req,postcode,palletType,radius,weight,height,temp,qty){
 	var srchJson = '{"sc":[' +
-	'{"palletType":"'+palletType +'","searchQty":"'+qty+'","postcode":"'+postcode+
+	'{"palletType":"'+palletType +'","totalPallets":"'+qty+'","postcode":"'+postcode+
 	'","maxDistance":"'+radius+'","description":"'+req.body.description+
 	'","height":"'+height+'","weight":"'+weight+'","temp":"'+temp+'","startDate":"'+
-	req.body["start-date"]+'","endDate":"'+req.body["end-date"]+'"} ]}';
+	req.body["start-date"]+'","minDuration":"'+req.body["minDuration"]+'"} ]}';
 	
 	return JSON.parse(srchJson)
 }

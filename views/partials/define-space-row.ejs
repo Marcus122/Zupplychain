@@ -1,65 +1,64 @@
 <tr class="active" data-tr="Expand" data-tr-closed="Collapse">
 	<td data-th="Storage Name" class="text input-field no-success-validation-style">
 		<input type="hidden" value="<%=row.id%>" name="_id"/>
-		<input type="text" data-bind-value="name" data-bind-value-condition="name" required  value="<%=row.name%>" name="name"/>
+		<input type="text" data-bind-value="name" data-bind-value-condition="name" required  value="<%=row.name%>" name="name" data-bind-placeholder="placeholder" placeholder="<%=row.placeholder%>"/>
 	</td>
 	<td data-th="Pallet Type" class="select input-field no-success-validation-style">
-		<select name="palletType">
-			<option
-				<%if(row.palletType === 'Blue' ){%>
-					selected="selected"
-				<%}%>
-			>Blue</option>
-			<option 
-				<%if(row.palletType === 'Euro' ){%>
-					selected="selected"
-				<%}%>
-			>Euro</option>
-			<option
-				<%if(row.palletType === 'Standard' ){%>
-					selected="selected"
-				<%}%>
-			>Standard</option>
-			<option
-				<%if(row.palletType === 'Anno' ){%>
-					selected="selected"
-				<%}%>
-			>Anno</option>
-			<option
-				<%if(row.palletType === 'Other' ){%>
-					selected="selected"
-				<%}%>
-			>Other</option>
-			<option
-				<%if(row.palletType === 'Ant' ){%>
-					selected="selected"
-				<%}%>
-			>Any</option>
+		<select name="palletType" required>
+        			<option value=""/>
+        <% for (i in palletTypes) { %>
+            <option <%= row.palletType == palletTypes[i] ? "selected='selected'" : "" %> >
+            <%= palletTypes[i] %>
+            </option>
+            <%
+            } //end for palletTypes
+            %>
 		</select>
 	</td>
 	<td data-th="Storage Temp" class="select input-field no-success-validation-style">
-		<select name="temp">
-			<option>Ambient</option>
+		<select name="temp" required>
+			<option value=""/>
+			<option
+				<%if(row.temp === 'Ambient' ){%>
+					selected="selected"
+				<%}%>
+			>Ambient</option>
 			<option
 				<%if(row.temp === 'Chilled' ){%>
 					selected="selected"
 				<%}%>
 			>Chilled</option>
-			<option>Frozen</option>
-			<option>Outside</option>
-			<option>Other</option>
+			<option
+				<%if(row.temp === 'Frozen' ){%>
+					selected="selected"
+				<%}%>
+			>Frozen</option>
+			<option
+				<%if(row.temp === 'Outside' ){%>
+					selected="selected"
+				<%}%>
+			>Outside</option>
+			<option
+				<%if(row.temp === 'Other' ){%>
+					selected="selected"
+				<%}%>
+			>Other</option>
 		</select>
 	</td>
 	<td data-th="Max Weight" class="value input-field no-success-validation-style">
-		<input name="maxWeight" type="number" value="<%=row.maxWeight%>" placeholder="kg"/>
+		<input name="maxWeight" type="number" value="<%=row.maxWeight%>" placeholder="0"/>
 	</td>
 	<td data-th="Max Height" class="value input-field no-success-validation-style">
-		<input name="maxHeight" type="number" value="<%=row.maxHeight%>" placeholder="m"/>
+		<input data-loom-type="decimal" data-loom-decimal-places="1" name="maxHeight" type="number" value="<%=Number(row.maxHeight).toFixed(1)%>" placeholder="0.0" step="0.1"/>
 	</td>
 	<td data-th="Pallet Spaces" class="value input-field no-success-validation-style">
 		<input required name="palletSpaces"  type="number" value="<%=row.palletSpaces%>"/>
 	</td>
 	<td data-th="Remove" class="action">
-		<button type="button" href="#" class="trash-button"><span>Delete</span></button>
+		<% if( warehouse.storage && warehouse.storage.length===1){%>
+			<button type="button" href="#" class="trash-button hidden"><span>Delete</span></button>
+		<%}else{%>
+			<button type="button" href="#" class="trash-button"><span>Delete</span></button>
+		<%}%>
 	</td>
 </tr>

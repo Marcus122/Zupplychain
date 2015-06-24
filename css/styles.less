@@ -19,6 +19,7 @@
 @import "search-results";
 @import "provider-registration";
 @import "dashboard";
+@import "warehouse-profile";
 
 
 
@@ -27,7 +28,7 @@
 
  
  
- @main-font-stack: 'Futura', 'Open Sans';
+ @main-font-stack: 'Open Sans';
  @header-font-stack: 'Calibri';
  
  
@@ -60,7 +61,7 @@
  //responsive selectors
  @mobile: ~"only screen and (max-width: 549px)";
  @non-mobile: ~"only screen and (min-width: 550px)";
- 
+ @full-width: ~"only screen and (max-width: 1200px)";
  
  @images: "/images";
  
@@ -209,7 +210,9 @@
  header, footer, main{
     position:relative;
  }
- 
+ .hidden{
+     display:none;
+ }
  .container {
     overflow:hidden;
 	max-width: @max-width;
@@ -498,6 +501,9 @@ span.highlight-bright{
  
  .banner{
     background-color:@secondary;
+    background-image:url("/images/header-bg.png");
+    background-size:cover;
+    background-position:center;
     .unit-padding-vertical;
     .unit-padding-horizontal(2);
     .unit-margin-vertical(2);
@@ -518,6 +524,11 @@ span.highlight-bright{
     h3{
         .unit-margin-bottom;
     }
+ }
+ .tag-line{
+     .medium-font;
+     text-align: center;
+      .unit-margin-vertical(2); 
  }
  
  .content-box{
@@ -618,7 +629,7 @@ span.highlight-bright{
         margin-bottom:0px;
     }
     > .main {
-        background-color:@tertiary;
+        background-color:@white;
     }
     > .footer{
         background-color:@secondary;
@@ -645,6 +656,9 @@ span.highlight-bright{
  .hot {
       color:@highlight;
  }
+ table{
+    transform: translateZ(0px);
+ }
 
  table.simple{
     width:100%;
@@ -663,6 +677,10 @@ span.highlight-bright{
         .unit-padding(0.5);
     }
     
+ }
+ 
+ .with-pound-sign:before{
+    content:'£';
  }
  
  blockquote{

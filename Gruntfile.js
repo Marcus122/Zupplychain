@@ -56,7 +56,7 @@ module.exports = function(grunt) {
             }
           },
           startServer: {
-            command: 'cd /var/www; npm install; nohup /var/www/server.sh; ps;',
+            command: 'cd /var/www; npm install; dos2unix server.sh;dos2unix stop.sh;chmod 777 ./images;nohup /var/www/server.sh; ps;',
             options: {
               host: '10.10.20.155',
               username: 'root',

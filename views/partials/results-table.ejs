@@ -1,6 +1,6 @@
 <div class="content-box search-results" style="display:none">
                     <div class="header">
-                        <h2><em>3. List</em> Results</h2><span>Confirm your email to get further information</span>
+                        <h2><em>List</em> Results</h2> 
                     </div>
                     <div class="main">
                         <!--<div class="pagination">
@@ -26,11 +26,11 @@
                                     <th></th>
                                     <th>Warehouse</th>
                                     <th>Town</th>
-                                    <th>Type</th>
-                                    <th>Rating</th>
-                                    <th>Current Weekly Price</th>
-                                    <th>In / Out Price</th>
-                                    <th>Available Pallets</th>
+                                    <th data-field="distance" class="sortable ascending">Distance<br/>(miles)</th>
+                                    <th data-field="rating" class="sortable">Rating</th>
+                                    <th data-field="price" class="sortable">Weekly Price at Start Date<br/> (£ per pallet)</th>
+                                    <th >In / Out Price<br/> (£ per pallet)</th>
+                                    <th data-field="availability" class="sortable">Available Pallets</th>
                                     <th>View Details</th>
                                 </tr>
                             </thead>
@@ -70,22 +70,21 @@
                                     <td>@num@.</td>
                                     <td>@name@</td>
                                     <td>@city@</td>
-                                    <td>
-                                        <span class="ion-thermometer cold"><em class="sr-only">Chilled</em></span>
+                                    <td data-field="distance" data-type="number">@distanceFromSearch@
+                                        <!--<span class="ion-thermometer cold"><em class="sr-only">Chilled</em></span>
                                         <span class="ion-thermometer hot"><em class="sr-only">Ambient</em></span>
-                                        <span class="ion-ios-snowy cold"><em class="sr-only">Frozen</em></span>
+                                        <span class="ion-ios-snowy cold"><em class="sr-only">Frozen</em></span>-->
                                     </td>
-                                    <td>
+                                    <td data-rating="5" data-field="rating">
                                         <span class="ion-android-star rating"><em class="sr-only">*</em></span>
                                         <span class="ion-android-star rating"><em class="sr-only">*</em></span>
                                         <span class="ion-android-star rating"><em class="sr-only">*</em></span>
                                         <span class="ion-android-star rating"><em class="sr-only">*</em></span>
                                         <span class="ion-android-star rating"><em class="sr-only">*</em></span>
                                     </td>
-                                    <td>£TBC</td>
-                                    <td>£TBC</td>
-                                    <td>200</td>
-                                    <td><a target="_blank" data-bind-href="href"><button class="action mini">View</button></a></td>
-                                    
+                                    <td data-field="price" data-type="number" class="with-pound-sign">@storageMatch.currentPricing.price@</td>
+                                    <td class="with-pound-sign">@storageMatch.currentPricing.charge@</td>
+                                    <td data-field="availability" data-type="number">@storageMatch.currentPalletsAvailable@</td>
+                                    <td><a  data-bind-href="href" class=" button action mini view-warehouse-link <%= user.email ? " " : "register-before-click " %>">View</a></td>
                                 </tr>
                 </script>

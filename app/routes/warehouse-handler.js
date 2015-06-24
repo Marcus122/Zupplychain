@@ -19,6 +19,15 @@ var handler = function(app) {
 	
 	app.get('/warehouse-profile/:warehouse_id', function(req,res){
 		req.data.warehouse = req.warehouse;
+        if (req.query.fromSearch && req.session.whSC && req.session.whSC.sc && req.session.whSC.sc.length > 0) {
+            //tidy up the query so that ints are parsed as such, we'll get strings back from session.
+            req.data.minDurationOptions = local.config.minDurationOptions;
+            var query = req.session.whSC.sc[0];
+            query.height = Number(query.height);
+            query.weight = Number(query.weight);
+            query.searchQty = Number(query.quantity);
+            req.data.warehouse = limitStorageToMatching(req.warehouse, query);
+        }
 		res.render("warehouse-profile",req.data);
 	});
 	
@@ -36,9 +45,17 @@ var handler = function(app) {
 	app.post('/warehouse/:warehouse_id/storage/batch',batchStorage);
 	
 	app.param('storage_id', storage.load);
-	app.post('/stroage/:storage_id', storageAuth,  updateStorage );
+	app.post('/warehouse/:warehouse_id/storage/:storage_id', warehouseAuth,  updateStorage );
 	app.get('/storage/:storage_id', setStorageResponse );
 };
+
+function limitStorageToMatching(thiswarehouse, query) {
+    var newStorage = warehouse.limitStorageToMatching(thiswarehouse.storage, query);
+    thiswarehouse.storage = newStorage;
+
+    return thiswarehouse;
+}
+
 function createUser(req,res){
 	user.create(req,res,{},function(err,user){
 		createWarehouse(req,res);
@@ -51,6 +68,7 @@ function warehouseAuth(req,res,next){
 function createWarehouse(req,res){
 	getLatLong(req.body.postcode,function(latlng){
 		req.body.geo = latlng;
+        req.body.loc = { 'type' : 'Point', 'coordinates' : [latlng.lng, latlng.lat] };
 		warehouse.create(req.data.user,req.body,function(err,Warehouse){
 			if(err){
 				setErrorResponse(err,res);
@@ -91,7 +109,10 @@ function updateStorage(req,res,next){
 function batchStorage(req,res){
 	if(!req.warehouse) next();
 	var storageArr=[];
+	var sortOrder = 0;
 	async.each(req.body, function(_storage,callback){
+		sortOrder++;
+		_storage.sortOrder = sortOrder;
 		if(!_storage._id){
 			delete _storage._id;
 			storage.create(req.data.user,_storage,function(err,Storage){
@@ -176,13 +197,15 @@ function getLatLong(postcode,cb){
 }
 function setResponse(req,res){
 	res.writeHead(200, {"Content-Type": "application/json"});
-    var output = { error: null, data: req.warehouse };
+    var output = { error: null, data: req.warehouse.toObject({
+		versionKey:false
+	}) };
     res.end(JSON.stringify(output) + "\n");
 }
 function setStorageResponse(req,res,next){
 	if(!req.storage) next();
 	res.writeHead(200, {"Content-Type": "application/json"});
-    var output = { error: null, data: req.storage };
+    var output = { error: null, data: req.storage.toObject({versionKey:false})};
     res.end(JSON.stringify(output) + "\n");
 }
 function setErrorResponse(err,res){

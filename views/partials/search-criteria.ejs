@@ -3,52 +3,73 @@
 		<h2>Get an instant quote</h2>
 		<span>* required field</span>
 	</div>
-	<%if (session.whSC != undefined){%>
+    <%var today = new Date();
+					  var toDate = new Date();
+					  toDate.setDate(today.getDate() + 28);
+	%>
+        <% if (session.whSC) { %>
 		<input type="hidden" name="search-cached"/>
+        <% } %>
 		<div class="main">
 			<form class="storage-search loom-form" action="/search" id="search-form" novalidate>
+            <div class="input-field">
+					<label for="postcode">Target Postcode/City</label>
+					<input type="text" name="postcode" required="required" minlength="2" value="<%= session.whSC ? session.whSC.sc[0].postcode : " "%>"/>
+				</div>
+                <div class="input-field number" >
+					<label for="max-distance">Max Distance (miles)</label>
+					<input type="number"  step="5" name="max-distance" min="1" required="required" value="<%=session.whSC ? session.whSC.sc[0].maxDistance : 25 %>"/>
+				</div>
 				<div class="input-field">
-					<label for="pallet-type">Pallet Type*</label>
+					<label for="pallet-type">Pallet Type</label>
 					<select name="pallet-type" id="pallet-type" required="required">
-						<%var palletTypes = ["Blue", "Euro", "Standard", "Ano", "Any", "Other"];
-						for (var i=0; i<palletTypes.length; i++){%>
-							<option value="<%=palletTypes[i]%>" <%if (session.whSC.sc[0].palletType === palletTypes[i]){%>
+						<%
+						for (var i in palletTypes){%>
+							<option value="<%=palletTypes[i]%>" <%if (session.whSC && session.whSC.sc[0].palletType === palletTypes[i]){%>
 																	selected
 																<%}%>><%=palletTypes[i]%></option>
 						<%}%>
 					</select>
 				</div>
+                
 				<div class="input-field number">
-					<label for="quantity">Qty*</label>
-					<input type="number" name="quantity" min="1" max="2000" required="required" value="<%=session.whSC.sc[0].searchQty%>"/>
+					<label for="quantity">Qty</label>
+					<input type="text" data-loom-type="number" name="quantity" min="1" max="2000" required="required" value="<%= session.whSC ? session.whSC.sc[0].totalPallets : 10%>"/>
 				</div>
+				
+				
 				<div class="input-field">
-					<label for="postcode">Target Postcode*</label>
-					<input type="text" name="postcode" required="required" data-loom-validators="UKPostCode" value="<%=session.whSC.sc[0].postcode%>"/>
-				</div>
-				<div class="input-field">
-					<label for="max-distance">Max Distance*</label>
-					<input type="number" name="max-distance" required="required" value="<%=session.whSC.sc[0].maxDistance%>"/>
-				</div>
-				<div class="input-field">
-					<label for="description">Product Description*</label>
-					<input type="text" name="description" minlength="0" maxlength="100" placeholder="" required="required" value="<%=session.whSC.sc[0].description%>"/>
+					<label for="description">Product Description</label>
+					<input type="text" name="description" minlength="0" maxlength="100" placeholder="" required="required" value="<%= session.whSC ? session.whSC.sc[0].description : "" %>"/>
 				</div><br/>
 				<div class="input-field">
 					<label for="start-date">Start Date</label>
-					<input type="date" name="start-date" value="<%=session.whSC.sc[0].startDate%>"/>
+					<input type="date" name="start-date" data-loom-add-controls="true" readonly required="required" value="<%= session.whSC ? session.whSC.sc[0].startDate : today.toISOString().substring(0, 10)%>"/>
 				</div>
 				<div class="input-field">
-					<label for="end-date">End Date</label>
-					<input type="date" name="end-date" value="<%=session.whSC.sc[0].endDate%>"/>
+					<label for="minDuration">Minimum Duration</label>
+					<select name="minDuration" required="required">
+                    <%
+                    var options = minDurationOptions;
+                    for (var key in options) {
+                    %>
+                        <option value="<%= key %>" 
+                        <% if (session.whSC && key == session.whSC.sc[0].minDuration) { %>
+                            selected="selected"
+                        <% } %>
+                        ><%= options[key] %> </option>
+                    <%
+                    }
+                    %>
+                    </select>
 				</div>
 				<div class="input-field number">
-					<label for="height">Height (m)</label>
-					<input type="number" name="height" min="0" max="100" value="<%=session.whSC.sc[0].height%>"/>
+					<label for="height">Pallet Height (m)</label>
+					<input type="text" name="height" min="0" required="required" max="100" step=".1" value="<%=session.whSC ? session.whSC.sc[0].height : ""%>" data-loom-type="decimal" data-loom-decimal-places="1" />
 				</div>
 				<div class="input-field number">
-					<label for="weight">Weight (kg)</label>
-					<input type="number" name="weight" min="0" max="2000" value="<%=session.whSC.sc[0].weight%>"/>
+					<label for="weight">Pallet Weight (kg)</label>
+					<input type="text" data-loom-type="decimal" data-loom-decimal-places="1" name="weight" required="required" min="0" max="2000" value="<%=session.whSC ? session.whSC.sc[0].weight : "" %>"/>
 				</div>
 				
 				<div class="input-field">
@@ -56,7 +77,7 @@
 					<select name="temperature">
 						<%var temps = ["Ambient", "Chilled", "Frozen", "Outside", "Other"];
 						for (var i=0; i<temps.length; i++){%>
-								<option value="<%=temps[i]%>" <%if (session.whSC.sc[0].temp === temps[i]){%>
+								<option value="<%=temps[i]%>" <%if (session.whSC && session.whSC.sc[0].temp === temps[i]){%>
 																	selected
 															   <%}%>><%=temps[i]%></option>
 						<%}%>
@@ -68,73 +89,4 @@
 				</div>
 			</form>
 		</div>
-	<%}else{%>
-		<div class="main">
-			<form class="storage-search loom-form" action="/search" id="search-form" novalidate>
-				<div class="input-field">
-					<label for="pallet-type">Pallet Type*</label>
-					<select name="pallet-type" id="pallet-type" required="required">
-						<option value="Blue">Blue</option>
-						<option value="Euro">Euro</option>
-						<option value="Standard">Standard</option>
-						<option value="Anno">Anno</option>
-						<option value="Any">Any</option>
-						<option value="Other">Other</option>
-					</select>
-				</div>
-				<div class="input-field number">
-					<label for="quantity">Qty*</label>
-					<input type="number" name="quantity" min="1" max="2000" required="required" value="10"/>
-				</div>
-				<div class="input-field">
-					<label for="postcode">Target Postcode*</label>
-					<input type="text" name="postcode" required="required" data-loom-validators="UKPostCode"/>
-				</div>
-				<div class="input-field">
-					<label for="max-distance">Max Distance*</label>
-					<input type="number" name="max-distance" required="required" value="100"/>
-				</div>
-				<div class="input-field">
-					<label for="description">Product Description*</label>
-					<input type="text" name="description" minlength="0" maxlength="100" placeholder="" required="required"/>
-				</div><br/>
-				<div class="input-field">
-					<label for="start-date">Start Date</label>
-					<%var today = new Date();
-					  var toDate = new Date();
-					  if ((today.getFullYear() + 2) % 4 == 0 || (today.getFullYear() + 1) % 4 == 0){
-						toDate.setDate(today.getDate() + 731);
-					  }else{
-						toDate.setDate(today.getDate() + 730);
-					  }%>
-					<input type="date" name="start-date" value="<%=today.toISOString().substring(0, 10)%>"/>
-				</div>
-				<div class="input-field">
-					<label for="end-date">End Date</label>
-					<input type="date" name="end-date" value="<%=toDate.toISOString().substring(0, 10)%>"/>
-				</div>
-				<div class="input-field number">
-					<label for="height">Height (m)</label>
-					<input type="number" name="height" min="0" max="100" value="10"/>
-				</div>
-				<div class="input-field number">
-					<label for="weight">Weight (kg)</label>
-					<input type="number" name="weight" min="0" max="2000" value="10"/>
-				</div>
-				
-				<div class="input-field">
-					<label for="temperature">Temp</label>
-					<select name="temperature">
-						<option value="Ambient">Ambient</option>
-						<option value="Chilled">Chilled</option>
-						<option value="Frozen">Frozen</option>
-					</select>
-					
-				</div>
-				<div class="input-field last">
-					<button type="submit" class="action forward">Search</button>
-				</div>
-			</form>
-		</div>
-	<%}%>
 </section>

@@ -1,15 +1,15 @@
 <tr>
-	<td data-th="From">
+	<td data-th="From" class="discount-from">
 		<input name="from" type="hidden" data-bind-value="from"/>
 		<span>@from@</span>
 		</td>
-	<td data-th="To" class="input-field no-success-validation-style">
-		<input required data-bind-value="to" data-bind-min="from" type="number" name="to" value="9999"/>
+	<td data-th="To" class="input-field no-success-validation-style discount-to">
+		<input data-bind-max="total" required data-bind-value="to" data-bind-min="from" type="number" name="to"/>
 	</td>
-	<td data-th="% Discount" class="input-field no-success-validation-style">
-		<input required data-bind-value="perc" name="perc" placeholder="%" type="number" min="0"/>
+	<td data-th="% Discount" class="input-field no-success-validation-style discount-value">
+		<input data-loom-type="decimal" data-loom-decimal-places="1" required data-bind-value="perc" name="perc" placeholder="%" type="number" min="0" step="0.5"/>
 	</td>
-	<td data-th="Remove">
+	<td data-th="Remove" class="remove-col">
 		<button type="button" class="trash-button">
 			<span>Delete</span>
 		</button>

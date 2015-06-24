@@ -14,10 +14,24 @@
     .unit-margin-bottom(2);
 }
 
+.search-results-page .banner{
+    margin-top:0px;
+}
 
+.search-results-page .distance{
+    float:right;
+    color:#fff;
+    .miles {
+        font-weight:bold;
+    }
+}
 
 .quote-form-section{
     .unit-margin-top(2);
+}
+
+.content-box.search-results .header{
+    border-radius:10px 10px 0px 0px;
 }
 
 .content-box.map-container {
@@ -63,11 +77,12 @@
 }
 
 .search-results .header{
+    position:relative;
     h2{
     display:inline;
 }    
     
-    span{
+    form{
         display:inline;
         float:right;
         padding-top:5px;
@@ -219,10 +234,10 @@
 .confirm-email{
     text-align:left;
     position:absolute;
-    left:0px;
-    top:0px;
+    right:0px;
+    top:4px;
     .unit-padding-top(3);
-    .unit-padding-left(2);
+    .unit-padding-right(2);
     width:auto;
     display:inline-block;
     
@@ -265,5 +280,46 @@
 }
 
 .storage-matched{
-	outline: 1px solid #EFA430;
+	
 }
+
+#search-results-table thead th:first-child{
+    z-index:-1;
+}
+#search-results-table th,
+#search-results-table tr  {
+       position:relative;
+}
+#search-results-table .sortable{
+    cursor:pointer;
+    padding-right:35px;
+    padding-right:3.5rem;
+    &:after{
+        content: '\f123';
+        .ion;
+        position:absolute;
+        right:4px;
+        top:50%;
+        font-size: 1rem;
+    }
+    &:before{
+        content: '\f126';
+        .ion;
+        position:absolute;
+        right:4px;
+        top:40%;
+        font-size: 1rem;
+    }
+}
+#search-results-table .sortable.descending{
+    &:after{
+        color:#000;
+    }
+}
+#search-results-table .sortable.ascending{
+    &:before{
+        color:#000;
+    }
+}
+
+

@@ -21,6 +21,12 @@ a button{
     .unit-padding-vertical(1);
     .unit-padding-horizontal(2);
  }
+ .button.tiny,
+ button.tiny{
+    .unit-padding-vertical(0.2);
+    .unit-padding-horizontal(0.5);
+    border-radius:4px;
+ }
  .button.mini,
  button.mini{
     .unit-padding-vertical(0.5);
@@ -124,7 +130,10 @@ button.prev:before, button.back:before{
     .unit-margin-right;
 }
 
-
+button.view:after,.button.view:after{
+    .ion;
+    font-size:2.5rem;
+}
 
 .button:hover:after, .button:hover:before,
 button:hover:after, button:hover:before{
@@ -231,6 +240,10 @@ button.down:after{
 .button.down:hover:after,
 button.down:hover:after{
     transform:rotateX(0deg) rotateY(360deg);
+}
+.button.view:after,
+button.view:after{
+    content:@ionicon-var-eye;
 }
 
 /* mini icon buttons add delete etc. */

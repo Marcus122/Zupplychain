@@ -45,10 +45,11 @@
 		margin-right:5%;
 	}
 	 .small-input label{
-		width:50%;
+		width: auto;
+  		display: inline-block;
 	}
 	 .small-input input{
-		width:20%;
+		width:30%;
 	}
 }
 .warehouse-details textarea{
@@ -119,7 +120,20 @@
 		vertical-align:middle;
 	}
 }
-.price-and-availability{ 
+.price-and-availability{
+	button.popup{
+		background:@primary;
+		padding: 2px 7px;
+		margin-left:1rem;
+		margin-left:10px;
+	}
+	button.popup:after{
+		font-size:2rem;
+		.ion;
+		content:@ionicon-var-android-add;
+		color:@white;
+		margin:0;
+	}
 	td.error{
 		background-image: url('/css/loom/images/icon-warning.png');
 		background-repeat:no-repeat;
@@ -130,8 +144,55 @@
 		background-image: url('/css/loom/images/icon-success.png');
 		background-repeat:no-repeat;
 		background-position: 95% 50%;
-		  background-color: #dff2bf;
+		background-color: #dff2bf;
+		button.popup:after{
+			content:@ionicon-var-android-create;
+		}
+		.edit-data:before{
+			content:'EDIT ';
+		}
 	}
+	.edit-data:before{
+		content:'ADD ';
+	}
+}
+.progress {
+	height: 20px;
+	overflow: hidden;
+	background-color: #f5f5f5;
+	border-radius: 4px;
+	-webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+	box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+}
+.progress-bar {
+	float: left;
+	width: 0;
+	height: 100%;
+	font-size: 12px;
+	line-height: 20px;
+	color: @white;
+	text-align: center;
+	background-color: @primary;
+	-webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);
+	box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);
+	-webkit-transition: width .6s ease;
+	-o-transition: width .6s ease;
+	transition: width .6s ease;
+}
+.progress.fill-1 .progress-bar{
+	width:50%;
+}
+.progress.fill-2 .progress-bar{
+	width:100%;
+}
+.progress.fill-3 .progress-bar{
+	width:100%;
+}
+#pallets-form .error-required input[type="date"],
+#pricing-form .error-required input[type="date"]{
+	border-color: #cccccc;
+	background:0;
+	color:inherit;
 }
 @media @mobile{
 	.start-selling {
@@ -156,12 +217,90 @@
 	}
 }
 
-.define-space{
+/*.define-space{
 	tbody tr:first-child td:last-child button{
 		display:none;
 	}
+}*/
+#discount-form{
+	.discount-from{
+		text-align: center;
+	}
+	.no-discount{
+		input{
+			display:inline-block;
+			width:auto;
+		}
+		label{
+			width:auto;
+		}
+	}
 }
-
+.discount-popup{
+	.discount-header{
+		.unit-margin-bottom(2);
+		border-bottom:1px solid  @secondary;
+		h2{
+			display:inline-block;
+		}
+		span{
+			float:right;
+			line-height: 3rem;
+		}
+	}
+	.discount-inner{
+		max-width:800px;
+		margin:auto;
+	}
+	.discount-value{
+		width:200px;
+	}
+}
+.popup-window{
+	.register{
+		width:420px;
+		
+		.complete{
+			width:500px;
+		}
+		.done{
+			float:right;
+		}
+		span{
+			  line-height: 44px;
+		}
+		form{
+			margin-bottom:0;
+		}
+		.saved{
+			text-align:center;
+		}
+		.saved span{
+			display:block;
+		}
+		.saved:before{
+			.ion;
+			content:@ionicon-var-android-done;
+			font-size: 10rem;
+		  	color: green;
+		}
+		input{
+			background-color: #fff !important;
+  			color: #000 !important;
+		}
+		/*.input-field .messages{
+			max-height:500px;
+			.msg-info{
+				display:block;
+			}
+			&.error-minlength{
+				.msg-info{
+					display:none;
+				}
+			}
+		}*/
+	}
+}
 form#define-space{	
 	.header{
 		h3{
@@ -174,6 +313,34 @@ form#define-space{
 			}
 			display:inline;
 			float:right;
+		}
+	}
+}
+.availability-progress{
+	position:relative;
+	  font-size: 1.2rem;
+	  overflow:hidden;
+	td,th{
+		background:#fff;
+		padding:2px 0;
+		border: 1px solid #d7d7d7;
+		height:25px;
+	}
+	.progress-row{
+		position:absolute;
+		bottom:10px;
+		height:12px;
+		width:100%;
+		td{
+			background:@primary;
+			height:8px;
+			max-width:100%;
+			display:block;
+			border:0;
+			opacity:0.8;
+			transition:0.1s;
+			position:absolute;
+			min-width: 0.1%;
 		}
 	}
 }
