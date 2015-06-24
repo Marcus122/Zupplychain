@@ -70,8 +70,10 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
                 angle += 360;
             }
             var pixelWidth = $("#" + MAP_ELEM_ID).width();
-            var zoom = Math.round(Math.log(pixelWidth * 360 / angle / GLOBE_WIDTH) / Math.LN2);
-            map.setZoom(zoom-4);
+            var pixelHeight = $("#" + MAP_ELEM_ID).height();
+            var shortestDimension = Math.min(pixelWidth, pixelHeight);
+            var zoom = Math.round(Math.log(shortestDimension * 360 / angle / GLOBE_WIDTH) / Math.LN2);
+            map.setZoom(zoom-2);
             //zoom is the zoom required to fit those points on the map.
             var miles = radiusInMiles;
                var radiusOptions = {
@@ -88,7 +90,7 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
                     circle.setMap(null);
                 }
                 circle = new google.maps.Circle(radiusOptions);
-            
+                map.setCenter(centerLatLong);
         }
         
         function clear() {
