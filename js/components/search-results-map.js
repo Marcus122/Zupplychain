@@ -141,7 +141,9 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
             unsetMarkers(markers, normalIcon);
             loadWarehouseData(data);
             marker.setIcon(highlightIcon);
-
+            //highlight the row in the table.
+            $("tr").removeClass("selected");
+            $("#" + data._id).addClass("selected");
             function unsetMarkers(markers, normalIcon){
                 var lim = markers.length;
                 for (var i= 0;i<lim;i++){

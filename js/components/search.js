@@ -103,6 +103,7 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
                    $("#search-results-table tbody ").append(row);
                }
 			   $(".continue-links.footer.form-footer .button.action.large.next").attr("href", response.results[0].href);
+                $("#search-results-table tbody tr").first().addClass("selected");
             });
             
             require(["loomTable/Table"], function(loomTable) {
