@@ -130,6 +130,7 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
 	if ($('input[name="search-cached"]').length){
 		triggerSearch();
 	}
+
     
     }
 

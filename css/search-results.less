@@ -145,8 +145,10 @@
     //
     background-color:fade(darken(@secondary,10%),90%);
     color:@light-text;
-    .unit-padding(2);
     border-radius:10px;
+    .inner-box{
+        .unit-padding(2);
+    }
     em{
         font-style:normal;
     }
@@ -225,9 +227,10 @@
 .search-result-info-box.fixed{
     left:inherit;
     right:0px;
-    top:57px;
+    top:0px;
     width:320px;
     position:absolute;
+    height:100%;
     }
 }
 
@@ -260,7 +263,8 @@
 
 #map-container{
     height:352px;
-
+    min-height: 352px;
+    max-height: 1000px;
 }
 .warehouse-pricing {
 	overflow-x: scroll !important;
@@ -271,7 +275,26 @@
 .rotateY90{
     transform:rotateY(90deg);
 }
-
+.resize *{
+     cursor:n-resize;
+}
+#results-area{
+    position:relative;
+    padding-bottom:50px;
+    .main{
+        position:relative;
+    }
+    .footer{
+        position:relative;
+    }
+    .map-resize{
+        position:absolute;
+        bottom:0;
+        width:100%;
+        height:5px;
+        cursor:n-resize;
+    }
+}
 @media @mobile{
 	.content-box.map-container small{
 		float:none;

@@ -20,10 +20,7 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
             url  : "/images/map-icon-highlight.png"
           }
           
-          var markerOptions;
-          
-          
-          
+          var markerOptions;  
         
         function initialize(postcode, radius) {
           var loc1 = new google.maps.LatLng(0,0);
@@ -195,6 +192,22 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
             resultsElem.find('.remove-from-quote').data("id", data._id);
             resultsElem.find('.view-details').attr("href" , "/warehouse-profile/" + data._id + "?fromSearch=true");
             setTimeout(function(){resultsElem.find('.js-image').prop("src", "/images/" + data.photos[0]).removeClass("rotateY90");}, 300 );
+        }
+        
+        function resizeMap(){
+            var $result = $('#results-area');
+            $result.find('.map-resize').on("mousedown",startResize);
+            function startResize(){
+                $(document).on("mousemove",function(event){
+                    $('#map-container').height(event.pageY - $('#map-container').offset().top - $result.find('.footer').outerHeight() );
+                    $('body').addClass('resize');
+                });
+                $(document).on("mouseup",function(){
+                    google.maps.event.trigger(map, "resize");
+                    $('body').removeClass('resize');
+                    $(document).off("mousemove");
+                });
+            }  
         }
 
             initialize(postcode, radius);
