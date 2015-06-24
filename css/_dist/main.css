@@ -6978,10 +6978,11 @@ body.wait #wait {
   box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
 }
 #home-page .banner {
-  background-image: url("/images/home-banner.jpg");
+  background-image: url("/images/home-banner-sm.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   position: relative;
+  background-color: #EDEDED;
   padding-left: 30px;
   padding-left: 3rem;
   padding-right: 30px;
