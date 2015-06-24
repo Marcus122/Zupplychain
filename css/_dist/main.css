@@ -7010,8 +7010,8 @@ body.wait #wait {
 }
 #home-page .banner .free-registration {
   position: absolute;
-  right: 20px;
-  top: 30%;
+  right: 90px;
+  top: 34%;
   text-align: center;
 }
 @media only screen and (max-width: 549px) {
@@ -7476,7 +7476,6 @@ body.wait #wait {
 }
 #results-area {
   position: relative;
-  padding-bottom: 50px;
 }
 #results-area .main {
   position: relative;

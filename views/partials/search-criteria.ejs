@@ -41,9 +41,14 @@
 					<label for="description">Product Description</label>
 					<input type="text" name="description" minlength="0" maxlength="100" placeholder="" required="required" value="<%= session.whSC ? session.whSC.sc[0].description : "" %>"/>
 				</div><br/>
+				<%
+					var minDate = new Date();
+					var maxDate = new Date();
+					maxDate.setYear(minDate.getFullYear()+1);
+				%>
 				<div class="input-field">
 					<label for="start-date">Start Date</label>
-					<input type="date" name="start-date" data-loom-add-controls="true" readonly required="required" value="<%= session.whSC ? session.whSC.sc[0].startDate : today.toISOString().substring(0, 10)%>"/>
+					<input type="date" name="start-date" data-loom-add-controls="true" readonly required="required" min="<%=minDate.toISOString().substring(0, 10)%>" max="<%=maxDate.toISOString().substring(0, 10)%>" value="<%= session.whSC ? session.whSC.sc[0].startDate : today.toISOString().substring(0, 10)%>"/>
 				</div>
 				<div class="input-field">
 					<label for="minDuration">Minimum Duration</label>
