@@ -24,7 +24,7 @@
 					<select name="pallet-type" id="pallet-type" required="required">
 						<%
 						for (var i in palletTypes){%>
-							<option value="<%=palletTypes[i]%>" <%if (session.whSC && session.whSC.sc[0].palletType === palletTypes[i]){%>
+							<option value="<%=i%>" <%if (session.whSC && session.whSC.sc[0].palletType == i){%>
 																	selected
 																<%}%>><%=palletTypes[i]%></option>
 						<%}%>
@@ -79,9 +79,9 @@
 				<div class="input-field">
 					<label for="temperature">Temp</label>
 					<select name="temperature">
-						<%var temps = ["Ambient", "Chilled", "Frozen", "Outside", "Other"];
-						for (var i=0; i<temps.length; i++){%>
-								<option value="<%=temps[i]%>" <%if (session.whSC && session.whSC.sc[0].temp === temps[i]){%>
+						<%var temps = temperatures;
+						for (var i in temps){%>
+								<option value="<%=i%>" <%if (session.whSC && session.whSC.sc[0].temp == i){%>
 																	selected
 															   <%}%>><%=temps[i]%></option>
 						<%}%>

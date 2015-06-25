@@ -66,11 +66,14 @@ warehouseSchema.statics = {
 		  .exec(cb); 
   },
   
-  filterStorageOnQuery: function(storage, query) {
+  filterStorageOnQuery: function(storage, query) {      
+    query.palletType   = parseInt(query.palletType,10);
+    query.temp         = parseInt(query.temp,10);
+    query.totalPallets = parseInt(query.totalPallets,10);
     var matchingStorages = [];
     var k = 0;
     for (var j=0; j<storage.length; j++){
-        var palletTypeOK  = !query.palletType || storage[j].palletType === "Any" || storage[j].palletType === query.palletType; //!palletType means any
+        var palletTypeOK  = !query.palletType || storage[j].palletType == 0 || storage[j].palletType === query.palletType; //!palletType means any
         var maxWeightOK   = !query.weight || storage[j].maxWeight >= query.weight;
         var maxHeightOK   = !query.height || storage[j].maxHeight >= query.height;
         var tempOK        = storage[j].temp === query.temp;

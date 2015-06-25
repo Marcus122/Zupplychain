@@ -27,6 +27,7 @@ function registrationHandler(req,res){
 	}
 }
 function populateData(req,res, next){
+    req.data.temperatures = local.config.temperatures;
 	req.data.services = local.config.services;
     req.data.palletTypes = local.config.palletTypes;
 	req.data.specifications = local.config.specifications;

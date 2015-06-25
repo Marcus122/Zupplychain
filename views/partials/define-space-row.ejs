@@ -7,7 +7,7 @@
 		<select name="palletType" required>
         			<option value=""/>
         <% for (i in palletTypes) { %>
-            <option <%= row.palletType == palletTypes[i] ? "selected='selected'" : "" %> >
+            <option value="<%= i %>" <%= row.palletType == i ? "selected='selected'" : "" %> >
             <%= palletTypes[i] %>
             </option>
             <%
@@ -18,31 +18,12 @@
 	<td data-th="Storage Temp" class="select input-field no-success-validation-style">
 		<select name="temp" required>
 			<option value=""/>
-			<option
-				<%if(row.temp === 'Ambient' ){%>
-					selected="selected"
-				<%}%>
-			>Ambient</option>
-			<option
-				<%if(row.temp === 'Chilled' ){%>
-					selected="selected"
-				<%}%>
-			>Chilled</option>
-			<option
-				<%if(row.temp === 'Frozen' ){%>
-					selected="selected"
-				<%}%>
-			>Frozen</option>
-			<option
-				<%if(row.temp === 'Outside' ){%>
-					selected="selected"
-				<%}%>
-			>Outside</option>
-			<option
-				<%if(row.temp === 'Other' ){%>
-					selected="selected"
-				<%}%>
-			>Other</option>
+            <% var temps = temperatures;
+            for (var i in temps) {%>
+			<option value="<%= i %>" <%= row.temp == i ? " selected='selected'" : "" %> ><%= temps[i] %></option>
+            <%
+            } //end for temperatures
+            %>
 		</select>
 	</td>
 	<td data-th="Max Weight" class="value input-field no-success-validation-style">

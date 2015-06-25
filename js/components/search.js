@@ -23,12 +23,6 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
         }
         resultsMap = new ResultsMap($("input[name='postcode']").val(), $("input[name='max-distance']").val());
         $(".js-map-results-container").slideDown(); //needs to be visible for map to load successfully.
-        //$(".js-page-banner").slideUp(300,function(){
-                //$(".search-top-section").css("height", "auto");
-             //require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) {
-                //$.scrollTo("#search-area",{ duration: 200, offset : -200});
-             //});
-        //});
         
     });
     
