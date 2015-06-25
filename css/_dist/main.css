@@ -8053,6 +8053,12 @@ form#define-space .header .form-header .reg-2-example {
 .warehouse-profile .key dl dt.available-space {
   background-color: #d4e6a5;
 }
+.warehouse-profile .show .hide {
+  display: none;
+}
+.warehouse-profile .hide .show {
+  display: none;
+}
 .warehouse-profile .search-header {
   background: #d7d7d7;
   padding-left: 20px;

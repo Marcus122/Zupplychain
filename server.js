@@ -7,6 +7,7 @@ var db = require('./app/data/db');
 var session = require('express-session');
 var crypto = require('crypto');
 var config = require('./app/local.config');
+var compression = require('compression');
 var data={};
 var random = Math.random()*100;
 random = random.toString();
@@ -32,6 +33,8 @@ process.argv.forEach(function (val, index, array) {
 app.set('view engine', 'ejs');
 // parse application/x-www-form-urlencoded 
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(compression());//
 
 app.use(cookieParser());
 //Set the session object and set the secret value to a sha256 message digest
