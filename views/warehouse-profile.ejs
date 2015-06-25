@@ -140,7 +140,7 @@
                                                             var priceLim = storage.pricing.length;
                                                             var basicPrice = parseFloat(storage.basicPricing.price,10).toFixed(2);
                                                             var adjustedPriceLim = priceLim + 1;
-                                                            for (var m = 0; m < adjustedPriceLim && !stopThisTime; m++) {
+                                                            for (var m = 0; m < priceLim && !stopThisTime; m++) {
                                                                 var pricing = storage.pricing[m];
                                                                 
                                                                 if (pricing &&  endDate < pricing.to) {
@@ -224,7 +224,7 @@
                                                         var lastEndDate = new Date(session.whSC.sc[0].startDate); //end date of the previous record.
                                                         var lim = storage.pallets.length;
                                                         var adjustedLim = lim + 1; //we want to go through the loop one more time to add a row at the end.
-                                                        for (var i = 0; i< adjustedLim && !stopThisTime;i++)
+                                                        for (var i = 0; i< lim && !stopThisTime;i++)
                                                         {
                                                             var thisAvailability = storage.pallets[i];
                                                             if (thisAvailability &&  endDate < thisAvailability.to) {
