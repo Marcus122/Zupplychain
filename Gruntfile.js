@@ -68,7 +68,8 @@ module.exports = function(grunt) {
       less: {
         compile: {
             options: {
-                paths: ["css"]
+                paths: ["css"],
+                compress : true
             },
             files: {
                 "./css/_dist/main.css": "./css/styles.less"

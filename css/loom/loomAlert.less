@@ -3,7 +3,7 @@
 // Alternatively those variables could be redefined in this file if used standalone.
 
 
-@success-message-background: @primary;
+@success-message-background: @secondary;
 @success-message-foreground: @white;
 @success-message-image-url: "./loom/images/icon-success-white.png";
 
@@ -41,6 +41,8 @@
             background-position:left 0px top 3px;
             }
     &.success {
+        top:initial;
+        bottom:0px;
         background-color:@success-message-background;
         color:@success-message-foreground;
         border: 2px solid @success-message-foreground;

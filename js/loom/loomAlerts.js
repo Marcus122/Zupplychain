@@ -75,7 +75,7 @@ define(["jquery"],function($){
             var defaults = {
                 onComplete : function(){;},
                 fadeOutTime : 600,
-                preFadeOutTime : 500,
+                preFadeOutTime : 1200,
                 noFadeOut : false
             }
             var settings = $.extend(defaults, options);

@@ -46,7 +46,7 @@ app.use(session({secret: crypto.createHash('sha256').update(random).digest("hex"
 // parse application/json 
 app.use(bodyParser.json());
 
-app.use(express.static(__dirname));
+app.use(express.static(__dirname, { maxAge: 86400000 })); //24 hours
 
 app.use(function(req, res, next){
 	res.locals.session = req.session;
