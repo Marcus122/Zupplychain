@@ -37,6 +37,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(compression());//
 
 app.use(cookieParser());
+
 //Set the session object and set the secret value to a sha256 message digest
 //Must specify resave and saveUninitialized, it is depreciated otherwise
 app.use(session({secret: crypto.createHash('sha256').update(random).digest("hex"),
@@ -59,6 +60,10 @@ app.use(load(data));
 
 app.get('/demo', function (req,res) {
     res.render("demo",req.data);
+});
+
+app.get("/" , function(req,res){
+   res.render("index", req.data);
 });
 
 require('./app/routes/user-handler')(app);
