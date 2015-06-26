@@ -5,6 +5,7 @@ var load = require('./app/load');
 var cookieParser = require('cookie-parser');
 var db = require('./app/data/db');
 var session = require('express-session');
+var mongostore = require("connect-mongo")(session);
 var crypto = require('crypto');
 var config = require('./app/local.config');
 var compression = require('compression');
@@ -38,12 +39,16 @@ app.use(compression());//
 
 app.use(cookieParser());
 
+var dbInstance = db.init();
 //Set the session object and set the secret value to a sha256 message digest
 //Must specify resave and saveUninitialized, it is depreciated otherwise
+
 app.use(session({secret: crypto.createHash('sha256').update(random).digest("hex"),
 				 resave: true,
-				 saveUninitialized: true
+				 saveUninitialized: true,
+                 store: new mongostore({ mongooseConnection: dbInstance })
 				 }));
+                 
 // parse application/json 
 app.use(bodyParser.json());
 
@@ -72,7 +77,7 @@ require('./app/routes/registration')(app);
 require('./app/routes/search')(app);
 require('./app/routes/dashboard')(app);
 require('./app/routes/error')(app);
-db.init();
+
 console.log("starting node server, you'll see 'listening' on the next line if it was a success:")
 app.listen(port, bind_address, function() {
         console.log("listening... go to localhost:" + port);

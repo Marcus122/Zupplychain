@@ -44,7 +44,6 @@ function createUser(req,res,cb){
 	});
 }
 function updateUser(req, res, user){
-    console.log("in update User");
 	for(i in req.body){
 		if(user[i]) user[i] = req.body[i];
 	}
