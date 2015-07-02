@@ -57,7 +57,7 @@ app.use(load(data));
 app.get('/demo', function (req,res) {
     res.render("demo",req.data);
 });
-
+require('./app/routes/static')(app);
 require('./app/routes/user-handler')(app);
 require('./app/routes/warehouse-handler')(app);
 require('./app/routes/registration')(app);
