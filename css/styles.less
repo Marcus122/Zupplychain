@@ -373,35 +373,33 @@ span.highlight-bright{
     
  @media @non-mobile{
     .side-header, .content-box.side-header { //Section with the header as a tab off to one side rather than full width.
-    > .header{
-        padding:0px;
-        background-color:transparent;
-        color:@dark-text;
-        
-        > h2 {
-            background-color:@secondary;
-            color:@light-text;
-            display:inline-block;
-            .unit-padding-vertical;
-            .unit-padding-horizontal(2);
-            border-radius: 10px 10px 0px 0px;
+        > .header{
+            padding:0px;
+            background-color:transparent;
+            color:@dark-text;
+            
+            > h2 {
+                background-color:@secondary;
+                color:@light-text;
+                display:inline-block;
+                .unit-padding-vertical;
+                .unit-padding-horizontal(2);
+                border-radius: 10px 10px 0px 0px;
+            }
+            
+            > span{
+                float:right;
+                .unit-padding-top(3);
+            }
+            
+            >button{
+                float:right;
+                .unit-margin-right;
+            }
+            
         }
-        
-        > span{
-            float:right;
-            .unit-padding-top(3);
-        }
-        
-        >button{
-            float:right;
-            .unit-margin-right;
-        }
-        
-    }
- 
- }
- 
- 
+     
+     }
  }
  
 

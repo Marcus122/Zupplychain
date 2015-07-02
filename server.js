@@ -76,8 +76,8 @@ require('./app/routes/warehouse-handler')(app);
 require('./app/routes/registration')(app);
 require('./app/routes/search')(app);
 require('./app/routes/dashboard')(app);
-require('./app/routes/error')(app);
 require('./app/routes/static')(app);
+require('./app/routes/error')(app);
 
 console.log("starting node server, you'll see 'listening' on the next line if it was a success:")
 app.listen(port, bind_address, function() {

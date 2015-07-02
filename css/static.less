@@ -6,15 +6,38 @@
 	h1,h2,h3{
 		text-transform:uppercase;
 	}
+	.what-is-zupply{
+		line-height:3.4rem;
+		font-size: 1.1em;
+	}
 	section{
 		.unit-margin-bottom(2.5);
+		> .main{
+			.unit-padding(4);
+			padding-bottom:10px;
+			> *{
+				.unit-margin-bottom(3);
+			}
+		}
+		.content-box.secondary .header,
+		.main{
+			.unit-padding-horizontal(4);
+		}
+	}
+	.content-box{
+		box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+	}
+	.types{
+		.main{
+			  min-height: 190px;
+		}
 	}
 	.service{
 		 .main{
 			background:@primary;
 		}
 		.service-box{
-			min-height: 206px;
+			min-height: 196px;
 			  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
 			background: @tertiary;
 			.border-radius(10px,10px,10px,10px);
@@ -31,6 +54,9 @@
 				font-size:2rem;
 				font-weight:bold;
 			}
+			p{
+				margin:0;
+			}
 			font-size:1.4rem;
 			line-height:2.4rem;
 		}
@@ -42,7 +68,9 @@
 	}
 	.how-it-works{
 		ol{
+			list-style: decimal !important;
 			color:@primary;
+			.unit-margin-left(2);
 			li span{
 				color:@secondary;
 			}
