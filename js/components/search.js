@@ -7,6 +7,14 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
 	var $postcode = $("input[name='postcode']");
 	var $maxDistance = $("input[name='max-distance']");
 	var loom = new Loom();
+    var hasSearch = $('input[name="search-cached"]').length;
+    
+    if (hasSearch && !(window.location.hash == "#search-area")) {
+       require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) { 
+                    $.scrollTo("#results-area", {duration : 100, offset : -90 });
+                });
+                
+    }
 	
     //on postcode entry, load up the map centered on that postcode.
     $postcode.blur(function(){
@@ -15,11 +23,6 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
         }
         resultsMap = new ResultsMap($("input[name='postcode']").val(), $("input[name='max-distance']").val());
         $(".js-map-results-container").slideDown(); //needs to be visible for map to load successfully.
-        $(".js-page-banner").slideUp(300,function(){$(".search-top-section").css("height", "auto");
-             require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) {
-                //$.scrollTo("#search-area",{ duration: 200, offset : -200});
-             });
-        });
         
     });
     
@@ -81,13 +84,19 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
 			} else {
                 $searchResInfoBox.find('.controls').show()
             }
-            if (window.location.hash == "#search-area") { //if they came back via an edit search link, don't scroll down.
+            if (window.location.hash == "#search-area" || hasSearch) { //if they came back via an edit search link, don't scroll down.
+                (window.location.hash = "");
+                hasSearch = false;
+            } else if(hasSearch){
+                hasSearch = false;
                 (window.location.hash = "");
             } else {
+                console.log("scrolling down");
                 require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) { 
-                    $.scrollTo("#results-area", {duration : 600, offset : -150 });
+                    $.scrollTo("#results-area", {duration : 600, offset : -90 });
                 });
             }
+            console.log("done");
             var numResults = response.results.length;
             var resultsWord = numResults != 1 ? " results loaded" : " result loaded";
             Alerts.showSuccessMessage(response.results.length + resultsWord);
@@ -127,7 +136,7 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
         Alerts.showPersistentErrorMessage("There was an error completing your search");
     });
 	
-	if ($('input[name="search-cached"]').length){
+	if (hasSearch){
 		triggerSearch();
 	}
 

@@ -19,7 +19,7 @@ var handler = function(app) {
     });
   app.post('/get-user', function(req, res) {
 	  if(req.data.user){
-		  user = user_controller.user_by_id(req.body.cookie,function(err,user){
+		  user = user_controller.user_by_id(req.session.user_id,function(err,user){
 			 setResponse(user,res);
 		  });
 	  }
@@ -44,7 +44,6 @@ function createUser(req,res,cb){
 	});
 }
 function updateUser(req, res, user){
-    console.log("in update User");
 	for(i in req.body){
 		if(user[i]) user[i] = req.body[i];
 	}
@@ -57,9 +56,11 @@ function setResponse(data,res){
     var output = { error: null, data: data };
     res.end(JSON.stringify(output) + "\n");
 }
-function setCookie(user,res){
-	res.cookie('session-id',user._id,  local.cookie_config );
-}
+/*function setCookie(user,res){
+    console.log("saving user to cookie");
+    req.session.user_id = user._id;
+	//res.cookie('session-id',user._id,  local.cookie_config );
+}*/
 function setErrorResponse(err,res){
 	res.writeHead(500, {"Content-Type": "application/json"});
     var output = { error: true, data: err };

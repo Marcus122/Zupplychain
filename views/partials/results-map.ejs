@@ -1,4 +1,4 @@
-<div class="js-map-results-container content-box map-container" style="display:none" id="results-area">
+<div class="js-map-results-container content-box map-container <%= session.whSC ? "" : "has-search" %>" style="<%= session.whSC ? "" : "display:none" %>" id="results-area">
                     <div class="header">
                         <h2><em>Map</em> Search Area<small></small></h2>
                     </div>

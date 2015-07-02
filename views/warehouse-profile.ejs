@@ -114,7 +114,7 @@
 												N/A
 											<%}%>
 										</td>
-										<td class="button-cell"><button data-id="<%=storage._id %>" data-template="pricing-and-availability" type="button" class="action popup mini">show / hide</button></td>
+										<td class="button-cell"><button data-id="<%=storage._id %>" data-template="pricing-and-availability" type="button" class="action popup mini <%= numStorages != 1 ? "show" : "hide"%>"><span class="show">show</span><span class="hide">hide<span></button></td>
 									</tr>
                                     <% if (session.whSC != undefined) { %>
                                     <tr style="<%= numStorages != 1 ? "display:none" : ""%>" class="pricing-and-availability-<%=storage._id %>">
@@ -140,7 +140,7 @@
                                                             var priceLim = storage.pricing.length;
                                                             var basicPrice = parseFloat(storage.basicPricing.price,10).toFixed(2);
                                                             var adjustedPriceLim = priceLim + 1;
-                                                            for (var m = 0; m < adjustedPriceLim && !stopThisTime; m++) {
+                                                            for (var m = 0; m < priceLim && !stopThisTime; m++) {
                                                                 var pricing = storage.pricing[m];
                                                                 
                                                                 if (pricing &&  endDate < pricing.to) {
@@ -224,7 +224,7 @@
                                                         var lastEndDate = new Date(session.whSC.sc[0].startDate); //end date of the previous record.
                                                         var lim = storage.pallets.length;
                                                         var adjustedLim = lim + 1; //we want to go through the loop one more time to add a row at the end.
-                                                        for (var i = 0; i< adjustedLim && !stopThisTime;i++)
+                                                        for (var i = 0; i< lim && !stopThisTime;i++)
                                                         {
                                                             var thisAvailability = storage.pallets[i];
                                                             if (thisAvailability &&  endDate < thisAvailability.to) {
@@ -324,6 +324,7 @@
                             </ul>
                         </div>
 						<p><%=warehouse.description%></p>
+                        
 					</div>
 				</div>
 				<div class="content-box columns six warehouse-features">
@@ -353,7 +354,10 @@
 			<div class="continue-links footer form-footer">
 				<div class="container">
 				<a href="/search" class="back button">Back</a>
-
+<p class="doc-buttons">
+                            <button class="simple">View Documents</button>
+                            <button class="simple">View Photos</button>
+                        </p>
 				</div>
 			</div>
 		</section>

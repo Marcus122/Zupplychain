@@ -13,7 +13,7 @@ exports.create = function (req,res,data,cb) {
 	var user = new User(data);
 	user.save(function(err){
 		if (!err) {
-			setCookie(user,res);
+			setCookie(user,req,res);
 			req.data.user=user;
 			return cb(null, user.toObject());
 		  }else{
@@ -87,6 +87,7 @@ exports.user_by_email = function (email,callback) {
 		}
 	});
 };
-function setCookie(user,res){
-	res.cookie('session-id',user._id,local.cookie_config );
+function setCookie(user,req,res){
+    req.session.user_id = user._id;
+	//res.cookie('session-id',user._id,local.cookie_config );
 }

@@ -24,4 +24,6 @@ exports.init = function (callback) {
 		console.log("Mongoose Success");
 	});
     
+    return db;
+    
 };

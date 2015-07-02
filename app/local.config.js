@@ -46,6 +46,14 @@ exports.config = {
         6 : "Other" 
     },
     
+    temperatures : { // miss out 0 as we'll code for zero being a wild card.
+        1 : "Ambient",
+        2 : "Chilled",
+        3 : "Frozen",
+        4 : "Outside",
+        5 : "Other"
+    },
+    
     minDurationOptions : { // numDays : textDescription
         7 : "1 week",
         14 : "2 weeks",

@@ -2,6 +2,8 @@ define(["jquery", "loom/loomAlerts"], function($, alerts){
     
     
     return function Class(theForm) {
+        //under development, commented out so not accidentally used in a production environment,
+        
         /*
         var form = theForm;
 

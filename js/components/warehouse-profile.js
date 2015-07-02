@@ -7,6 +7,7 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
 		
 		function initialize() {	
 			$('.popup').on("click",function(){
+                $(this).toggleClass("show").toggleClass("hide");
                 var id = $(this).data("id");
                 $(".pricing-and-availability-" + id).toggle();
             });

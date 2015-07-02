@@ -6,9 +6,9 @@ module.exports = function(_data){
 		req.data={}
 		req.data.live = data.live;
 		req.data.user = {};
-		var session = req.cookies["session-id"];
+		var session = req.session //req.cookies["session-id"];
 		if(!session) return next();
-		user_controller.user_by_id(session,function(err,user){
+		user_controller.user_by_id(session.user_id,function(err,user){
 			if(user){
 				req.data.user = user;
 			}
