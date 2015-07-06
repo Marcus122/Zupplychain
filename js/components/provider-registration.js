@@ -13,6 +13,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			step1();
 			step2();
 			step3();
+            postcodeAnywhereInit();
 			
 			$(document).on("click",".popup-window .close",function(){
 				$(this).closest('.popup-window').remove();
@@ -760,6 +761,11 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			}
 		});
 	}
+    
+    function postcodeAnywhereInit() {
+        require(["components/postcodeanywhere"], function(postcode){
+        });
+    }
 	
 	function sendFile(files,cb){
 		if(!files) return cb();

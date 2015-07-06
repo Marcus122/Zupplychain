@@ -15,6 +15,10 @@ require.config({
         },
     shim :{
         "jqueryPlugins" : ["jquery"],
+        "jquery-ui.min": {
+            exports: "$",
+            deps: ['jquery']
+        },
         "debounce" : ["jquery"],
         "jqueryPlugins/jquery.scrollTo.min" : ["jquery"]
     } 

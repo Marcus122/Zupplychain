@@ -22,8 +22,6 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
 		}
         
         
-        
-        
         function initAllAvailabilityBars(){
             var $theTables = $(".availability-table");
             $theTables.each(function() {

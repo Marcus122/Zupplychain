@@ -50,24 +50,28 @@
 									</div>
 								</div>
 								<div class="columns six">
+                                <div class="input-field">
+                                    <label for="addressLookup">Address Lookup</label><input type="text" data-loom-no-post="true" name="addressLookup" id="addressLookup" placeholder="Enter your postcode" />
+                                </div>
 									<div class="input-field">
-										<label for="addressLine1">Address Line 1*</label><input type="text" name="addressline1" id="addressLine1" required value="<%=warehouse.addressline1%>"/>
+										<label for="addressLine1">Address Line 1*</label><input disabled="disabled" type="text" name="addressline1" id="addressLine1" required value="<%=warehouse.addressline1%>"/>
 									</div>
 									<div class="input-field">
-										<label for="addressLine2">Address Line 2</label><input type="text" name="addressline2" id="addressLine2" value="<%=warehouse.addressline2%>"/>
+										<label for="addressLine2">Address Line 2</label><input  disabled="disabled" type="text" name="addressline2" id="addressLine2" value="<%=warehouse.addressline2%>"/>
 									</div>
 									<div class="input-field">
-										<label for="addressLine3">Address Line 3</label><input type="text" name="addressline3" id="addressLine3" value="<%=warehouse.addressline3%>"/>
+										<label for="addressLine3">Address Line 3</label><input type="text" disabled="disabled" name="addressline3" id="addressLine3" value="<%=warehouse.addressline3%>"/>
 									</div>
 									<div class="input-field">
-										<label for="city">Town/City*</label><input type="text" name="city" id="city" required value="<%=warehouse.city%>"/>
+										<label for="city">Town/City*</label><input type="text" name="city" disabled="disabled" id="city" required value="<%=warehouse.city%>"/>
 									</div>
 									<div class="input-field">
-										<label for="county">County</label><input type="text" name="county" id="county" value="<%=warehouse.county%>"/>
+										<label for="county">County</label><input type="text" name="county" disabled="disabled" id="county" value="<%=warehouse.county%>"/>
 									</div>
-									<div class="input-field">
-										<label for="postcode">Postcode*</label><input type="text" name="postcode" id="postcode" required value="<%=warehouse.postcode%>" data-loom-validators="UKPostCode"/>
+                                    <div class="input-field">
+										<label for="postcode">Postcode*</label><input disabled="disabled" type="text" name="postcode" id="postcode" required value="<%=warehouse.postcode%>" data-loom-validators="UKPostCode"/>
 									</div>
+									
 								</div>
 							</fieldset>
 						</div>
