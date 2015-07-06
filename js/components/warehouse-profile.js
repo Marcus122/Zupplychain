@@ -1,5 +1,4 @@
 define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!https://maps.googleapis.com/maps/api/js'], function ($,Loom,Templates,Alerts,GM) {
-	/*SINGLETON*/
 	
     function Class() {
 		var templates = new Templates();
@@ -13,7 +12,18 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
             });
             initAllAvailabilityBars();
             $('.see-on-map').on("mouseover",showMap);
+
+            
+            //world's simplest image gallery :)
+            $(".thumbnails img").click( function(evt) {
+                $(".placeholder").attr("src", $(this).attr("src"));
+            });
+            
 		}
+        
+        
+        
+        
         function initAllAvailabilityBars(){
             var $theTables = $(".availability-table");
             $theTables.each(function() {

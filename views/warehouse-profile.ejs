@@ -317,10 +317,15 @@
 					</div>
 					<div class="main">
                         <div class="carousel">
-                            <ul>
+                            <img src="/images/whouse1.jpg" class="placeholder" alt="placeholder" />
+                            <ul class="thumbnails">
                             <% for (var i = 0; i < warehouse.photos.length; i++) { %>
                                 <li><img src="/images/<%= warehouse.photos[i] %>" alt="an image of the warehouse"/></li>
                             <%}%>
+                                <li><img src="/images/whouse1.jpg" alt="a warehouse"  /></li>
+                                <li><img src="/images/whouse2.jpg" alt="a warehouse"  /></li>
+                                <li><img src="/images/whouse3.jpg" alt="a warehouse"  /></li>
+                                <li><img src="/images/whouse4.jpg" alt="a warehouse"  /></li>
                             </ul>
                         </div>
 						<p><%=warehouse.description%></p>

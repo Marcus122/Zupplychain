@@ -30,13 +30,11 @@ exports.config = {
         "24hr Security",
 		"CCTV",
 		"Sprinklers",
-		"Narrow Aisle Racking",
 		"Outdoor Storage",
-        "Roll in Roll out storage",
 		"Bulk Storage"	
 	],
     
-    palletTypes : { //maps a numeric ID to the string.
+    palletTypes : {
         0 : "Any",
         1 : "Standard Two way (1mx1.2m)",
         2 : "Standard 4 way (1mx1.2m)",
