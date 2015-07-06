@@ -157,6 +157,11 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			});
 		}
 		function step2(){
+            
+            $("#define-space .back").click(function() {
+                saveDefinedSpace();
+            });
+            
 			var $defineSpaceTable = $('.define-space');
 			var $defineSpace = $('#define-space');
 			if(!$defineSpace.length) return;
