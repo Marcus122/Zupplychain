@@ -38,6 +38,9 @@ define(["jquery","./Datarow"],function($,Datarow){
 		function getRows(){
 			return rows;
 		}
+        function numRows(){
+            return rows.length;
+        }
 		function filter(field,value){
 			return rows.filter(function(row){
 				return row.filter(field,value);
@@ -47,7 +50,8 @@ define(["jquery","./Datarow"],function($,Datarow){
 			addRow:addRow,
 			sort:sort,
 			getRows:getRows,
-			filter:filter
+			filter:filter,
+            numRows:numRows
 		}
 	};
 });

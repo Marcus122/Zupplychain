@@ -8,6 +8,13 @@ define(["jquery","./Datafield"],function($,Datafield){
 		
 		populateFields();
 		
+        function hide() {
+            $element.hide();
+        }
+        function show() {
+            $element.show();
+        }
+        
 		function populateFields(){
 			for(var i in fields ){
 				var dataField = new Datafield(i,fields[i],config[i]);
@@ -26,7 +33,9 @@ define(["jquery","./Datafield"],function($,Datafield){
 		return {
 			getField:getField,
 			getElement:getElement,
-			filter:filter
+			filter:filter,
+            hide:hide,
+            show:show
 		}
 	};
 });

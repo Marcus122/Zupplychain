@@ -1,4 +1,4 @@
-define(["jquery","./Datasource"],function($,Datasource){
+define(["jquery","./Datasource", "./Pager"],function($,Datasource,Pager){
 
 	// MODEL OBJECT
 	return function Class($table, _config) {
@@ -8,6 +8,7 @@ define(["jquery","./Datasource"],function($,Datasource){
 		var datasource;
 		var _ascending = 'A';
 		var _descending = 'D';
+        var pager;
 		
 		var DESCENDING_CLASS =  config.descendingClass ? config.descendingClass : 'descending';
 		var ASCENDING_CLASS =  config.ascendingClass ? config.ascendingClass : 'ascending';
@@ -17,7 +18,12 @@ define(["jquery","./Datasource"],function($,Datasource){
 		
 		populateDatasource();
 		setEvents();
-		
+        setUpPaging();
+        
+        function setUpPaging() {
+            pager = new Pager($tableElement, $tableElement.parent() ,datasource);
+        }
+        
 		function populateDatasource(){
 			datasource = new Datasource($table.attr('id'),config);
 			$tableElement.find('tbody tr').each(function(){
@@ -31,6 +37,9 @@ define(["jquery","./Datasource"],function($,Datasource){
 				});
 				datasource.addRow(datarow,$row);
 			});
+            //if do paging.. generate the controls and show the first page.
+            //do sort and do filter will update the view.
+            //updateView() updates based on page.
 		}
 		function doSort($cell){
 			var field = $cell.data('field');
@@ -66,11 +75,13 @@ define(["jquery","./Datasource"],function($,Datasource){
 			draw(items);
 			$table.trigger('loomSort');
 			if(cb) cb();
+            pager.refreshView();
 		}
 		function filter(field,value,cb){
 			var items = datasource.filter(field,value);
 			draw(items);
 			if(cb) cb();
+            pager.refreshAll();
 		}
 		function draw(items){
 			var $tbody = $table.find('tbody');
