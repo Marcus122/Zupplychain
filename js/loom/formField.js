@@ -595,8 +595,14 @@ ADate.prototype.setupControls = function() {
     }
     var minDate = this.element.attr('min') ? new Date(this.element.attr('min')) : null;
     var maxDate = this.element.attr('max') ? new Date(this.element.attr('max')) : null;
-    //require(["loom/jquery-ui"], function(ui){ //already included in define now... if load times become a problem uncomment this.
-        //debugger;
+    var limitDayOfWeekTo = parseInt(this.element.attr("data-loom-limit-day-of-week"));
+    var beforeShowDay = function(date) {return [true, ""];}
+    
+    if (!isNaN(limitDayOfWeekTo)) {
+       beforeShowDay = function(date) {
+            return [date.getDay() == limitDayOfWeekTo, ""];
+       }       
+    }
         if(this.element.hasClass('hasDatepicker')){
             this.element.datepicker( "option", "minDate", minDate );
             this.element.datepicker( "option", "maxDate", maxDate );
@@ -612,8 +618,8 @@ ADate.prototype.setupControls = function() {
                 that.isValid();
             },
             minDate: minDate,
-            maxDate: maxDate
-     //    });
+            maxDate: maxDate,
+            "beforeShowDay": beforeShowDay
     });
 }
 
