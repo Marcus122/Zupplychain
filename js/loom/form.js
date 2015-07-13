@@ -9,9 +9,9 @@ define(["jquery", "./formField", "./loomConfig"],function($, FormField, Config){
 	var FORM_PENDING_CLASS  =  config.FORM_PENDING_CLASS || "form-pending";
 	var FORM_ERROR_CLASS    =  config.FORM_ERROR_CLASS || "form-error";
 	var FORM_SUCCESS_CLASS  =  config.FORM_SUCCESS_CLASS || "form-success";
-        var FORM_SOFT_ERROR_CLASS = config.FORM_SUCCESS_CLASS || "form-soft-error";
-        var FORM_HARD_ERROR_CLASS = config.FORM_SUCCESS_CLASS || "form-hard-error";
-        var FORM_FIELD_CONTAINER_SELECTOR = config.FORM_FIELD_CONTAINER_SELECTOR || ".input-field";
+    var FORM_SOFT_ERROR_CLASS = config.FORM_SUCCESS_CLASS || "form-soft-error";
+    var FORM_HARD_ERROR_CLASS = config.FORM_SUCCESS_CLASS || "form-hard-error";
+    var FORM_FIELD_CONTAINER_SELECTOR = config.FORM_FIELD_CONTAINER_SELECTOR || ".input-field";
 		
 	var VALIDATE_ON_BLUR                    = config.VALIDATE_ON_BLUR;
 	var MAY_NOT_PROGRESS_PAST_INVALID_FIELD = config.MAY_NOT_PROGRESS_PAST_INVALID_FIELD;
@@ -33,6 +33,7 @@ define(["jquery", "./formField", "./loomConfig"],function($, FormField, Config){
         
         var disableOnSuccess;
         var noAJAX;
+        var noAJAXflag = false;
         var noSubmit;
         var resetOnSuccess;
         var isIE;
@@ -129,6 +130,10 @@ define(["jquery", "./formField", "./loomConfig"],function($, FormField, Config){
 		});
         
         function onSubmit(evt) {
+            if (noAJAXflag == "FORM_HAS_VALIDATED_READY_TO_SUBMIT") {
+                noAJAXflag = false; //reset for next time.
+                return true;
+            }
             if (evt) {
                 evt.preventDefault();
             }
@@ -136,6 +141,7 @@ define(["jquery", "./formField", "./loomConfig"],function($, FormField, Config){
 			clearValidationMessages();
 			loadFormValuesIntoModelFields();
 			var isValid = validateFormAndReturnTrueIfValid();
+            //TODO: to support async validators, isValid should be argument to a callback containing the below code.
 			if (!isValid){
 				showValidationMessage();
 				if (JUMP_TO_INVALID_FIELD_ON_SUBMIT) {
@@ -143,9 +149,13 @@ define(["jquery", "./formField", "./loomConfig"],function($, FormField, Config){
 				}
 				return;
 			} else {
-                if (!noSubmit) {
+                if (!noSubmit && !noAJAX) {
                     setStatePending();
                     doFormSubmission();
+                }
+                if (noAJAX){ //set a flag and submit the form, we'll end up back in this method;
+                    noAJAXflag = "FORM_HAS_VALIDATED_READY_TO_SUBMIT";
+                    formElement.submit();
                 }
 			}
         }

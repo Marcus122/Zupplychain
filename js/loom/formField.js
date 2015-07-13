@@ -317,7 +317,15 @@ FormField.prototype.showValidationMessage = function(nameOfValidatorThatFailed){
         this.validationElement.addClass("error-" + nameOfValidatorThatFailed);
     }
 		
-		// TODO : add if !isRequired && value = blank return true... just doesn't work for number
+//TODO: to support async validators isValid should take a callback and call that with the true / false result.
+//validators will need to be wrapped in a function to make them *appear* async, e.g. run and then call callback with result.
+//e.g. FormField.prototupe.wrapValidatorAsAsync = function(validatorFunc) {
+/*        return function(thingToValidate, cb) {
+            var result = validatorFunc(thingToValidate);
+            cb(result);
+        }
+}
+*/
 FormField.prototype.isValid = function(){
         this.clearValidationMessages();
         if (this.element.attr("disabled")) {

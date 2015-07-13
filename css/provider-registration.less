@@ -356,3 +356,47 @@ form#define-space{
     text-align:left;
  }
 }
+#show-net{
+    button {
+        background-color:transparent;
+        border:1px solid @secondary;
+        color:@secondary;
+        font-size:small;
+        height:22px;
+        padding:4px;
+        padding-top:0px;
+        vertical-align:middle;
+        &.left{ border-radius:5px 0px 0px 5px;border-right:0px;}
+        &.right{ border-radius:0px 5px 5px 0px;}
+    }
+    .gross {
+        display:none;
+    }
+    .net {
+        display:initial;
+    }
+    #gross{
+        background-color:@primary;
+    }
+    &.net{
+        .gross {
+            display:initial;
+        }
+        .net {
+            display:none;
+        }
+        #gross {
+            background-color:transparent;
+        }
+        #net {
+            background-color:@primary;
+        }
+    }
+}
+.input-span {
+    display:block;
+    text-align:right;
+}
+input.currency{
+    text-align:right;
+}

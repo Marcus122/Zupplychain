@@ -156,22 +156,36 @@
 						<button class="close no-resize"><span>close</span></button>
 						<form id="pricing-form" class="loom-form" novalidate method="post" data-loom-no-submit="true">
 							<div class="main">
-								<h2>Standard Pricing</h2>
-								<p>This is the price you will be charging for all periods except those specified in date range pricing.</p>
+								<h2>Standard Pricing</h2> 
+								<p>This is the price you will be charging for all periods except those specified in date specific pricing.</p>
 								<div class="row">
 									<table class="responsive-table columns seven" data-title="Basic pricing" id="default-pricing-table">
 										<thead><tr>
 											<th>Price per pallet per week (£)</th>
 											<th>Handling charge per pallet (In and Out) (£)</th>
-											<th>Cost to reserve (£)</th></tr>
 										</thead>
 										<tbody/>
 									</table>
+                                    <div class="columns five">
+                                        <h3>Copy From</h3>
+                                        <div class="copy-controls">
+                                            <select name="copy-from" id="copy-from">
+                                                <%for( var i=0; i<warehouse.storage.length;i++ ){ 
+                                                %>
+                                                    <option value="<%=warehouse.storage[i]._id%>" ><%=warehouse.storage[i].name %></option>
+                                                
+                                                <%
+                                                }
+                                                %>
+                                            </select>
+                                            <button id="copy-button" type="button" class="action">COPY</button>
+                                        </div>
+                                    </div>
 								</div>
 							</div>
 							<div class="main">
 								<h2>Date Specific Pricing</h2>
-								<p>You can specify alternative pricing for specific time periods. This will overide your core pricing for these time periods.</p>
+								<p>You can specify alternative pricing for specific time periods. This will overide your standard pricing for these time periods.</p>
 								<table class="show-title responsive-table" data-title="Pricing" id="date-pricing-table">
 									<thead>
 										<tr>
@@ -179,7 +193,6 @@
 											<th>To</th>
 											<th>Price per pallet per week (£)</th>
 											<th>Handling charge per pallet (In and Out) (£)</th>
-											<th>Cost to reserve (£)</th>
 											<th class="remove-col"/>
 										</tr>
 									</thead>
@@ -192,12 +205,19 @@
 										<button type="button" class="add-button"><span>add row</span></button>
 									</div>
 								</div>
-								<div class="popup-buttons">
-									<div class="save">
-										<button data-bind-value="_id" type="button" class="action add-volume">Add volume discount</button>
-										<button class="action done">save</button>
-									</div>
-								</div>
+                                <div class="row">
+                                    <div class="columns six">
+                                            all prices are subject to 10% commission.<br/><span  id="show-net"><span class="net"> Switch to view with commission</span><span class="gross"> Switch to view with no commission</span> <button id="gross" type="button" class="mini left">gross</button><button id="net" type="button" class="mini right">net</button></span>
+                                    </div>
+                                    <div class="columns six">
+                                        <div class="popup-buttons">
+                                            <div class="save">
+                                                <button data-bind-value="_id" type="button" class="action add-volume">Add volume discount</button>
+                                                <button class="action done">save</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 							</div>
 						</form>
 					</div>
@@ -241,16 +261,17 @@
 										<tbody>
 										</tbody>
 									</table>
-									<div class="popup-buttons">
-										<div class="add">
-											<button type="button" class="add-button"><span>add row</span></button>
-										</div>
-									</div>
-									<div class="popup-buttons">
-										<div class="save">
-											<button class="action done">save</button>
-										</div>
-									</div>
+                                        <div class="popup-buttons">
+                                                <div class="add">
+                                                    <button type="button" class="add-button"><span>add row</span></button>
+                                                </div>
+                                            </div>
+                                            <div class="popup-buttons">
+                                                <div class="save">
+                                                    <button class="action done">save</button>
+                                                </div>
+                                            </div>
+                                        </div>
 								</form>
 							</div>
 						</div>

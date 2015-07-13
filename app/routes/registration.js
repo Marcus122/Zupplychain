@@ -53,7 +53,7 @@ function completeRegistration(req,res){
 	});
 }
 function saveRegistration(req,res){
-	if(!req.data.user._id) return redirectToStart(res);
+	//if(!req.data.user._id) return redirectToStart(res);
 	if(!req.body.email || !req.body.email){
 		res.writeHead(200, {"Content-Type": "application/json"});
 		res.end(JSON.stringify({error:"required fields"}));

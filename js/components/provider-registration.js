@@ -248,6 +248,64 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 		function step3(){
 			var $priceForm = $('#price-and-availability-user-data');
 			if(!$priceForm.length) return;
+            
+            $(document).on("click", "#copy-button",  copyButtonOnClick);
+            $(document).on("click", "#show-net button", netGrossOnClick);
+            
+            function copyButtonOnClick(evt) {
+                var $select = $(this).closest(".copy-controls").find("select");
+                var idOfStorageToCopy = $select.val();
+                var selectedStorage = storage[idOfStorageToCopy];
+                var thisStorageId = $(this).closest("form").data("storage_id");
+                var popupElem = $(this).closest(".popup-window");
+                copyStorage(idOfStorageToCopy, thisStorageId, popupElem);
+            }
+            
+            function clearPricing($elem) {
+                //delete any input element rows from the form.
+                $elem.find("tbody tr").remove();
+            }
+            
+            function copyStorage(copyFromStorageId,copyToStorageId,popupElem){
+                element = popupElem;
+                getStorage(copyFromStorageId,function(Storage){
+                    Storage._id = copyToStorageId;
+                    clearPricing(popupElem);
+                    doPricing(Storage, element);
+                    lm.rebind(element.find('form'));
+                    Alerts.showSuccessMessage("Pricing data copied");
+                });
+			}
+            
+            function netGrossOnClick(evt) {
+                $(this).closest("#show-net").toggleClass("net");
+                var commission = 0.11;
+                var commissionMultiplier = 1 - commission;
+                $("#pricing-form input.currency").each(function() {
+                    
+                    $(this).toggleClass("replaced-with-span");
+                    
+                    if(! $(this).is(".replaced-with-span")) {
+                        $(this).show();
+                        $(this).parent().find(".input-span").remove();
+                        return;
+                    }
+
+                    var theValue = $(this).val();
+                    var num = parseFloat(theValue, 10);
+                    var valueToDisplay = "N/A"; //fallback for non-numeric / empty 
+                    if (!isNaN(num)) { 
+                        //subtract the commission.
+                        valueToDisplay = (num * commissionMultiplier).toFixed(2);
+                    }
+                    // 'Turn it into' a span.
+                    $(this).hide();
+                    $span = $(this).after("<span class='input-span'>" + valueToDisplay + "</span>");
+                    
+                });
+                
+            }
+            
 			$priceForm.on("submit",function(ev){
 				ev.preventDefault();
 				//Check each storage has pricing
@@ -344,6 +402,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				var template = templates.getTemplate(templateName);
 				getStorage(storageId,function(Storage){
 					var $element = template.bind(Storage);
+                    $element.find("form").data("storage_id",storageId); //just so we have access to the storage ID if we need it.
 					$('body').append($element);
 					switch( templateName ){
 						case 'pricing':
@@ -378,6 +437,10 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				var $datePricingTable = $('#date-pricing-table');
 				var template = templates.getTemplate("pricing-row");
 				var Storage = _Storage;
+                
+                function hideInvalidCopyFromOption(){
+                    $form.find("option[value='" + $form.data("storage_id") + "']").remove();
+                }
 				
 				function datePricing(){
 					if(!Storage.pricing || !Storage.pricing.length){
@@ -484,6 +547,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					events();
 					basicPricing();
 					datePricing();
+                    hideInvalidCopyFromOption();
 				}
 				init();
 			}

@@ -48,7 +48,7 @@ define(["jquery","./Datasource", "./Pager"],function($,Datasource,Pager){
 				datarow[$col.data('field')] = $col;
 			});
 			datasource.addRow(datarow,$row);
-		});
+		}); 
 	}
 	function doSort($cell){
 		var field = $cell.data('field');

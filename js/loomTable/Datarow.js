@@ -7,13 +7,6 @@ define(["jquery","./Datafield"],function($,Datafield){
 		var config = _config ? _config : {};
 		
 		populateFields();
-		
-        function hide() {
-            $element.hide();
-        }
-        function show() {
-            $element.show();
-        }
         
 		function populateFields(){
 			for(var i in fields ){
@@ -33,9 +26,7 @@ define(["jquery","./Datafield"],function($,Datafield){
 		return {
 			getField:getField,
 			getElement:getElement,
-			filter:filter,
-            hide:hide,
-            show:show
+			filter:filter
 		}
 	};
 });

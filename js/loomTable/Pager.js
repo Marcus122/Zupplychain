@@ -1,6 +1,6 @@
 define(["jquery"],function($){
     
-    return function Class(container, controlsContainer, thedatasource) {
+    return function Class(container, controlsContainer, thedatasource, theNumPerPage) {
     
         console.log("creating pager instance");
         var datasource = {};
@@ -9,17 +9,13 @@ define(["jquery"],function($){
         var $generatedControlsContainer;
         var $clonedGeneratedControlsContainer;
         var currentPage = 0;
-        var numPerPage = 0;
+        var numPerPage = theNumPerPage;
         var numPages = 0;
         var numActiveItems = 0; //number of items that *should* be displayed e.g. one's that aren't filtered out.
-        var NUM_PER_PAGE_ATTRIBUTE = "data-loom-num-per-page";
 
         function init() {
             $container = container;
             $controlsContainer = controlsContainer;
-            //read the num per page from the container element.
-            getNumPerPage();
-            console.log(numPerPage);
             if (numPerPage == 0) {
                 //no paging so we're done!
                 return;
@@ -43,6 +39,8 @@ define(["jquery"],function($){
                 $that = $(evt.target);
                 if (currentPage < numPages -1) {
                     currentPage++;
+                } else {
+                    currentPage = 0;
                 }
                 refreshView();
             });
@@ -50,34 +48,29 @@ define(["jquery"],function($){
                 $that = $(evt.target);
                 if (currentPage > 0 ) {
                     currentPage--;
+                } else {
+                    currentPage = numPages - 1;
                 }
                 refreshView();
             })
             
         }
 
-        function getNumPerPage() {
-            var numPerPageValue = $container.attr(NUM_PER_PAGE_ATTRIBUTE);
-            if (numPerPageValue) {
-                numPerPage = parseInt(numPerPageValue);
-            }
-            if (isNaN(numPerPage)) {
-                numPerPage = 0;
-            }
-        }
+
 
         function refreshView() {
             // hide any elements in the container not within the current page bounds.
+            $container.empty();
             startItemIndex = currentPage * numPerPage;
             endItemIndex = startItemIndex + numPerPage;
             var rows = datasource.getRows();
             var lim = rows.length;
             for (var i = 0; i < lim; i++) {
                 if (i >= startItemIndex && i < endItemIndex) {
-                    rows[i].show();
+                    $container.append(rows[i].getElement()); //instead clear the container, call get rows, filter by page and only show them.
                     continue;
                 }
-                rows[i].hide();
+                
             }
             highlightActivePage();
         }
@@ -94,6 +87,11 @@ define(["jquery"],function($){
             refreshView();
         }
 
+        function resetToFirstPage(){
+            currentPage = 0;
+            refreshView();    
+        }
+        
         function generateControls() {
             if (!$generatedControlsContainer) {
                 $generatedControlsContainer = $("<ul class='loom-paging-container' />");
@@ -127,13 +125,15 @@ define(["jquery"],function($){
             }
             return {
                 refreshView : doNothing,
-                refreshAll : doNothing
+                refreshAll : doNothing,
+                resetToFirstPage: doNothing
             }
         
         }
         return {
                 refreshView:refreshView, //re draws the view showing only active page items.
-                refreshAll:refreshAll // regenerates paging controls, resets page to 1st, and redraws the view.
+                refreshAll:refreshAll, // regenerates paging controls, resets page to 1st, and redraws the view.
+                resetToFirstPage:resetToFirstPage
         }
     
     }
