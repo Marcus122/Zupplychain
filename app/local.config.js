@@ -21,9 +21,7 @@ exports.config = {
 		"Container De-stuffing",
 		"Pick & Pack",
 		"Home Delivery",
-		"Product Disposal",
-		"Additional Insurance",
-		"Bonded Warehouse"
+		"Additional Insurance"
 	],
 	specifications: [
         "Perimeter Fencing",
@@ -49,17 +47,21 @@ exports.config = {
         2 : "Chilled",
         3 : "Frozen",
         4 : "Outside",
-        5 : "Other"
+        5 : "Bonded"
     },
     
     minDurationOptions : { // numDays : textDescription
-        7 : "1 week",
-        14 : "2 weeks",
-        21 : "3 weeks",
-        28 : "1 month",
-        56 : "2 months",
-        84 : "3 months",
+        7   : "1 week",
+        14  : "2 weeks",
+        21  : "3 weeks",
+        28  : "1 month",
+        42  : "6 weeks",
+        56  : "2 months",
+        84  : "3 months",
+        120 :  "4 months",
+        150 : "5 months",
         180 : "6 months",
+        279 : "9 months",
         365 : "12 months"
     }
 };

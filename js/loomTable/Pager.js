@@ -2,10 +2,9 @@ define(["jquery"],function($){
     
     return function Class(container, controlsContainer, thedatasource, theNumPerPage) {
     
-        console.log("creating pager instance");
         var datasource = {};
         var $container = {}
-        var $controlsContainer;
+        var $controlsContainer; 
         var $generatedControlsContainer;
         var $clonedGeneratedControlsContainer;
         var currentPage = 0;
@@ -17,10 +16,8 @@ define(["jquery"],function($){
             $container = container;
             $controlsContainer = controlsContainer;
             if (numPerPage == 0) {
-                //no paging so we're done!
-                return;
+                return; //no paging so we're done!
             }
-            //grab the datasource and store a reference.
             datasource = thedatasource;
             numActiveItems = datasource.numRows();
             deferPageControlOnClicks();
@@ -59,7 +56,6 @@ define(["jquery"],function($){
 
 
         function refreshView() {
-            // hide any elements in the container not within the current page bounds.
             $container.empty();
             startItemIndex = currentPage * numPerPage;
             endItemIndex = startItemIndex + numPerPage;
@@ -67,10 +63,9 @@ define(["jquery"],function($){
             var lim = rows.length;
             for (var i = 0; i < lim; i++) {
                 if (i >= startItemIndex && i < endItemIndex) {
-                    $container.append(rows[i].getElement()); //instead clear the container, call get rows, filter by page and only show them.
+                    $container.append(rows[i].getElement()); 
                     continue;
-                }
-                
+                } 
             }
             highlightActivePage();
         }
@@ -93,6 +88,7 @@ define(["jquery"],function($){
         }
         
         function generateControls() {
+            $controlsContainer.find(".loom-paging-container").remove();
             if (!$generatedControlsContainer) {
                 $generatedControlsContainer = $("<ul class='loom-paging-container' />");
                 $controlsContainer.prepend($generatedControlsContainer);
@@ -120,9 +116,7 @@ define(["jquery"],function($){
         
         init();
         if (numPerPage == 0) {//no paging;
-            function doNothing() {
-                return;
-            }
+            function doNothing() { return; }
             return {
                 refreshView : doNothing,
                 refreshAll : doNothing,

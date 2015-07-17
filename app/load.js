@@ -1,4 +1,5 @@
 var user_controller = require("./controllers/users.js");
+var search_controller = require("./controllers/users.js");
 
 module.exports = function(_data){
 	var data=_data;
@@ -13,6 +14,8 @@ module.exports = function(_data){
 				req.data.user = user;
 			}
 			return next();
-		})
+		});
+        //in here we could also load up the saved search.
+        
 	};
 }

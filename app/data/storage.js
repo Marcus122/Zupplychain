@@ -39,15 +39,53 @@ var fields = {
 		free:Number
 	}]
 };
+
 function getPrice(num){
 	return num ? Number(num).toFixed(2) : Number(0).toFixed(2);
 }
+
 function setPrice(num){
     return Number(num).toFixed(2);
 }
 
+function priceAtDate(wcDate,data) {
+    var numPrices = 0;
+    if (data.pricing) {
+        numPrices = data.pricing.length;
+    }
+    for (var j = 0; j < numPrices; j++) {
+        if (data.pricing[j].from <= wcDate &&
+            data.pricing[j].to > wcDate) {
+            return data.pricing[j];
+        }
+    }
+    return data.basicPricing;
+}
+
+function spacesAtDate(wcDate, data){
+    var currentPalletsAvailable = data.palletSpaces;
+    var numPalletEntries = 0;
+    if (data.pallets) {
+        numPalletEntries = data.pallets.length;
+    }
+    for (var j =0;j < numPalletEntries; j++) {
+        if (data.pallets[j].from <= wcDate &&
+        data.pallets[j].to > wcDate) {
+            currentPalletsAvailable = data.currentPalletsAvailable - data.pallets[j].inUse;
+        }
+    }
+    return currentPalletsAvailable;
+}
+
 var storageSchema = new Schema(fields);
 
+storageSchema.methods.getPriceAtDate = function(wcDate){
+    return priceAtDate(wcDate, this);
+}
+
+storageSchema.methods.getFreeSpacesAtDate = function(wcDate){
+    return spacesAtDate(wcDatem, this);
+}
 
 storageSchema.pre('init', function(next, data) {
     
@@ -75,28 +113,10 @@ storageSchema.pre('init', function(next, data) {
             }
         }
     }
-    
-    //loop through again, pull out the current price and store in .currentPricing.
-    
-    data.currentPricing = data.basicPricing; //fallback if no date range match.
+
     var currentDate = new Date();
-    for (var j = 0; j < numPrices; j++) {
-            if (data.pricing[j].from < currentDate &&
-                data.pricing[j].to > currentDate) {
-                data.currentPricing = data.pricing[j];
-            }
-        }
-    
-    if (data.pallets) {
-        numPalletEntries = data.pallets.length;
-    }
-    data.currentPalletsAvailable = data.palletSpaces; 
-    for (var j =0;j < numPalletEntries; j++) {
-        if (data.pallets[j].from < currentDate &&
-        data.pallets[j].to > currentDate) {
-            data.currentPalletsAvailable = data.currentPalletsAvailable - data.pallets[j].inUse;
-        }
-    }
+    data.currentPricing = priceAtDate(currentDate, data);    
+    data.currenPalletsAvailable = spacesAtDate(currentDate, data);
     next();
 });
 
@@ -104,7 +124,7 @@ storageSchema.statics = {
 	load: function (id, cb) {
 		this.findOne({ _id : id })
 		  .exec(cb);
-  }
+    }
 }
 
 module.exports = mongoose.model('storage', storageSchema);

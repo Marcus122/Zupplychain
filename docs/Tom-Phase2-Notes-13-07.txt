@@ -1,0 +1,103 @@
+
+
+As part of the search process, a warehouses storages are filtered down to ones that meet the palletType and height / weight requirements.
+We then wrap all these storages in an aggregate Storage object.
+
+aggStorage(storages)
+//creates the object, we assume that storages are already filtered down based on palletType etc.
+storages = @storages
+
+
+getStorageProfileForWeekCommencing(wcdate, numPallets) {
+    //this does all the work in terms of finding storage.
+    //params
+        @wcdate : week commencing (we always assume a unit of 7 days,
+        @numPallets 
+    
+    //returns
+        @price : the price for that week.
+        @number : returns the number of Pallets that can be stored (could be less than the number passed in).
+        @insufficientStorage : true / false 
+        @storageProfile : details of the split of the pallets across the different storages.
+}
+
+generateContractStorageProfile(useageProfile) {
+    
+}
+
+useageProfile() {
+    //stores the users estimated useage of the storage areas.
+    for each week:
+    {
+        numPallets.
+    } 
+}
+
+contractStorageProfile ().
+{
+    Record the in out price.
+    Then one storageProfile per week:
+    {
+        storageName:
+        numPallets:
+        price:
+        insufficientStorage:
+    }
+    then the total price based on this.
+}
+
+
+Quote:
+    + Search Criteria.
+    + useageProfile.
+    + User.
+    + Warehouse.
+    + Storage Profile. e.g. which pallets go where including pricing.
+    + payment terms. (selected by provider).
+
+Contract consists of:
+    + Warehouse.
+    + A quote.
+    + A user.
+    + created date and other basic meta.
+    + various flags for when things are approved / which stage of the process we're at. For each we store the date it was changed so that we have a contract history.
+    + payment details. (entered by user)
+    + some 'realtime' storage information.
+    + PalletMovements link to table with in/out transactions.
+
+
+    
+Possible new tables needed:
+PaymentTermTypes: (looked up from the payment Term code on the contract).
+PaymentDetails: just to keep these separate, these might not be 'per contract'.
+useageProfiles/
+searches.
+contactStorageProfiles.
+    
+
+
+    
+The initial stages for a contract are.
+
+Quote:
+JustCreated.
+AwaitingProviderPaymentTerms
+AwaitingUserAgreesPaymentTerms
+AwaitingProviderConfirmsContract
+
+Then we generate the contract.
+
+Issues with availability:
+    Once things are checked in, we need a record of which pallets are in the warehouse.
+    Do we take this into account when checking availability?
+    If so we may need to rethink how the availability works... e.g. we create a global week by week record for each storage, which details how many spaces are in use, and the 'type' of the in-use spaces. e.g. 'marked as unavailable', 'actually in use', 'reserved for pending contract' etc. etc.
+    The alternative is just to leave this for now and let the user decide whether they will have the room or not.
+    
+    
+    
+Issues with pricing:
+    The user agrees to a quote... do we 'freeze' the price at this point or will we let the price change for later weeks?
+    What about if the first week price changes?
+    Do we freeze the in/out price.. and is this paid separately as a one-off fee?
+    
+    
