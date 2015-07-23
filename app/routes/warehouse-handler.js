@@ -1,45 +1,23 @@
+"use strict";
 var user = require("../controllers/users.js"),
 	warehouse = require("../controllers/warehouses.js"),
 	storage = require("../controllers/storage.js"),
 	local = require("../local.config.js"),
-    search = require("../controllers/search.js");
-	async = require("async");
-	// UKPostcodes = require("uk-postcodes-node");
-var extra = {
-	apiKey : '',
-	formatter: null
-};
-var geocoderProvider = 'google';
-var httpAdapter = 'http';
-var geocoder = require('node-geocoder')(geocoderProvider, httpAdapter, extra);
+    search = require("../controllers/search.js"),
+	async = require("async"),
+    Utils = require("../utils.js");
 
 var handler = function(app) {
 	app.param('warehouse_id', warehouse.load);
 	
 	app.get('/warehouse/:warehouse_id', setResponse);
 	
-	app.get('/warehouse-profile/:warehouse_id', function(req,res){
-		req.data.warehouse = req.warehouse;
-        if (req.query.fromSearch && req.session.whSC && req.session.whSC.sc && req.session.whSC.sc.length > 0) {
-            req.data.minDurationOptions = local.config.minDurationOptions;
-            //should probably load the query from db rather than session?
-            var query = req.session.whSC.sc[0];
-            query.height = Number(query.height);
-            query.weight = Number(query.weight);
-            query.totalPallets = Number(query.totalPallets);
-            //rather than limit storage to matching... we need to build the storage profile
-            // and attach the storageProfile to the warehouse.
-            req.data.warehouse.generateStorageProfile(query);
-            req.data.temperatures = local.config.temperatures;
-        }
-		res.render("warehouse-profile",req.data);
-	});
+	app.get('/warehouse-profile/:warehouse_id', warehouseProfile );
 	
 	app.post('/warehouse/:warehouse_id', warehouseAuth, updateWarehouse );
 	
 	app.post('/warehouse', function(req, res) {
-		//If user is not logged in then create user
-		if(req.data.user._id){
+		if(req.data.user._id){ //If user is not logged in then create user
 			createWarehouse(req,res);
 		}else{
 			createUser(req, res);
@@ -47,11 +25,24 @@ var handler = function(app) {
 	});
 	app.post('/warehouse/:warehouse_id/storage',createStorage);
 	app.post('/warehouse/:warehouse_id/storage/batch',batchStorage);
-	
 	app.param('storage_id', storage.load);
 	app.post('/warehouse/:warehouse_id/storage/:storage_id', warehouseAuth,  updateStorage );
 	app.get('/storage/:storage_id', setStorageResponse );
 };
+
+function warehouseProfile (req,res){
+    req.data.warehouse = req.warehouse;
+    if (req.query.fromSearch && req.session.whSC && req.session.whSC.sc && req.session.whSC.sc.length > 0) {
+        req.data.minDurationOptions = local.config.minDurationOptions;
+        req.data.temperatures = local.config.temperatures;
+        var query = search.getFromSession(req, function(err, query){
+            if (!err) {
+                req.data.warehouse.generateStorageProfile(query);
+            }
+            res.render("warehouse-profile",req.data);
+        });
+    }
+}
 
 function createUser(req,res){
 	user.create(req,res,{},function(err,user){
@@ -151,7 +142,7 @@ function updateWarehouse(req,res){
 		//Any data request go here
 		function(callback){
 			if(req.body.postcode != req.warehouse.postcode){
-				getLatLong(req.body.postcode,function(latlng){
+				Utils.getLatLong(req.body.postcode,function(latlng){
 					req.body.geo=latlng;
 					callback(null);
 				});
@@ -170,28 +161,7 @@ function updateWarehouse(req,res){
 		});
 	});
 }
-function getLatLong(postcode,cb){
-	var geo = {
-		lat:"",
-		lng:""
-	};
-	if(!postcode) return cb(geo);
-	geocoder.geocode(postcode, function(error, result){
-		if(!error){
-			if (result && result.length > 0) {
-				geo.lat = result[0].latitude;
-				geo.lng = result[0].longitude;
-			} else { //we didn't get a result back from google.
-				
-			}
-		}else{
-			console.log ("in warehouse-handler.js");
-			console.log("error in Google Geolocation module:");
-			console.log(error);
-		}
-		return cb(geo);
-	});
-}
+
 function setResponse(req,res){
 	res.writeHead(200, {"Content-Type": "application/json"});
     var output = { error: null, data: req.warehouse.toObject({

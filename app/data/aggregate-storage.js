@@ -55,28 +55,20 @@ var aggregateStorage = function(theStorages) {
     function fillStoragesThisWeekMostCheaply(storagesThisWeek, numPallets) {
         var filledStorageProfile = {};
         var storagesUsed = [];
-        storagesThisWeek.sort(function(x,y) {return x.price.price > y.price.price });
         var numPalletsLeft = numPallets;
-        var highestPriceOfAnyStorageUsed = 0.00
+        var highestPriceOfAnyStorageUsed = {};
+        
+        storagesThisWeek.sort(function(x,y) {return x.price.price > y.price.price });
         for (var i in storagesThisWeek) {
             var numPalletsInThisStorage = Math.min(storagesThisWeek[i].numSpaces, numPalletsLeft);
             storagesThisWeek.numPalletsStored = numPalletsInThisStorage;
             numPalletsLeft -= numPalletsInThisStorage;
-            
-            //console.log("Storage ############ " + i);
-            //console.log("searched for : " + numPallets);
-            //console.log("numPalletsLeft : " + numPalletsLeft);
-            //console.log("numSpaces in the storage : " + storagesThisWeek[i].numSpaces);
-            //console.log("numPallets stored : " + numPalletsInThisStorage);
-            
+            highestPriceOfAnyStorageUsed = storagesThisWeek[i].price; //since these are sorted by price, subsequent loops will overwrite this.
+            storagesUsed.push(storagesThisWeek[i]);
             if (numPalletsLeft > 0) {
                 storagesThisWeek[i].full = true;
-                storagesUsed.push(storagesThisWeek[i]);
-                highestPriceOfAnyStorageUsed = storagesThisWeek[i].price; //since these are sorted by price, subsequent loops will overwrite this.
             } else {
-                //We've used up all the pallets, and we know this is the most expensive storage used so use this price;
-                highestPriceOfAnyStorageUsed = storagesThisWeek[i].price;
-                storagesUsed.push(storagesThisWeek[i]);
+                storagesThisWeek[i].full = false;
                 break;
             }
         }
@@ -90,8 +82,7 @@ var aggregateStorage = function(theStorages) {
     }
 
     function generateContractStorageProfile(useageProfile) {
-        //assume the useageProfile looks as follows.
-        // { WeekCommencingDateISOString : numPallets }
+        //useageProfile looks like: { WeekCommencingDateISOString : numPallets }
         var weeklyProfilesIndexedByDate = {};
         var firstTimeThrough = true;
         for (var i in useageProfile) {

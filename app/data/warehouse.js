@@ -5,7 +5,8 @@ var mongoose = require('mongoose'),
 	ObjectId = Schema.ObjectId,
 	Storage = require("./storage.js"),
 	local = require("../local.config.js"),
-    AggregateStorage = require("./aggregate-storage.js");
+    AggregateStorage = require("./aggregate-storage.js"),
+    Utils = require("../utils.js");
 
 var fields = {
 	user: { type: Schema.ObjectId, ref: 'users' },
@@ -44,14 +45,17 @@ var fields = {
 var warehouseSchema = new Schema(fields);
 warehouseSchema.index({ loc: '2dsphere' });
 
+// INSTANCE METHODS
+
 warehouseSchema.methods.generateStorageProfile = function(query) {
     var warehouseAPI = this;
-    //grab the warehouse storages,
     var storages = this.storage;
     var aggStorage = this.constructor.storagesToAggregateStorage(storages, query);
     this.storageProfile = aggStorage.generateContractStorageProfile(query.useageProfile);
     this.useageProfile = query.useageProfile;
 };
+
+// STATIC METHODS
 
 warehouseSchema.statics = {
 	load: function (id, cb) {
@@ -152,21 +156,12 @@ warehouseSchema.statics = {
   },
   
   checkAgainstQueryAndPopulate: function(warehouse, query) {
-        function distanceInMiles(point1, point2) {
-            function toRadians(degrees) { return degrees * Math.PI / 180; }
-            var lat1 = point1.lat, lat2 = point2.lat, lon1 = point1.lng, lon2 = point2.lng;
-            var φ1 = toRadians(lat1), φ2 = toRadians(lat2), Δλ = toRadians(lon2-lon1), R = 6371000; // gives d in metres
-            var d = Math.acos( Math.sin(φ1)*Math.sin(φ2) + Math.cos(φ1)*Math.cos(φ2) * Math.cos(Δλ) ) * R;
-            return Math.round(d * 0.0006213711);
-        }
         var warehouseAPI = this;
-        var startDate = query.startDate;
-        var useageProfile = query.useageProfile;
         var editableResult = warehouse.toObject();
         var aggStorage = warehouseAPI.storagesToAggregateStorage(warehouse.storage, query);
-        if (aggStorage && aggStorage.palletsWillFitAtThisDate(startDate, query.totalPallets)) {
-            editableResult.storageProfile = aggStorage.generateContractStorageProfile(useageProfile);
-            editableResult.distanceFromSearch = distanceInMiles(editableResult.geo , query.geo );
+        if (aggStorage && aggStorage.palletsWillFitAtThisDate(query.startDate, query.totalPallets)) {
+            editableResult.storageProfile = aggStorage.generateContractStorageProfile(query.useageProfile);
+            editableResult.distanceFromSearch = Utils.distanceInMiles(editableResult.geo , query.geo );
             editableResult.firstWeekPrice = aggStorage.getPriceForFirstWeek();
             return editableResult
         } else {
