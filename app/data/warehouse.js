@@ -4,7 +4,8 @@ var mongoose = require('mongoose'),
 	Schema = mongoose.Schema,
 	ObjectId = Schema.ObjectId,
 	Storage = require("./storage.js"),
-	local = require("../local.config.js");
+	local = require("../local.config.js"),
+    AggregateStorage = require("./aggregate-storage.js");
 
 var fields = {
 	user: { type: Schema.ObjectId, ref: 'users' },
@@ -43,9 +44,14 @@ var fields = {
 var warehouseSchema = new Schema(fields);
 warehouseSchema.index({ loc: '2dsphere' });
 
-warehouseSchema.pre('init', function(next, data) {
-    next();
-});
+warehouseSchema.methods.generateStorageProfile = function(query) {
+    var warehouseAPI = this;
+    //grab the warehouse storages,
+    var storages = this.storage;
+    var aggStorage = this.constructor.storagesToAggregateStorage(storages, query);
+    this.storageProfile = aggStorage.generateContractStorageProfile(query.useageProfile);
+    this.useageProfile = query.useageProfile;
+};
 
 warehouseSchema.statics = {
 	load: function (id, cb) {
@@ -63,10 +69,31 @@ warehouseSchema.statics = {
 				}
 			})
 		  .populate('user')
-		  .exec(cb); 
+		  .exec(cb);
   },
   
-  filterStorageOnQuery: function(storage, query) {      
+  //TODO: this should no longer be used anywhere.. check and delete.
+  /*getStorageProfile: function(query, warehouseId, cb) {
+    var warehouseAPI = this;
+    this.findOne({ _id : warehouseId})
+        .populate({
+			  	path:'storage',
+				options:{
+					sort:'sortOrder'
+				}
+			})
+            .exec(function(err, result) {
+                if (err) {
+                    console.log(err);
+                    cb (err);
+                } else {
+                    var warehouseResult = warehouseAPI.checkAgainstQueryAndPopulate(result, query);
+                    cb(false, warehouseResult);
+                }
+            });
+  },*/
+  
+  storagesToAggregateStorage: function(storage, query) {     
     query.palletType   = parseInt(query.palletType,10);
     query.temp         = parseInt(query.temp,10);
     query.totalPallets = parseInt(query.totalPallets,10);
@@ -77,49 +104,24 @@ warehouseSchema.statics = {
         var maxWeightOK   = !query.weight || storage[j].maxWeight >= query.weight;
         var maxHeightOK   = !query.height || storage[j].maxHeight >= query.height;
         var tempOK        = storage[j].temp === query.temp;
-        if (storage[j].palletSpaces < query.totalPallets) {
-            continue; //we can bail out early if the totalPallet space is too small for our query.
-        }
         
-        var spacesOK      = false;
-        for (var k in storage[j].pallets) {  //check that there is availability at the query start date.
-            var startDate = query.startDate;
-            if (! (query.startDate instanceof Date))
-            {
-                startDate = new Date(query.startDate);
-            } 
-            if (storage[j].pallets[k].from <= startDate 
-                &&  storage[j].pallets[k].to >= startDate 
-                && storage[j].pallets[k].free > query.totalPallets) {
-                    spacesOK = true;
-                    break;
-                }
-        }
-        if (palletTypeOK && maxWeightOK && maxHeightOK && tempOK && spacesOK){
-            matchingStorages.push(storage[j].toObject());
+        if (palletTypeOK && maxWeightOK && maxHeightOK && tempOK) {
+            matchingStorages.push(storage[j]);
         }
     }
-    return matchingStorages;       
+    if (matchingStorages.length == 0) {
+        return false;
+    }
+    var aggStorage = new AggregateStorage(matchingStorages);
+    return aggStorage;
   },
+  
+  
   
   search_by_query: function(query, cb) {
     var warehouseAPI = this;
     var editableResult = null; //stores a toObject() version of the warehouse which we can add properties to etc.
-	var corrResults = [];
-	
-	function distanceInMiles(point1, point2) {
-        function toRadians(degrees) {
-            return degrees * Math.PI / 180;
-        }
-        var lat1 = point1.lat;
-        var lat2 = point2.lat;
-        var lon1 = point1.lng;
-        var lon2 = point2.lng;
-        var φ1 = toRadians(lat1), φ2 = toRadians(lat2), Δλ = toRadians(lon2-lon1), R = 6371000; // gives d in metres
-        var d = Math.acos( Math.sin(φ1)*Math.sin(φ2) + Math.cos(φ1)*Math.cos(φ2) * Math.cos(Δλ) ) * R;
-       
-        return Math.round(d * 0.0006213711);
-    }    
+	var corrResults = [];   
 	
     this.find({
 			  "loc" : {
@@ -135,18 +137,12 @@ warehouseSchema.statics = {
 				  if (err){
 					  console.log(err);
 				  }else{
-					  for(var i in result){
-                          var matchingStorages = [];
-                          editableResult = result[i].toObject(); //turn warehouse into a nice plain JS object.
-                          var matchingStorage = warehouseAPI.filterStorageOnQuery(result[i].storage, query);
-                          if (matchingStorage.length > 0) {
-                              matchingStorage.sort(function(a,b){return a.currentPricing.price - b.currentPricing.price});
-                              editableResult.storageMatch = matchingStorage[0]; //this 'storageMatch' is the one who's details we show on the search page.
-                              editableResult.storage = matchingStorage;//limit the storage to ones that match.
-						      editableResult.distanceFromSearch = distanceInMiles(editableResult.geo , query.geo );
-                        	  corrResults.push(editableResult);
-						  }
-					  };
+                        for(var i in result){
+                            var warehouseResult = warehouseAPI.checkAgainstQueryAndPopulate(result[i], query);
+                            if (warehouseResult) {
+                                corrResults.push(warehouseResult);
+                            }
+                        }
                       corrResults.sort(function(a,b) {
                           return a.distanceFromSearch-b.distanceFromSearch;
                       });
@@ -154,12 +150,38 @@ warehouseSchema.statics = {
 				  }
 			  });
   },
+  
+  checkAgainstQueryAndPopulate: function(warehouse, query) {
+        function distanceInMiles(point1, point2) {
+            function toRadians(degrees) { return degrees * Math.PI / 180; }
+            var lat1 = point1.lat, lat2 = point2.lat, lon1 = point1.lng, lon2 = point2.lng;
+            var φ1 = toRadians(lat1), φ2 = toRadians(lat2), Δλ = toRadians(lon2-lon1), R = 6371000; // gives d in metres
+            var d = Math.acos( Math.sin(φ1)*Math.sin(φ2) + Math.cos(φ1)*Math.cos(φ2) * Math.cos(Δλ) ) * R;
+            return Math.round(d * 0.0006213711);
+        }
+        var warehouseAPI = this;
+        var startDate = query.startDate;
+        var useageProfile = query.useageProfile;
+        var editableResult = warehouse.toObject();
+        var aggStorage = warehouseAPI.storagesToAggregateStorage(warehouse.storage, query);
+        if (aggStorage && aggStorage.palletsWillFitAtThisDate(startDate, query.totalPallets)) {
+            editableResult.storageProfile = aggStorage.generateContractStorageProfile(useageProfile);
+            editableResult.distanceFromSearch = distanceInMiles(editableResult.geo , query.geo );
+            editableResult.firstWeekPrice = aggStorage.getPriceForFirstWeek();
+            return editableResult
+        } else {
+            return false;
+        }
+  },
+  
   availableServices: function(){
 	  return local.services;
   },
   availableSpecifications: function(){
 	  return local.specifications;
   }
+  
+  
 }
 
 module.exports = mongoose.model('warehouses', warehouseSchema);

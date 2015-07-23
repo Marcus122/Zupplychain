@@ -17,6 +17,15 @@ exports.create = function (user,data,cb) {
 		 }
 	});
 }
+exports.getById = function(id, cb) {
+    Warehouse.load(id,function(err,warehouse){
+		if(err || !warehouse){
+			return cb(new Error('not found'));
+		}else{
+			return cb(false, warehouse);
+		}
+	});
+}
 exports.load = function(req,res,next,id) {
 	Warehouse.load(id,function(err,warehouse){
 		if(err || !warehouse){
@@ -43,10 +52,7 @@ exports.warehouse_by_user = function (user,callback) {
 		}
 	});
 };
-exports.limitStorageToMatching = function(storage, query) {
-    var result = Warehouse.filterStorageOnQuery(storage,query);
-    return result;
-};
+
 exports.warehouse_by_query = function(query,cb) {
     // do the actual search and return the warehouse data.
     Warehouse.search_by_query(query, function(err,result){
@@ -59,4 +65,15 @@ exports.warehouse_by_query = function(query,cb) {
         }
         return cb(error,data);
     });
+
+//TODO : DELETE
+/*exports.getStorageProfile =  function(query, warehouseId, cb) {
+    Warehouse.getStorageProfile(query, warehouseId, cb);
+};
+exports.limitStorageToMatching = function(storage, query) {
+    var result = Warehouse.filterStorageOnQuery(storage,query);
+    return result;
+};*/
+
+
 };

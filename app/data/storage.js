@@ -71,7 +71,7 @@ function spacesAtDate(wcDate, data){
     for (var j =0;j < numPalletEntries; j++) {
         if (data.pallets[j].from <= wcDate &&
         data.pallets[j].to > wcDate) {
-            currentPalletsAvailable = data.currentPalletsAvailable - data.pallets[j].inUse;
+            currentPalletsAvailable = currentPalletsAvailable - data.pallets[j].inUse;
         }
     }
     return currentPalletsAvailable;
@@ -79,12 +79,14 @@ function spacesAtDate(wcDate, data){
 
 var storageSchema = new Schema(fields);
 
-storageSchema.methods.getPriceAtDate = function(wcDate){
-    return priceAtDate(wcDate, this);
+storageSchema.methods.getPriceAtDate = function(wcDate, cb){
+    var retVal = priceAtDate(wcDate, this);
+    return retVal;
 }
 
-storageSchema.methods.getFreeSpacesAtDate = function(wcDate){
-    return spacesAtDate(wcDatem, this);
+storageSchema.methods.getFreeSpacesAtDate = function(wcDate, cb){
+    var retVal =  spacesAtDate(wcDate, this);
+    return retVal;
 }
 
 storageSchema.pre('init', function(next, data) {

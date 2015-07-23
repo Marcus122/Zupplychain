@@ -6,7 +6,8 @@
 			</h1>
 		</div>
 		<section>
-            <%if (session.whSC != undefined){%>
+            <input type="hidden" name="warehouse-id" id="warehouse-id" value="<%=warehouse._id%>" />
+            <%if (session.whSC != undefined && session.whSC.sc){%>
                 <div class="search-header">
                     <div class="row">
                         <div class="columns three back-to-search">
@@ -59,8 +60,8 @@
                                             <span class="search-value"><%=session.whSC.sc[0].weight%></span> 
                                         </li>
                                         <li>
-                                            <span class="title">Temp</span>
-                                            <span class="search-value"><%=session.whSC.sc[0].temp%></span> 
+                                            <span class="title">Type</span>
+                                            <span class="search-value"><%=temperatures[session.whSC.sc[0].temp]%></span> 
                                         </li>
                                     </ul>
                                     <div class="edit-search">
@@ -84,228 +85,69 @@
 					<div class="header">
 						<h2>Pricing and availability</h2>
 					</div>
-					<div class="main warehouse-pricing">
-						<table class="max">
-							<thead>
-								<tr>
-									<th>Storage Name</th>
-									<th>Max Weight (kg)</th>
-									<th>Max Height (m)</th>
-									<th>Price/Availability</th>
-								</tr>
-							</thead>
-							<tbody>
-								<%  var numStorages = warehouse.storage.length 
-                                    for(var k= 0; k<numStorages;k++ ){
-									var storage = warehouse.storage[k];
-									%>
-									<tr <%if (session.whSC){
-											if (storage.maxWeight >= session.whSC.sc[0].weight && session.whSC.sc[0].palletType == storage.palletType
-											&& session.whSC.sc[0].temp == storage.temp && storage.maxHeight >= session.whSC.sc[0].height){%>
-												class="storage-matched"
-											<%}%>
-										<%}%>>
-										<td><%=storage.name%></td>
-										<td><%=storage.maxWeight%></td>
-										<td>
-											<%if( storage.maxHeight ){%>
-												<%=storage.maxHeight%>
-											<%}else{%>
-												N/A
-											<%}%>
-										</td>
-										<td class="button-cell"><button data-id="<%=storage._id %>" data-template="pricing-and-availability" type="button" class="action popup mini <%= numStorages != 1 ? "show" : "hide"%>"><span class="show">show</span><span class="hide">hide<span></button></td>
-									</tr>
-                                    <% if (session.whSC != undefined) { %>
-                                    <tr style="<%= numStorages != 1 ? "display:none" : ""%>" class="pricing-and-availability-<%=storage._id %>">
-                                        <td colspan="5">
-                                            <div class="pricing-and-availability-row row">
-                                                <div class="columns six pricing box">                                                    
-                                                    <div class="header">
-                                                        <h2>Pricing</h2>
-                                                    </div>
-                                                    <%
-                                                    var startDate = new Date(session.whSC.sc[0].startDate);
-                                                    var endDate = new Date(startDate.getTime());
-                                                    endDate.setYear(startDate.getFullYear() + 1);
-                                                    %>
-                                                    <div class="main">
-                                                        <table class="pricing-table"><tbody>
-                                                            <tr>
-                                                            <td colspan="2">Price per pallet</td>
-                                                            </tr>
-                                                            <%
-                                                            var stopThisTime = false;
-                                                            var lastEndDate = new Date(session.whSC.sc[0].startDate);
-                                                            var priceLim = storage.pricing.length;
-                                                            var basicPrice = parseFloat(storage.basicPricing.price,10).toFixed(2);
-                                                            var adjustedPriceLim = priceLim + 1;
-                                                            for (var m = 0; m < priceLim && !stopThisTime; m++) {
-                                                                var pricing = storage.pricing[m];
-                                                                
-                                                                if (pricing &&  endDate < pricing.to) {
-                                                                pricing.to = endDate;
-                                                                stopThisTime = true;
-                                                                }
-                                                                if (m >= priceLim) {
-                                                                    stopThisTime = true;
-                                                                }
-                                                                if (m >= priceLim || lastEndDate < pricing.from){
-                                                                    //we need to add an interveening row to cover the time inbetween.
-                                                                    var newRowStartDate = lastEndDate;
-                                                                    var newRowEndDate = new Date()
-                                                                    var newRowFree = storage.palletSpaces;
-                                                                    if (m < priceLim ) {
-                                                                        newRowEndDate = new Date(storage.pricing[m].from.valueOf());
-                                                                        newRowEndDate.setDate(newRowEndDate.getDate() - 1);
-                                                                    } else { //use the end date of the search.
-                                                                        newRowEndDate = new Date(endDate.valueOf());
-                                                                    }
-                                                                    //insert our new row
-                                                                    %>
-                                                                    <tr>
-                                                                        <td class="added date"><%=
-                                                                        ("0" + newRowStartDate.getDate()).slice(-2) + "/" 
-                                                                        + ("0" + (newRowStartDate.getMonth() + 1)).slice(-2) + "/" 
-                                                                        + newRowStartDate.getFullYear() %> - <%=("0" + newRowEndDate.getDate()).slice(-2) + "/" 
-                                                                        + ("0" + (newRowEndDate.getMonth() + 1)).slice(-2) + "/" 
-                                                                        + newRowEndDate.getFullYear()%></td>
-                                                                        <td class="price">£<%=basicPrice%>
-                                                                        </td>
-                                                                    </tr>
-                                                                <%
-                                                                }
-                                                               if (m < priceLim && pricing.from < endDate) {
-                                                                    lastEndDate = new Date(pricing.to.valueOf());
-                                                                    lastEndDate.setDate(lastEndDate.getDate() + 1);
-                                                                if (m == 0 && pricing.from < startDate) {
-                                                                    pricing.from = startDate; //on first time just show our start date.
-                                                                }
-                                                                %>
-                                                                <tr>
-                                                                <td class="date"><%=
-                                                                    ("0" + pricing.from.getDate()).slice(-2) + "/"
-                                                                    + ("0" + (pricing.from.getMonth() + 1)).slice(-2) + "/" 
-                                                                    + pricing.from.getFullYear() %> 
-                                                                    - <%= ("0" + pricing.to.getDate()).slice(-2) + "/" 
-                                                                    +("0" + (pricing.to.getMonth() + 1)).slice(-2) + "/" 
-                                                                    + pricing.to.getFullYear() %></td>
-                                                                <td class="price">£<%=parseFloat(pricing.price,10).toFixed(2)%></td>
-                                                                </tr>
-                                                            <%
-                                                            }//endif
-                                                            }//end for
-                                                            %>
-                                                        </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                                <div class="columns six availability box">
-                                                    <div class="header">
-                                                        <h2>Availability</h2>
-                                                    </div>
-                                                    <% 
-                                                    var totalPallets = parseInt(session.whSC.sc[0].totalPallets,10);
-                                                    var maxAvailability = totalPallets * 2; //Math.ceil(totalPallets / 50)*50 + Math.min(50, totalPallets * 2) ;
-                                                    //var thisAvailability = storage.palletSpaces;
-                                                    var startDate = new Date(session.whSC.sc[0].startDate);
-                                                    var endDate = new Date(startDate.getTime());
-                                                    endDate.setYear(startDate.getFullYear() + 1);
-                                                    %>
-                                                    <div class="main">
-                                                        <div class="availability-marker"><span class="number"><%=session.whSC.sc[0].totalPallets;%>
-                                                        </span><div></div></div>
-                                                        <table class="availability-table" data-max-availability="<%= maxAvailability %>" ><tbody>
-                                                            <tr>
-                                                            <td colspan="2">Availability for this storage space</td>
-                                                            </tr>
-                                                        <% 
-                                                        var stopThisTime = false;
-                                                        var lastEndDate = new Date(session.whSC.sc[0].startDate); //end date of the previous record.
-                                                        var lim = storage.pallets.length;
-                                                        var adjustedLim = lim + 1; //we want to go through the loop one more time to add a row at the end.
-                                                        for (var i = 0; i< lim && !stopThisTime;i++)
-                                                        {
-                                                            var thisAvailability = storage.pallets[i];
-                                                            if (thisAvailability &&  endDate < thisAvailability.to) {
-                                                                thisAvailability.to = endDate;
-                                                                stopThisTime = true;
-                                                            }
-                                                            if (i >= lim) {
-                                                                stopThisTime = true;
-                                                            }
-                                                            if (i >= lim || lastEndDate < thisAvailability.from){
-                                                                //we need to add an interveening row to cover the time inbetween.
-                                                                var newRowStartDate = lastEndDate;
-                                                                var newRowEndDate = new Date()
-                                                                var newRowFree = 0;//storage.palletSpaces;
-                                                                if (i < lim ) {
-                                                                    newRowEndDate = new Date(storage.pallets[i].from.valueOf());
-                                                                    newRowEndDate.setDate(newRowEndDate.getDate() - 1);
-                                                                } else { //use the end date of the search.
-                                                                    newRowEndDate = new Date(endDate.valueOf());
-                                                                }
-                                                                //insert our new row
-                                                                %>
-                                                                <tr>
-                                                                    <td class="added date"><%=
-                                                                    ("0" + newRowStartDate.getDate()).slice(-2) + "/" 
-                                                                    + ("0" + (newRowStartDate.getMonth() + 1)).slice(-2) + "/" 
-                                                                    + newRowStartDate.getFullYear() %> - <%=("0" + newRowEndDate.getDate()).slice(-2) + "/" 
-                                                                    + ("0" + (newRowEndDate.getMonth() + 1)).slice(-2) + "/" 
-                                                                    + newRowEndDate.getFullYear()%></td>
-                                                                    <td class="bar">
-                                                                    <div data-value="<%=newRowFree%>" class="bar <%=newRowFree >= totalPallets ? "full" : "not-full" %>">
-                                                                    <span><%=newRowFree >= totalPallets ? "OK" : newRowFree %></span></div>
-                                                                    </td>
-                                                                </tr>
-                                                            <%
-                                                            }
-                                                            if (i < lim && thisAvailability.from < endDate) {
-                                                                lastEndDate = new Date(thisAvailability.to.valueOf());
-                                                                lastEndDate.setDate(lastEndDate.getDate() + 1);
-                                                                if (i == 0 && thisAvailability.from < startDate) {
-                                                                    thisAvailability.from = startDate; //on first time just show our start date.
-                                                                }
-                                                            
-                                                        %>
-                                                                <tr>
-                                                                <td class="date"><%=
-                                                                ("0" + thisAvailability.from.getDate()).slice(-2) + "/"
-                                                                + ("0" + (thisAvailability.from.getMonth() + 1)).slice(-2) + "/" 
-                                                                + thisAvailability.from.getFullYear() %> 
-                                                                - <%= ("0" + thisAvailability.to.getDate()).slice(-2) + "/" 
-                                                                +("0" + (thisAvailability.to.getMonth() + 1)).slice(-2) + "/" 
-                                                                + thisAvailability.to.getFullYear() %></td>
-                                                                <td class="bar"><div data-value="<%=thisAvailability.free%>" class="bar <%= thisAvailability.free >= totalPallets ? "full" :  "not-full" %>"><span><%= thisAvailability.free >= totalPallets ? "OK" : thisAvailability.free%></span></div></td>
-                                                                </tr>
-                                                        <% 
-                                                            }//end if
-                                                        }//end for %>
-                                                        </tbody>
-                                                        </table>
-                                                        
-                                                    </div>
-                                                    <div class="key">
-                                                            <dl>
-                                                                <dt class="available-space"></dt>
-                                                                <dd>Available space</dd>
-                                                                <dt class="required-space">
-                                                                <dd>Your required space</dd>
-                                                            <dl>
-                                                        </div>
-                                                </div>
-                                            </div>
-                                            <div class="row button-row">
-                                                <button class="next action">Choose this Storage</button> 
-                                            </div>
-                                        </td>
+                    <div class="warehouse-pricing main">
+                        <script type="text/template" id="warehouse-pricing-row">
+                            <tr>
+                                    <td class="week-commencing" data-bind-data-week-commencing="wcDate" >@wcDate@</td>
+                                    <td class="bar-container" >
+                                        <div data-bind-data-pallets-required="palletsRequired" class="useage-marker"></div>
+                                        <div data-bind-class="cssClass"  data-bind-data-value="numPalletsStored">
+                                        @barText@</div>
+                                    </td>
+                                    <td><input data-bind-data-start-date="wcDate" type="text" data-bind-value="palletsRequired" /></td>
+                                    <td>@price@</td>
+                                    <td>@charge@</td>
+                            </tr>
+                        </script>
+                        <div class="pricing-container">
+                            <table data-max-pallets="<%= Math.round(session.whSC.sc[0].totalPallets * 1.5)  %>">
+                                <thead>
+                                    <tr>
+                                        <th>Week Commencing</th>
+                                        <th>Pallet Space</th>
+                                        <th>Your Estimated Requirements</th>
+                                        <th>Price per Pallet per Week</th>
+                                        <th>In and Out Price per Pallet</th>
+                                    </tr>                                
+                                    <tr>
+                                    <td colspan="5"></td>
                                     </tr>
-                                    <%}%>
-								<%}%>
-							</tbody>
-						</table>
-					</div>
+                                </thead>
+                                <tbody>
+                                    <% 
+                                    var runningTotal = 0;
+                                    var useageProfile = warehouse.useageProfile;
+                                    for (var wcDate in warehouse.storageProfile)
+                                    { 
+                                        var storageProfile = warehouse.storageProfile[wcDate]%>
+                                    <tr class="animated">
+                                        <td class="week-commencing" data-week-commencing="<%= wcDate %>" ><%= wcDate %></td>
+                                        <td class="bar-container" >
+                                            <div data-pallets-required="<%=useageProfile[wcDate] %>" class="useage-marker"></div>
+                                            <div class="bar <%= storageProfile.numPalletsLeft == 0 ? "full" : "not-full" %>" data-value="<%= storageProfile.numPalletsStored%>">
+                                            <%= storageProfile.numPalletsLeft == 0 ? "OK" : storageProfile.numPalletsStored %></div>
+                                        </td>
+                                        <td><input data-start-date="<%= wcDate %>" type="text" value="<%=useageProfile[wcDate]%>" /></td>
+                                        <td><%=storageProfile.highestPriceOfAnyStorageUsed.price %></td>
+                                        <td><%=storageProfile.highestPriceOfAnyStorageUsed.charge %></td>
+                                    </tr>
+                                    <%
+                                    runningTotal += storageProfile.totalPrice;
+                                    } //end for
+                                    %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="estimated-total-cost">
+                            <span class="label">Estimated Total Cost</span>
+                            <span class="price"><%= runningTotal.toFixed(2) %></span><br/>
+                            <a id="choose-this-warehouse" class="button action forward">choose this warehouse</a>
+                        </div>
+                        <div class="data">
+                            <h3>storage profile</h3>
+                            <%=JSON.stringify(warehouse.storageProfile)%>
+                        </div>
+                    </div>
 				</div>
 			</div>
 		</section>

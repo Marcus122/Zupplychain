@@ -18,13 +18,15 @@ var fields = {
     startDate : {type : Date},
     minDuration : {type : Number},
     created_at : { type: Date },
-    updated_at : { type: Date }
+    updated_at : { type: Date },
+    useageProfile : Schema.Types.Mixed
 };
 
 var searchSchema = new Schema(fields);
 searchSchema.index({ loc: '2dsphere' });
 
 searchSchema.pre('save', function(next){
+  //convert the invalid chars in the date strings.
   var now = new Date();
   this.updated_at = now;
   if ( !this.created_at ) {
@@ -32,6 +34,7 @@ searchSchema.pre('save', function(next){
   }
   next();
 });
+
 
 
 searchSchema.statics = {

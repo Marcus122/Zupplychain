@@ -50,18 +50,18 @@ exports.config = {
         5 : "Bonded"
     },
     
-    minDurationOptions : { // numDays : textDescription
-        7   : "1 week",
-        14  : "2 weeks",
-        21  : "3 weeks",
-        28  : "1 month",
-        42  : "6 weeks",
-        56  : "2 months",
-        84  : "3 months",
-        120 :  "4 months",
-        150 : "5 months",
-        180 : "6 months",
-        279 : "9 months",
-        365 : "12 months"
+    minDurationOptions : { // numWeeks : textDescription
+        1   : "1 week",
+        2  : "2 weeks",
+        3  : "3 weeks",
+        4  : "1 month",
+        6  : "6 weeks",
+        8  : "2 months",
+        12  : "3 months",
+        16 :  "4 months",
+        20 : "5 months",
+        26 : "6 months",
+        38 : "9 months",
+        52 : "12 months"
     }
 };

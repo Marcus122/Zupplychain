@@ -24,16 +24,21 @@ exports.saveSearch = function(search, cb) {
         mySearch.save(cb);
     }
 }
-exports.getFromSession = function(req) {
+exports.getFromSession = function(req, cb) {
     if (req.session.whSC) {
-        return req.session.whSC.sc[0];
+        cb(false,req.session.whSC.sc[0]);
     } else {
-        return null;
+        cb("couldnt get from session");
     }
 }
 
 exports.saveToSession = function(search,req,cb) {
-    //TODO move stuff out of the route into here.
+    console.log("saving to session");
+    console.log("totalPallets : " + search.totalPallets);
+    if (!(search.startDate instanceof Date)) {
+        search.startDate = new Date(search.startDate);
+    }
+    search.startDate = search.startDate.toISOString().substr(0,10);
     var searchJSON = { "sc" : [search] };
     req.session.whSC = searchJSON;
     if(cb) {

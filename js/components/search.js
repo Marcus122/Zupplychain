@@ -26,7 +26,6 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
         
     });
     
-    
     $("#register-email-popup .close").click(function() {
         $("#register-email-popup").hide();
     });
@@ -68,7 +67,12 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
 		$("#search-form").submit();
 	}
     
-    
+    $("#search-form").submit(function() {
+        if (!resultsMap) {
+            resultsMap = new ResultsMap($("input[name='postcode']").val(), $("input[name='max-distance']").val());
+            $(".js-map-results-container").slideDown(); //needs to be visible for map to load successfully.
+        }
+    });
     
     loom.addOnSuccessCallback("search-form", function(response){
 		var $searchResInfoBox = $(".search-result-info-box");
@@ -91,12 +95,10 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
                 hasSearch = false;
                 (window.location.hash = "");
             } else {
-                console.log("scrolling down");
                 require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) { 
                     $.scrollTo("#results-area", {duration : 600, offset : -90 });
                 });
             }
-            console.log("done");
             var numResults = response.results.length;
             var resultsWord = numResults != 1 ? " results loaded" : " result loaded";
             Alerts.showSuccessMessage(response.results.length + resultsWord);

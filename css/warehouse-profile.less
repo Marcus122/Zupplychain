@@ -1,4 +1,85 @@
 .warehouse-profile{
+    #choose-this-warehouse{
+        font-size:16px;
+        .unit-margin-top(2);
+        width:300px;
+    }
+
+    #estimated-total-cost{
+        .unit-margin-top(2);
+        text-align:right;
+        font-size:18px;
+        .price {
+            width:300px;
+            display:inline-block;
+            border:1px solid;
+            padding:10px;
+            color:@primary;
+            border-radius:10px;
+            margin-left:20px;
+        }
+    }   
+
+    .pricing-container{
+        max-height:600px;
+        overflow-y:scroll;
+    }
+    
+    table  {
+                text-align:left;
+                margin-bottom:0px;
+            .bar-container {
+                position:relative;
+                width:200px;
+                .bar {
+                    cursor:crosshair;
+                    text-align:left;
+                    padding:2px;
+                    transition:  width 0.5s;
+                    height:38px;
+                    line-height: 2.5em;
+                    font-weight:bold;
+                    padding-left:4px;
+                    box-sizing:border-box;
+                    width:200px;
+                    &.full{
+                       color: darken( #d4e6a5, 20);
+                       background-color:#d4e6a5;
+                    }
+                    &.not-full{
+                        color:darken(#f0dfa6, 20);
+                        background-color:#f0dfa6;
+                    }
+                    span{
+                        margin-left:4px;
+                    }
+                }
+                .useage-marker{
+                    z-index:50 !important;
+                    height:1000px;
+                    position:absolute;
+                    left:0px;
+                    top:0px;
+                    width:3px;
+                    background-color:@highlight;
+                    height:58px;
+                    
+                }
+                
+                
+            }
+            td{
+                text-align:right;
+            }
+            td.week-commencing{
+               text-align:center;
+            }
+            .animated .useage-marker{
+               transition: 1s left;
+               border-left:1px solid @highlight;    
+            }
+        }
+
 
     //image gallery.
     .carousel {
@@ -140,60 +221,7 @@
     }
     table {
         width:100%;
-
-        .availability-marker{
-            transition:0.4s right;
-            z-index:50 !important;
-            height:1000px;
-            position:absolute;
-            right:10px;
-            top:45px;
-            transition: 1s right;
-            div {
-                width:3px;
-                background-color:@highlight;
-                height:1000px;
-            }
-            span {
-                position:absolute;
-                top:-1.4em;
-                display:block;
-                color:@highlight;
-            }
-        }
-        table  {
-                text-align:left;
-                margin-bottom:0px;
-            td {
-                text-align:left;
-            }
-            td.bar {
-                width:200px;
-                padding:2px;
-                
-            }
-            td.bar .bar{
-                width:50%;
-                transition:  width 0.5s;
-                height:38px;
-                line-height: 2.5em;
-                font-weight:bold;
-                padding-left:4px;
-                box-sizing:border-box;
-                &.full{
-                   width:100%;
-                   color: darken( #d4e6a5, 20);
-                   background-color:#d4e6a5;
-                }
-                &.not-full{
-                    color:darken(#f0dfa6, 20);
-                    background-color:#f0dfa6;
-                }
-                span{
-                margin-left:4px;
-                }
-            }
-        }
+        
         .header {
             background-color:@light-grey;
             text-align:left;

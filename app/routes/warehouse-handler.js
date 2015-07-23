@@ -2,6 +2,7 @@ var user = require("../controllers/users.js"),
 	warehouse = require("../controllers/warehouses.js"),
 	storage = require("../controllers/storage.js"),
 	local = require("../local.config.js"),
+    search = require("../controllers/search.js");
 	async = require("async");
 	// UKPostcodes = require("uk-postcodes-node");
 var extra = {
@@ -20,15 +21,16 @@ var handler = function(app) {
 	app.get('/warehouse-profile/:warehouse_id', function(req,res){
 		req.data.warehouse = req.warehouse;
         if (req.query.fromSearch && req.session.whSC && req.session.whSC.sc && req.session.whSC.sc.length > 0) {
-            //tidy up the query so that ints are parsed as such, we'll get strings back from session.
             req.data.minDurationOptions = local.config.minDurationOptions;
+            //should probably load the query from db rather than session?
             var query = req.session.whSC.sc[0];
             query.height = Number(query.height);
             query.weight = Number(query.weight);
-            //query.searchQty = Number(query.quantity);
             query.totalPallets = Number(query.totalPallets);
-            query.startDate = query.startDate;
-            req.data.warehouse = limitStorageToMatching(req.warehouse, query);
+            //rather than limit storage to matching... we need to build the storage profile
+            // and attach the storageProfile to the warehouse.
+            req.data.warehouse.generateStorageProfile(query);
+            req.data.temperatures = local.config.temperatures;
         }
 		res.render("warehouse-profile",req.data);
 	});
@@ -50,13 +52,6 @@ var handler = function(app) {
 	app.post('/warehouse/:warehouse_id/storage/:storage_id', warehouseAuth,  updateStorage );
 	app.get('/storage/:storage_id', setStorageResponse );
 };
-
-function limitStorageToMatching(thiswarehouse, query) {
-    var newStorage = warehouse.limitStorageToMatching(thiswarehouse.storage, query);
-    thiswarehouse.storage = newStorage;
-
-    return thiswarehouse;
-}
 
 function createUser(req,res){
 	user.create(req,res,{},function(err,user){

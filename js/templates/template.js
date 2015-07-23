@@ -26,11 +26,13 @@ define(["jquery"],function($){
 				for (var property in $this.data()) {
 					if (property.indexOf(config.bind) == 0) {
 						if(passesCondition($this,property,data)){
-							var attribute = property.replace(config.bind ,'').toLowerCase();
+							var attribute = property.replace(config.bind ,'');
+                            //data-bind-data-my-value comes out as dataMyValue... here we just convert it back to data-my-value
+                            var attributeCamelCaseToDashed = attribute.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 							var bind = $this.data(property);
 							var value = getBindValue(data,bind);
 							if(value != undefined){
-								$this.attr(attribute,value);
+								$this.attr(attributeCamelCaseToDashed,value);
 							}
 						}
 					}
