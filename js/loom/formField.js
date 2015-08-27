@@ -1,4 +1,4 @@
-define(["jquery", "./validators" , "./jquery-ui", "./loomConfig"],function($, ValidatorLib, ui, Config){
+define(["jquery", "./validators" , "jquery-ui.min", "./loomConfig"],function($, ValidatorLib, ui, Config){
 
 
 
@@ -484,7 +484,7 @@ MonthAndYear.prototype.getFormDataString = function() {
 // ************* Numeric
 
 function Numeric($elem) {
-    FormField.call(this, $elem, "Numeric");
+    FormField.call(this, $elem, "number");
     this.maxValue = Number.MAX_VALUE;
     this.minValue = -Number.MAX_VALUE;
     if (this.element.attr("max")) {

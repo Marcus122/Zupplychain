@@ -1,0 +1,101 @@
+
+    <script type="text/template" id="warehouse-pricing-row">
+        <tr data-bind-class="cssClass">
+                <td class="week-commencing" data-bind-data-week-commencing="wcDate" >@wcDate | dateFormat@</td>
+                <td class="bar-container" >
+                    <div data-bind-data-pallets-required="palletsRequired" class="useage-marker"></div>
+                    <div data-bind-class="cssClass"  data-bind-data-value="numPalletsStored">
+                    @barText@</div>
+                </td>
+                <td class="input-field no-success-validation-style"><div data-bind-class="cssClass"><input data-loom-type="number" data-bind-data-start-date="wcDate" type="text" data-bind-value="palletsRequired" /></div></td>
+                <td>@price | currency@</td>
+                <td>@charge | currency@</td>
+                <td class="weeklyTotal">@totalPrice | currency@</td>
+        </tr>
+    </script>
+    <div class="pricing-container">
+        <form id="useageProfile-form" class="loom-form" data-loom-no-submit="true">
+        <%  
+            //maxPallets calculation.. we should move this to a controller rather than the view.
+            var maxPallets = 0;
+            for (var wcDate in warehouse.storageProfile)
+                { 
+                    if (warehouse.storageProfile[wcDate].numPallets > maxPallets) {
+                        maxPallets = warehouse.storageProfile[wcDate].numPallets;
+                    }
+                }
+                
+        %>
+        <table data-max-pallets="<%= maxPallets * 1.5  %>">
+            <thead>
+                <tr>
+                    <th>Week Commencing</th>
+                    <th>Pallet Space</th>
+                    <th>Estimated Requirements</th>
+                    <th>Price per Pallet per Week (&pound;)</th>
+                    <th>In and Out Price per Pallet (&pound;)</th>
+                    <th>Weekly Total (&pound;)</th>
+                </tr>                          
+                <tr>
+                <td colspan="6" class="key">
+		  <dl>
+		    <dt class="primary"></dt><dd>Available Space</dd><dt class="highlight"></dt><dd>Your Required Space</dd>
+		  </dl>
+		</td>
+                </tr>
+            </thead>
+            <tbody>
+                <% 
+                var runningTotal = 0;
+                var useageProfile = warehouse.useageProfile;
+                for (var wcDate in warehouse.storageProfile)
+                { 
+                    var storageProfile = warehouse.storageProfile[wcDate]%>
+                    <% console.log(storageProfile) %>
+                <tr class="animated <%= storageProfile.numPalletsLeft == 0 ? "full" : "not-full" %>">
+                    <td class="week-commencing" data-week-commencing="<%= wcDate %>" ><%= utils.printFormatDate(new Date(wcDate)) %></td>
+                    <td class="bar-container" >
+                        <div data-pallets-required="<%=useageProfile[wcDate] %>" class="useage-marker"></div>
+                        <div class="bar <%= storageProfile.numPalletsLeft == 0 ? "full" : "not-full" %>" data-value="<%= storageProfile.numPalletsStored%>">
+                        <%= storageProfile.numPalletsLeft == 0 ? "OK" : storageProfile.numPalletsStored %></div>
+                    </td>
+                    <td class="<%= !quoteView && "input-field" || "" %> no-success-validation-style">
+                    <% if (quoteView) { %>
+                        <span><%=useageProfile[wcDate]%></span>
+                    <% } else { %>
+                        
+                            <input data-loom-type="number" data-start-date="<%= wcDate %>" type="text" value="<%=useageProfile[wcDate]%>" />
+                        
+                    <% } %>
+                    </td>
+                    <td><%=storageProfile.highestPriceOfAnyStorageUsed.price  ? Number(storageProfile.highestPriceOfAnyStorageUsed.price).toFixed(2) : "N/A" %></td>
+                    <td>
+                    <% if (storageProfile.totalHandlingCharge) { //we only show the handling charge for weeks where it applies.%>
+                        <%=storageProfile.highestPriceOfAnyStorageUsed.charge ? Number(storageProfile.highestPriceOfAnyStorageUsed.charge).toFixed(2)  :"N/A" %>
+                    <% } %>
+                        </td>
+                    <td class="weeklyTotal"><%=parseFloat(storageProfile.totalPrice,10).toFixed(2)%></td>
+                </tr>
+                <%
+                        runningTotal += storageProfile.totalPrice;
+                } //end for
+                %>
+            </tbody>
+        </table>
+        </form>
+    </div>
+    <div class="row">
+        <div class="six columns">
+       <% include ./volume-discount-table %>
+        </div>
+        <div id="estimated-total-cost" class="six columns">
+           <span class="label">Estimated Total Cost (&pound;)*</span>
+           <span class="price"><%= isNaN(runningTotal) ? "N/A" : runningTotal.toFixed(2) %></span><br/>
+        </div>
+    </div>
+    <% if(1==2) { %>
+    <div class="data">
+        <h3>storage profile</h3>
+        <%=JSON.stringify(warehouse.storageProfile)%>
+    </div>
+    <% } %>

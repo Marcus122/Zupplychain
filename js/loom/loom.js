@@ -78,6 +78,13 @@ define(["jquery", "./form"],function($, Form){
             }
         }
         
+        
+        function clearValidationStylesOnAllForms() {
+            for (var i in forms) {
+                forms[i].clearAllValidationStyles();
+            }
+        }
+        
         function reset(id, callback){
             var thisForm = getForm(id);
             if (thisForm) {
@@ -85,11 +92,17 @@ define(["jquery", "./form"],function($, Form){
             }
         }
         
-        function rebind(elements) {
-            var lim = elements.length;
+        function rebind(elementsOrId) {
+            if (typeof elementsOrId == "string") {
+                    form = getForm(elementsOrId);
+                    formId = elementsOrId.replace(/#/g, '');
+                    forms[elementsOrId] = new Form($('#' + elementsOrId));
+                    return;
+            } 
+            var lim = elementsOrId.length;
             for (var i =0;i< lim;i++) {
-                var thisID = $(elements[i]).attr("id");
-                forms[thisID] = new Form($(elements[i]));
+                var thisID = $(elementsOrId[i]).attr("id");
+                forms[thisID] = new Form($(elementsOrId[i]));
             }
         }
         
@@ -101,6 +114,15 @@ define(["jquery", "./form"],function($, Form){
                 return form.validateFormAndReturnTrueIfValid();
             }
         }
+        
+        /*function isFieldSetValid(formId, fieldSetId) {
+            var form = forms[formID];
+            if (!form || form.length < 1) {
+                return false;
+            } else {
+                return form.validateFormAndReturnTrueIfValid();
+            }
+        }*/
         
         //takes a jquery form element, or an ID, and returns the loomForm instance associated with that form (if one exists).
         function getForm(formOrId) {
@@ -144,7 +166,8 @@ define(["jquery", "./form"],function($, Form){
             rebind:rebind,
             getForm:getForm,
             trySubmitForm:trySubmitForm,
-            reset:reset
+            reset:reset,
+            clearValidationStylesOnAllForms:clearValidationStylesOnAllForms
 		}
         return instance;
 	}

@@ -19,7 +19,8 @@ var fields = {
     minDuration : {type : Number},
     created_at : { type: Date },
     updated_at : { type: Date },
-    useageProfile : Schema.Types.Mixed
+    useageProfile : Schema.Types.Mixed,
+    storageProfile : Schema.Types.Mixed
 };
 
 var searchSchema = new Schema(fields);
@@ -49,4 +50,4 @@ searchSchema.statics = {
     },
 }
 
-module.exports = mongoose.model('searches', searchSchema);
+module.exports = mongoose.model('search', searchSchema);

@@ -1,19 +1,20 @@
-<tr>
+<tr class="js-single-availability-inputs-container">
 	<td data-th="From" class="input-field no-success-validation-style">
 		<%var today = new Date(),
 		      toDate = new Date();
 		  	  toDate.setYear(today.getFullYear() + 1);
+              var endOfNextYear = utils.getEndOfNextYear(new Date());
 		  %>
-		<input readonly required type="date" data-loom-limit-day-of-week="1" name="from" class="datepicker" data-bind-value="from" data-loom-add-controls="true" value="<%=today.toISOString().substring(0, 10)%>" min="<%=today.toISOString().substring(0, 10)%>"/>
+		<input readonly required type="date" data-loom-limit-day-of-week="1" name="from" class="datepicker" data-bind-value="from" data-loom-add-controls="true" value="" max="<%=utils.formatDate(endOfNextYear) %>"/>
 	</td>
 	<td data-th="To" class="input-field no-success-validation-style">
-		<input readonly data-loom-limit-day-of-week="0" required data-bind-value="to" type="date" name="to" class="datepicker" data-loom-add-controls="true" max="<%=toDate.toISOString().substring(0, 10)%>" data-bind-min="from" min="<%=today.toISOString().substring(0, 10)%>"/>
+		<input readonly data-loom-limit-day-of-week="0" required data-bind-value="to" type="date" name="to" class="datepicker" data-loom-add-controls="true" max="<%=utils.formatDate(endOfNextYear) %>" data-bind-min="from" />
 	</td>
 	<td data-th="Total Pallets" class="input-field no-success-validation-style">
 		<input disabled required data-bind-value="total" name="total" type="number"/>
 	</td>
 	<td data-th="Estimated in Use" class="input-field no-success-validation-style">
-		<input data-loom-type="integer" required data-bind-value="inUse" data-bind-max="total" name="inUse" type="number" data-loom-validators="integer"/>
+		<input data-loom-type="integer" required data-bind-value="inUse" data-bind-max="total" name="inUse" type="number" data-loom-validators="integer" />
 	</td>
 	<td data-th="Estimated Free" class="input-field no-success-validation-style">
 		<input disabled required data-bind-value="free" name="free" type="number"/>

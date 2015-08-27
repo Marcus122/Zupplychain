@@ -10,8 +10,10 @@ exports.clearSearchFromSession = function(req) {
 exports.saveSearch = function(search, cb) {
     //if the search has an ID, then we update the record with that ID.
     if (search._id) {
+        console.log("saving seach to DB, has an id which is " + search._id);
         Search.update({"_id" : search._id}, search, {}, cb);
     } else {
+        console.log("saving new search to the db");
         var mySearch = new Search(search);
         mySearch.save(cb);
     }
@@ -19,6 +21,8 @@ exports.saveSearch = function(search, cb) {
 
 exports.getFromSession = function(req, cb) {
     if (req.session.whSC) {
+        console.log("loading search from session");
+        console.log("id is" + req.session.whSC.sc[0]._id);
         cb(false,req.session.whSC.sc[0]);
     } else {
         cb("couldnt get from session");
@@ -27,6 +31,7 @@ exports.getFromSession = function(req, cb) {
 
 exports.saveToSession = function(search,req,cb) {
     console.log("saving to session");
+    console.log("id" + search._id);
     console.log("totalPallets : " + search.totalPallets);
     if (!(search.startDate instanceof Date)) {
         search.startDate = new Date(search.startDate);

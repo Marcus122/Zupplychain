@@ -17,7 +17,7 @@ var handler = function(app) {
 };
 function registrationHandler(req,res){
 	//If active send to dashboard
-	if(req.data.user.active){
+	if(req.data.user.active && 1== 2){ //disabled while we test stuff.
 		res.redirect('/dashboard');
 	}
 	else if(req.params.step > 1 && !req.data.user._id ){

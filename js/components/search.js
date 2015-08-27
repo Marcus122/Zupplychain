@@ -8,13 +8,26 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
 	var $maxDistance = $("input[name='max-distance']");
 	var loom = new Loom();
     var hasSearch = $('input[name="search-cached"]').length;
-    
-    if (hasSearch && !(window.location.hash == "#search-area")) {
-       require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) { 
-                    $.scrollTo("#results-area", {duration : 100, offset : -90 });
+    var haveDoneASearch = false;
+
+    var cameHereViaBackButton = (hasSearch && !(window.location.hash == "#search-area"));
+    if (cameHereViaBackButton) { 
+       require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) {
+                    $(".search-results").show();
+                    $.scrollTo(".search-results", {duration : 100, offset : -0 });
                 });
                 
     }
+    
+    $("#search-form input, #search-form select").change(function(){
+       if (haveDoneASearch) {
+            $(".search-nag").fadeIn();
+       }
+    });
+    
+    $("#search-form button").click(function(){
+        $(".search-nag").fadeOut();
+    });
 	
     //on postcode entry, load up the map centered on that postcode.
     $postcode.blur(function(){
@@ -75,6 +88,7 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
     });
     
     loom.addOnSuccessCallback("search-form", function(response){
+        haveDoneASearch = true;
 		var $searchResInfoBox = $(".search-result-info-box");
         var res = resultsMap.load(response.results);
         if (res) {
@@ -110,6 +124,11 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
                for (var i =0 ;i< lim;i++) {
                    response.results[i].num = i + 1;
                    response.results[i].href = '/warehouse-profile/' + response.results[i]._id + '?fromSearch=true';
+                   var estimatedTotalPrice = 0.0;
+                   for (var j in response.results[i].storageProfile) {
+                       estimatedTotalPrice += response.results[i].storageProfile[j].totalPrice;
+                   }
+                   response.results[i].estimatedPrice = estimatedTotalPrice ? estimatedTotalPrice.toFixed(2) :  "N/A";
                    var row = template.bind(response.results[i]);
                    $("#search-results-table tbody ").append(row);
                }

@@ -11,6 +11,18 @@
  }
 input[type="email"], input[type="number"], input[type="search"], input[type="text"], input[type="tel"], input[type="url"], input[type="date"], input[type="password"]{
 	.border-radius(2px,2px,2px,2px);
+    
+}
+input::-webkit-calendar-picker-indicator{
+    display: none;
+}
+input[type="date"]::-webkit-input-placeholder{ 
+    visibility: hidden !important;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 input[type="checkbox"]{
 	width:auto;
@@ -18,7 +30,7 @@ input[type="checkbox"]{
 	height:@unit-px*2;
 }
 .input-field.check label,
-.checbox label{
+.checkbox label{
 	width:auto;
 	display:inline;
 	word-wrap: break-word;

@@ -3,11 +3,11 @@
 				<div class="six columns">
 					<img src="/images/footer-logo.png" alt="Zupply Chain Logo" />
 					<p class="address">
-					Unit 20, Shuttleworth Mead Business Park,<br/> Burnley, Lancashire, BB2 8JZ
+					<%= config.companyDetails.addressLine1 %>, <%= config.companyDetails.addressLine2 %>,<br/> <%= config.companyDetails.city %>, <%= config.companyDetails.county %>, <%= config.companyDetails.postcode %>
 					</p>
 					<p class="contact">
-						<span>T:</span>01254 785522<br/>
-						<span>F:</span>01254 785577<br/>
+						<span>T:</span><%= config.companyDetails.telephone %><br/>
+						<span>F:</span><%= config.companyDetails.fax %><br/>
 					</p>
 					<ul class="sm-icons">
 						<li><a class="ion-social-linkedin-outline" href="#"><span class="sr-only">twitter</span></a></li>
@@ -15,7 +15,7 @@
 				</div>
 				<div class="three columns">
 					<h5>Terms And Conditions</h5>
-					<p class="terms">The company provides all items and services on the following Conditions which can be vaird only in writing by an Officer of the Company.
+					<p class="terms">The company provides all items and services on the following Conditions which can be varied only in writing by an Officer of the Company.
 					</p>
 				</div>
 				

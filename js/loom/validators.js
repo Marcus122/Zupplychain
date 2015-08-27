@@ -16,7 +16,7 @@ define({
 	getMinValidator : function (minVal, fieldType){
        if (fieldType == "date") {
             return function(input) {
-                return input >= minVal;
+                return new Date(input) >=  new Date(minVal);
             }
         }
 		return function(input) {
@@ -52,11 +52,11 @@ define({
 		var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 		return re.test(input);
 	},
-	number : function(input) {
+	"number" : function(input) {
         if (input === "") { //blank inputs are always 'valid'
             return true;
         }
-		var re= /^[-+]?[0-9]*\.?[0-9]*/
+		var re= /^[-+]?[0-9]+\.?[0-9]*/;
 		return re.test(input);
 	},
 	date : function(input){ // YYYY-MM-DD
@@ -119,7 +119,13 @@ define({
         if (typeof input == "undefined" || input === false) {
             return false;
         }
-		return (input.toString()); 
+		if (typeof input == "string") {
+			return input;
+		}
+		if (isNaN(input)) {
+			return false;
+		}
+		return input.toString(); 
 	},
 	passwordPolicyStrict : function(input) {
 		var reHasUppercase = /[A-Z]+/;

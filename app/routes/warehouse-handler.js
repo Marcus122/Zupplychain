@@ -1,11 +1,12 @@
 "use strict";
 var user = require("../controllers/users.js"),
-	warehouse = require("../controllers/warehouses.js"),
-	storage = require("../controllers/storage.js"),
-	local = require("../local.config.js"),
-    search = require("../controllers/search.js"),
-	async = require("async"),
-    Utils = require("../utils.js");
+warehouse = require("../controllers/warehouses.js"),
+storage = require("../controllers/storage.js"),
+local = require("../local.config.js"),
+search = require("../controllers/search.js"),
+quote = require("../controllers/quote.js"),
+async = require("async"),
+Utils = require("../utils.js");
 
 var handler = function(app) {
 	app.param('warehouse_id', warehouse.load);
@@ -26,9 +27,34 @@ var handler = function(app) {
 	app.post('/warehouse/:warehouse_id/storage',createStorage);
 	app.post('/warehouse/:warehouse_id/storage/batch',batchStorage);
 	app.param('storage_id', storage.load);
-	app.post('/warehouse/:warehouse_id/storage/:storage_id', warehouseAuth,  updateStorage );
+	app.post('/warehouse/:warehouse_id/storage/:storage_id', warehouseAuth,  updateStorage);
 	app.get('/storage/:storage_id', setStorageResponse );
+    app.post('/warehouse/:warehouse_id/volumeDiscount',updateVolumeDiscount);
+    app.get("/warehouse-registration-complete/:warehouse_id", warehouseRegistrationComplete)
 };
+
+
+function warehouseRegistrationComplete(req,res) {
+    res.render("registration-complete",req.data);
+}
+
+function updateVolumeDiscount(req,res) {
+    var volumeDiscountData = {}
+    volumeDiscountData.noDiscount = req.body.noDiscount;
+    volumeDiscountData.discounts = req.body.discounts;
+    req.data.warehouse = req.warehouse;
+    console.log(volumeDiscountData);
+    warehouse.updateVolumeDiscount(req.warehouse, volumeDiscountData, function(err, result){
+        if (err) {
+            console.log("failed to update volume discount");
+            setErrorResponse(err,res);
+        } else {
+            setResponse(req,res,result);
+        }
+    });
+
+    
+}
 
 function warehouseProfile (req,res){
     req.data.warehouse = req.warehouse;
@@ -54,7 +80,7 @@ function warehouseAuth(req,res,next){
 	setResponse(req,res,next);
 }
 function createWarehouse(req,res){
-	getLatLong(req.body.postcode,function(latlng){
+	Utils.getLatLong(req.body.postcode,function(err,latlng){
 		req.body.geo = latlng;
         req.body.loc = { 'type' : 'Point', 'coordinates' : [latlng.lng, latlng.lat] };
 		warehouse.create(req.data.user,req.body,function(err,Warehouse){
@@ -99,9 +125,11 @@ function batchStorage(req,res){
 	var storageArr=[];
 	var sortOrder = 0;
 	async.each(req.body, function(_storage,callback){
+		console.log("saving a storage");
 		sortOrder++;
 		_storage.sortOrder = sortOrder;
-		if(!_storage._id){
+		if(!_storage._id){ //if no id, create a new storage.
+			console.log("creating storage: " + _storage._id);
 			delete _storage._id;
 			storage.create(req.data.user,_storage,function(err,Storage){
 				if(err){
@@ -112,10 +140,11 @@ function batchStorage(req,res){
 					callback();
 				}
 			});
-		}else{
+		}else{ //otherwise update it.
 			_storage.user=req.data.user._id;
 			delete _storage.__v;
 			storage.updateWithData(_storage,function(err,Storage){
+				console.log("updating storage: " + _storage._id);
 				if(!err){
 					storageArr.push(Storage._id);
 					callback();

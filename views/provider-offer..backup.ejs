@@ -1,0 +1,199 @@
+ <% include ./partials/top%>   
+	<main class="warehouse-profile quote-request">
+		<div class="banner">
+			<h1>Quotation request</h1>
+		</div>
+		<section>
+            <input type="hidden" name="warehouse-id" id="warehouse-id" value="<%=warehouse._id%>" />
+            <% if (session.whSC != undefined && session.whSC.sc){ %>
+                <div class="search-header">
+                    <div class="row">
+                        <div class="columns three back-to-search">
+                            <a href="/search" class="button action">Back to search results</a>
+                        </div>
+                        <div class="search-criteria columns three">
+                            <span class="button-text">MY SEARCH CRITERIA</span>
+                            <button class="view primary tiny"></button>
+                            <div class="my-search-criteria">
+                                <div class="critera-popup">
+                                    <ul>
+                                        <li>
+                                           <span class="title">Pallet type</span>
+                                           <% if(session.whSC.sc[0].palletType){%>
+                                                <span class="search-value"><%=session.whSC.sc[0].palletType%></span>
+                                           <%}else{%>
+                                               <span class="search-value">Any</span>
+                                           <%}%>
+                                        </li>
+                                        <li>
+                                            <span class="title">Quantity</span>
+                                            <span class="search-value"><%=session.whSC.sc[0].totalPallets%></span> 
+                                        </li>
+                                        <li>
+                                            <span class="title">Target postcode</span>
+                                            <span class="search-value"><%=session.whSC.sc[0].postcode%></span> 
+                                        </li>
+                                        <li>
+                                            <span class="title">Max distance</span>
+                                            <span class="search-value"><%=session.whSC.sc[0].maxDistance%></span> 
+                                        </li>
+                                        <li>
+                                            <span class="title">Product description</span>
+                                            <span class="search-value"><%=session.whSC.sc[0].description%></span> 
+                                        </li>
+                                        <li>
+                                            <span class="title">Start date</span>
+                                            <span class="search-value"><%=session.whSC.sc[0].startDate.substring(8,10)%>/<%=session.whSC.sc[0].startDate.substring(5,7)%>/<%=session.whSC.sc[0].startDate.substring(0,4)%></span> 
+                                        </li>
+                                        <li>
+                                            <span class="title">Min Duration</span>
+                                            <span><%=minDurationOptions[parseInt(session.whSC.sc[0].minDuration,10)]%></span> 
+                                        </li>
+                                        <li>
+                                            <span class="title">Height (m)</span>
+                                            <span class="search-value"><%=session.whSC.sc[0].height%></span> 
+                                        </li>
+                                        <li>
+                                            <span class="title">Weight (kg)</span>
+                                            <span class="search-value"><%=session.whSC.sc[0].weight%></span> 
+                                        </li>
+                                        <li>
+                                            <span class="title">Type</span>
+                                            <span class="search-value"><%=temperatures[session.whSC.sc[0].temp]%></span> 
+                                        </li>
+                                    </ul>
+                                    <div class="edit-search">
+                                        <a href="/search#search-area" class="button action">Edit search criteria</a>
+                                    </div>
+                                </div>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+             <%}%>
+			<div class="main">
+				<div class="content-box primary">
+					<div class="header">
+						<h2>Your chosen warehouse - <%=warehouse.name %>, <%= warehouse.postcode %></h2>
+					</div>
+                    <div class="main quote-request-summary">
+                        <div class="content-box search-criteria-summary">
+                            <div class="header">
+                                <h2>Search Criteria</h2>
+                            </div>
+                            <div class="main">
+                                <div class="row">
+                                    <div class="columns two">
+                                    <span>Target Postcode/City</span>
+                                    <em class="search-value"><%=session.whSC.sc[0].postcode%></em> 
+                                    </div>
+                                    <div class="columns two">
+				    <span>Max Distance (miles)</span>
+                                    <em class="search-value"><%=session.whSC.sc[0].maxDistance%></em> 
+                                    </div>
+                                    <div class="columns two">
+				    <span>  Pallet Type</span>
+					<% if(session.whSC.sc[0].palletType){%>
+                                           <em class="search-value"><%=session.whSC.sc[0].palletType%></em>
+                                       <%}else{%>
+                                           <em class="search-value">Any</em>
+                                      <%}%>
+                                    </div>
+				    <div class="columns two">
+				      <span>Qty</span>
+                                      <em class="search-value"><%=session.whSC.sc[0].totalPallets%></em> 
+				    </div>
+                                    <div class="columns two">
+				      <span>Product Description</span>
+                                      <em class="search-value"><%=session.whSC.sc[0].description%></em> 
+                                    </div>
+                                    <div class="columns two">
+                                    <span>Start Date</span>
+				    <em class="search-value"><%=session.whSC.sc[0].startDate.substring(8,10)%>/<%=session.whSC.sc[0].startDate.substring(5,7)%>/<%=session.whSC.sc[0].startDate.substring(0,4)%></em> 
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="columns two">
+				     <span>Minimum Duration</span>
+                                    <em><%=minDurationOptions[parseInt(session.whSC.sc[0].minDuration,10)]%></em> 
+                                    </div>
+                                    <div class="columns two">
+				      <span>Pallet Height (m)</span>
+				      <em class="search-value"><%=session.whSC.sc[0].height%></em> 
+                                    </div>
+                                    <div class="columns two">
+				      <span>Pallet Weight (kg)</span>
+			            <em class="search-value"><%=session.whSC.sc[0].weight%></em> 
+                                    </div>
+				    <div class="columns two">
+				      <span>Type</span>
+                                      <em class="search-value"><%=temperatures[session.whSC.sc[0].temp]%></em> 
+				    </div>
+                                </div>
+                            </div>
+                        </div>
+			<div class="warehouse-pricing">
+                        <% var quoteView = true; %>
+                        <%= include ./partials/warehouse-pricing %>
+			</div>
+
+                        <form class="loom-form row" action="/quotation-request" id="quotation-request-form">
+                                <div class="input-field" style="display:none">
+				      <input type="hidden" name="warehouseId" value="<%= warehouse._id %>" />
+				  </div>
+                        <div class="content-box contact-information">
+                            <div class="header">
+                                <h2>Contact Information</h2>
+                            </div>
+                            <div class="main row">
+                                   <div class="six columns">
+                                        <div class="input-field">
+                                            <label for = "Name">Contact Name</label><input type="text" name="name" required="required" />
+                                        </div>
+                                        <div class="input-field">
+                                            <label for="companyName">Company Name</label><input name="companyName" type="text" required="required" />
+                                        </div>
+                                        <div class="input-field">
+                                            <label for="location">Location <div class="tool-tip hint--top" data-hint="Town or postcode">?</div></label><input name="location" type="text" required="required" />
+                                        </div>
+                                        <div class="input-field">
+                                            <label for="position">Position at Company</label><input name="position" type="text" required="required" />
+                                        </div>
+                                    </div>
+                                    <div class="six columns">
+                                        <div class="input-field">
+                                            <label for = "email">Email</label><input type="email" name="email" required="required" value="<%= user && user.email || ''; %>" />
+                                        </div>
+                                        <div class="input-field">
+                                            <label for = "telephone">Telephone</label><input type="tel" name="telephone" required="required" value="<%= user && user.telephone || ''; %>"/>
+                                        </div>
+                                        <div class="input-field">
+                                            <label for = "mobile">Mobile</label><input type="tel" name="mobile" required="required" value="<%= user && user.mobile || ''; %>" />
+                                        </div>
+                                        <div class="input-field check checkbox">
+                                            <label for="terms">I have read and accept the ZupplyChain Terms and Conditions<input type="checkbox" name="terms" id="terms" required="required"/></label>
+                                        </div>
+                                    </div>
+                            </div>
+                            
+                       
+                        </div>
+                        <div class="content-box action row">
+                            <div class="eight columns">
+                                <p>In order to request a quotation for space in your chosen warehouse please<br/> press the SUBMIT REQUEST button. You will receive a response within two working days.</p> 
+                            </div>
+                            <div class="four columns submit-request-container">
+                                <button type="submit" class="button action large">SUBMIT REQUEST
+                                </button>
+                            </div>
+                          
+                        </div>
+                         </form>
+                    </div>
+				</div>
+			</div>
+		</section>
+	</main>
+    
+ <% include ./partials/bottom%>
+ 

@@ -1,8 +1,109 @@
+
+.quote-request-confirm {
+        .main {
+            text-align:center;
+            h2 {
+                text-transform:none; 
+            }
+          }
+    }
+
 .warehouse-profile{
+
+    .choose-warehouse-button-container {
+        span {
+            display:none;
+            float:right;
+            font-size:18px;
+            font-size:1.8rem;
+            width:400px;
+        }
+        &.invalid {
+            span {
+                display:block;
+            }
+            a {
+                display:none;
+            }
+        }
+    }
+
+    .back-to-search-criteria{
+        margin-left:20px;
+    }   
+
+    .warehouse-pricing {
+        position:relative;
+    }
+
+    #vat-message {
+        //position:absolute;
+        bottom:0px;
+        position:absolute;
+        font-size:smaller;
+    }
+
+    .volume-discount-table {
+        width:auto;
+        min-width:300px;
+    }
+
+    .search-criteria-summary{
+	.row{
+	    .unit-margin-bottom(2);
+	    color:#bbb;
+	    font-size:14px;
+	}
+	
+	span{
+	    display:block;
+	    color:@dark-text;
+	    //height:3em;
+	}
+	em{
+	    font-style:normal;
+	}
+    }
+    
+    
+
+    .quote-request-summary{
+        .header{
+            background-color:@light-grey;
+            h2 {
+                font-size:16px;
+                text-transform:none;
+                font-weight:bold;
+                color:@dark-text;
+            }
+        }
+         .main{
+            border:1px solid @light-grey;
+            .unit-margin-bottom(3);
+        }            
+        .contact-information{
+            .unit-margin-top(2);
+            .tool-tip {
+                margin-left:5px;
+            }
+        }
+        input[type='checkbox'] {
+            margin-left:30px;
+        }
+        .content-box.action{
+            border:2px solid @highlight;
+            .unit-padding(3);
+        }
+        .submit-request-container{
+            text-align:right;
+        }
+    }
+
     #choose-this-warehouse{
         font-size:16px;
-        .unit-margin-top(2);
-        width:300px;
+        .unit-margin-top(3);
+        width:256px;
+        float:right;
     }
 
     #estimated-total-cost{
@@ -10,24 +111,74 @@
         text-align:right;
         font-size:18px;
         .price {
-            width:300px;
+            width:156px;
             display:inline-block;
             border:1px solid;
             padding:10px;
-            color:@primary;
+            background-color:@primary;
+            color:@white;
             border-radius:10px;
             margin-left:20px;
+            box-sizing:border-box;
         }
     }   
 
-    .pricing-container{
-        max-height:600px;
-        overflow-y:scroll;
-    }
+
     
     table  {
-                text-align:left;
-                margin-bottom:0px;
+        
+        text-align:left;
+        margin-bottom:0px;
+	    th{
+            text-align:center;
+		}
+        td {
+            padding:2px 6px;
+        }
+	    .key {
+            padding:12px;
+            dl {
+                margin:0px;
+                font-size:14px;
+                font-size:1.4rem;
+                text-align:right;
+            }
+            dd,dt{
+                display:inline-block;
+                }
+            dt {
+                height:1.5em;
+                width:1.5em;
+                .unit-margin-right();
+                &.primary{
+                    background-color:#d4e6a5;
+                }
+                &.highlight{
+                    background-color:@highlight;
+                }
+		    }
+		}
+        
+            .not-full {
+                
+                .weeklyTotal {
+                    background-color:rgba(240,223,166,0.5);
+                }
+                .input-field {
+                    background-color:rgba(240,223,166,0.5);
+                }
+            }
+                
+            .input-field{
+                text-align:center;
+                input {
+                    text-align:right;
+                    background-position:10px 10px;
+                    height:32px;
+                }
+                
+                
+            }
             .bar-container {
                 position:relative;
                 width:200px;
@@ -62,11 +213,9 @@
                     top:0px;
                     width:3px;
                     background-color:@highlight;
-                    height:58px;
+                    height:44px;
                     
-                }
-                
-                
+                }   
             }
             td{
                 text-align:right;
@@ -85,9 +234,11 @@
     .carousel {
         text-align:center;
         .placeholder {
-            height:200px;
+            height:auto;
+            width:100%;
             margin:auto;
         }
+        
         .thumbnails{
             list-style:none;
             li {
@@ -251,7 +402,22 @@
     }
     .warehouse-features.content-box .main{
         .unit-padding(4);
+        .temperatures span{
+            border:1px solid #ccc;
+        }
     } 
+    .warehouse-documents{
+        .unit-margin-top(2);
+        li {
+            list-style:none;
+            background-image:url("/images/pdf.png");
+            background-repeat:no-repeat;
+            background-position:0 0;
+            padding-top:10px;
+            height:30px;
+            padding-left:50px;
+        }
+    }
 }
 
 #profile-map-container{

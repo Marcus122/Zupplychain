@@ -1,0 +1,9 @@
+define(["jquery"], function($) {
+    return {
+	    currency : function(input) {
+		   var asFloat = parseFloat(input,10);
+		   if (isNaN(asFloat)) { return input ;}
+		   return asFloat.toFixed(2);
+	    }
+	}
+});

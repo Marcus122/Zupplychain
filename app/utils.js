@@ -1,6 +1,7 @@
 
-function addDays(date, days) {
-    return date.setDate(date.getDate() + days);
+function addDaysToDate(date, days) {
+    date.setDate(date.getDate() + days);
+    return date;
 }
 
 module.exports.test = function() {
@@ -17,7 +18,26 @@ module.exports.distanceInMiles = function(point1, point2) {
 }
 
 module.exports.addDays = function(date, days) {
-    return addDays(date, days);
+    return addDaysToDate(date, days);
+}
+
+module.exports.formatDate = function(date) {
+    return date.toISOString().substr(0,10);
+}
+
+module.exports.getEndOfNextYear = function (date) {
+    date.setYear(date.getFullYear() + 1);
+    date.setMonth(11);
+    date.setDate(31);
+    return date;
+}
+
+module.exports.printFormatDate = function(date) {
+    var dateString = date.toISOString();
+    var yyyy = dateString.substr(0,4);
+    var mm = dateString.substr(5,2);
+    var dd = dateString.substr(8,2);
+    return dd + "/" + mm + "/" + yyyy;
 }
 
 module.exports.getClosestPreviousMonday = function(inDate) {
@@ -25,9 +45,9 @@ module.exports.getClosestPreviousMonday = function(inDate) {
     var retDate = new Date(inDate.getTime());
         //We 'pull' the start day back to the closest monday.
     if (dayOfWeek > 1) {
-        addDays(retDate, -(dayOfWeek-1));
+        addDaysToDate(retDate, -(dayOfWeek-1));
     } else if (dayOfWeek == 0) {
-        addDays(retDate, -6);
+        addDaysToDate(retDate, -6);
     }
     return retDate;
 }

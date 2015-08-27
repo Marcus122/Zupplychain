@@ -53,6 +53,12 @@ exports.warehouse_by_user = function (user,callback) {
 	});
 };
 
+exports.updateVolumeDiscount = function(warehouse, data, cb) {
+    warehouse.noDiscount = data.noDiscount;
+    warehouse.discounts = data.discounts;
+    warehouse.save(cb);
+}
+
 exports.warehouse_by_query = function(query,cb) {
     // do the actual search and return the warehouse data.
     Warehouse.search_by_query(query, function(err,result){

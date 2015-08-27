@@ -1,0 +1,8 @@
+<% 
+title = "QUOTATION OFFER";
+subtitle = "Please review the details below"; 
+%>
+<% include ./partials/header %> 
+<b><%= quote.warehouse.name%></b> has responded to you request for storage with a quotation<br/><br/><br/>
+                            <a href="/provider-offer-reply/<%= quote._id %>" style="color:#fff;background-color:#f1901a;padding:10px 15px;border-radius:5px;text-decoration:none;">CLICK TO VIEW AND RESPOND</a>
+<% include ./partials/footer %> 

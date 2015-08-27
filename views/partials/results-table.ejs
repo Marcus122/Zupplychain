@@ -3,23 +3,6 @@
                         <h2><em>List</em> Results</h2> 
                     </div>
                     <div class="main">
-                        <!--<div class="pagination">
-                            <p>1 to 9 of 24 results</p>
-                            <nav class="controls">
-                                <button class="simple mini">View all items</button>
-                                <ul class="pagination-links">
-                                    <li><a class="prev" href="#">
-                                        <span class="ion-chevron-left"></span>
-                                        <span class="sr-only">previous</span></a></li>
-                                    <li class="active"><a href="#">1</a></li>
-                                    <li><a href="#">2</a></li>
-                                    <li><a class="next" href="#">
-                                        <span class="ion-chevron-right"></span>
-                                        <span class="sr-only">next</span>
-                                        </a></li>
-                                </ul>
-                            </nav>
-                        </div>-->
                         <table class="simple " id="search-results-table" data-loom-num-per-page="5">
                             <thead>
                                 <tr>
@@ -29,7 +12,8 @@
                                     <th data-field="distance" class="sortable ascending">Distance<br/>(miles)</th>
                                     <th data-field="rating" class="sortable">Rating</th>
                                     <th data-field="price" class="sortable">Weekly Price at Start Date<br/> (£ per pallet)</th>
-                                    <th >In / Out Price<br/> (£ per pallet)</th>
+                                    <th  >In / Out Price<br/> (£ per pallet)</th>
+                                    <th data-field="estimatedPrice" class="sortable"> Estimated Total Price</th>
                                     <th>View Details</th>
                                 </tr>
                             </thead>
@@ -40,7 +24,6 @@
                         </table>
                         
                     </div>
-                
                 </div>
                 <script id="result-table-row" type="text/template">
                 <tr data-bind-Id="_id">
@@ -59,8 +42,9 @@
                                         <span class="ion-android-star rating"><em class="sr-only">*</em></span>
                                         <span class="ion-android-star rating"><em class="sr-only">*</em></span>
                                     </td>
-                                    <td data-field="price" data-type="number" class="with-pound-sign">@firstWeekPrice.price@</td>
-                                    <td class="with-pound-sign">@firstWeekPrice.charge@</td>
+                                    <td data-field="price" data-type="number" class="with-pound-sign">@firstWeekPrice.price | currency@</td>
+                                    <td class="with-pound-sign">@firstWeekPrice.charge | currency@</td>
+                                    <td data-field="estimatedPrice" data-type="number" class="with-pound-sign">@estimatedPrice | currency@</td>
                                     <td><a  data-bind-href="href" class="button action mini view-warehouse-link <%= user.email ? " " : "register-before-click " %>">View</a></td>
                                 </tr>
                 </script>

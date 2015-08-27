@@ -3,10 +3,12 @@ var user_controller = require("../controllers/users.js"),
 
 var handler = function(app) {
   app.post('/update-user', function(req, res) {
+        console.log("in update user");
 		//If user is not logged in then create user
 		if(req.data.user._id){
 			user = user_controller.user_by_id(req.data.user._id,function(err,user){
 				if(user){
+                    console.log("setting user to active and updating email");
                     user.active = true;
 					updateUser(req, res, user);
 				}else{
@@ -14,6 +16,7 @@ var handler = function(app) {
 				}
 			});
 		}else{
+            console.log("creating new user");
 			createUser(req, res);
 		}
     });

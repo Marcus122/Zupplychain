@@ -4,6 +4,7 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
     function Class() {
 		var templates = new Templates();
 		var lm = new Loom();
+        var indexOfInputThatWasFocused;
 		
 		function initialize() {	
 			$('.popup').on("click",function(){
@@ -16,41 +17,122 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
             $('.see-on-map').on("mouseover",showMap);
 
             
+            $(document).on("focus", "input", function() {
+                indexOfInputThatWasFocused = $(this).closest("tr").index();
+                console.log(indexOfInputThatWasFocused);
+            });
+            
             //world's simplest image gallery :)
             $(".thumbnails img").click( function(evt) {
                 $(".placeholder").attr("src", $(this).attr("src"));
             });
             
+            if ($("#quotation-request-form").length > 0) {
+                lm.addOnSuccessCallback("quotation-request-form", function(response) {
+                    if (response.error) {
+                        quotationRequestError();
+                    } else {
+                        quotationRequestSuccess(response);
+                    }
+                })
+            }
+            
+            if ($("#provider-offer-form").length > 0) {
+                lm.addOnSuccessCallback("provider-offer-form", function(response) {
+                    if (response.error) {
+                        providerOfferError();
+                    } else {
+                        providerOfferSuccess(response);
+                    }
+                });
+            }
+            
+            if ($("#provider-offer-reply-form").length > 0) {
+                lm.addOnSuccessCallback("provider-offer-reply-form", function(response) {
+                    if (response.error) {
+                        providerOfferReplyError();
+                    } else {
+                        providerOfferReplySuccess(response);
+                    }
+                });
+            }
 		}
         
+        function providerOfferReplySuccess(response) {
+            var redirectTo = response.redirectURL;
+            if (!redirectTo) {
+                ProviderOfferReplyError();
+                return;
+            }
+            Alerts.showSuccessMessage("redirecting...")
+            window.location.href = redirectTo;
+        }
+        
+        function providerOfferReplyError() {
+            Alerts.showPersistantErrorMessage("There was an error processing your confirmation");
+        }
+        
+        function providerOfferSuccess(response) {
+            var redirectTo = response.redirectURL;
+            if (!redirectTo) {
+                ProviderOfferError();
+                return;
+            }
+            Alerts.showSuccessMessage("redirecting...")
+            window.location.href = redirectTo;
+        }
+        
+        function providerOfferError() {
+            Alerts.showPersistantErrorMessage("There was an error processing your offer");
+        }
+        
+        function quotationRequestSuccess(response) {
+            var redirectTo = response.redirectURL;
+            if (!redirectTo) {
+                quotationRequestError();
+                return;
+            }
+            Alerts.showSuccessMessage("redirecting...")
+            window.location.href = redirectTo;
+        }
+        
+        function quotationRequestError() {
+            Alerts.showPersistantErrorMessage("There was an error processing your quote");
+        }
+        
         function initAllAvailabilityBars(){
-            var $theTables = $(".warehouse-pricing table");
+            var $theTables = $("#useageProfile-form table");
             $theTables.each(function() {
                initAvailabilityBars($(this));
             });
-            
+
+            var onQuotePage =  $theTables.find("input").length < 1;
+            if (!onQuotePage) {
             $(document).on("click", ".bar-container .bar", function(evt) {
-                //get the offset from the bar's left;
-                var mouseX = evt.pageX;
-                var divX = $(evt.target).offset().left;
-                var leftOffset = mouseX - divX;
-                var maxPossibleOffset = $(evt.target).width();
-                //convert the offset relative to the maxPallets (100% bar width);
-                var ratio = leftOffset / maxPossibleOffset;
-                var maxPallets = $(evt.target).closest("table").data("max-pallets");
-                var selectedValue = Math.round(ratio * maxPallets);
-                var $tr = $(evt.target).closest("tr");
-                var $useageMarker = $tr.find(".useage-marker");
-                $useageMarker.data("palletsRequired", selectedValue);
-                $tr.find("input").val(selectedValue);
-                var $theTable = $(".warehouse-pricing table");
-                $tr.find("input").trigger("change");
-            });
-            
+                    //get the offset from the bar's left;
+                    var mouseX = evt.pageX;
+                    var divX = $(evt.target).offset().left;
+                    var leftOffset = mouseX - divX;
+                    var maxPossibleOffset = $(evt.target).width();
+                    //convert the offset relative to the maxPallets (100% bar width);
+                    var ratio = leftOffset / maxPossibleOffset;
+                    var maxPallets = $(evt.target).closest("table").data("max-pallets");
+                    var selectedValue = Math.round(ratio * maxPallets);
+                    var $tr = $(evt.target).closest("tr");
+                    var $useageMarker = $tr.find(".useage-marker");
+                    $useageMarker.data("palletsRequired", selectedValue);
+                    $tr.find("input").val(selectedValue);
+                    var $theTable = $(".warehouse-pricing table");
+                    $tr.find("input").trigger("change");
+                });
+            }            
         }
         
         
+        
+        
         function initAvailabilityBars($theTable) {
+            var palletsWontFit = false;
             var maxValue = parseInt($theTable.data("max-pallets"), 10); //the max value is what value a bar would need to have to be 100%;
             var $barTds = $theTable.find("td.bar-container");
             var barWidth = $barTds.width();
@@ -61,12 +143,19 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
                 var thisValue = parseInt(thisBar.data("value"),10);
                 if (!isNaN(thisValue) && thisBar.is(".not-full")){
                     thisBar.css("width", (barWidth / maxValue)  * thisValue);
+                    palletsWontFit = true;
                 }
                 var $theMarker = thisBar.closest("tr").find(".useage-marker");
                 var markerValue = parseInt($theMarker.data("pallets-required"), 10);
                 var markerLeft = (barWidth /maxValue) * markerValue + baseLeft;
                 $theMarker.css("left", markerLeft);
             });
+
+            if (palletsWontFit) {
+                $(".choose-warehouse-button-container").addClass("invalid"); //hide the button
+            } else {
+                $(".choose-warehouse-button-container").removeClass("invalid");
+            }
         }
         
         var focussedInputWCdate;
@@ -82,7 +171,7 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
                 var warehouseId = $("#warehouse-id").val();
                 var numPallets = $(this).val();
                 var wcDate = $(this).closest("tr").find(".week-commencing").data("week-commencing");
-                // we chuck up the ajax request to get the result for this row back from the server.
+                // we chuck up the ajax request to get the result back from the server.
                 $.post("/useage-profile",
                         {
                             wcDate :  wcDate,
@@ -91,30 +180,62 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
                         },
                         function (result) {
                             populatePricingTable(result, wcDate);
+                            focusInputThatWasFocussed();
                 });
             });
             
         }
         
+        function focusInputThatWasFocussed(){
+            $("#useageProfile-form").find("table tbody tr").eq(indexOfInputThatWasFocused).find("input").focus();
+        }
+        
+        function printFormatDate(date) {
+            var dateString = date.toISOString();
+            var yyyy = dateString.substr(0,4);
+            var mm = dateString.substr(5,2);
+            var dd = dateString.substr(8,2);
+            return dd + "/" + mm + "/" + yyyy;
+        }
+        
+        function calculateAndDisplayTotal(storageProfile) {
+            var runningTotal = 0.0;
+            var palletsInLastWeek = 0;
+            for (var wcDateString in storageProfile) {
+                var sp = storageProfile[wcDateString];
+                var storedPalletsSuccesfully = sp.numPallets <= sp.numPalletsStored;
+                var palletIncreaseThisWeek = Math.max(sp.numPallets - palletsInLastWeek, 0);
+                runningTotal += parseFloat(sp.totalPrice);
+                palletsInLastWeek = sp.numPallets;
+            }
+            var totalToDisplay = runningTotal ? (runningTotal).toFixed(2) : "N/A";
+            $("#estimated-total-cost .price").html(totalToDisplay);
+            //if running total is NaN set some global so that we can't get to the next page.
+        }
+        
         function populatePricingTable(storageProfile, wcDateOfRowThatChanged) {
             var newLargestRequiredValue = 0;
             var $theTable = $(".warehouse-pricing table");
-            var runningTotal = 0.0;
             var template = templates.getTemplate("warehouse-pricing-row");
             for (var wcDateString in storageProfile) {
                 var rowObject = {}
                 var sp = storageProfile[wcDateString];
                 rowObject["wcDate"] = wcDateString;
                 rowObject["palletsRequired"] = sp.numPallets;
+                rowObject["totalPrice"] = sp.totalPrice;
                 newLargestRequiredValue = Math.max(newLargestRequiredValue, sp.numPallets);
                 rowObject["numPalletsStored"] = sp.numPalletsStored;
                 var fits = rowObject["palletsRequired"] <= rowObject["numPalletsStored"];
                 var extraCSSClass = fits ? "full " : "not-full ";
                 rowObject["barText"] = fits ? "OK" : rowObject["numPalletsStored"];
                 rowObject["cssClass"] = "bar " + extraCSSClass;
-                rowObject["price"] = Number(sp.highestPriceOfAnyStorageUsed.price).toFixed(2);
-                rowObject["charge"] = Number(sp.highestPriceOfAnyStorageUsed.charge).toFixed(2);
-                runningTotal = rowObject["price"] * sp.numPallets;
+                rowObject["price"] = sp.highestPriceOfAnyStorageUsed.price ? Number(sp.highestPriceOfAnyStorageUsed.price).toFixed(2) : "N/A";
+                if (sp.totalHandlingCharge > 0) {
+                    rowObject["charge"] = sp.highestPriceOfAnyStorageUsed.charge ? Number(sp.highestPriceOfAnyStorageUsed.charge).toFixed(2) : "N/A";
+                } else {
+                    rowObject["charge"] = "";
+                }
+                
                 var $tr = $(".warehouse-pricing table").find("td[data-week-commencing='" + wcDateString + "']").closest('tr');
                 var row = template.bind(rowObject);
                 if (wcDateOfRowThatChanged == wcDateString) {
@@ -122,14 +243,13 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
                 }
                 row.insertAfter($tr);
                 $tr.remove();
+                
+               
             }
             $theTable.data("max-pallets", Math.round(newLargestRequiredValue * 1.5));
-            $("#estimated-total-cost .price").html(runningTotal.toFixed(2));
+            calculateAndDisplayTotal(storageProfile);
             initAvailabilityBars($theTable);
-            console.log("setting Timeout");
-            setTimeout(function(){
-                    $theTable.find("td[data-week-commencing='" + focussedInputWCdate+  "']").closest("tr").find("input").focus(); 
-                }, 100);
+            lm.rebind($("#useageProfile-form"));
         }
         
         function showMap(){

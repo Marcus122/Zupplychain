@@ -29,6 +29,9 @@
 			%>
 			<section class="tab-content">
 				<form data-loom-no-submit="true" method="post" action="/provider-registration-2" id="registration" novalidate class="provider-form loom-form">
+                    <div class="input-field" style="display:none">
+                    <input type="hidden" name="defaultPhoto" id="defaultPhoto" value="<%=warehouse.defaultPhoto%>" />
+                    </div>
 					<div class="main">
 						<div class="content-box primary">
 							<div class="header">
@@ -110,7 +113,10 @@
 													<%}else{%>
 														<input data-array="services" name="name" type="checkbox" value="<%=services[i]%>"/>
 													<%}%>
-													<label><%=services[i]%></label><div class="tool-tip hint--left" data-hint="[Description of this item]">?</div>
+													<label><%=services[i]%></label>
+                                                    <% if (services[i] == "Additional Insurance") {%>
+                                                        <div class="tool-tip hint--top" data-hint="Are you able to offer full insurance for a customer’s product in your warehouse?">?</div>
+                                                    <% } %>
 												</div>
 											<%}%>
 										</div>
@@ -126,7 +132,7 @@
 													<%}else{%>
 														<input data-array="specifications" name="name" type="checkbox" value="<%=specifications[i]%>"/>
 													<%}%>
-													<label><%=specifications[i]%></label><div class="tool-tip hint--left" data-hint="[Description of this item]">?</div>
+													<label><%=specifications[i]%></label>
 												</div>
 											<%}%>
 										</div>
@@ -151,15 +157,20 @@
 									<%if(warehouse.photos){
 										for(var i=0;i<warehouse.photos.length;i++){
 											var url = "/images/" + warehouse.photos[i];%>
-											<div class="columns four row document">
+											<div class="columns four row document <%=warehouse.defaultPhoto == warehouse.photos[i] ? "isDefault" : "" %>">
 												<div class="columns five image">
 													<img src="<%=url%>"/>
 												</div>
-												<span class="file-name columns four"><%=warehouse.photos[i];%></span>
+												<span class="file-name columns four">
+                                                    <%=warehouse.photos[i];%>
+                                                </span>
 												<input type="hidden" name="photo" data-array="photos" value="<%=warehouse.photos[i];%>"/>
 												<div class="columns one">
 													<button type="button" href="#" class="trash-button"><span>Delete</span></button>
 												</div>
+                                                        <span class="default-photo-label">Main image</span>
+                                                        <button data-photo="<%=warehouse.photos[i];%>" class="tiny simple make-default-photo" type="button">Use as main image
+                                                        </button>
 											</div>
 										<%}
 									}%>
@@ -206,6 +217,9 @@
 			<div class="columns one">
 				<button type="button" href="#" class="trash-button"><span>Delete</span></button>
 			</div>
+            <span class="default-photo-label">Main image</span>
+            <button data-bind-data-photo="name" class="tiny simple make-default-photo" type="button">Use as main image
+            </button>
 		</div>
 	 </script>
 	  <script type="text/template" id="save-registration">

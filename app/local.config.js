@@ -14,6 +14,30 @@ exports.config = {
     static_content: "../static/",
 	
 	upload_folder: __dirname + '/../images/',
+    
+    test : "test",
+    
+    companyDetails : {
+        "telephone" : "01888 888 888",
+        "fax" : "01888 888 888",
+        "addressLine1" : "Unit 99",
+        "addressLine2" : "Address line 2",
+        "city" : "city",
+        "county" : "county",
+        "postcode" : "postcode"
+    },
+    
+    paymentTerms : [
+        "7 days",
+        "14 days",
+        "28 days"
+    ],
+    
+    paymentTypes : [
+        "credit card",
+        "BACS transfer",
+        "invoice"
+    ],
 	
 	services: [
 		"Transport / Distribution",

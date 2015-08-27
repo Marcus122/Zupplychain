@@ -13,7 +13,7 @@ var fields = {
 	maxHeight: {type: Number },
 	palletSpaces: {type: Number },
 	sortOrder:{type: Number },
-	noDiscount:{type: Number },
+	//noDiscount:{type: Number },
 	basicPricing:{
 		price: { type: Number, default:0, get:getPrice, set:setPrice },
 		charge:{ type: Number, default:0, get:getPrice, set:setPrice },
@@ -26,11 +26,11 @@ var fields = {
 		charge:{ type: Number, default:0, get:getPrice, set:setPrice },
 		reserve:{ type: Number, default:0, get:getPrice, set:setPrice }
 	}],
-	discounts:[{
+	/*discounts:[{
 		from:Number,
 		to:Number,
 		perc:Number
-	}],
+	}],*/ //now on warehouse
 	pallets:[{
 		from:Date,
 		to:Date,
@@ -62,19 +62,25 @@ function priceAtDate(wcDate,data) {
     return data.basicPricing;
 }
 
+//returns the number of free spaces at a given date.
+//If there is no availability for the given date.. then we assume zero availability.
 function spacesAtDate(wcDate, data){
-    var currentPalletsAvailable = data.palletSpaces;
+    
+    var wcDateAsDate = new Date(wcDate);
+     //var currentPalletsAvailable = data.palletSpaces;
     var numPalletEntries = 0;
     if (data.pallets) {
         numPalletEntries = data.pallets.length;
     }
     for (var j =0;j < numPalletEntries; j++) {
-        if (data.pallets[j].from <= wcDate &&
-        data.pallets[j].to > wcDate) {
-            currentPalletsAvailable = currentPalletsAvailable - data.pallets[j].inUse;
+        var thisPalletsFrom = new Date(data.pallets[j].from);
+        var thisPalletsTo = new Date(data.pallets[j].to);
+         if (thisPalletsFrom <= wcDateAsDate &&
+        thisPalletsTo > wcDateAsDate) {
+            return data.pallets[j].free;
         }
     }
-    return currentPalletsAvailable;
+    return 0;
 }
 
 var storageSchema = new Schema(fields);

@@ -1,13 +1,13 @@
- <% include ./partials/top%>   
+ <% include ./partials/top%>  
+    <% console.log(session.whSC.sc[0]); %>
 	<main class="warehouse-profile">
 		<div class="banner">
 			<h1>
 				<span><%=warehouse.name%></span> profile
 			</h1>
 		</div>
-		<section>
-            <input type="hidden" name="warehouse-id" id="warehouse-id" value="<%=warehouse._id%>" />
-            <%if (session.whSC != undefined && session.whSC.sc){%>
+        <section>
+        <%if (session.whSC != undefined && session.whSC.sc){%>
                 <div class="search-header">
                     <div class="row">
                         <div class="columns three back-to-search">
@@ -80,134 +80,112 @@
                     </div>
                 </div>
              <%}%>
-			<div class="main">
-				<div class="content-box primary">
-					<div class="header">
-						<h2>Pricing and availability</h2>
-					</div>
-                    <div class="warehouse-pricing main">
-                        <script type="text/template" id="warehouse-pricing-row">
-                            <tr>
-                                    <td class="week-commencing" data-bind-data-week-commencing="wcDate" >@wcDate@</td>
-                                    <td class="bar-container" >
-                                        <div data-bind-data-pallets-required="palletsRequired" class="useage-marker"></div>
-                                        <div data-bind-class="cssClass"  data-bind-data-value="numPalletsStored">
-                                        @barText@</div>
-                                    </td>
-                                    <td><input data-bind-data-start-date="wcDate" type="text" data-bind-value="palletsRequired" /></td>
-                                    <td>@price@</td>
-                                    <td>@charge@</td>
-                            </tr>
-                        </script>
-                        <div class="pricing-container">
-                            <table data-max-pallets="<%= Math.round(session.whSC.sc[0].totalPallets * 1.5)  %>">
-                                <thead>
-                                    <tr>
-                                        <th>Week Commencing</th>
-                                        <th>Pallet Space</th>
-                                        <th>Your Estimated Requirements</th>
-                                        <th>Price per Pallet per Week</th>
-                                        <th>In and Out Price per Pallet</th>
-                                    </tr>                                
-                                    <tr>
-                                    <td colspan="5"></td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% 
-                                    var runningTotal = 0;
-                                    var useageProfile = warehouse.useageProfile;
-                                    for (var wcDate in warehouse.storageProfile)
-                                    { 
-                                        var storageProfile = warehouse.storageProfile[wcDate]%>
-                                    <tr class="animated">
-                                        <td class="week-commencing" data-week-commencing="<%= wcDate %>" ><%= wcDate %></td>
-                                        <td class="bar-container" >
-                                            <div data-pallets-required="<%=useageProfile[wcDate] %>" class="useage-marker"></div>
-                                            <div class="bar <%= storageProfile.numPalletsLeft == 0 ? "full" : "not-full" %>" data-value="<%= storageProfile.numPalletsStored%>">
-                                            <%= storageProfile.numPalletsLeft == 0 ? "OK" : storageProfile.numPalletsStored %></div>
-                                        </td>
-                                        <td><input data-start-date="<%= wcDate %>" type="text" value="<%=useageProfile[wcDate]%>" /></td>
-                                        <td><%=storageProfile.highestPriceOfAnyStorageUsed.price %></td>
-                                        <td><%=storageProfile.highestPriceOfAnyStorageUsed.charge %></td>
-                                    </tr>
-                                    <%
-                                    runningTotal += storageProfile.totalPrice;
-                                    } //end for
-                                    %>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div id="estimated-total-cost">
-                            <span class="label">Estimated Total Cost</span>
-                            <span class="price"><%= runningTotal.toFixed(2) %></span><br/>
-                            <a id="choose-this-warehouse" class="button action forward">choose this warehouse</a>
-                        </div>
-                        <div class="data">
-                            <h3>storage profile</h3>
-                            <%=JSON.stringify(warehouse.storageProfile)%>
-                        </div>
-                    </div>
-				</div>
-			</div>
-		</section>
-		<section>
 			<div class="row main">
-				<div class="content-box columns six ">
+            <div class="columns six">
+				<div class="content-box">
 					<div class="header">
 						<h2>About the warehouse</h2>
 					</div>
 					<div class="main">
                         <div class="carousel">
-                            <img src="/images/whouse1.jpg" class="placeholder" alt="placeholder" />
+                            <img src="/images/<%= warehouse.defaultPhoto || warehouse.photos && warehouse.photos[0] %>" class="placeholder" alt="placeholder" />
                             <ul class="thumbnails">
                             <% for (var i = 0; i < warehouse.photos.length; i++) { %>
                                 <li><img src="/images/<%= warehouse.photos[i] %>" alt="an image of the warehouse"/></li>
                             <%}%>
-                                <li><img src="/images/whouse1.jpg" alt="a warehouse"  /></li>
+                                <!--<li><img src="/images/whouse1.jpg" alt="a warehouse"  /></li>
                                 <li><img src="/images/whouse2.jpg" alt="a warehouse"  /></li>
                                 <li><img src="/images/whouse3.jpg" alt="a warehouse"  /></li>
-                                <li><img src="/images/whouse4.jpg" alt="a warehouse"  /></li>
+                                <li><img src="/images/whouse4.jpg" alt="a warehouse"  /></li>-->
                             </ul>
                         </div>
 						<p><%=warehouse.description%></p>
                         
 					</div>
 				</div>
-				<div class="content-box columns six warehouse-features">
+            </div>
+            <div class="columns six">
+				<div class="content-box warehouse-features">
 					<div class="header">
-						<h2>Warehouse features</h2>
+						<h2>Services and Features</h2>
 					</div>
-					<div class="main row">
-                        <div class="columns six">
-                            <h4>Services</h4>
-    						<ul>
-    							<% for( var i= 0; i<warehouse.services.length;i++ ){%>
-    								<li><%=warehouse.services[i]%></li>
-    							<%}%>
-    						</ul>
-                        </div>
-                        <div class="columns six">
-                            <h4>Specifications</h4>
-    						<ul>
-    							<% for( var i= 0; i<warehouse.specifications.length;i++ ){%>
-    								<li><%=warehouse.specifications[i]%></li>
-    							<%}%>
-    						</ul>
-                        </div>
+                    <div class="main row">
+                      <div class="row">
+                            <div class="columns six">
+                                <h4>Services</h4>
+                                <ul>
+                                    <% for( var i= 0; i<warehouse.services.length;i++ ){%>
+                                        <li><%=warehouse.services[i]%></li>
+                                    <%}%>
+                                    <% for( var i= 0; i<warehouse.specifications.length;i++ ){%>
+                                        <li><%=warehouse.specifications[i]%></li>
+                                    <%}%>
+                                </ul>
+                            </div>
+                            <div class="columns six">
+                                <h4>Features</h4>
+                                <p>Size: <%= warehouse.size %>m<sup>2</sup>  <br/>
+                            Height: <%= warehouse.height %>m</p>
+                                <div class="temperatures">
+
+                                    <% for (var i =0;i<warehouse.storageTemps.length; i++) { %>
+                                        <span class="icon-box temp-<%= warehouse.storageTemps[i]%> "></span>    
+                                    <% } %>
+                                </div>
+                            </div>
+                       </div>
 					</div>
 				</div>
+                <div class="content-box warehouse-documents">
+                    <div class="header">
+                        <h2>Warehouse Documents</h2>
+                        
+                    </div>
+                    <div class="main">
+                    <ul>
+                           <% for( var i= 0; i<warehouse.documents.length;i++ ){%>
+    								<li><%=warehouse.documents[i]%></li>
+                        <%}%>
+                            <li>Insurance Details</li>
+                            <li>P115L</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
 			</div>
-			<div class="continue-links footer form-footer">
+			
+		</section>
+		<section>
+            <input type="hidden" name="warehouse-id" id="warehouse-id" value="<%=warehouse._id%>" />
+            
+			<div class="main">
+				<div class="content-box primary">
+					<div class="header">
+						<h2>Pricing and availability</h2>
+					</div>
+                    <div class="warehouse-pricing main">
+		      <% var quoteView = false; %>
+
+                        <% include ./partials/warehouse-pricing %>
+                        <p class="terms" id="vat-message">*All prices excluding VAT charged at the applicable rate</p>
+                        <div class="choose-warehouse-button-container">
+                            <a id="choose-this-warehouse" href="/quotation-request/<%= warehouse._id %>" class="button  action forward">choose this
+                        warehouse</a>
+                            <span>Your estimated requirements do not fit in this warehouse, either adjust the requirements or view another warehouse.</span>
+                        </div>
+                    </div>
+       
+				</div>
+			</div>
+            <div class="continue-links footer form-footer">
 				<div class="container">
-				<a href="/search" class="back button action">Back to search results</a>
+				<a href="/search" class="back button action">Back to search results</a> <a href="/search#search-area" class="back button action back-to-search-criteria">Edit search criteria</a>
 <p class="doc-buttons">
-                            <button class="simple">View Documents</button>
-                            <button class="simple">View Photos</button>
                         </p>
 				</div>
 			</div>
 		</section>
+		
 	</main>
     
  <% include ./partials/bottom%>

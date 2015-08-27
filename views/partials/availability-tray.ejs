@@ -1,0 +1,134 @@
+<div class="availability-tray">
+    <a class="open-tray-link">Available Pallet Spaces</a>
+    <div class="tray">
+				<p>Specify your pallet availability for up to the end of the next calendar year.<br/>
+                <span class="aside">For date ranges where you have not specified availability, we assume zero avilability (i.e. your warehouse won't show up in search results for those dates).</span></p>
+						
+							<div class="inner">
+								<table class="show-title responsive-table availability-table js-availability-inputs-container" data-title="Available Pallets" data-total-pallets="<%= storage.palletSpaces %>">
+									<thead>
+										<tr>
+											<th>From (Monday)</th>
+											<th>To (Sunday)</th>
+											<th>Total Pallets</th>
+											<th>Estimated in Use</th>
+											<th>Estimated Free</th>
+											<th class="remove-col"/>
+										</tr>
+									</thead>
+									<tbody>
+									<% 
+                                    var lastMonday = utils.getClosestPreviousMonday(new Date());
+                                    var endOfNextYear = utils.getEndOfNextYear(new Date());
+                                    var lastPallets = null;
+                                    for (var i = 0; i<storage.pallets.length;i++) { %>
+									<tr class="js-single-availability-inputs-container">
+										<td data-th="From" class="input-field no-success-validation-style">
+											<%var today = new Date(),
+											      toDate = new Date();
+											  	  toDate.setYear(today.getFullYear() + 1);
+                                                  var thisPallets = storage.pallets[i];
+                                                  var nextPallets = (i+1 < storage.pallets.length) ? storage.pallets[i+1] : null
+											  %>
+											<input readonly required type="date" data-loom-limit-day-of-week="1" name="from" class="datepicker" data-bind-value="from" data-loom-add-controls="true" value="<%=thisPallets.from.toISOString().substring(0, 10)%>" min="<%= lastPallets ? utils.formatDate(lastPallets.from) : utils.formatDate(lastMonday) %>" />
+										</td>
+										<td data-th="To" class="input-field no-success-validation-style">
+											<input readonly data-loom-limit-day-of-week="0" required data-bind-value="to" type="date" name="to" class="datepicker" data-loom-add-controls="true" value="<%=thisPallets.to.toISOString().substring(0, 10)%>" min="<%=thisPallets.from.toISOString().substring(0, 10)%>" max="<%nextPallets ? utils.formatDate(nextPallets.from) : utils.formatDate(endOfNextYear)%>"/>
+										</td>
+										<td data-th="Total Pallets" class="input-field no-success-validation-style">
+											<input disabled required data-bind-value="total" name="total" type="number" value="<%= storage.palletSpaces %>"/>
+										</td>
+										<td data-th="Estimated in Use" class="input-field no-success-validation-style">
+											<input data-loom-type="integer" required data-bind-value="inUse" data-bind-max="total" name="inUse" type="number" data-loom-validators="integer" max="<%= storage.palletSpaces %>" min="1" value="<%=thisPallets.inUse%>"/>
+										</td>
+										<td data-th="Estimated Free" class="input-field no-success-validation-style">
+											<input disabled required data-bind-value="free" name="free" type="number"  value="<%= thisPallets.free %>"/>
+										</td>
+										<td data-th="Remove" class="remove-col">
+											<button type="button" class="trash-button">
+												<span>Delete</span>
+											</button>
+										</td>
+									</tr>
+									<% 
+                                    lastPallets = thisPallets;
+                                    }//end for %>
+                                    <!-- add a blank row -->
+                                    <tr class="js-single-availability-inputs-container">
+										<td data-th="From" class="input-field no-success-validation-style">
+											<input readonly required type="date" data-loom-limit-day-of-week="1" name="from" class="datepicker" data-bind-value="from" data-loom-add-controls="true" min="<%= lastPallets ? utils.formatDate(lastPallets.to) : utils.formatDate(lastMonday)%> " max="<%=utils.formatDate(endOfNextYear)%>" value="<%=lastPallets ? utils.formatDate(utils.addDays(lastPallets.to,1)) : utils.formatDate(lastMonday)%>"/>
+										</td>
+										<td data-th="To" class="input-field no-success-validation-style">
+											<input readonly data-loom-limit-day-of-week="0" required data-bind-value="to" type="date" name="to" class="datepicker" data-loom-add-controls="true" value="" data-bind-min="from" min="" max="<%=utils.formatDate(endOfNextYear)%>"/>
+										</td>
+										<td data-th="Total Pallets" class="input-field no-success-validation-style">
+											<input disabled required data-bind-value="total" name="total" type="number" value="<%= storage.palletSpaces %>"/>
+										</td>
+										<td data-th="Estimated in Use" class="input-field no-success-validation-style">
+											<input data-loom-type="integer" required data-bind-value="inUse" data-bind-max="total" name="inUse" type="number" data-loom-validators="integer" max="<%= storage.palletSpaces %>" min="1" value=""/>
+										</td>
+										<td data-th="Estimated Free" class="input-field no-success-validation-style">
+											<input disabled required data-bind-value="free" name="free" type="number"  value=""/>
+										</td>
+										<td data-th="Remove" class="remove-col">
+											<button type="button" class="trash-button">
+												<span>Delete</span>
+											</button>
+										</td>
+									</tr>
+                                    
+									</tbody>
+								</table>
+								<div class="row controls">
+									<div class="add">
+										<span>Add new date range</span>
+										<button type="button" class="add-button"><span>add row</span></button>
+									</div>
+								</div>
+								
+						</div><!-- end inner -->
+								<div class="row controls">
+									<div class="save">
+										<button class="action done">save</button>
+									</div>
+								</div>
+					
+							<!--<div class="availability-progress">
+								<table>
+									<thead>
+										<tr>
+											<% 
+												var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
+												  "July", "Aug", "Sep", "Oct", "Nov", "Dec"
+												];
+												var i = 0;
+												var date = new Date();
+												while(i<13){%>
+													<th><%=monthNames[date.getMonth()].toUpperCase()%> <%=String(date.getFullYear()).substring(2,4)%></th>
+													<%
+														date.setMonth(date.getMonth()+1);
+														i++;
+												}
+											%>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<%
+												i=0;
+												while(i<13){%>
+													<td/>
+													<%i++;
+												}
+											%>
+										</tr>
+										<tr class="progress-row">
+											<td/>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+                            </div>
+                            </div>-->
+	</div>
+</div>

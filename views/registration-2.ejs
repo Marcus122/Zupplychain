@@ -45,7 +45,7 @@
 													<%
 													if( !warehouse.storage || !warehouse.storage.length ){
 														var row = {};
-														row.placeholder = "A";%>
+														row.name = "A";%>
 														<% include ./partials/define-space-row %>
 													<%}else{
 														for( var i=0; i < warehouse.storage.length; i++ ){

@@ -1,0 +1,158 @@
+ <% include ./partials/top%>   
+ <%
+    var session = { whSC : { sc : "" } };
+    console.log("in template");
+    //console.log(quote);
+    console.log(typeof quote.search.startDate);
+    session.whSC.sc = [quote.search];
+    var warehouse = quote.warehouse;
+    session.whSC.sc[0].startDate = new Date(session.whSC.sc[0].startDate).toISOString();
+
+    var minDurationOptions = config.minDurationOptions;
+    var temperatures = config.temperatures;
+    var palletTypes = config.palletTypes;
+    warehouse.useageProfile = quote.search.useageProfile;
+    warehouse.storageProfile = quote.storageProfile;
+ %>
+	<main class="warehouse-profile quote-request">
+		<div class="banner">
+			<h1>Quotation request</h1>
+		</div>
+		<section>
+            <input type="hidden" name="warehouse-id" id="warehouse-id" value="<%=warehouse._id%>" />
+			<div class="main">
+				<div class="content-box primary">
+					<div class="header">
+						<h2>Request for storage - <%=warehouse.name %>, <%= warehouse.postcode %></h2>
+					</div>
+                    <div class="main quote-request-summary">
+                        <div class="content-box search-criteria-summary">
+                            <div class="header">
+                                <h2>Search Criteria</h2>
+                            </div>
+                            <div class="main">
+                                <div class="row">
+                                    <div class="columns two">
+                                    <span>Target Postcode/City</span>
+                                    <em class="search-value"><%=session.whSC.sc[0].postcode%></em> 
+                                    </div>
+                                    <div class="columns two">
+				    <span>Max Distance (miles)</span>
+                                    <em class="search-value"><%=session.whSC.sc[0].maxDistance%></em> 
+                                    </div>
+                                    <div class="columns two">
+				    <span>  Pallet Type</span>
+					<% if(session.whSC.sc[0].palletType){%>
+                                           <em class="search-value"><%=session.whSC.sc[0].palletType%></em>
+                                       <%}else{%>
+                                           <em class="search-value">Any</em>
+                                      <%}%>
+                                    </div>
+				    <div class="columns two">
+				      <span>Qty</span>
+                                      <em class="search-value"><%=session.whSC.sc[0].totalPallets%></em> 
+				    </div>
+                                    <div class="columns two">
+				      <span>Product Description</span>
+                                      <em class="search-value"><%=session.whSC.sc[0].description%></em> 
+                                    </div>
+                                    <div class="columns two">
+                                    <span>Start Date</span>
+				    <em class="search-value"><%=session.whSC.sc[0].startDate.substring(8,10)%>/<%=session.whSC.sc[0].startDate.substring(5,7)%>/<%=session.whSC.sc[0].startDate.substring(0,4)%></em> 
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="columns two">
+				     <span>Minimum Duration</span>
+                                    <em><%=minDurationOptions[parseInt(session.whSC.sc[0].minDuration,10)]%></em> 
+                                    </div>
+                                    <div class="columns two">
+				      <span>Pallet Height (m)</span>
+				      <em class="search-value"><%=session.whSC.sc[0].height%></em> 
+                                    </div>
+                                    <div class="columns two">
+				      <span>Pallet Weight (kg)</span>
+			            <em class="search-value"><%=session.whSC.sc[0].weight%></em> 
+                                    </div>
+				    <div class="columns two">
+				      <span>Type</span>
+                                      <em class="search-value"><%=temperatures[session.whSC.sc[0].temp]%></em> 
+				    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+            <div class="content-box search-criteria-summary">
+                <div class="header"><h2>Customer Details</h2></div>
+                <div class="main">
+                    <div class="row">
+                        <div class="columns three"><span>Name</span><%=quote.userData.name%></div>
+                        <div class="columns three"><span>Company</span>
+                        <%=quote.userData.companyName%></div>
+                        <div class="columns three"><span>Location</span>
+                        <%=quote.userData.location%></div>
+                        <div class="columns three"><span>Position</span>
+                        <%=quote.userData.position%></div>
+                    </div>
+                </div>
+            </div>
+			<div class="warehouse-pricing">
+                        <% var quoteView = true; %>
+                        <%= include ./partials/warehouse-pricing %>
+			</div>
+
+                        <form class="loom-form row" action="/provider-offer" id="provider-offer-form">
+                                <div class="input-field" style="display:none">
+				      <input type="hidden" name="quoteId" value="<%= quote._id %>" />
+				  </div>
+                        <div class="content-box">
+                            <div class="header">
+                                <h2>Your Payment Terms</h2>
+                            </div>
+                            <div class="main row">
+                                   <div class="six columns">
+                                        <div class="input-field">
+                                            <label for = "paymentType">Payment Type Accepted</label>
+                                            <select name="paymentType">
+                                                <option value="0">Invoice</option>
+                                                <option value="1">Credit Card</option>
+                                                <option value="2">BACS transfer</option>
+                                                
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="six columns">
+                                        <div class="input-field">
+                                            <label for = "paymentTerms">Payment Type Accepted</label>
+                                            <select name="paymentTerms">
+                                                <option value="0">7 Days</option>
+                                                <option value="1" selected="selected">14 Days</option>
+                                                <option value="2">28 Days</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-field check checkbox">
+                                            <label for="terms">I have read and accept the ZupplyChain Terms and Conditions<input type="checkbox" name="terms" id="terms" required="required"/></label>
+                                        </div>
+                                    </div>
+                            </div>
+                            
+                        </div>
+                        <div class="content-box action row">
+                            <div class="eight columns">
+                                <p>Press the SUBMIT button to reply the the customer's storage request with your payment terms. You will be notified by email when the customer accepts or rejects your offer.</p> 
+                            </div>
+                            <div class="four columns submit-request-container">
+                                <button type="submit" class="button action large">SUBMIT OFFER
+                                </button>
+                            </div>
+                          
+                        </div>
+                         </form>
+                    </div>
+				</div>
+			</div>
+		</section>
+	</main>
+    
+ <% include ./partials/bottom%>
+ 

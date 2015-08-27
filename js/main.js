@@ -31,7 +31,7 @@ require(["jquery"], function($) {
 				Registration();
 			});
 		}
-        if (onPage("warehouse-profile")) {
+        if (onPage("warehouse-profile") || onPage("quotation-request") || onPage("/provider-offer")) {
             require(["components/warehouse-profile"], function(warehouseProfile){
                 warehouseProfile();
             });

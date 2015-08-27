@@ -28,6 +28,7 @@ var fields = {
 	services: [String],
 	specifications: [String],
 	photos: [String],
+    defaultPhoto: String,
 	documents: [{filename:String, type:String}],
 	active: { type: Boolean, default: false },
 	created: { type: Date , default: Date.now },
@@ -39,7 +40,13 @@ var fields = {
     loc  :{
         type : { type: String},
         coordinates: [Number]
-    }
+    },
+    noDiscount:{type: Number },
+    discounts:[{
+		from:Number,
+		to:Number,
+		perc:Number
+	}],
 };
 
 var warehouseSchema = new Schema(fields);
@@ -47,12 +54,18 @@ warehouseSchema.index({ loc: '2dsphere' });
 
 // INSTANCE METHODS
 
+warehouseSchema.pre('init', function(next, data) {
+    //we can do any pre-loading data assignment in here if we want.
+    next();
+});
+
 warehouseSchema.methods.generateStorageProfile = function(query) {
     var warehouseAPI = this;
     var storages = this.storage;
-    var aggStorage = this.constructor.storagesToAggregateStorage(storages, query);
+    var aggStorage = this.constructor.storagesToAggregateStorage(this, query); // '.constructor' just lets us call a static method from an instance method.
     this.storageProfile = aggStorage.generateContractStorageProfile(query.useageProfile);
     this.useageProfile = query.useageProfile;
+    this.storageTemps = aggStorage.getAvailableStorageTemps();
 };
 
 // STATIC METHODS
@@ -97,7 +110,9 @@ warehouseSchema.statics = {
             });
   },*/
   
-  storagesToAggregateStorage: function(storage, query) {     
+  storagesToAggregateStorage: function(warehouse, query) {  
+    var storage = warehouse.storage;
+    var volumeDiscounts = warehouse.discounts;
     query.palletType   = parseInt(query.palletType,10);
     query.temp         = parseInt(query.temp,10);
     query.totalPallets = parseInt(query.totalPallets,10);
@@ -116,7 +131,7 @@ warehouseSchema.statics = {
     if (matchingStorages.length == 0) {
         return false;
     }
-    var aggStorage = new AggregateStorage(matchingStorages);
+    var aggStorage = new AggregateStorage(matchingStorages, volumeDiscounts);
     return aggStorage;
   },
   
@@ -158,11 +173,12 @@ warehouseSchema.statics = {
   checkAgainstQueryAndPopulate: function(warehouse, query) {
         var warehouseAPI = this;
         var editableResult = warehouse.toObject();
-        var aggStorage = warehouseAPI.storagesToAggregateStorage(warehouse.storage, query);
+        var aggStorage = warehouseAPI.storagesToAggregateStorage(warehouse, query);
         if (aggStorage && aggStorage.palletsWillFitAtThisDate(query.startDate, query.totalPallets)) {
             editableResult.storageProfile = aggStorage.generateContractStorageProfile(query.useageProfile);
             editableResult.distanceFromSearch = Utils.distanceInMiles(editableResult.geo , query.geo );
             editableResult.firstWeekPrice = aggStorage.getPriceForFirstWeek();
+            editableResult.storageTemps = aggStorage.getAvailableStorageTemps();
             return editableResult
         } else {
             return false;
@@ -178,5 +194,5 @@ warehouseSchema.statics = {
   
   
 }
-
-module.exports = mongoose.model('warehouses', warehouseSchema);
+//used to be 'warehouses' if we get an error change it back.
+module.exports = mongoose.model('warehouse', warehouseSchema);

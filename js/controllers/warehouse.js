@@ -26,10 +26,24 @@ define(["jquery"], function ($) {
 				}
 			});
 		}
+        
+        function updateVolumeDiscount(warehouse,volumeDiscountData,cb){
+        //data in format: {noDiscount : 20, discounts [from: 21, to: 25, perc: 4]}}
+            var new_url = url + '/'+ warehouse.id + '/volumeDiscount/';
+			$.ajax({
+				url: new_url,
+				type:'POST',
+				data: JSON.stringify(volumeDiscountData),
+				contentType: 'application/json; charset=utf-8',
+				dataType: 'json',
+				success:function(response){
+					cb(response);
+				}
+			});
+        }
 		
 		function updateStorageBatch(warehouse,storage,cb){
 			var new_url = url + '/'+ warehouse.id + '/storage/batch/';
-			console.log("once");
 			$.ajax({
 				url: new_url,
 				type:'POST',
@@ -71,7 +85,8 @@ define(["jquery"], function ($) {
 			update :update,
 			updateStorageBatch:updateStorageBatch,
 			getStorage:getStorage,
-			updateStorage:updateStorage
+			updateStorage:updateStorage,
+            updateVolumeDiscount:updateVolumeDiscount
 		}
 	}
 		

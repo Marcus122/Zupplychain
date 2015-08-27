@@ -1,0 +1,28 @@
+&nbsp;
+<% if (warehouse.discounts.length != 0) { %>
+<h4>Volume Discount</h4>
+<table class="volume-discount-table">
+    <thead>
+        <tr>
+            <th>From</th>
+            <th>To</th>
+            <th>Dicount (%)</th>
+        </tr>
+    </thead>
+    <tbody>
+       <% if (1 == 2 && warehouse.noDiscount != 0) { //disabled for now%>
+        <tr>
+            <td>0</td><td><%=warehouse.noDiscount%></td><td>0.00</td>
+        </tr>
+       <% } %>
+        <% for (var i=0;i<warehouse.discounts.length; i++) {
+        var thisDiscount = warehouse.discounts[i]; %>
+        <tr>
+            <td><%= thisDiscount.from %></td>
+            <td><%= thisDiscount.to%></td>
+            <td><%= thisDiscount.perc.toFixed(2)%></td>
+        </tr>
+        <% } %>
+    </tbody>
+</table>
+<% } %>

@@ -1,0 +1,120 @@
+<div class="date-range-pricing-tray">
+  <a class="open-tray-link">Date Specific Pricing (Optional)</a>
+  <div class="tray">
+    <div class="row">
+        <div class="columns six">
+        <p>You can specify alternative pricing for specific time periods. This will overide your standard pricing for these time periods.</p>
+        </div>
+        <div class="columns six controls">
+        <% include ./net-gross-controls %>
+        </div>
+    </div>
+    <div class="inner">
+        <div class="row">
+            <div class="columns four">&nbsp;</div>
+            <div class="copy-controls controls columns eight">
+                <label for="copy-from">Copy from another storage?</label>
+                <select name="copy-from">
+                    <%for( var i=0; i<warehouse.storage.length;i++ ){ 
+                        if (storage._id == warehouse.storage[i]._id) {
+                            continue;
+                        }
+                    %>
+                        <option value="<%=warehouse.storage[i]._id%>" >Copy from: <%=warehouse.storage[i].name %></option>
+                    <%
+                    }
+                    %>
+                </select>
+                <button type="button" class="primary copy-button">COPY</button>
+            </div>
+        </div>
+    <table class="js-date-specific-inputs-container show-title responsive-table date-pricing-table" data-title="Pricing" id="">
+        <thead>
+            <tr>
+                <th>From W/C (Monday)</th>
+                <th>To (Sunday)</th>
+                <th>Price per Pallet (&pound; per Week)</th>
+                <th>Handling Charge (&pound; per Pallet)</th>
+                <th class="remove-col"/>
+            </tr>
+        </thead>
+        <tbody>
+<% 
+var lastMonday = utils.getClosestPreviousMonday(new Date());
+var endOfNextYear = utils.getEndOfNextYear(new Date());
+var lastDateRange = null;
+
+for (var i = 0; i < storage.pricing.length; i++) { 
+    var currentStoragePricing = {from : "", to: "", price : "", charge: ""};
+    if (i < storage.pricing.length) {
+        currentStoragePricing = storage.pricing[i];
+    }
+%> 
+            <tr class="js-single-date-range-inputs-container">
+            	<%
+      var today = new Date(),
+      toDate = new Date();
+	  toDate.setYear(today.getFullYear() + 1);
+      var thisDateRange = storage.pricing[i];
+      var nextDateRange = (i+1 < storage.pricing.length) ? storage.pricing[i+1] : null
+	  %>
+        <td data-th="From" class="input-field no-success-validation-style">
+		<input readonly required type="date" data-loom-limit-day-of-week="1" name="from" class="datepicker" data-bind-value="from" data-loom-add-controls="true" value="<%=thisDateRange.from.toISOString().substring(0, 10)%>" min="<%= lastDateRange ? utils.formatDate(lastDateRange.from) : utils.formatDate(lastMonday) %>" />
+	</td>
+	<td data-th="To" class="input-field no-success-validation-style" >
+		<input readonly data-loom-limit-day-of-week="0" required data-bind-value="to" type="date" name="to" class="datepicker" data-loom-add-controls="true" value="<%=thisDateRange.to.toISOString().substring(0, 10)%>" min="<%=thisDateRange.from.toISOString().substring(0, 10)%>" max="<%nextDateRange ? utils.formatDate(nextDateRange.from) : utils.formatDate(endOfNextYear)%>"/>
+	</td>
+	<td data-th="Price per pallet per week" class="input-field no-success-validation-style">
+		<input data-loom-type="decimal" data-loom-decimal-places="2" data-bind-value="price" name="price" type="number" class="currency" required="required" value="<%=thisDateRange.price %>"/>
+	</td>
+	<td data-th="Handling charge per pallet (In and Out)" class="input-field no-success-validation-style">
+		<input data-loom-type="decimal" data-loom-decimal-places="2" data-bind-value="charge" name="charge" type="number" class="currency" required="required" value="<%=thisDateRange.charge %>"/>
+	</td>
+	<!--<div class="input-field no-success-validation-style" style="display:none">
+		<input type="hidden" data-loom-type="decimal" data-loom-decimal-places="2" name="reserve" class="currency" value="0" />
+	</div>-->
+	<td data-th="Remove" class="input-field no-success-validation-style remove-col">
+		<button type="button" class="trash-button"><span>Delete</span></button>
+	</td>
+            </tr>
+  <% 
+  lastDateRange = thisDateRange;
+  }
+  var blankRowFromDate = lastDateRange ? utils.formatDate(utils.addDays(lastDateRange.to, 1)) : lastMonday
+  %>
+  <!-- add a blank row -->
+  
+  <tr class="js-single-date-range-inputs-container">
+        <td data-th="From" class="input-field no-success-validation-style">
+		<input readonly required type="date" data-loom-limit-day-of-week="1" name="from" class="datepicker" data-bind-value="from" data-loom-add-controls="true" value="<%= blankRowFromDate %>" min="<%= lastDateRange ? utils.formatDate(lastDateRange.from) : utils.formatDate(lastMonday) %>" />
+	</td>
+	<td data-th="To" class="input-field no-success-validation-style" >
+		<input readonly data-loom-limit-day-of-week="0" required data-bind-value="to" type="date" name="to" class="datepicker" data-loom-add-controls="true" value="" min="<%= blankRowFromDate %>" max="<%= utils.formatDate(endOfNextYear)%>"/>
+	</td>
+	<td data-th="Price per pallet per week" class="input-field no-success-validation-style">
+		<input data-loom-type="decimal" data-loom-decimal-places="2" data-bind-value="price" name="price" type="number" class="currency" required="required" value=""/>
+	</td>
+	<td data-th="Handling charge per pallet (In and Out)" class="input-field no-success-validation-style">
+		<input data-loom-type="decimal" data-loom-decimal-places="2" data-bind-value="charge" name="charge" type="number" class="currency" required="required" value=""/>
+	</td>
+	<!--<div class="input-field no-success-validation-style" style="display:none">
+		<input type="hidden" data-loom-type="decimal" data-loom-decimal-places="2" name="reserve" class="currency" value="0" />
+	</div>-->
+	<td data-th="Remove" class="input-field no-success-validation-style remove-col">
+		<button type="button" class="trash-button"><span>Delete</span></button>
+	</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="controls">
+        <div class="add">
+            <span>Add new date range</span>
+            <button type="button" class="add-button"><span>add row</span></button>
+        </div>
+    </div>
+    </div>
+    <div class="controls save-button">
+        <button type="submit" class="action">Save</button>
+    </div>
+</div>
+</div>

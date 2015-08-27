@@ -5,13 +5,13 @@ define(["jquery","./Datasource", "./Pager"],function($,Datasource,Pager){
 		
 	var config = _config ? _config : {};
 	var $tableElement = $table;
-        var $rowContainer = $table.find("tbody");
+    var $rowContainer = $table.find("tbody");
 	var datasource;
 	var _ascending = 'A';
 	var _descending = 'D';
-        var pager;
+    var pager;
 		
-        var NUM_PER_PAGE_ATTRIBUTE = "data-loom-num-per-page";
+    var NUM_PER_PAGE_ATTRIBUTE = "data-loom-num-per-page";
         
 	var DESCENDING_CLASS =  config.descendingClass ? config.descendingClass : 'descending';
 	var ASCENDING_CLASS =  config.ascendingClass ? config.ascendingClass : 'ascending';
@@ -21,7 +21,19 @@ define(["jquery","./Datasource", "./Pager"],function($,Datasource,Pager){
 		
 	populateDatasource();
 	setEvents();
-        setUpPaging();
+    setUpPaging();
+    sortIfSavedSortOrder();
+        
+        function sortIfSavedSortOrder() {
+            var savedSortOrder = loadLastSortFromLocalStorage();
+            if (!savedSortOrder) {
+                return;
+            }
+            var savedAsObj = JSON.parse(savedSortOrder);
+            var sortBy = savedAsObj.sortBy;
+            var field = savedAsObj.field;
+            sortAndUpdateHeadings(field, sortBy);
+        }
         
         function setUpPaging() {
             var numPerPage = getNumPerPage();
@@ -60,7 +72,11 @@ define(["jquery","./Datasource", "./Pager"],function($,Datasource,Pager){
 		if($cell.hasClass(ASCENDING_CLASS)){
 			sortBy = _descending;
 		};
-		$table.find('thead th').removeClass(ASCENDING_CLASS);
+		sortAndUpdateHeadings(field, sortBy)
+	}
+    function sortAndUpdateHeadings(field, sortBy){
+        var $cell = $tableElement.find("th[data-field='" + field + "']");
+        $table.find('thead th').removeClass(ASCENDING_CLASS);
 		$table.find('thead th').removeClass(DESCENDING_CLASS);
 		switch(sortBy){
 			case _ascending:
@@ -70,9 +86,32 @@ define(["jquery","./Datasource", "./Pager"],function($,Datasource,Pager){
 				$cell.addClass(DESCENDING_CLASS);
 				break;
 		}
+        storeLastSortInLocalStorage(field, sortBy);
 		sort(field,sortBy);
-           pager.resetToFirstPage();
-	}
+        pager.resetToFirstPage();
+    }
+    function storeLastSortInLocalStorage(field, sortBy) {
+        if (!supports_html5_storage) {
+            return;
+        }
+        var tableId = $tableElement.attr("id") ;
+        if (!tableId) {
+            return;
+        }
+        var obj = JSON.stringify({"field" : field, "sortBy" : sortBy});
+        localStorage.setItem("loomTable#" + tableId ,obj);
+    }
+    function loadLastSortFromLocalStorage() {
+        if (!supports_html5_storage) {
+            return;
+        }
+        var tableId = $tableElement.attr("id") ;
+        if (!tableId) {
+            return;
+        }
+        return localStorage.getItem("loomTable#" + tableId);
+    }
+    
 	function setEvents(){
 		$table.off("click.loomSort").on("click.loomSort","thead th",function(){
 			doSort($(this));
@@ -101,6 +140,13 @@ define(["jquery","./Datasource", "./Pager"],function($,Datasource,Pager){
 	function reset(){
 		draw(datasource.getRows());
 	}
+    function supports_html5_storage() {
+        try {
+            return 'localStorage' in window && window['localStorage'] !== null;
+        } catch (e) {
+            return false;
+        }
+    }   
 	
 	return {
 		sort:sort,

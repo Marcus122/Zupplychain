@@ -12,6 +12,7 @@ define(["jquery", "./formField", "./loomConfig"],function($, FormField, Config){
     var FORM_SOFT_ERROR_CLASS = config.FORM_SUCCESS_CLASS || "form-soft-error";
     var FORM_HARD_ERROR_CLASS = config.FORM_SUCCESS_CLASS || "form-hard-error";
     var FORM_FIELD_CONTAINER_SELECTOR = config.FORM_FIELD_CONTAINER_SELECTOR || ".input-field";
+    var FORM_FIELD_IGNORE_SELECTOR = ".loom-ignore";
 		
 	var VALIDATE_ON_BLUR                    = config.VALIDATE_ON_BLUR;
 	var MAY_NOT_PROGRESS_PAST_INVALID_FIELD = config.MAY_NOT_PROGRESS_PAST_INVALID_FIELD;
@@ -59,10 +60,10 @@ define(["jquery", "./formField", "./loomConfig"],function($, FormField, Config){
         
         formElement.attr("novalidate", "novalidate");
         
-	setupNormalInputs();
-	setupRadioInputs();
-	setupFieldDependentValidators();
-	setupConfirmationValidators();
+	   setupNormalInputs();
+	   setupRadioInputs();
+	   setupFieldDependentValidators();
+	   setupConfirmationValidators();
         setupFieldCompareValidators();
         setupAutoPopulationOnSelection();
         setupCopyOnCheck();
@@ -272,7 +273,7 @@ define(["jquery", "./formField", "./loomConfig"],function($, FormField, Config){
         }
 		
 		function setupNormalInputs(){
-            var formFieldContainers = formElement.find(FORM_FIELD_CONTAINER_SELECTOR);
+            var formFieldContainers = formElement.find(FORM_FIELD_CONTAINER_SELECTOR).not(FORM_FIELD_IGNORE_SELECTOR);
             var lim = formFieldContainers.length;
             for(var i = 0;i<lim;i++){
                 addInputField(formFieldContainers[i]);
@@ -445,6 +446,13 @@ define(["jquery", "./formField", "./loomConfig"],function($, FormField, Config){
                 formSubmissionCallback(result);
 			});
 		}
+        
+        function clearAllValidationStyles() {
+            clearStateMessages();
+            for (var i =0;i<this.fields.length;i++) {
+                fields[i].clearValidationMessages();
+            }
+        }
 		
 		function clearStateMessages(){
 			formElement.removeClass(FORM_PENDING_CLASS);
@@ -530,6 +538,7 @@ define(["jquery", "./formField", "./loomConfig"],function($, FormField, Config){
             dataType:dataType,
 			showValidationMessage:showValidationMessage,
 			clearValidationMessages:clearValidationMessages,
+            clearAllValidationStyles:clearAllValidationStyles,
 			setStatePending:setStatePending,
 			setStateError:setStateError,
 			setStateSuccess:setStateSuccess,

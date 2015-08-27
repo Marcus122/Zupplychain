@@ -7,6 +7,7 @@
 				if(!warehouse.storage.length){
 					warehouse.storage=[];
 				}
+
 			%>
 			<main>
 				<div class="banner">
@@ -20,14 +21,13 @@
                         <li class="four columns active checked"><span>Step 3</span> - Price and availability</li>
 					</ul>
 					<section class="tab-content">
-						<form id="price-and-availability-user-data" class="loom-form responsive-table provider-form" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" action="/complete-registration" novalidate>
-							<div class="main">
+							<div class="main" id="price-and-availability-user-data">
 								<div class="content-box primary">
 									<div class="header">
 										<h3>Define your Price and availability</h3>
 									</div>
-									<fieldset class="main">
-										<table class="max price-and-availability">
+									<div class="main">
+										<table class="max price-and-availability js-all-storages">
 											<thead>
 												<tr>
 													<th>Storage Name</th>
@@ -57,37 +57,45 @@
 													<td class="text" data-th="Pallet Spaces">
 														<span><%=storage.palletSpaces%></span>
 													</td>
-													<%if(pricingComplete){%>
-														<td class="button-cell pricing success" data-th="Pricing">
-															<span class="edit-data">DATA</span>
-															<button data-template="pricing" type="button" class="popup mini"/>
-														</td>
-													<%}else{%>
-														<td class="button-cell pricing" data-th="Pricing">
-															<span class="edit-data">DATA</span>
-															<button data-template="pricing" type="button" class="popup mini"/>
-														</td>
-													<%}%>
+													
+													<td class="button-cell pricing <%= pricingComplete ?  'success' : '' %>" data-th="Pricing">
+														<span class="edit-data">DATA</span>
+														<button data-type="pricing" type="button" class="popup mini"/>
+													</td>
 													<!--<td class="button-cell discounts" data-th="Volume Discount">
 														<button data-template="volume"  type="button" class="secondary popup mini">click here</button>
 													</td>-->
-													<%if(palletsComplete){%>
-														<td class="button-cell pallets success" data-th="Available Pallets">
-															<span class="edit-data">DATA</span>
-															<button data-template="pallets" type="button" class="popup mini"/>
-														</td>
-													<%}else{%>
-														<td class="button-cell pallets" data-th="Available Pallets">
-															<span class="edit-data">DATA</span>
-															<button data-template="pallets" type="button" class="popup mini"/>
-														</td>
-													<%}%>
+													
+													<td class="button-cell pallets <%= palletsComplete ? 'success' : ''%>" data-th="Available Pallets">
+														<span class="edit-data">DATA</span>
+														<button data-type="availability" type="button" class="popup mini"/>
+													</td>
+												
 													<!--<td data-th="Progress">
 														<div class="progress">
 															<div class="progress-bar"/>
 														</div>
 													</td>-->
 											    </tr>
+
+												<tr class="trays" id="pricing-container-<%=storage._id %>">
+                                                    <td colspan="4" class="js-storage" data-storage-id="<%=storage._id%>">
+                                                        <div class="pricing-trays tray-holder">
+                                                            <form  data-storage-id="<%=storage._id%>" id="standard-pricing-<%=storage._id %>" data-id="price-and-availability-user-data" class="loom-form provider-form standard-pricing-form" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" action="/complete-registration" novalidate>
+                                                                <% include ./partials/standard-pricing-tray %>
+                                                            </form>
+                                                            <form  data-storage-id="<%=storage._id%>" id="date-range-pricing-<%=storage._id %>" data-id="price-and-availability-user-data" class="loom-form provider-form date-range-pricing-form" data-storage_id="<%=storage._id%>" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" action="/complete-registration" novalidate>
+                                                                <% include ./partials/date-range-pricing-tray %>
+                                                            </form>
+
+                                                       </div>
+                                                       <div class="availability-trays tray-holder">
+                                                            <form  data-storage-id="<%=storage._id%>" id="availability-<%=storage._id %>"  class="loom-form provider-form availability-form" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" >
+                                                                <% include ./partials/availability-tray %>
+                                                            </form>
+                                                       </div>
+                                                    </td>
+												</tr>
 											    <%}%>
 											</tbody>
 										</table>
@@ -103,7 +111,8 @@
 												<button href="#" class="view tertiary forward mini">View Terms &amp; Conditions</button>
 											</div>
 										</div>-->
-									</fieldset>
+                                        <button href="#" class="add primary mini add-volume-discount">Add volume discount (optional)</button>
+									</div>
 								</div>
 								<!--<div class="content-box primary">
 									<div class="header">
@@ -139,15 +148,14 @@
 							<fieldset class="form-footer">
 								<input name="warehouse" type="hidden" value="<%=warehouse._id%>"/>
 								<a href="/provider-registration-2"><button class="back" type="button">Back</button></a>
-								<button class="action next">Save &amp; Finish</button>
+								<button id="save-and-finish" class="action next">Save &amp; Finish</button>
 							</fieldset>
-						</form>
 					</section>
 				</div>
 			</main>
          <% include ./partials/bottom %> 
 		 <script type="text/template" id="pricing">
-			<div class="popup-window">
+			<div class="popup-window .pricing-container">
 				<div class="inner">
 					<div class="popup-main content-box secondary">
 						<div class="header">
@@ -225,59 +233,110 @@
 			</div>
 		 </script>
 		 <script type="text/template" id="basic-pricing-row">
-		    <% include ./partials/basic-pricing-row %> 
+		    <%  include ./partials/basic-pricing-row    %> 
 		 </script>
 		 <script type="text/template" id="pricing-row">
-		    <% include ./partials/pricing-row %> 
+		    <% include ./partials/pricing-row 
+              
+            %> 
 		 </script>
-		 <script type="text/template" id="volume">
-			<div class="popup-window">
+
+			<div class="popup-window" id="volume-discount-popup" style="display:none;">
 				<div class="inner">
-					<div class="popup-main content-box secondary discount-popup">
+					<div class="popup-main content-box secondary discount-popup tray">
 						<div class="header">
-							<h2>Volume Discount: Storage @name@</h2>
+							<h2>Volume Discount</h2>
 						</div>
-						<button class="close no-resize"><span>close</span></button>
+						<button class="close-me no-resize"><span>close</span></button>
 						<div class="main">
 							<div class="discount-inner">
+                            <%
+                                    warehouse.totalPalletSpaces = 0;
+                                    for (var j =0;j<warehouse.storage.length;j++) {
+                                        warehouse.totalPalletSpaces += warehouse.storage[j].palletSpaces;
+                                    }
+                                %>
 								<div class="discount-header">
 									<h2>Volume Discount</h2>
-									<span>Max number of pallets: <strong>@palletSpaces@</strong></span>
+									<span>Max number of pallets: <strong><%= warehouse.totalPalletSpaces %></strong></span>
 								</div>
-								<form method="post" id="discount-form" class="loom-form" novalidate data-loom-no-submit="true">
+                                
+								<form method="post" id="discount-form" class="volume-discount-form loom-form" novalidate data-loom-no-submit="true">
 									<div class="input-field no-discount no-success-validation-style">
 										<label for="no-disc">No discount on orders with up to</label>
-										<input required type="number" value="0" name="noDiscount" min="0" data-bind-value="noDiscount" data-bind-max="palletSpaces"/>
+										<input required type="number" name="noDiscount" min="0" data-bind-value="noDiscount" data-bind-max="palletSpaces" value="<%= warehouse.noDiscount || ''; %>" max="<%=warehouse.totalPalletSpaces%>"/>
 										<span>pallets</span>
 									</div>
 									<p>If you want to specify variations to your prices for large quantities, use this table. If not, your prices will apply to any quantity.</p>
-									<table class="show-title responsive-table" data-title="Volume Discount">
+									<table class="show-title responsive-table" data-title="Volume Discount" id="volume-discount-table">
 										<thead>
-											<th>From (Monday)</th>
-											<th>To (Sunday)</th>
+											<th>From</th>
+											<th>To</th>
 											<th class="discount-value">% Discount</th>
 											<th class="remove-col"/>
 										</thead>
 										<tbody>
+                                        <% 
+                                        var thisDiscount = null;
+                                        for (var i=0;i<warehouse.discounts.length;i++)  {
+                                            thisDiscount = warehouse.discounts[i];
+                                        %>
+                                            <tr class="js-single-discount">
+                                                <td data-th="From" class="discount-from">
+                                                    <input name="from" type="hidden" data-bind-value="from" value="<%=thisDiscount.from%>"/>
+                                                    <span class="js-from"><%= thisDiscount.from %></span>
+                                                </td>
+                                                <td data-th="To" class="input-field no-success-validation-style discount-to">
+                                                    <input data-bind-max="total" required data-bind-value="to" data-bind-min="from" type="number" name="to" value="<%=thisDiscount.to %>"/>
+                                                </td>
+                                                <td data-th="% Discount" class="input-field no-success-validation-style discount-value">
+                                                    <input data-loom-type="decimal" data-loom-decimal-places="1" required data-bind-value="perc" name="perc"  type="number" min="0" step="0.5" value="<%=thisDiscount.perc%>"/>
+                                                </td>
+                                                <td data-th="Remove" class="remove-col">
+                                                    <button type="button" class="trash-button">
+                                                        <span>Delete</span>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        <% }
+                                        var blankRowFrom = thisDiscount && thisDiscount.to + 1 || ( warehouse.noDiscount && warehouse.noDiscount + 1 || 0)  
+                                        %>
+                                        <!-- add a blank row -->
+                                        <tr class="js-single-discount">
+                                                <td data-th="From" class="discount-from">
+                                                    <input name="from" type="hidden" data-bind-value="from" value="<%= blankRowFrom %>"/>
+                                                    <span class="js-from"> <%= blankRowFrom %></span>
+                                                </td>
+                                                <td data-th="To" class="input-field no-success-validation-style discount-to">
+                                                    <input data-bind-max="total" required data-bind-value="to" data-bind-min="from" type="number" name="to" value=""/>
+                                                </td>
+                                                <td data-th="% Discount" class="input-field no-success-validation-style discount-value">
+                                                    <input data-loom-type="decimal" data-loom-decimal-places="1" required data-bind-value="perc" name="perc"  type="number" min="0" step="0.5"/>
+                                                </td>
+                                                <td data-th="Remove" class="remove-col">
+                                                    <button type="button" class="trash-button">
+                                                        <span>Delete</span>
+                                                    </button>
+                                                </td>
+                                            </tr>
 										</tbody>
 									</table>
                                         <div class="popup-buttons">
                                                 <div class="add">
                                                     <button type="button" class="add-button"><span>add row</span></button>
                                                 </div>
-                                            </div>
-                                            <div class="popup-buttons">
+                                        </div>
+                                        <div class="popup-buttons">
                                                 <div class="save">
                                                     <button class="action done">save</button>
                                                 </div>
-                                            </div>
                                         </div>
 								</form>
-							</div>
+                            </div>
 						</div>
 					</div>
 				</div>
-			</div>
+            </div>
 		 </script>
 		 <script type="text/template" id="discount-row">
 		    <% include ./partials/discount-row %> 
@@ -325,6 +384,7 @@
 									<thead>
 										<tr>
 											<% 
+
 												var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
 												  "July", "Aug", "Sep", "Oct", "Nov", "Dec"
 												];

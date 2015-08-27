@@ -40,6 +40,8 @@ exports.login = function(req,res,cb){
 	});
 }
 exports.logout = function(req,res,cb){
+    console.log("logging out");
+   req.session.user_id = "";
   delete req.session.user_id;
   cb(false);
 }

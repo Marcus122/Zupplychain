@@ -1,3 +1,5 @@
+
+
 .popup-window{
 	position:absolute;
 	z-index:100;
@@ -10,12 +12,18 @@
 		position: relative;
 		max-width:1200px;
 	}
-	.close{
+    .close-me:after{
+        .ion;
+    }
+	.close, .close-me{
 		  position: absolute;
 		  top: -6px;
 		  right: 5px;
 		  font-size: 40px;
 		  color:@white;
+          span {
+            display:none;
+          }
 	}
 	.input-field input:not([type="checkbox"]){
 		width:100%;
@@ -107,7 +115,7 @@
 				width:100%;
 			}
 		}
-		.close{
+		.close, .close-me{
 			top: -21px;
 			right: -3px;
 		}

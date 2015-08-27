@@ -1,4 +1,4 @@
-define(["jquery"],function($){
+define(["jquery", "./filters"],function($, Filters){
 	
 	return function Class(_$script,_config) {
         var $script = _$script;
@@ -6,6 +6,8 @@ define(["jquery"],function($){
 		var $template = $($script.html());
 		var $attrElements = $();
 		var $textElements = $();
+	        var filters = Filters;
+		
 		
 		function bind(data){
 			//Bind all data
@@ -62,20 +64,48 @@ define(["jquery"],function($){
 		function getBindValue(_data,_text){
 			var data=_data;
 			var text = _text;
-			var inverse=false;
-			if(text.substring(0,1) === "!"){
-				text = text.substring(1,text.length);
-				inverse=true;
-			}
+		        var inverse = getInverse(text);
+		        text = removeInverse(text);
+		        var thisFilter = getFilter(text);
+		        text = removeFilter(text);
 			//For nested object attributes
 			var attrs = text.split(".");
 			for( i in attrs ){
 				if(Number(i)===attrs.length-1){
-					return inverse ? !data[attrs[i]] : data[attrs[i]];
+					var retVal = inverse ? !data[attrs[i]] : data[attrs[i]];
+					return thisFilter(retVal);
 				}else{
 					data = data[attrs[i]];
 				}
 			}
+		}
+		function getInverse(text){
+		    return text.substring(0,1) == "!";
+		}
+		function removeInverse(text){
+		    if (text.substring(0,1) == "!"){
+			return text.substring(1,text.length);
+		    }
+		    return text;
+		}
+		function getFilter(text) {
+		    var nonFilter = function(input) { return input;};
+		    var pipeLocation = text.indexOf("|"); 
+		    if (pipeLocation == -1) {
+			return nonFilter;
+		    }
+		    var filterString = text.substr(pipeLocation + 1, text.length - (pipeLocation + 1)).replace(/ /g,'');
+		    if (filterString in filters) {
+			return filters[filterString];
+			}
+		    return nonFilter;
+		}
+		function removeFilter(text) {
+		    var pipeLocation = text.indexOf("|");
+		    if (pipeLocation == -1) {
+			return text;
+		    }
+		    return text.substr(0, pipeLocation).replace(/ /g,'');
 		}
 		function getAttributeBindables($container){
 			return $container.find('*').filter(function(){

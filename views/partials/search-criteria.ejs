@@ -13,7 +13,7 @@
 			<form class="storage-search loom-form" action="/search" id="search-form" novalidate>
             <div class="input-field">
 					<label for="postcode">Target Postcode/City</label>
-					<input type="text" name="postcode" required="required" minlength="2" value="<%= session.whSC ? session.whSC.sc[0].postcode : " "%>"/>
+					<input type="text" name="postcode" required="required" minlength="3" value="<%= session.whSC ? session.whSC.sc[0].postcode : " "%>"/>
 				</div>
                 <div class="input-field number" >
 					<label for="max-distance">Max Distance (miles)</label>
@@ -90,6 +90,9 @@
 					
 				</div>
 				<div class="input-field last">
+                    <div class="search-nag" style="">
+                        Your search criteria have changed, click below to search
+                    </div>
 					<button type="submit" class="action forward">Search</button>
 				</div>
 			</form>

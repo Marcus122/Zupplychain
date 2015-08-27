@@ -1,6 +1,6 @@
 define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (GM, $) {
 
-    
+    //Apologies this is ugly.. could do with a rewrite.
     function Class(postcode, radius) {
     
         var MAP_ELEM_ID = "map-container"
@@ -13,56 +13,53 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
         var factoryData;
         var centerLatLong;
         var normalIcon = {
-              url  : "/images/map-icon.png"
-          }
-          
-          var highlightIcon = {
+          url  : "/images/map-icon.png"
+        }
+        var highlightIcon = {
             url  : "/images/map-icon-highlight.png"
-          }
-          
-          var markerOptions;  
+        }  
+        var markerOptions;  
         
         function initialize(postcode, radius) {
-          var loc1 = new google.maps.LatLng(0,0);
-          var mapOptions = {
-            center: loc1,
-            zoom: 14
-          };
-          map = new google.maps.Map( document.getElementById(MAP_ELEM_ID), mapOptions);
-          
-          markerOptions = {
-              icon: normalIcon,
-              map:map,
-              animation:'DROP'
-          }
-          
-          centerMapAtPostCode(postcode, map, radius);
-          
-          function centerMapAtPostCode(postcode, map, radius) {
-              
-              if (!radius) {
+            
+            var loc1 = new google.maps.LatLng(0,0);
+            var mapOptions = {
+                center: loc1,
+                zoom: 14
+            };
+            map = new google.maps.Map( document.getElementById(MAP_ELEM_ID), mapOptions);
+            centerMapAtPostCode(postcode, map, radius);
+            
+            markerOptions = {
+                icon: normalIcon,
+                map:map,
+                animation:'DROP'
+            }
+
+            function centerMapAtPostCode(postcode, map, radius) {
+                if (!radius) {
                   radius = 20;//default 20 miles;
-              } //TODO: have a local API that we use for this.
+                } //TODO: have a local API that we use for this.
                 geocoder = new google.maps.Geocoder();
-              geocoder.geocode( { 'address': postcode, "componentRestrictions":restrictions}, function(results, status) {
-                if (status == google.maps.GeocoderStatus.OK) {
-                  
-                  var latlong = results[0].geometry.location;
-                    var loc2 = new google.maps.LatLng(latlong.latitude, latlong.longitude);
-                    centerLatLong = latlong;
-                    map.setCenter(latlong);
-                    setRadius(radius);
-                } else {
-                  alert('Geocode was not successful for the following reason: ' + status);
-                }
-              });
-          }
+                geocoder.geocode( { 'address': postcode, "componentRestrictions":restrictions}, function(results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                      
+                      var latlong = results[0].geometry.location;
+                        var loc2 = new google.maps.LatLng(latlong.latitude, latlong.longitude);
+                        centerLatLong = latlong;
+                        map.setCenter(latlong);
+                        setRadius(radius);
+                    } else {
+                      console.log('Geocode was not successful for the following reason: ' + status);
+                    }
+                });
+            }
         }
         
         function setRadius(radiusInMiles) {
             
             var GLOBE_WIDTH = 256; // a constant in Google's map projection
-             var angle = radiusInMiles/69;//east - west;
+            var angle = radiusInMiles/69;//east - west;
             if (angle < 0) {
                 angle += 360;
             }
@@ -73,15 +70,15 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
             map.setZoom(zoom-2);
             //zoom is the zoom required to fit those points on the map.
             var miles = radiusInMiles;
-               var radiusOptions = {
-                strokeColor: '#37bbec',
-                strokeOpacity: 0.8,
-                strokeWeight: 2,
-                fillColor: '#c3eaf9',
-                fillOpacity: 0.35,
-                map: map,
-                center:centerLatLong, //map.getCenter(),
-                radius: miles * 1609.344
+                var radiusOptions = {
+                    strokeColor: '#37bbec',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    fillColor: '#c3eaf9',
+                    fillOpacity: 0.35,
+                    map: map,
+                    center:centerLatLong, //map.getCenter(),
+                    radius: miles * 1609.344
                 };
                 if (circle){
                     circle.setMap(null);
@@ -90,47 +87,44 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
                 map.setCenter(centerLatLong);
         }
         
+        //deletes all the markers and reset the display area;
         function clear() {
-            //delete all the markers and reset the display area;
             var lim = markers.length;
             for (var i = 0; i< lim; markers[i++].setMap(null));
             factoryData = {};
-           markers = [];
-           selectedMarkerIndex = 0;
-           $('#search-results-info').fadeOut();
-            
+            markers = [];
+            selectedMarkerIndex = 0;
+            $('#search-results-info').fadeOut();  
         }
         
         function load(data) {
-           clear();
-           
-           if (data.length < 1) {
-               return false;
-           }
-          factoryData = data;
-          $('#search-results-info').fadeIn();
-          var lim = data.length;
-          for (var i =0;i<lim;i++) {
-              var position = new google.maps.LatLng(data[i].geo.lat, data[i].geo.lng);
-              
-              var thisMarkerOptions = $.extend(markerOptions, {
-                title : data[i].name,
-                position : position,
-                icon : normalIcon
-              });
-              if (i==0) {
+            clear();
+            if (data.length < 1) {
+                return false;
+            }
+            factoryData = data;
+            $('#search-results-info').fadeIn();
+            var lim = data.length;
+            for (var i =0;i<lim;i++) {
+                var position = new google.maps.LatLng(data[i].geo.lat, data[i].geo.lng);
+
+                var thisMarkerOptions = $.extend(markerOptions, {
+                    title : data[i].name,
+                    position : position,
+                    icon : normalIcon
+                });
+                if (i==0) {
                   thisMarkerOptions.icon = highlightIcon;
-              }
-              
-              var thisMarker = new google.maps.Marker(thisMarkerOptions);
-              setMarkerOnClick(map, thisMarker, markers, data[i], highlightIcon, normalIcon);
-               
-              thisMarker.index = i;
-              markers.push(thisMarker);
-          }
-          setPrevNextOnClick(map, markers, data, highlightIcon, normalIcon);
-          google.maps.event.trigger(markers[0], "click");
-          return true;
+                }
+                var thisMarker = new google.maps.Marker(thisMarkerOptions);
+                setMarkerOnClick(map, thisMarker, markers, data[i], highlightIcon, normalIcon);
+
+                thisMarker.index = i;
+                markers.push(thisMarker);
+            }
+            setPrevNextOnClick(map, markers, data, highlightIcon, normalIcon);
+            google.maps.event.trigger(markers[0], "click");
+            return true;
         }
         
         
@@ -151,7 +145,6 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
             } 
         }
         
-        //TODO : move this to select and add a call.
         function setMarkerOnClick(map, marker, markers, data, highlightIcon, normalIcon) {
             google.maps.event.addListener(marker, 'click', function() {
                 selectedMarkerIndex = marker.index;
@@ -159,7 +152,9 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
             }); 
         }
         
-        function setPrevNextOnClick(map, IGNOREmrkers, data, highlightIcon, normalIcon) {
+        function setPrevNextOnClick(map, markers, data, highlightIcon, normalIcon) {
+            $("#map-next-result").unbind("click");
+            $("#map-prev-result").unbind("click");
             $("#map-next-result").click(function() {
                 selectedMarkerIndex++;
                 selectedMarkerIndex = selectedMarkerIndex % ( markers.length );
@@ -181,9 +176,16 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
 			if (data.photos[0] == undefined){
 				data.photos[0] = 'not-found.jpg'//Default image
 			}
+            var mainPhoto = data.defaultPhoto || data.photos[0] || "not-found.jpg";
+            var postCodeFirstHalf = data.postcode.substr(0,2);//fallback if splitting on space fails.
+            var postCodeSplit = data.postcode.split(" ");
+            if (postCodeSplit.length > 1 && postCodeSplit[0].length > 1 && postCodeSplit.length <= 4) {
+                postCodeFirstHalf = postCodeSplit[0];
+            }
+            
             var resultsElem = $(RESULT_INFO_ELEM_SELECTOR);
             resultsElem.find('.js-name').html(data.name);
-            resultsElem.find('.js-address').html(data.city + ", " + data.postcode );
+            resultsElem.find('.js-address').html(data.city + ", " + postCodeFirstHalf );
             resultsElem.find('.js-name').html(data.name);
             resultsElem.find('.js-image').addClass("rotateY90");
             resultsElem.find('.add-to-quote').data("id", data._id);
@@ -191,9 +193,16 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
             resultsElem.find('.distance').html("<span class='miles'>" + data.distanceFromSearch + "</span>" + milePluralOrSingle + " from search");
             resultsElem.find('.remove-from-quote').data("id", data._id);
             resultsElem.find('.view-details').attr("href" , "/warehouse-profile/" + data._id + "?fromSearch=true");
-            setTimeout(function(){resultsElem.find('.js-image').prop("src", "/images/" + data.photos[0]).removeClass("rotateY90");}, 300 );
+            resultsElem.find(".js-size").html(data.size);
+            resultsElem.find(".js-height").html(data.height);
+            var $temps = resultsElem.find(".js-temperatures");
+            $temps.html('');
+            for (var i in data.storageTemps) {
+                $temps.append("<span class='icon-box temp-" + data.storageTemps[i] +  "'></span>")
+            }
+            setTimeout(function(){resultsElem.find('.js-image').prop("src", "/images/" + mainPhoto).removeClass("rotateY90");}, 300 );
         }
-        
+
         function resizeMap(){
             var $result = $('#results-area');
             $result.find('.map-resize').on("mousedown",startResize);
