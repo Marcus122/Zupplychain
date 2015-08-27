@@ -175,52 +175,6 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                 changeWasCalledManuallySoDontSetValidators = false;
             }
          });
-        
-        
-        
-        
-        /*function updateNextToDate(inp) {
-            var $row = $(inp).closest("tr");
-            var $row = $(inp).closest("tr");
-            var nextTo = $row.find("input[name='to']");
-            if (nextTo.length > 0 && nextTo.val() ) {
-                var thisDate =  new Date($(inp).val());
-                var toDate = new Date(nextTo.val());
-                if (toDate < thisDate) {
-                    var newVal = (addDays(thisDate,6).toISOString().substr(0,10) );
-                    nextTo.val(newVal);
-                    nextTo.trigger("change");
-                }
-            }
-        }
-        
-        function updateNextFromDate(inp) {
-            var $row = $(inp).closest("tr");
-            var nextFrom = $row.next().find("input[name='from']");
-            if (nextFrom.length > 0 && nextFrom.val() ) {
-                var thisDate =  new Date($(inp).val());
-                var fromDate = new Date(nextFrom.val());
-                if (fromDate <= thisDate) {
-                    var newVal = (addDays(thisDate,1).toISOString().substr(0,10) );
-                    nextFrom.val(newVal);
-                    nextFrom.trigger("change");
-                }
-            }
-        }
-        
-        function makeDateRangesContinuous(elem) {
-            var $this = $(elem);
-            var $row = $this.closest('tr');
-            var $from = $row.find('input[name="from"]');
-            var $to = $row.find('input[name="to"]');
-            if($from.val()){
-                $to.attr('min',$from.val());
-            }
-            if($to.val()){
-                $from.attr('max',$to.val());
-            }
-            lm.rebind($this.closest("form").attr("id"));
-        }*/
     }
     
     //sets up the functionality of the Copy From control.
@@ -332,37 +286,6 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
             }
             $table.append($newrow);
         }
-        
-        /*
-        function addPricingRow($table){
-                var data = {};
-                var template = templates.getTemplate("pricing-row");
-                var to = $table.find('tbody tr').last().find('input[name="to"]').val();
-                if(to){
-                    date = new Date(to);
-                    date.setDate(date.getDate()+1);
-                }else{
-                    date = new Date();
-                }
-                data.from = date.toISOString().substring(0, 10);
-                var $newrow = template.bind(data);
-                $table.append($newrow);
-        }
-        
-        function addAvailabilityRow($table) {
-                var data = {};
-                var template = templates.getTemplate("pricing-row");
-                var to = $table.find('tbody tr').last().find('input[name="to"]').val();
-                if(to){
-                    date = new Date(to);
-                    date.setDate(date.getDate()+1);
-                }else{
-                    date = new Date();
-                }
-                data.from = date.toISOString().substring(0, 10);
-                var $newrow = template.bind(data);
-                $table.append($newrow);
-        }*/
         
         $(document).on("click",".add button",function(){
             var $form = $(this).closest("form");
