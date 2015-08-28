@@ -84,52 +84,53 @@
                             <div class="main">
                                 <div class="row">
                                     <div class="columns two">
-                                    <span>Target Postcode/City</span>
-                                    <em class="search-value"><%=session.whSC.sc[0].postcode%></em> 
+										<span>Target Postcode/City</span>
+										<em class="search-value"><%=session.whSC.sc[0].postcode%></em> 
                                     </div>
                                     <div class="columns two">
-				    <span>Max Distance (miles)</span>
-                                    <em class="search-value"><%=session.whSC.sc[0].maxDistance%></em> 
+										<span>Max Distance (miles)</span>
+										<em class="search-value"><%=session.whSC.sc[0].maxDistance%></em> 
                                     </div>
                                     <div class="columns two">
-				    <span>  Pallet Type</span>
-					<% if(session.whSC.sc[0].palletType){%>
+										<span>  Pallet Type</span>
+										<% if(session.whSC.sc[0].palletType){%>
                                            <em class="search-value"><%=session.whSC.sc[0].palletType%></em>
                                        <%}else{%>
                                            <em class="search-value">Any</em>
                                       <%}%>
                                     </div>
-				    <div class="columns two">
-				      <span>Qty</span>
-                                      <em class="search-value"><%=session.whSC.sc[0].totalPallets%></em> 
-				    </div>
+									<div class="columns two">
+										<span>Qty</span>
+										<em class="search-value"><%=session.whSC.sc[0].totalPallets%></em> 
+									</div>
                                     <div class="columns two">
-				      <span>Product Description</span>
-                                      <em class="search-value"><%=session.whSC.sc[0].description%></em> 
+										<span>Product Description</span>
+										<em class="search-value"><%=session.whSC.sc[0].description%></em> 
                                     </div>
                                     <div class="columns two">
-                                    <span>Start Date</span>
-				    <em class="search-value"><%=session.whSC.sc[0].startDate.substring(8,10)%>/<%=session.whSC.sc[0].startDate.substring(5,7)%>/<%=session.whSC.sc[0].startDate.substring(0,4)%></em> 
+										<span>Start Date</span>
+										<em class="search-value"><%=session.whSC.sc[0].startDate.substring(8,10)%>/<%=session.whSC.sc[0].startDate.substring(5,7)%>/<%=session.whSC.sc[0].startDate.substring(0,4)%></em> 
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="columns two">
-				     <span>Minimum Duration</span>
-                                    <em><%=minDurationOptions[parseInt(session.whSC.sc[0].minDuration,10)]%></em> 
+										<span>Minimum Duration</span>
+										<em><%=minDurationOptions[parseInt(session.whSC.sc[0].minDuration,10)]%></em> 
                                     </div>
                                     <div class="columns two">
-				      <span>Pallet Height (m)</span>
-				      <em class="search-value"><%=session.whSC.sc[0].height%></em> 
+									  <span>Pallet Height (m)</span>
+									  <em class="search-value"><%=session.whSC.sc[0].height%></em> 
                                     </div>
                                     <div class="columns two">
-				      <span>Pallet Weight (kg)</span>
-			            <em class="search-value"><%=session.whSC.sc[0].weight%></em> 
+									  <span>Pallet Weight (kg)</span>
+									   <em class="search-value"><%=session.whSC.sc[0].weight%></em> 
                                     </div>
-				    <div class="columns two">
-				      <span>Type</span>
-                                      <em class="search-value"><%=temperatures[session.whSC.sc[0].temp]%></em> 
-				    </div>
+									<div class="columns two">
+										<span>Type</span>
+                                        <em class="search-value"><%=temperatures[session.whSC.sc[0].temp]%></em> 
+									</div>
                                 </div>
+								<% //include ./partials/multi-used/mini-warehouse-profile %>
                             </div>
                         </div>
 			<div class="warehouse-pricing">

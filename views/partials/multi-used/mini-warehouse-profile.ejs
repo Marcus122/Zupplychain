@@ -1,0 +1,33 @@
+<div class="search-result-info-box fixed" id="search-results-info" style="display:none">
+	<div class="inner-box">
+		<h4><em class="js-name"></em><span class="selected ion-checkmark js-is-on-quote"></span>
+		</h4>
+		<p><span class="address js-address"> </span><span class="distance"></span></p>
+		
+		<hr/>
+		<img class="js-image" src="" alt="an external view of a warehouse " />
+		<div class="info">
+			<a class="button mini action view-details <%= user.email ? "" : "register-before-click " %>view-warehouse-link">View details</a>
+			<div class="ratings js-rating">
+				<span class="ion-android-star rating"><em class="sr-only">*</em></span>
+				<span class="ion-android-star rating"><em class="sr-only">*</em></span>
+				<span class="ion-android-star rating"><em class="sr-only">*</em></span>
+				<span class="ion-android-star rating"><em class="sr-only">*</em></span>
+				<span class="ion-android-star rating"><em class="sr-only">*</em></span>
+			</div>
+			<div class="temperatures js-temperatures">
+				<span class="ion-thermometer cold icon-box"></span>
+				<span class="ion-thermometer hot icon-box"></span>
+				<span class="ion-ios-snowy cold icon-box"></span>
+				<span class="ion-wineglass icon-box"></span>
+			</div>
+		</div>
+		<hr/>
+		<p>Size: <span class="js-size"></span>m<sup>2</sup><br/>
+		Height: <span class="js-height"></span>m</p>
+		<div class="controls">
+			<button class="simple prev mini" id="map-prev-result">PREV</button>
+			<button class="simple next mini" id="map-next-result">NEXT</button>
+		</div>
+	</div>
+</div>

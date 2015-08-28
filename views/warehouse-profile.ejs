@@ -1,5 +1,4 @@
  <% include ./partials/top%>  
-    <% console.log(session.whSC.sc[0]); %>
 	<main class="warehouse-profile">
 		<div class="banner">
 			<h1>
@@ -88,7 +87,7 @@
 					</div>
 					<div class="main">
                         <div class="carousel">
-                            <img src="/images/<%= warehouse.defaultPhoto || warehouse.photos && warehouse.photos[0] %>" class="placeholder" alt="placeholder" />
+                            <img src="/images/<%= warehouse.defaultPhoto || warehouse.photos && warehouse.photos[0] || 'not-found.jpg' %>" class="placeholder" alt="placeholder" />
                             <ul class="thumbnails">
                             <% for (var i = 0; i < warehouse.photos.length; i++) { %>
                                 <li><img src="/images/<%= warehouse.photos[i] %>" alt="an image of the warehouse"/></li>
