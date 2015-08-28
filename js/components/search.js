@@ -19,7 +19,7 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
                 
     }
     
-    $("#search-form input, #search-form select").change(function(){
+    $("#search-form input, #search-form select").on("change keyup",function(){
        if (haveDoneASearch) {
             $(".search-nag").fadeIn();
        }
