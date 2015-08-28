@@ -10,12 +10,9 @@ module.exports = function(_data){
 		req.data.live = data.live;
         req.data.config = local.config;
         req.data.utils = utils;
-        console.log("loading local:");
-        console.log(req.data.config.companyDetails);
 		req.data.user = {};
 		var session = req.session //req.cookies["session-id"];
 		if(!session || !session.user_id) {
-            console.log("in load, user id in session is:" + session.user_id);
             return next();
         }
 		user_controller.user_by_id(session.user_id,function(err,user){

@@ -46,6 +46,12 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
                     }
                 });
             }
+			
+			if ($(".search-result-info-box").length > 0){
+				var $searchResInfoBox = $(".search-result-info-box");
+				$searchResInfoBox.fadeIn();
+				$searchResInfoBox.find('.controls').hide();
+			}
             
             if ($("#provider-offer-reply-form").length > 0) {
                 lm.addOnSuccessCallback("provider-offer-reply-form", function(response) {

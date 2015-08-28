@@ -43,7 +43,6 @@ function updateVolumeDiscount(req,res) {
     volumeDiscountData.noDiscount = req.body.noDiscount;
     volumeDiscountData.discounts = req.body.discounts;
     req.data.warehouse = req.warehouse;
-    console.log(volumeDiscountData);
     warehouse.updateVolumeDiscount(req.warehouse, volumeDiscountData, function(err, result){
         if (err) {
             console.log("failed to update volume discount");

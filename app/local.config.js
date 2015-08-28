@@ -81,7 +81,7 @@ exports.config = {
         4  : "1 month",
         6  : "6 weeks",
         8  : "2 months",
-        12  : "3 months",
+        12 : "3 months",
         16 :  "4 months",
         20 : "5 months",
         26 : "6 months",

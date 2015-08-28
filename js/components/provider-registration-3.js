@@ -117,6 +117,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
     initNetGrossSwitch();
     initVolumeDiscount();
     initPopup();
+    initVolDiscountTablebehaviour();
     
     function initPopup() {
         $(".close-me").click(function(){
@@ -336,6 +337,24 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				}
 			});
 		}
+    
+    //General Volume Discount table behaviour
+    function initVolDiscountTablebehaviour(){
+        function changeDiscountfromValue($tableRow, templateName){
+            var to = $tableRow.find('.discount-to').find('input[name="to"]').val();
+            if (to){
+                to = parseInt(to,10);
+            }
+            to++;
+            $tableRow.next('.js-single-discount').find('.discount-from input[name="from"]').val(to);
+            $tableRow.next('.js-single-discount').find('.discount-from span').text(to);
+        }
+        
+        $(document).on('blur', '#volume-discount-table tbody tr td[data-th="To"] input[name="to"]', function (){
+            var $tableRow = $(this).closest("tr");
+            changeDiscountfromValue($tableRow, 'discount-row');
+        });
+    }
     
     //the trays opening anc closing... actually quite complex logic involved in the end.
     function initTrayBehaviour() {
