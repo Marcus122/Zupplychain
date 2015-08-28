@@ -8,6 +8,9 @@ var handler = function(app) {
 	app.get('/provider-registration', function(req,res){
 		res.render("registration",req.data);
 	});
+	app.get('/customer', function(req,res){
+		res.render("search-landing",req.data);
+	});
 	app.get('/provider-registration/:step', populateData, registrationHandler);
 	app.get('/provider-registration-:step', populateData, registrationHandler);
 	app.post('/provider-registration-:step', registrationHandler);

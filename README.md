@@ -71,19 +71,51 @@ PROGRA~1/MongoDB/Server/3.0/bin/mongorestore.exe updates a database from a previ
 
 mongorestore doesn't update, only inserts, so ensure database is empty before you restore.
 
+Local build css and JS
+
+You can build the css and js files locally with 
+grunt build
+
+
+Deploy to live.
+
+
+To deploy to the live server run:
+grunt deploy.
+
+To check everything is running ok, visit the live URL.
+also ssh to the server and run
+ps
+Check that node and mongod processes are running.
+
+If something goes wrong run
+cat /var/node.log to view the output of the node server.
+cat /var/mongo.log to view the output of the mongo server
 
 Server
 
-server servers from /var/www
+server serves from /var/www
 
 run 
-./server.sh &
+./server.sh
 to start the server.
 
 run 
 ./stop.sh
 to stop it.
 
+
+
+OTHER INFO
+
+https://github.com/Marcus122/Zupplychain/
+
+https://trello.com/b/06cZ2x3Z/zupply
+
+Server public url:
+www.test.zupplychain.com
+Server internal IP;
+10.10.20.155
 
 
 
