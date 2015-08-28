@@ -12,14 +12,14 @@
  %>
 	<main class="warehouse-profile quote-request">
 		<div class="banner">
-			<h1>Storage Quotation</h1>
+			<h1>Quotation for storage<small>Review and accept below</small></h1>
 		</div>
 		<section>
             <input type="hidden" name="warehouse-id" id="warehouse-id" value="<%=warehouse._id%>" />
 			<div class="main">
 				<div class="content-box primary">
 					<div class="header">
-						<h2>Review and Accept Payment Terms - <%=warehouse.name %>, <%= warehouse.postcode %></h2>
+						<h2><%=warehouse.name %>, <%= warehouse.postcode %></h2>
 					</div>
                     <div class="main quote-request-summary">
                         <div class="content-box search-criteria-summary">
