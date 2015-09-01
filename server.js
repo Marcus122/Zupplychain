@@ -77,6 +77,7 @@ require('./app/routes/registration')(app);
 require('./app/routes/search')(app);
 require('./app/routes/quote')(app);
 require('./app/routes/dashboard')(app);
+require('./app/routes/news')(app);
 require('./app/routes/static')(app);
 require('./app/routes/error')(app);
 

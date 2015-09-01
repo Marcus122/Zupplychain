@@ -1,0 +1,121 @@
+#news{
+	.banner{
+		margin-bottom: 0;
+	}
+	.news-posts, .other-posts, .news-post{
+		margin-top: 20px;
+	}
+	.other-posts{
+		margin-left: 9%;
+	}
+	.header.curved{
+		width: 33%;
+		-webkit-border-top-right-radius: 10px;
+		-webkit-border-bottom-right-radius: 0;
+		-webkit-border-bottom-left-radius: 0;
+		-webkit-border-top-left-radius: 10px;
+		-moz-border-radius-topright: 10px;
+		-moz-border-radius-bottomright: 0;
+		-moz-border-radius-bottomleft: 0;
+		-moz-border-radius-topleft: 10px;
+		border-top-right-radius: 10px;
+		border-bottom-right-radius: 0;
+		border-bottom-left-radius: 0;
+		border-top-left-radius: 10px;
+		text-align: center; 
+		background-color:#9BC11F; 
+		h2{
+			margin-bottom:0;
+			color: #fff;
+		}
+	}
+	.main-footer{
+		background-color: #6A6666;
+		color: #FEFEFE;
+		margin-bottom: 30px;
+		margin-bottom: 3rem;
+		border-radius: 0px 0px 20px 20px;
+		padding-left: 30px;
+		padding-left: 3rem;
+		padding-right: 30px;
+		padding-right: 3rem;
+		padding-top: 20px;
+		padding-top: 2rem;
+		padding-bottom: 20px;
+		padding-bottom: 2rem;
+		.button.action.mini{
+			float: right;
+		}
+	}
+	.secondary-post{
+		margin-left: 0;
+	}
+	.news-container {
+		 background-color: #D7D7D7;
+		 display: inline-block;
+		 width: 100%;
+		 a.back{
+			color: #000;
+			position: absolute;
+			bottom: 465px;
+			left: 0;
+			margin-left: 10px;
+			text-decoration: initial;
+			&:before{
+				content: "\f124";
+				color: #000;
+				margin-right: 10px;
+				&:extend(.ion);
+			}
+		 }
+		.latest-post{
+			.main{
+				border-top: 5px solid #9BC11F;
+    			border-top-right-radius: 5px;
+			}
+		}
+	}
+	.latest-post, .secondary-post, .news-post{
+		margin-left: 10px;
+	}
+	.third-party-post{
+		box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+		margin-bottom: 20px;
+		.case-study-link p{
+			span:nth-child(1){
+				font-size: .9em;
+				font-weight: bold;
+			}
+			span:nth-child(2){
+				font-size: .8em;
+			}
+		}
+		.case-study-link, .testimonial{
+			border-bottom: 1px solid;
+			margin-bottom: 10px;
+		}
+		.testimonial blockquote {
+			position: relative;
+			padding-left: 42px;
+			padding-bottom: 40px;
+			padding-bottom: 4rem;
+			&:before{
+				left: 0;
+				top: 0;
+			}
+			&:after{
+				position: absolute;
+				right: 0;
+			}
+		}
+		.button.action.mini{
+			float: right;
+		}
+	}
+	.news-post{
+		.main p:first-child{
+			font-weight: bold;
+		}
+		box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+	}
+}

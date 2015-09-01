@@ -167,16 +167,32 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
         var focussedInputWCdate;
         
         function initUseageProfileChange() {
-            $(document).on("change", ".warehouse-pricing table input",function(evt){
-                focussedInputWCdate = $(this).closest("tr").next().find(".week-commencing").data("week-commencing");
-                var wcDate = $(this).closest("tr").data("week-commencing");
-                var newNum = parseInt($(this).val());
+            $(document).on("keyup", ".warehouse-pricing table input",function(evt){
+                var newNum = parseInt($(this).val()),
+                    $parentTd = $(this).closest('td.input-field'),
+                    $refresh = $parentTd.find('.refresh');
+                if (isNaN(newNum) || $refresh.length > 0) {
+                     return;
+                }
+                $(this).after('<button class="refresh highlight tiny"/>');
+            });
+            
+            $(document).on("click", ".warehouse-pricing table tr td .refresh", function(evt){
+                changeUsageProfile($(this));
+            });
+            
+            function changeUsageProfile($this){
+                var $tr = $this.closest("tr"),
+                    $input = $tr.find("input"),
+                    wcDate = $tr.data("week-commencing"),
+                    newNum = parseInt($input.val()),
+                    warehouseId = $("#warehouse-id").val(),
+                    numPallets = $input.val(),
+                    wcDate = $tr.find(".week-commencing").data("week-commencing");
+                focussedInputWCdate = $tr.next().find(".week-commencing").data("week-commencing");
                 if (isNaN(newNum)) {
                     return;
                 }
-                var warehouseId = $("#warehouse-id").val();
-                var numPallets = $(this).val();
-                var wcDate = $(this).closest("tr").find(".week-commencing").data("week-commencing");
                 // we chuck up the ajax request to get the result back from the server.
                 $.post("/useage-profile",
                         {
@@ -188,7 +204,7 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
                             populatePricingTable(result, wcDate);
                             focusInputThatWasFocussed();
                 });
-            });
+            }
             
         }
         

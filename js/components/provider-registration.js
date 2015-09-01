@@ -116,6 +116,8 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				saveWarehouse(function(result){
 					if (result.data.geo.lat !== null && result.data.geo.lng !== null){
 						window.location = $registration.attr('action');
+					} else if(result.data.geo.lat === undefined && result.data.geo.lng === undefined && result.error === true){
+						Alerts.showErrorMessage("An Error has Occurred, Check your Internet Connection, if the Problem Persists Contact an Administrator");
 					} else {
 						Alerts.showErrorMessage("Postcode Not Found");
 					}

@@ -65,7 +65,7 @@
                     <% } else { %>
                         
                             <input data-loom-type="number" data-start-date="<%= wcDate %>" type="text" value="<%=useageProfile[wcDate]%>" />
-                        
+                         
                     <% } %>
                     </td>
                     <td><%=storageProfile.highestPriceOfAnyStorageUsed.price  ? Number(storageProfile.highestPriceOfAnyStorageUsed.price).toFixed(2) : "N/A" %></td>

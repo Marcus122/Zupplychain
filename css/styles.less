@@ -24,6 +24,7 @@
 @import "provider-registration";
 @import "dashboard";
 @import "warehouse-profile";
+@import "news";
 @import "static";
 @import "error";
 
@@ -322,7 +323,7 @@ span.highlight-bright{
 		.unit-margin-bottom(2);
     }
     li:before{
-        .ion;
+        &:extend(.ion);
         content:@ionicon-var-android-checkbox-outline;
         .unit-margin-right(3);
         font-size:30px;
@@ -449,7 +450,7 @@ span.highlight-bright{
  .quotes:before, .quotes:after{
     font-size:40px;
     color:@primary;
-    .ion;
+    &:extend(.ion);
     
  }
  
@@ -661,22 +662,22 @@ span.highlight-bright{
 
 .temperatures{
     .temp-1:before { //ambient
-        .ion;
+        &:extend(.ion);
         content:@ionicon-var-thermometer;
-        .hot;
+        &:extend(.hot);
     }
     .temp-2:before { //chilled
-        .ion;
+        &:extend(.ion);
         content:@ionicon-var-thermometer;
-        .cold;
+        &:extend(.cold);
     }
     .temp-3:before{ //frozen
-        .ion;
+        &:extend(.ion);
         content:@ionicon-var-ios-snowy;
-        .cold;
+        &:extend(.cold);
     }
     .temp-4:before{ //bonded.
-        .ion;
+        &:extend(.ion);
         content:@ionicon-var-wineglass;
         color:@secondary;
     }

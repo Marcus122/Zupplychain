@@ -183,7 +183,9 @@
                     height:32px;
                     border-color: #FFA500 !important;
                 }
-                
+                .refresh{
+                    margin-left: 5px;
+                }
                 
             }
             .bar-container {
@@ -353,7 +355,7 @@
                         overflow:hidden;
                     }
                      &:before{
-                        .ion;
+                        &:extend(.ion);
                         content:@ionicon-var-android-arrow-dropup;
                         color:@white;
                         position:absolute;
@@ -445,10 +447,17 @@
     border-radius:10px;
 }
 button.map:after{
-   .ion;
+   &:extend(.ion);
     content:@ionicon-var-android-pin;
     font-size: 2rem;
     padding:2px 5px;
+}
+button.refresh:after{
+   &:extend(.ion);
+   content:@ionicon-var-android-refresh;
+   font-size: 2rem;
+   padding: 2px 5px; 
+   margin-left: 0;
 }
 .see-on-map:hover #profile-map-container{
     max-height:358px;

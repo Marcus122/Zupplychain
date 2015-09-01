@@ -170,9 +170,9 @@ function updateWarehouse(req,res){
 		//Any data request go here
 		function(callback){
 			if(req.body.postcode != req.warehouse.postcode){
-				Utils.getLatLong(req.body.postcode,function(latlng){
+				Utils.getLatLong(req.body.postcode,function(error,latlng){
 					req.body.geo=latlng;
-					callback(null);
+					callback(error);
 				});
 			}else{
 				callback(null);

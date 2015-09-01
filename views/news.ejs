@@ -1,0 +1,97 @@
+ <% include ./partials/top%> 
+<main id="news">
+	<div class="banner">
+		<h1>News</h1>
+	</div>
+	<div class="news-container">
+		<%
+			if (id !== undefined){
+				switch(id){
+					case '1':%>
+						<%include ./partials/news-posts/news-post-1%>
+					<%break;
+					case '2':%>
+						<%include ./partials/news-posts/news-post-2%>	
+					<%break;
+					case '3':%>
+						<%include ./partials/news-posts/news-post-3%>	
+						<%break;
+					default:%>
+						<%include ./partials/news-posts/news-post-3%>
+				<%}
+			}else{%>
+				<%include ./partials/news-posts%>
+			<%}
+		%>
+		<div class="other-posts columns three">
+			<div class="third-party-post content-box">
+				<div class="header">
+					<h2>press articles</h2>
+				</div>
+				<div class="main">
+					<div class="case-study-link">
+						<p>
+							<span>Event Sales Streamlines Reverse Logistic Buying Opportunity</span></br>
+							<span>Monday - 24.08.15</span>
+						</p>
+					</div>
+					<div class="case-study-link">
+						<p>
+							<span>Global Point Saves Thousands Through Re-engineered Distribution</span></br>
+							<span>Monday - 24.08.15</span>
+						</p>
+					</div>
+					<div class="case-study-link">
+						<p>
+							<span>Event Sales Streamlines Reverse Logistic Buying Opportunity</span></br>
+							<span>Monday - 24.08.15</span>
+						</p>
+					</div>
+					<a class="button action mini" href="#">See More</a>
+				</div>
+			</div>
+			<div class="third-party-post content-box">
+				<div class="header">
+					<h2>case studies</h2>
+				</div>
+				<div class="main">
+					<div class="case-study-link">
+						<p>
+							<span>Event Sales Streamlines Reverse Logistic Buying Opportunity</span></br>
+							<span>Monday - 24.08.15</span>
+						</p>
+					</div>
+					<div class="case-study-link">
+						<p>
+							<span>Global Point Saves Thousands Through Re-engineered Distribution</span></br>
+							<span>Monday - 24.08.15</span>
+						</p>
+					</div>
+					<div class="case-study-link">
+						<p>
+							<span>Event Sales Streamlines Reverse Logistic Buying Opportunity</span></br>
+							<span>Monday - 24.08.15</span>
+						</p>
+					</div>
+					<a class="button action mini" href="#">See More</a>
+				</div>
+			</div>
+			<div class="third-party-post content-box">
+				<div class="header">
+					<h2>testimonials</h2>
+				</div>
+				<div class="main">
+					<div class="testimonial">
+						<blockquote class="quotes">Zupplychain were greate to work with; they were very responsive and accommodating. We look forward to working with them in the future</blockquote>
+						<p>
+							<span>User - Joe Bloggs</span>
+							<span>ABC Warehousing</span>
+						</p>
+					</div>
+					<a class="button action mini" href="#">See More</a>
+				</div>
+			</div>
+		<div>
+	</div>
+</main>	
+<% include ./partials/bottom%>

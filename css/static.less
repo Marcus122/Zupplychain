@@ -80,3 +80,33 @@
 		}
 	}
 }
+
+#registration .start-selling,#customer .start-search{
+	//.unit-margin-bottom(2);
+	.title{
+		background:@secondary;
+		.border-radius(20px,20px,20px,20px);
+		color:@light-text;
+		overflow:hidden;
+		h2{
+			font-weight:100;
+			display:inline;
+		}
+		padding: @unit-px*2 @unit-px*6 @unit-px*2 @unit-px*8;
+		.button,
+		button{
+			float:right;
+		}
+	}
+	p{
+		background: @tertiary;
+		.border-radius(0,10px,10px,0);
+		display:inline-block;
+		padding: @unit-px/2 @unit-px;
+		.unit-margin-left(8);
+		.button,
+		button{
+			padding:0;
+		}
+	}
+}

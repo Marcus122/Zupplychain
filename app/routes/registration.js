@@ -11,6 +11,9 @@ var handler = function(app) {
 	app.get('/customer', function(req,res){
 		res.render("search-landing",req.data);
 	});
+	app.get('/registration-complete', function(req,res){
+		res.render("registration-complete",req.data);
+	});
 	app.get('/provider-registration/:step', populateData, registrationHandler);
 	app.get('/provider-registration-:step', populateData, registrationHandler);
 	app.post('/provider-registration-:step', registrationHandler);
@@ -51,7 +54,7 @@ function completeRegistration(req,res){
 			var backURL=req.header('Referer') 
 			return backURL ? res.redirect(backURL) : redirectToStart(res);
 		}else{
-			res.send({redirect: '/dashboard'});
+			res.send({redirect: '/registration-complete'});
 		}
 	});
 }

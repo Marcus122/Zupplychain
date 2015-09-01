@@ -73,11 +73,11 @@ module.exports.getLatLong = function(postcode, cb) {
 				geo.lat = result[0].latitude;
 				geo.lng = result[0].longitude;
 			}else{
-				console.log ("in search.js");
+				console.log ("in utils.js");
                 console.log("error in Google Geolocation module:");
                 console.log(error);
 			}
-			return cb(null,geo);
+			return cb(error,geo);
 		});
     
 }

@@ -6,7 +6,8 @@ define(["jquery"], function ($) {
 	}
     
     function Class() {
-		var url = '/warehouse';
+		var url = '/warehouse',
+			err;
 		
 		function update(warehouse,cb){
 			var new_url;
@@ -23,6 +24,10 @@ define(["jquery"], function ($) {
 				dataType: 'json',
 				success:function(response){
 					cb(response);
+				},
+				error:function(jqXHR, textStatus, errThrown){
+					err = {error: true, errText:'Geocoding Error'};
+					cb(err);
 				}
 			});
 		}

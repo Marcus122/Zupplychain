@@ -54,6 +54,11 @@ a button{
     color:@light-text;
     background-color:@primary;
  }
+ .button.highlight,
+ button.highlight{
+    color:@light-text;
+    background-color:@highlight;
+ }
 .button.secondary,
  button.secondary{
     color:@light-text;
@@ -83,6 +88,10 @@ a button{
  .button.secondary:hover,
  button.secondary:hover{
     background-color:darken(@secondary, 5%);
+ }
+ .button.highlight:hover,
+ button.highlight:hover{
+    background-color:darken(@highlight, 5%);
  }
  .button.tertiary:hover,
  button.tertiary:hover{
