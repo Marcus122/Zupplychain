@@ -80,16 +80,23 @@ function warehouseAuth(req,res,next){
 }
 function createWarehouse(req,res){
 	Utils.getLatLong(req.body.postcode,function(err,latlng){
-		req.body.geo = latlng;
-        req.body.loc = { 'type' : 'Point', 'coordinates' : [latlng.lng, latlng.lat] };
-		warehouse.create(req.data.user,req.body,function(err,Warehouse){
-			if(err){
-				setErrorResponse(err,res);
-			}else{
-				req.warehouse = Warehouse;
-				setResponse(req,res);
-			}
-		});
+		if (latlng.lat === null && latlng.lng === null){
+			req.warehouse = warehouse.createWarehouseObject(req.body);
+			req.warehouse.geo.lat = null; 
+			req.warehouse.geo.lng = null;
+			setResponse(req,res);
+		}else{
+			req.body.geo = latlng;
+			req.body.loc = { 'type' : 'Point', 'coordinates' : [latlng.lng, latlng.lat] };
+			warehouse.create(req.data.user,req.body,function(err,Warehouse){
+				if(err){
+					setErrorResponse(err,res);
+				}else{
+					req.warehouse = Warehouse;
+					setResponse(req,res);
+				}
+			});
+		}
 	});
 }
 function storageAuth(req,res,next){

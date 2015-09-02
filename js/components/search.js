@@ -34,13 +34,23 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
         if ($("input[name='postcode']").val().length <=2){
             return;
         }
-        resultsMap = new ResultsMap($("input[name='postcode']").val(), $("input[name='max-distance']").val());
+        resultsMap = new ResultsMap($("input[name='postcode']").val(), $("input[name='max-distance']").val(), $("input[name='postcode']"));
         $(".js-map-results-container").slideDown(); //needs to be visible for map to load successfully.
         
     });
     
     $("#register-email-popup .close").click(function() {
         $("#register-email-popup").hide();
+    });
+    
+    $(".change-map-lock-status").click(function(){
+        if( $(this).hasClass('unlock-map')){
+            $(this).removeClass('unlock-map');
+            $(this).addClass('lock-map');
+        }else if( $(this).hasClass('lock-map')){
+            $(this).removeClass('lock-map');
+            $(this).addClass('unlock-map');           
+        }
     });
     
     $(document).on("click", ".register-before-click", function(evt){
@@ -71,6 +81,7 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
     $maxDistance.change(function(){
         if (resultsMap) {
             resultsMap.setRadius($("input[name='max-distance']").val());
+            resultsMap.changeMapRadiusOnClickEL();
         }
     });
 	
@@ -82,7 +93,7 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
     
     $("#search-form").submit(function() {
         if (!resultsMap) {
-            resultsMap = new ResultsMap($("input[name='postcode']").val(), $("input[name='max-distance']").val());
+            resultsMap = new ResultsMap($("input[name='postcode']").val(), $("input[name='max-distance']").val(), $("input[name='postcode']"));
             $(".js-map-results-container").slideDown(); //needs to be visible for map to load successfully.
         }
     });

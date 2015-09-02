@@ -46,6 +46,9 @@
 		.button.action.mini{
 			float: right;
 		}
+		span:nth-child(3){
+			font-size: .9em;
+		}
 	}
 	.secondary-post{
 		margin-left: 0;
@@ -56,8 +59,8 @@
 		 width: 100%;
 		 a.back{
 			color: #000;
-			position: absolute;
-			bottom: 465px;
+			position: relative;
+			top: 11px;
 			left: 0;
 			margin-left: 10px;
 			text-decoration: initial;
@@ -67,6 +70,25 @@
 				margin-right: 10px;
 				&:extend(.ion);
 			}
+		&:hover{
+			text-decoration: underline;
+		}
+		 }
+		 a.previous-news{
+			 color: #000;
+			 float:right;
+			 top: 11px;
+			 text-decoration: initial;
+			 position: relative;
+			 &:after{
+				content: "\f125";
+				color: #000;
+				margin-left: 10px;
+				&:extend(.ion);
+			 }
+			&:hover{
+				text-decoration: underline;
+			}
 		 }
 		.latest-post{
 			.main{
@@ -75,16 +97,25 @@
 			}
 		}
 	}
-	.latest-post, .secondary-post, .news-post{
-		margin-left: 10px;
-	}
 	.third-party-post{
 		box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
 		margin-bottom: 20px;
 		.case-study-link p{
-			span:nth-child(1){
+			a:nth-child(1){
 				font-size: .9em;
 				font-weight: bold;
+				text-decoration: initial;
+				color: #000;
+				&:hover{
+					text-decoration: underline;
+				}
+			}
+			a:nth-child(1):after{
+				content: "\f125";
+				color: #000;
+				margin-top: 6px;
+				float: right;
+				&:extend(.ion);
 			}
 			span:nth-child(2){
 				font-size: .8em;
@@ -99,6 +130,7 @@
 			padding-left: 42px;
 			padding-bottom: 40px;
 			padding-bottom: 4rem;
+			font-size: .9em;
 			&:before{
 				left: 0;
 				top: 0;
@@ -117,5 +149,23 @@
 			font-weight: bold;
 		}
 		box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+	}
+	.news-posts .latest-post,
+	.news-posts .secondary-post{
+		.main img{
+			max-width: 100%;
+			height: auto;
+		}
+	}
+	.image-container img{
+		max-width:100%;
+		height:auto;
+	}
+	.news-post-container{
+		padding-bottom: 40px;
+		display: inline-block;
+		border-bottom: 1px solid;
+		margin-left: 10px;
+		width: 100%;
 	}
 }

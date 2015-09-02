@@ -5,8 +5,12 @@ var Warehouse = require("../data/warehouse.js"),
 /**
  * Warehouse class.
  */
-exports.create = function (user,data,cb) {
+exports.createWarehouseObject = function(data){
 	var warehouse = new Warehouse(data);
+	return warehouse;
+}
+exports.create = function (user,data,cb) {
+	var warehouse = exports.createWarehouseObject(data);
 	warehouse.user = user._id;
 	warehouse.save(function(err){
 		if (!err) {

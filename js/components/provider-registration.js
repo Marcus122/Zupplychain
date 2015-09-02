@@ -114,19 +114,37 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			$registration.on("submit",function(ev){
 				ev.preventDefault();
 				saveWarehouse(function(result){
-					if (result.data.geo.lat !== null && result.data.geo.lng !== null){
+					var checkResult = checkSaveWarehouseResultAndGetMsg(result);
+					if (checkResult.error === false){
 						window.location = $registration.attr('action');
-					} else if(result.data.geo.lat === undefined && result.data.geo.lng === undefined && result.error === true){
-						Alerts.showErrorMessage("An Error has Occurred, Check your Internet Connection, if the Problem Persists Contact an Administrator");
-					} else {
-						Alerts.showErrorMessage("Postcode Not Found");
+					} else if (checkResult.error === true){
+						Alerts.showErrorMessage(checkResult.message);
 					}
 				});
 			});
 			$registration.find('.save').on("click",function(ev){
-				saveWarehouse();
-				saveRegistration();
+				saveWarehouse(function(result){
+					var checkResult = checkSaveWarehouseResultAndGetMsg(result);
+					if (checkResult.error === false){
+							saveRegistration();
+					}else if (checkResult.error === true){
+						Alerts.showErrorMessage(checkResult.message);
+					}
+				});
 			});
+			function checkSaveWarehouseResultAndGetMsg(warehouseResult){
+				var result;
+				if (warehouseResult.error === undefined || warehouseResult.error === false || warehouseResult.error === null){
+					if (warehouseResult.data.geo.lat !== null && warehouseResult.data.geo.lng !== null){
+						result = {error:false, message:"Successful Call"};
+					}else{
+						result = {error:true, message:"Postcode Not Found"};
+					}
+				}else if (warehouseResult.error === true){
+					result = {error:true, message:"An Error has Occurred, Check your Internet Connection, if the Problem Persists Contact an Administrator"}
+				}
+				return result;	
+			}
 			function saveWarehouse(cb){
 				if( lm.isFormValid($registration.attr('id')) ){
 					bindFormToObject($registration,warehouse);

@@ -374,12 +374,36 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         }
         
         $('.popup').on("click",function(evt){ 
-                editButtonClick($(this));
+                var $this = $(this);
+                editButtonClick($this);
         });
+        
+        function checkSectionCompleted(inputs){
+            var completed = true; //Assume everything is ok
+            for (var i = 0; i < inputs.length; i++){
+                if (completed == false){
+                    break;
+                }
+                for (var j = 0; j < inputs[i].length; j++){
+                    if(inputs[i][j].value !== "" && inputs[i][j].value !== undefined){
+                        completed = true;
+                    }else{
+                        completed = false;
+                        break; //It is incomplete 
+                    }
+                }
+            }
+            return completed;
+        }
 
         function editButtonClick($buttonThatWasClicked) {
             var pricingOrAvailability = $buttonThatWasClicked.data("type");
-            var storageId = $buttonThatWasClicked.closest("tr").data("id");
+            var storageId = $buttonThatWasClicked.closest("tr").data("id"),
+                $price = $buttonThatWasClicked.closest("tr").next().find('input[name="standard-pricing-price"]'),
+                $handlingCharge = $buttonThatWasClicked.closest("tr").next().find('input[name="standard-pricing-handling-charge"]'),
+                $inUse = $buttonThatWasClicked.closest("tr").next().find('input[name="inUse"]'),
+                $to = $buttonThatWasClicked.closest("tr").next().find('.availability-table').find('input[name="to"]'),
+                $from = $buttonThatWasClicked.closest("tr").next().find('.availability-table').find('input[name="from"]');
             
             //hide all the .trays tr's
             var $traysToOpen = $buttonThatWasClicked.closest("tr").next();
@@ -392,6 +416,20 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
             if (!wasOpen) {
                 $traysToOpen.addClass("open");
                 $buttonThatWasClicked.closest(".button-cell").addClass("open");
+            }else{
+                if ($buttonThatWasClicked.data('type') === 'pricing'){
+                    if (checkSectionCompleted([$price,$handlingCharge])){
+                        $buttonThatWasClicked.closest(".button-cell").addClass("success");
+                    }else{
+                        $buttonThatWasClicked.closest(".button-cell").removeClass("success");
+                    }  
+                }else if($buttonThatWasClicked.data('type') === 'availability'){
+                   if(checkSectionCompleted([$inUse,$to,$from])){
+                        $buttonThatWasClicked.closest(".button-cell").addClass("success");
+                    }else{
+                        $buttonThatWasClicked.closest(".button-cell").removeClass("success");
+                    }    
+                }
             }
             
             //within the tr show either the price div or availability div depending on which one we clicked.

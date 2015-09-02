@@ -89,6 +89,28 @@
         background-color:@secondary;
         h2 {
             margin-bottom:0px;
+            display: inline-block;
+        }
+        .lock-map-container{
+            display: inline-block;
+            float: right;
+            top: 5px;
+            position: relative;
+            .change-map-lock-status{
+                margin-left: 10px;
+            }
+            .unlock-map:after{
+                content: "\f200";
+                font-size: 2rem;
+                padding: 2px 5px;
+                &:extend(.ion);
+            }
+            .lock-map:after{
+                content: "\f254";
+                font-size: 2rem;
+                padding: 2px 5px;
+                &:extend(.ion);
+            }
         }
     }
     .main{
