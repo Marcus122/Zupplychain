@@ -57,9 +57,11 @@ function updateVolumeDiscount(req,res) {
 
 function warehouseProfile (req,res){
     req.data.warehouse = req.warehouse;
+
     if (req.query.fromSearch && req.session.whSC && req.session.whSC.sc && req.session.whSC.sc.length > 0) {
         req.data.minDurationOptions = local.config.minDurationOptions;
         req.data.temperatures = local.config.temperatures;
+		req.data.page = 'warehouse-profile';
         var query = search.getFromSession(req, function(err, query){
             if (!err) {
                 req.data.warehouse.generateStorageProfile(query);
@@ -128,49 +130,56 @@ function updateStorage(req,res,next){
 }
 function batchStorage(req,res){
 	if(!req.warehouse) next();
-	var storageArr=[];
-	var sortOrder = 0;
-	async.each(req.body, function(_storage,callback){
-		console.log("saving a storage");
-		sortOrder++;
-		_storage.sortOrder = sortOrder;
-		if(!_storage._id){ //if no id, create a new storage.
-			console.log("creating storage: " + _storage._id);
-			delete _storage._id;
-			storage.create(req.data.user,_storage,function(err,Storage){
-				if(err){
-					console.log(err);
-					callback(err);
-				}else{
-					storageArr.push(Storage._id);
-					callback();
-				}
-			});
-		}else{ //otherwise update it.
-			_storage.user=req.data.user._id;
-			delete _storage.__v;
-			storage.updateWithData(_storage,function(err,Storage){
-				console.log("updating storage: " + _storage._id);
-				if(!err){
-					storageArr.push(Storage._id);
-					callback();
-				}else{
-					console.log(err);
-					callback(err);
-				}
-			});
-		}
-		
-	},function(err){
-		if(!err){	
-			req.warehouse.storage=storageArr;
-			req.warehouse.save(function(){
-				setResponse(req,res);
-			});
-		}else{
-			setErrorResponse(err,res);
-		}
-	});
+	var idsMatch = Utils.checkUserSameAgainstLoadedWarehouse(req.warehouse,req.data.user);
+	if (!idsMatch){
+		user.logout(req,res,function(err,cb){
+			setErrorResponse("Users do not Match",res);
+		});
+	}else{
+		var storageArr=[];
+		var sortOrder = 0;
+		async.each(req.body, function(_storage,callback){
+			console.log("saving a storage");
+			sortOrder++;
+			_storage.sortOrder = sortOrder;
+			if(!_storage._id){ //if no id, create a new storage.
+				console.log("creating storage: " + _storage._id);
+				delete _storage._id;
+				storage.create(req.data.user,_storage,function(err,Storage){
+					if(err){
+						console.log(err);
+						callback(err);
+					}else{
+						storageArr.push(Storage._id);
+						callback();
+					}
+				});
+			}else{ //otherwise update it.
+				_storage.user=req.data.user._id;
+				delete _storage.__v;
+				storage.updateWithData(_storage,function(err,Storage){
+					console.log("updating storage: " + _storage._id);
+					if(!err){
+						storageArr.push(Storage._id);
+						callback();
+					}else{
+						console.log(err);
+						callback(err);
+					}
+				});
+			}
+			
+		},function(err){
+			if(!err){	
+				req.warehouse.storage=storageArr;
+				req.warehouse.save(function(){
+					setResponse(req,res);
+				});
+			}else{
+				setErrorResponse(err,res);
+			}
+		});
+	}
 }
 function updateWarehouse(req,res){
 	async.waterfall([
@@ -179,6 +188,7 @@ function updateWarehouse(req,res){
 			if(req.body.postcode != req.warehouse.postcode){
 				Utils.getLatLong(req.body.postcode,function(error,latlng){
 					req.body.geo=latlng;
+					req.body.loc = { 'type' : 'Point', 'coordinates' : [latlng.lng, latlng.lat] };
 					callback(error);
 				});
 			}else{

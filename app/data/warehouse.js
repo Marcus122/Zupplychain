@@ -141,7 +141,6 @@ warehouseSchema.statics = {
     var warehouseAPI = this;
     var editableResult = null; //stores a toObject() version of the warehouse which we can add properties to etc.
 	var corrResults = [];   
-	
     this.find({
 			  "loc" : {
                   $near : {

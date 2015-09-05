@@ -6,7 +6,7 @@
 					  var toDate = new Date();
 					  toDate.setDate(today.getDate() + 28);
 	%>
-        <% if (session.whSC) { %>
+        <% if (session.whSC) { console.log(session.whSC); %>
 		<input type="hidden" name="search-cached"/>
         <% } %>
 		<div class="main">

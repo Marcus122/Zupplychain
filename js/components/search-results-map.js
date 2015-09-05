@@ -1,4 +1,4 @@
-define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (GM, $) {
+define(['async!https://maps.googleapis.com/maps/api/js' , "jquery", "loom/loomAlerts"], function (GM, $, Alerts) {
 
     //Apologies this is ugly.. could do with a rewrite.
     function Class(postcode, radius, $postCode) {
@@ -32,6 +32,7 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
             };
             map = new google.maps.Map( document.getElementById(MAP_ELEM_ID), mapOptions);
             centerMapAtPostCode(postcode, map, radius);
+            changeMapRadiusOnClickEL();
             
             markerOptions = {
                 icon: normalIcon,
@@ -44,6 +45,21 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
             }
             
             mapRadius = radius;
+            
+            function changeMapRadiusOnClickEL(){
+                google.maps.event.addListener(map, 'click', function(event) {
+                    var $mapLockStatus = $(".change-map-lock-status");
+                    if ($mapLockStatus.hasClass('lock-map')){
+                        centerMapAtlnglat(event.latLng.lat(),event.latLng.lng(),map,mapRadius);
+                        reverseGeocode(event.latLng.lat(),event.latLng.lng(),function(pc){
+                            $pcInput.val(pc);
+                            $(SEARCH_NAG_ELEM_SELECTOR).fadeIn();
+                        });
+                        $mapLockStatus.removeClass('lock-map');
+                        $mapLockStatus.addClass('unlock-map');
+                    }
+                });
+            }
 
             function centerMapAtPostCode(postcode, map, radius) {
                 if (!radius) {
@@ -51,13 +67,15 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
                 } //TODO: have a local API that we use for this.
                 geocoder = new google.maps.Geocoder();
                 geocoder.geocode( { 'address': postcode, "componentRestrictions":restrictions}, function(results, status) {
-                    if (status == google.maps.GeocoderStatus.OK) {
+                    if (status === google.maps.GeocoderStatus.OK) {
                       
                       var latlong = results[0].geometry.location;
                         var loc2 = new google.maps.LatLng(latlong.latitude, latlong.longitude);
                         centerLatLong = latlong;
                         map.setCenter(latlong);
                         setRadius(radius);
+                    } else if (status === google.maps.GeocoderStatus.ZERO_RESULTS) {
+                        Alerts.showErrorMessage("Postcode Not Found")
                     } else {
                       console.log('Geocode was not successful for the following reason: ' + status);
                     }
@@ -96,21 +114,6 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
                 circle = new google.maps.Circle(radiusOptions);
                 map.setCenter(centerLatLong);
                 mapRadius = radiusInMiles;
-        }
-
-        function changeMapRadiusOnClickEL(){
-            google.maps.event.addListener(map, 'click', function(event) {
-                var $mapLockStatus = $(".change-map-lock-status");
-                if ($mapLockStatus.hasClass('lock-map')){
-                    centerMapAtlnglat(event.latLng.lat(),event.latLng.lng(),map,mapRadius);
-                    reverseGeocode(event.latLng.lat(),event.latLng.lng(),function(pc){
-                        $pcInput.val(pc);
-                        $(SEARCH_NAG_ELEM_SELECTOR).fadeIn();
-                    });
-                    $mapLockStatus.removeClass('lock-map');
-                    $mapLockStatus.addClass('unlock-map');
-                }
-            });
         }
         
         //deletes all the markers and reset the display area;
@@ -282,8 +285,7 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery"], function (G
 
         return {
             load:load,
-            setRadius:setRadius,
-            changeMapRadiusOnClickEL:changeMapRadiusOnClickEL
+            setRadius:setRadius
         }
 
     }

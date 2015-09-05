@@ -1,5 +1,6 @@
 
-.quote-request-confirm {
+.quote-request-confirm,
+.contract-confirmed {
         .main {
             text-align:center;
             h2 {
@@ -34,6 +35,11 @@
 
     .warehouse-pricing {
         position:relative;
+        .change-warehouse-profile-row-number{
+            display: inline-block;
+            float:right;
+            margin-bottom: 20px;
+        }
     }
 
     #vat-message {
@@ -74,6 +80,8 @@
     .quote-request-summary{
         .header{
             background-color:@light-grey;
+            border-top-left-radius: 7px;
+            border-top-right-radius: 7px;
             h2 {
                 font-size:16px;
                 text-transform:none;
@@ -81,27 +89,65 @@
                 color:@dark-text;
             }
         }
+        .content-box{
+            .main{
+                border: 1px solid @light-grey;
+            }
+        }
+        #provider-offer-form,
+        #provider-offer-reply-form,
+        #provider-confirm-contract,
+        #quotation-request-form{
+            border: 2px solid #F28711;
+            border-radius: 10px;
+            margin-top: 20px;
+            .content-box{
+                border-top-left-radius: 7px;
+                border-top-right-radius: 7px;
+                .main{
+                    border: none;
+                    .accepted-by-customer{
+                        color:@primary;
+                    }
+                }
+            }
+            .content-box.action.row{
+                .five.columns.submit-request-container.confirm-contract{
+                    float:right;
+                }  
+            }
+        }
          .main{
-            border:1px solid @light-grey;
 			position: relative;
 			//height: 352px;
             .unit-margin-bottom(3);
         }            
         .contact-information{
-            .unit-margin-top(2);
+            //.unit-margin-top(2);
             .tool-tip {
                 margin-left:5px;
+            }
+            .main.row .six.columns:nth-child(1) .input-field:nth-child(4){ 
+                position:relative;
+                label[for="position"]:after{
+                    content: "*";
+                    position:absolute;
+                    top:0;
+                    margin-left:8px;
+                }
             }
         }
         input[type='checkbox'] {
             margin-left:30px;
         }
         .content-box.action{
-            border:2px solid @highlight;
             .unit-padding(3);
         }
         .submit-request-container{
             text-align:right;
+            button{
+                margin: 0 10px;
+            }
         }
     }
 

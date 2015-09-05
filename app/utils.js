@@ -87,3 +87,15 @@ module.exports.getLatLong = function(postcode, cb) {
     
 }
 
+module.exports.checkUserSameAgainstLoadedWarehouse = function(warehouse,user){
+    if (warehouse !== undefined){
+        if (warehouse.user._id.equals( user._id)){
+            return true;
+        }else{
+            return false;
+        }
+    }else{
+        return false;//The user must be a customer, they need to log in as a provider
+    }
+}
+

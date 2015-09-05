@@ -81,7 +81,6 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
     $maxDistance.change(function(){
         if (resultsMap) {
             resultsMap.setRadius($("input[name='max-distance']").val());
-            resultsMap.changeMapRadiusOnClickEL();
         }
     });
 	

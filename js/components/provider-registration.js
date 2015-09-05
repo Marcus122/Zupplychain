@@ -192,7 +192,13 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 		function step2(){
             
             $("#define-space .back").click(function() {
-                saveDefinedSpace();
+                saveDefinedSpace(function(response){
+					if (response !== undefined){
+						if (response.error !== undefined && response.error === true && response.data !== undefined && response.data === "Users do not Match"){
+							window.location.href = '/'
+						}
+					}
+				});
             });
             
 			var $defineSpaceTable = $('.define-space');
@@ -214,15 +220,29 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				ev.preventDefault();
 				ev.stopPropagation();
 				updateForm();
-				saveDefinedSpace(function(){
-					window.location = $defineSpace.attr('action');
+				saveDefinedSpace(function(response){
+					if (response !== undefined){
+						if (response.error !== undefined && response.error === true && response.data !== undefined && response.data === "Users do not Match"){
+							window.location.href = '/';
+						}else{
+							window.location = $defineSpace.attr('action');
+						}
+					}else{
+						window.location = $defineSpace.attr('action');
+					}
 				});
 			});
 			$defineSpace.find('.save').on("click",function(ev){
 				ev.preventDefault();
 				updateForm();
 				if( lm.isFormValid($defineSpace.attr('id')) ){
-					saveDefinedSpace();
+					saveDefinedSpace(function (response){
+						if (response !== undefined){
+							if (response.error !== undefined && response.error === true && response.data !== undefined && response.data === "Users do not Match"){
+								window.location.href = '/'
+							}
+						}
+					});
 					saveRegistration();
 				}
 			});
@@ -257,8 +277,8 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					});
 					var warehouse={};
 					warehouse.id = $defineSpace.find('input[name="warehouse_id"]').val();
-					Warehouse.updateStorageBatch(warehouse,storage,function(){
-						if(cb) cb();
+					Warehouse.updateStorageBatch(warehouse,storage,function(response){
+						if(cb) cb(response);
 					});
 				}
 			}

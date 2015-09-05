@@ -33,10 +33,23 @@ exports.config = {
         "28 days"
     ],
     
-    paymentTypes : [
+    prepaymentRequired : [
+        "None",
+        "1 Week in Advance",
+        "2 Weeks in Advance",
+        "4 Weeks in Advance"
+    ],
+    
+    finalPayment : [
+        "To Aggreed Terms",
+        "Unknown",
+        "In Full"
+    ],
+    
+     paymentTypes : [
+        "Invoice",
         "credit card",
-        "BACS transfer",
-        "invoice"
+        "BACS transfer"
     ],
 	
 	services: [

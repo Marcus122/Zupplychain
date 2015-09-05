@@ -105,8 +105,8 @@ var aggregateStorage = function(theStorages, VolumeDiscounts) {
         var weeklySubTotal                              = (highestPriceOfAnyStorageUsed.price * (numPallets));//even if the storage doesn't fit, calc the price as if it did as an estimate.
         var weeklySubTotalWithDiscount                  = weeklySubTotal * (1 - (filledStorageProfile.volumeDiscount / 100));
         filledStorageProfile.totalPrice                 = (weeklySubTotalWithDiscount + totalHandlingCharge);
-        console.log("storage Profile for week: #####################################");
-        console.log(filledStorageProfile);
+        //console.log("storage Profile for week: #####################################");
+        //console.log(filledStorageProfile);
         return filledStorageProfile;
         
         function getVolumeDiscount(numPallets) {

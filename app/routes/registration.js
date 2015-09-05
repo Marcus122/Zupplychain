@@ -1,6 +1,7 @@
 var User = require("../controllers/users.js"),
 	local = require("../local.config.js"),
 	multiparty = require('multiparty'),
+	utils = require('../utils.js'),
 	fs = require('fs');
 
 var handler = function(app) {
@@ -23,14 +24,16 @@ var handler = function(app) {
 };
 function registrationHandler(req,res){
 	//If active send to dashboard
-	if(req.data.user.active && 1== 2){ //disabled while we test stuff.
-		res.redirect('/dashboard');
-	}
-	else if(req.params.step > 1 && !req.data.user._id ){
-		redirectToStart(res);
-	}else{
-		res.render("registration" + "-" + req.params.step,req.data);
-	}
+		if(req.data.user.active && 1== 2){ //disabled while we test stuff.
+			res.redirect('/dashboard');
+		}
+		else if(req.params.step > 1 && !req.data.user._id ){
+			redirectToStart(res);
+		}else if (req.data.user._id && req.idsMatch === false){
+			res.redirect('/logout');
+		}else{
+			res.render("registration" + "-" + req.params.step,req.data);
+		}
 }
 function populateData(req,res, next){
     req.data.temperatures = local.config.temperatures;
@@ -39,6 +42,7 @@ function populateData(req,res, next){
 	req.data.specifications = local.config.specifications;
 	if(!req.data.user._id) return next();
 	req.data.user.getWarehouses(function(warehouses){
+		req.idsMatch = utils.checkUserSameAgainstLoadedWarehouse(warehouses[0],req.data.user);
 		req.data.user.warehouses = warehouses;
 		return next();
 	});

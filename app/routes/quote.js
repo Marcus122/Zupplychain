@@ -22,7 +22,11 @@ var handler = function(app) {
     
     app.get("/provider-offer-reply/:quote_id", providerOfferReply);
     app.post("/provider-offer-reply", updateQuoteReply);
-    app.get("/provider-offer-reply-confirm/:quote_id", providerOfferConfirmReply);
+    app.get("/provider-offer-reply-confirm", providerOfferConfirmReply);
+    
+    app.get("/provider-confirm-contract/:quote_id", providerConfirmContract);
+    app.post("/provider-confirm-contract", confirmContract);
+    app.get("/contract-confirmed", contractConfirmed);
 };
 
 function providerOfferConfirmReply(req,res) {
@@ -34,11 +38,12 @@ function providerOfferConfirmReply(req,res) {
 function updateQuoteReply(req,res) {
     //update the quote.
     res.writeHead(200, {"Content-Type": "application/json"});
-    res.end(JSON.stringify({"error" : false, "redirectURL" : "/provider-offer-reply-confirm/" + quoteId }) + "\n");  
+    res.end(JSON.stringify({"error" : false, "redirectURL" : "/provider-offer-reply-confirm"}));  
 }
 
 function providerOfferReply(req,res) {
             req.data.config = local.config;
+            req.data.page = 'provider-offer-reply';
             req.data.quote = req.quote.toObject();
             console.log("quote that was loaded:");
             console.log(req.data.quote);
@@ -54,10 +59,11 @@ function providerOfferConfirm(req,res) {
 
 function updateQuote(req,res) {
     var quoteId = req.body.quoteId;
-    console.log(req.body);
     var offerData = {};
     offerData.paymentTerms = req.body.paymentTerms;
     offerData.paymentType = req.body.paymentType;
+    offerData.prepaymentRequired = req.body.prepaymentRequired;
+    offerData.finalPayment = req.body.finalPayment;
     quote.addOfferData(quoteId,offerData, function(err, quote) {
             if (!err) {
                 res.writeHead(200, {"Content-Type": "application/json"});
@@ -73,8 +79,20 @@ function providerOffer(req,res) {
     
     req.data.config = local.config;
     req.data.quote = req.quote.toObject();
+    req.data.page = 'provider-offer';
     console.log("quote that was loaded:");
     console.log(req.data.quote);
+    // req.data.quote.storages = [];
+    // var storage = {};
+    // for (var key in req.data.quote.storageProfile){
+    //     if(req.data.quote.storageProfile.hasOwnProperty(key)){
+    //         storage.key = [];
+    //         for (var i = 0; i<req.data.quote.storageProfile[key].storages.length; i++){
+    //             var chosenStorage = storage.load(req,res,null,req.data.quote.storageProfile[key].storages[i]._id)
+    //              storage.key.push(storage.load(req,res,null,req.data.quote.storageProfile[key].storages[i]._id));
+    //         }
+    //     }
+    // }
     res.render("provider-offer",req.data);
 }
 
@@ -99,7 +117,12 @@ function createQuote(req,res) {
                             if (!err) {
                                 quote.createQuote(req.body, req.data.user, req.body.warehouseId, storageProfile,  searchFromSession, function(err, result){
                                     if (!err) {
-                                        res.writeHead(200, {"Content-Type": "application/json"});
+                                      if (req.session.whSC.chosenWHs === undefined){
+                                          req.session.chosenWHs = [req.data.warehouse.id];
+                                      }else{
+                                          req.session.whSC.chosenWHs.push(req.data.warehouse.id);
+                                        }
+                                       res.writeHead(200, {"Content-Type": "application/json"});
                                         var quoteId = result._id;
                                         res.end(JSON.stringify({"error" : false, "redirectURL" : "/quotation-request-confirm/" + quoteId }) + "\n");  
                                     } else {
@@ -125,6 +148,7 @@ function createQuote(req,res) {
 
 function quotationRequest(req,res) {
     req.data.warehouse = req.warehouse;
+    req.data.page = 'quotation-request';
     if (req.session.whSC && req.session.whSC.sc && req.session.whSC.sc.length > 0) {
         req.data.minDurationOptions = local.config.minDurationOptions;
         req.data.temperatures = local.config.temperatures;
@@ -135,6 +159,24 @@ function quotationRequest(req,res) {
             res.render("quotation-request",req.data);
         });
     }
+}
+
+function providerConfirmContract(req,res){
+    req.data.quote = req.quote.toObject();
+    req.data.page = 'provider-confirm-contract';
+    req.data.config = local.config;
+    res.render("provider-confirm-contract",req.data);
+}
+
+function confirmContract(req,res) {
+    //update the quote.
+    res.writeHead(200, {"Content-Type": "application/json"});
+    res.end(JSON.stringify({"error" : false, "redirectURL" : "/contract-confirmed" }));  
+}
+
+function contractConfirmed(req,res) {
+    console.log("wooo");
+    res.render("contract-confirmed", req.data);
 }
 
 function createQuoteConfirm(req,res) {

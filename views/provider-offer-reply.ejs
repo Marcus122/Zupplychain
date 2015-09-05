@@ -12,14 +12,14 @@
  %>
 	<main class="warehouse-profile quote-request">
 		<div class="banner">
-			<h1>Quotation for storage<small>Review and accept below</small></h1>
+			<h1>Quotation for storage</h1>
 		</div>
 		<section>
             <input type="hidden" name="warehouse-id" id="warehouse-id" value="<%=warehouse._id%>" />
 			<div class="main">
 				<div class="content-box primary">
 					<div class="header">
-						<h2><%=warehouse.name %>, <%= warehouse.postcode %></h2>
+						<h2>Review and Accept Payment Terms - <%=warehouse.name %>, <%= warehouse.postcode.split(" ")[0] %></h2>
 					</div>
                     <div class="main quote-request-summary">
                         <div class="content-box search-criteria-summary">
@@ -59,7 +59,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="columns two">
-				     <span>Minimum Duration</span>
+				     <span>Expected Duration</span>
                                     <em><%=minDurationOptions[parseInt(session.whSC.sc[0].minDuration,10)]%></em> 
                                     </div>
                                     <div class="columns two">
@@ -80,6 +80,8 @@
 			<div class="warehouse-pricing">
                         <% var quoteView = true; %>
                         <%= include ./partials/warehouse-pricing %>
+                        <br/><br/>
+                        <p class="term" id="vat-message">*All prices excluding VAT charged at the applicable rate</p>
 			</div>
 
                         <form class="loom-form row" action="/provider-offer-reply" id="provider-offer-reply-form">
@@ -94,12 +96,18 @@
                                    <div class="six columns">
                                        <h3>Payment Type Accepted</h3>
                                        <p>Payment accepted by <%= config.paymentTypes[quote.offerData.paymentType] %>
+                                            <h3>Payment Terms</h3>
+                                            <p>Payment to be made within <%= config.paymentTerms[quote.offerData.paymentTerms]%>
                                         
                                     </div>
                                     <div class="six columns">
                                         <div class="input-field">
-                                            <h3>Payment Terms</h3>
-                                            <p>Payment to be made within <%= config.paymentTerms[quote.offerData.paymentTerms]%>
+                                            <h3>Prepayment Required</h3>
+                                            <p>Prepayment Required: <%= config.prepaymentRequired[quote.offerData.prepaymentRequired]%>
+                                        </div>
+                                        <div class="input-field">
+                                            <h3>Final Payment</h3>
+                                            <p>Final Payment: <%= config.finalPayment[quote.offerData.finalPayment]%>
                                         </div>
                                         <div class="input-field check checkbox">
                                             <label for="terms">I accept the above payment terms<input type="checkbox" name="terms" id="terms" required="required"/></label>
@@ -111,11 +119,12 @@
                         </div>
                         <div class="content-box action row">
                             <div class="eight columns">
-                                <p>Press the ACCEPT button to accept the supplier's payment terms. You will be notified by email when the supplier confirms the contract.</p> 
+                                <p>Press the ACCEPT button to accept the supplier's quotation. You will be notified by email with the supplier's order UNKNOWN.</p> 
                             </div>
                             <div class="four columns submit-request-container">
-                                <button type="submit" class="button action large">ACCEPT
-                                </button>
+                                <button type="submit" class="button action">ACCEPT</button>
+                                <span>OR</span>
+                                <button type="button" class="button action">DECLINE</button>
                             </div>
                           
                         </div>

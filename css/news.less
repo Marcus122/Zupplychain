@@ -24,10 +24,14 @@
 		border-top-left-radius: 10px;
 		text-align: center; 
 		background-color:#9BC11F; 
-		h2{
+		h3{
 			margin-bottom:0;
 			color: #fff;
+			margin-bottom: 0;
 		}
+	}
+	.content-box .header h3{
+		margin-bottom: 0;
 	}
 	.main-footer{
 		background-color: #6A6666;
@@ -50,6 +54,7 @@
 			font-size: .9em;
 		}
 	}
+	
 	.secondary-post{
 		margin-left: 0;
 	}
@@ -62,7 +67,6 @@
 			position: relative;
 			top: 11px;
 			left: 0;
-			margin-left: 10px;
 			text-decoration: initial;
 			&:before{
 				content: "\f124";
@@ -128,8 +132,8 @@
 		.testimonial blockquote {
 			position: relative;
 			padding-left: 42px;
-			padding-bottom: 40px;
-			padding-bottom: 4rem;
+			padding-bottom: 13px;
+			padding-bottom: 1.3em;
 			font-size: .9em;
 			&:before{
 				left: 0;
@@ -157,6 +161,9 @@
 			height: auto;
 		}
 	}
+	.news-posts .secondary-post:last-child .main-footer{
+		margin-bottom: 0;
+	}
 	.image-container img{
 		max-width:100%;
 		height:auto;
@@ -165,7 +172,16 @@
 		padding-bottom: 40px;
 		display: inline-block;
 		border-bottom: 1px solid;
-		margin-left: 10px;
 		width: 100%;
+	}
+	.eight.columns{
+		margin-left: 10px;
+	}
+}
+.footer {
+	position: relative;
+	top: -6px;
+	.container .news-home{
+		float: left;
 	}
 }

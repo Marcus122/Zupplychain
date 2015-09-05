@@ -31,13 +31,24 @@
                 <tr>
                     <th>Week Commencing</th>
                     <th>Pallet Space</th>
+                    <%if(typeof page !== undefined){
+                        if(typeof page !== undefined && page !== "" && page === "provider-offer"){%>
+                            <th>Storage Name</th>
+                        <%}
+                    }%>
                     <th>Estimated Requirements</th>
                     <th>Price per Pallet per Week (&pound;)</th>
                     <th>In and Out Price per Pallet (&pound;)</th>
                     <th>Weekly Total (&pound;)</th>
                 </tr>                          
                 <tr>
-                <td colspan="6" class="key">
+                <%if(typeof page !== undefined){
+                    if(typeof page !== undefined && page !== "" && page === "provider-offer"){%>
+                        <td colspan="7" class="key">
+                    <%}else{%>
+                        <td colspan="6" class="key">
+                    <%}
+                }%>
 		  <dl>
 		    <dt class="primary"></dt><dd>Available Space</dd><dt class="highlight"></dt><dd>Your Required Space</dd>
 		  </dl>
@@ -59,6 +70,11 @@
                         <div class="bar <%= storageProfile.numPalletsLeft == 0 ? "full" : "not-full" %>" data-value="<%= storageProfile.numPalletsStored%>">
                         <%= storageProfile.numPalletsLeft == 0 ? "OK" : storageProfile.numPalletsStored %></div>
                     </td>
+                    <%if(typeof page !== undefined){
+                        if(typeof page !== undefined && page !== "" && page === "provider-offer"){%>
+                            <td class="storage-name" data-storage-name="N/A">N/A</td>
+                        <%}
+                    }%>
                     <td class="<%= !quoteView && "input-field" || "" %> no-success-validation-style">
                     <% if (quoteView) { %>
                         <span><%=useageProfile[wcDate]%></span>
@@ -74,7 +90,7 @@
                         <%=storageProfile.highestPriceOfAnyStorageUsed.charge ? Number(storageProfile.highestPriceOfAnyStorageUsed.charge).toFixed(2)  :"N/A" %>
                     <% } %>
                         </td>
-                    <td class="weeklyTotal"><%=parseFloat(storageProfile.totalPrice,10).toFixed(2)%></td>
+                    <td class="weeklyTotal"><%=storageProfile.highestPriceOfAnyStorageUsed.charge ? parseFloat(storageProfile.totalPrice,10).toFixed(2) :"N/A"%></td>
                 </tr>
                 <%
                         runningTotal += storageProfile.totalPrice;
@@ -83,6 +99,10 @@
             </tbody>
         </table>
         </form>
+    </div>
+    <div class="change-warehouse-profile-row-number">
+        <button class="view-more action">View More</button>
+        <button class="view-less action">View Less</button>
     </div>
     <div class="row">
         <div class="six columns">

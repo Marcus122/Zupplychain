@@ -340,6 +340,9 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
     
     //General Volume Discount table behaviour
     function initVolDiscountTablebehaviour(){
+        
+        var changeWasCalledManuallySoDontSetValidators = false;
+        
         function changeDiscountfromValue($tableRow, templateName){
             var to = $tableRow.find('.discount-to').find('input[name="to"]').val();
             if (to){
@@ -353,6 +356,13 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         $(document).on('blur', '#volume-discount-table tbody tr td[data-th="To"] input[name="to"]', function (){
             var $tableRow = $(this).closest("tr");
             changeDiscountfromValue($tableRow, 'discount-row');
+            
+            if (!changeWasCalledManuallySoDontSetValidators) {
+                setDateValidators(this);
+                changeWasCalledManuallySoDontSetValidators = true;
+                $(this).trigger("change");//retrigger validation of the input that changed now that we've changed the validators.
+                changeWasCalledManuallySoDontSetValidators = false;
+            }
         });
     }
     
@@ -381,16 +391,11 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         function checkSectionCompleted(inputs){
             var completed = true; //Assume everything is ok
             for (var i = 0; i < inputs.length; i++){
-                if (completed == false){
-                    break;
-                }
-                for (var j = 0; j < inputs[i].length; j++){
-                    if(inputs[i][j].value !== "" && inputs[i][j].value !== undefined){
-                        completed = true;
-                    }else{
-                        completed = false;
-                        break; //It is incomplete 
-                    }
+                if(inputs[i][0].value !== "" && inputs[i][0].value !== undefined){
+                    completed = true;
+                }else{
+                    completed = false;
+                    break; //It is incomplete 
                 }
             }
             return completed;
@@ -520,14 +525,26 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
             var storageJSON = getStorageJSON($(".js-all-storages"));
             //check that the storage JSON looks ok...
             saveAllStorages(storageJSON, function(response){
-                Alerts.showSuccessMessage("Data saved");
-                $("body").removeClass("wait");
-                if (cb) {
-                    cb();
+                if (response !== undefined){
+                    if (response.error !== undefined && response.error === true && response.data !== undefined && response.data === "Users do not Match"){
+                        window.location.href = '/'; //The users don't match, they have been logged out, now send them to the home page.
+                    }else{
+                        alertWhSavedAndCallback(cb)
+                        //if it all went ok, redirect them to the next page.
+                    }
+                }else{
+                    alertWhSavedAndCallback(cb);
                 }
-                //if it all went ok, redirect them to the next page.
             });
 
+        }
+        
+        function alertWhSavedAndCallback(cb){
+            Alerts.showSuccessMessage("Data saved");
+            $("body").removeClass("wait");
+            if (cb) {
+                cb();
+            }
         }
         
         function getStorageJSON($formContainer) {
@@ -667,8 +684,8 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         
         function saveAllStorages(storages, cb) {
             warehouse.id=$('input[name="warehouse"]').val();
-            Warehouse.updateStorageBatch(warehouse,storages,function(){
-                if(cb) cb();
+            Warehouse.updateStorageBatch(warehouse,storages,function(response){
+                if(cb) cb(response);
             });
         }
 

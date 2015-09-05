@@ -4,6 +4,7 @@ var Quote = require("../data/quote.js"),
 	ObjectId = Schema.ObjectId;
     
 exports.addOfferData = function(quoteId, offerData, cb) {
+    //Quote.markModified('offerData');
     Quote.update({"_id" : quoteId}, { $set: { "offerData": offerData }}, {},cb);
 }
 
@@ -24,8 +25,10 @@ exports.createQuote = function(formData,user,warehouseId,storageProfile,search,c
     quote.userData.email = formData.email;
     quote.userData.telephone = formData.telephone;
     quote.userData.mobile = formData.mobile;
+    quote.userData.website = formData.website;
     
     var myQuote = new Quote(quote);
+    //myQuote.markModified('userData');
     myQuote.save(cb);
 }
 

@@ -57,6 +57,10 @@ define(["jquery"], function ($) {
 				dataType: 'json',
 				success:function(response){
 					cb(response);
+				},
+				error:function(jqXHR, textStatus, errThrown){
+					err = JSON.parse(jqXHR.responseText);
+					cb(err);
 				}
 			});
 		}

@@ -16,7 +16,7 @@
  %>
 	<main class="warehouse-profile quote-request">
 		<div class="banner">
-			<h1>Request for storage</h1>
+			<h1>Accepted Quotation</h1>
 		</div>
 		<section>
             <input type="hidden" name="warehouse-id" id="warehouse-id" value="<%=warehouse._id%>" />
@@ -107,7 +107,7 @@
                             <p class="term" id="vat-message">*All prices excluding VAT charged at the applicable rate</p>
 			             </div>
 
-                        <form class="loom-form row" action="/provider-offer" id="provider-offer-form">
+                        <form class="loom-form row" action="/provider-confirm-contract" id="provider-confirm-contract">
                             <div class="input-field" style="display:none">
 				                <input type="hidden" name="quoteId" value="<%= quote._id %>" />
 				            </div>
@@ -118,39 +118,26 @@
                                 <div class="main row">
                                     <div class="six columns">
                                         <div class="input-field">
-                                            <label for = "paymentType">Payment Type Accepted</label>
-                                            <select name="paymentType">
-                                                <option value="0">Invoice</option>
-                                                <option value="1">Credit Card</option>
-                                                <option value="2">BACS transfer</option>   
-                                            </select>
+                                            <p>Payment Type Accepted</p>
+                                            <p><b><%= config.paymentTypes[quote.offerData.paymentType] %></b></p>
+                                            <p class="accepted-by-customer">Accepted by customer</p>
                                         </div>
                                         <div class="input-field">
-                                            <label for = "paymentTerms">Payment Terms</label>
-                                            <select name="paymentTerms">
-                                                <option value="0">7 Days</option>
-                                                <option value="1" selected="selected">14 Days</option>
-                                                <option value="2">28 Days</option>
-                                            </select>
+                                            <p>Payment Terms</p>
+                                            <p><b><%= config.paymentTerms[quote.offerData.paymentTerms] %></b></p>
+                                            <p class="accepted-by-customer">Accepted by customer</p>
                                         </div>
                                     </div>
                                     <div class="six columns">
                                         <div class="input-field">
-                                            <label for = "prepaymentType">Prepayment Required</label>
-                                            <select name="prepaymentRequired">
-                                                <option value="0">None</option>
-                                                <option value="1">1 Week in Advance</option>
-                                                <option value="2">2 Weeks in Advance</option>
-                                                <option value="3">4 Weeks in Advance</option>   
-                                            </select>
+                                            <p>Prepayment Required</p>
+                                            <p><b><%= config.prepaymentRequired[quote.offerData.prepaymentRequired] %></b></p>
+                                            <p class="accepted-by-customer">Accepted by customer</p>
                                         </div>
                                         <div class="input-field">
-                                            <label for = "paymentType">Final Payment</label>
-                                            <select name="finalPayment">
-                                                <option value="0">To Agreed Terms</option>
-                                                <option value="1">Unknown</option>
-                                                <option value="2">In Full</option>  
-                                            </select>
+                                            <p>Final Payment</p>
+                                            <p><b><%= config.finalPayment[quote.offerData.finalPayment] %></b></p>
+                                            <p class="accepted-by-customer">Accepted by customer</p>
                                         </div>
                                         <div class="input-field check checkbox">
                                             <label for="terms">I have read and accept the ZupplyChain Terms and Conditions<input type="checkbox" name="terms" id="terms" required="required"/></label>
@@ -159,11 +146,8 @@
                                 </div>
                             </div>
                             <div class="content-box action row">
-                                <div class="eight columns">
-                                    <p>Press the SUBMIT button to reply the the customer's storage request with your payment terms. You will be notified by email when the customer accepts or rejects your offer.</p> 
-                                </div>
-                                <div class="four columns submit-request-container">
-                                    <button type="submit" class="button action">SUBMIT OFFER</button>
+                                <div class="five columns submit-request-container confirm-contract">
+                                    <button type="submit" class="button action">SEND ACKNOWLEDGEMENT</button>
                                     <span>OR</span>
                                     <button type="button" class="button action">DECLINE</button>
                                 </div>

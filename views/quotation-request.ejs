@@ -74,7 +74,7 @@
 			<div class="main">
 				<div class="content-box primary">
 					<div class="header">
-						<h2>Your chosen warehouse - <%=warehouse.name %>, <%= warehouse.postcode %></h2>
+						<h2>Your chosen warehouse - <%=warehouse.name %>, <%= warehouse.postcode.split(" ")[0] %></h2>
 					</div>
                     <div class="main quote-request-summary">
                         <div class="content-box search-criteria-summary">
@@ -151,13 +151,13 @@
                             <div class="main row">
                                    <div class="six columns">
                                         <div class="input-field">
-                                            <label for = "Name">Contact Name</label><input type="text" name="name" required="required" />
+                                            <label for = "Name">Contact Name*</label><input type="text" name="name" required="required" />
                                         </div>
                                         <div class="input-field">
-                                            <label for="companyName">Company Name</label><input name="companyName" type="text" required="required" />
+                                            <label for="companyName">Company Name*</label><input name="companyName" type="text" required="required" />
                                         </div>
                                         <div class="input-field">
-                                            <label for="location">Location <div class="tool-tip hint--top" data-hint="Town or postcode">?</div></label><input name="location" type="text" required="required" />
+                                            <label for="location">Location*<div class="tool-tip hint--top" data-hint="Town or postcode">?</div></label><input name="location" type="text" required="required" />
                                         </div>
                                         <div class="input-field">
                                             <label for="position">Position at Company</label><input name="position" type="text" required="required" />
@@ -166,13 +166,16 @@
                                     </div>
                                     <div class="six columns">
                                         <div class="input-field">
-                                            <label for = "email"> Contact Email<div class="tool-tip hint--top" data-hint="This can be different to the email you signed up with">?</div></label><input type="email" name="email" required="required" value="<%= user && user.email || ''; %>" />
+                                            <label for = "email">Contact Email*<div class="tool-tip hint--top" data-hint="This can be different to the email you signed up with">?</div></label><input type="email" name="email" required="required" value="<%= user && user.email || ''; %>" />
                                         </div>     
                                         <div class="input-field">
                                             <label for = "telephone">Telephone</label><input type="tel" name="telephone"  value="<%= user && user.telephone || ''; %>" />
                                         </div>
                                         <div class="input-field">
                                             <label for = "mobile">Mobile</label><input type="tel" name="mobile"  value="<%= user && user.mobile || ''; %>" />
+                                        </div>
+                                        <div class="input-field">
+                                            <label for = "website">Company Website</label><input type="text" name="website" />
                                         </div>
                                         <div class="input-field check checkbox">
                                             <label for="terms">I have read and accept the ZupplyChain Terms and Conditions<input type="checkbox" name="terms" id="terms" required="required"/></label>

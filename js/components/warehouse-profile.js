@@ -46,6 +46,16 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
                     }
                 });
             }
+            
+            if ($("#provider-confirm-contract").length > 0) {
+                lm.addOnSuccessCallback("provider-confirm-contract", function(response) {
+                    if (response.error) {
+                        providerOfferError();
+                    } else {
+                        providerOfferSuccess(response);
+                    }
+                });
+            }
 			
 			if ($(".search-result-info-box").length > 0){
 				var $searchResInfoBox = $(".search-result-info-box");
@@ -62,7 +72,30 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
                     }
                 });
             }
+            
+            initWarehouseProfileRowChanger();
+            
 		}
+        
+        function initWarehouseProfileRowChanger(){
+            $('.change-warehouse-profile-row-number .view-less').hide();
+            $('.change-warehouse-profile-row-number .view-more').hide();
+            if ($('.pricing-container form table > tbody > tr').length > 12){
+                $('.change-warehouse-profile-row-number .view-more').show();
+                $('.pricing-container form table > tbody > tr').hide().slice(0,12).show();
+                $('.change-warehouse-profile-row-number .view-less').hide();
+                $('.change-warehouse-profile-row-number .view-more').click(function (){
+                    $(".pricing-container form table > tbody > tr").show();
+                    $('.change-warehouse-profile-row-number .view-less').show();
+                    $('.change-warehouse-profile-row-number .view-more').hide();
+                });
+                $('.change-warehouse-profile-row-number .view-less').click(function (){
+                    $('.pricing-container form table > tbody > tr').hide().slice(0,12).show();
+                    $('.change-warehouse-profile-row-number .view-more').show();
+                    $('.change-warehouse-profile-row-number .view-less').hide();
+                });
+            }
+        }
         
         function providerOfferReplySuccess(response) {
             var redirectTo = response.redirectURL;
@@ -244,7 +277,11 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
                 var sp = storageProfile[wcDateString];
                 rowObject["wcDate"] = wcDateString;
                 rowObject["palletsRequired"] = sp.numPallets;
-                rowObject["totalPrice"] = sp.totalPrice;
+                if (sp.totalPrice === null || sp.totalPrice === undefined || isNaN(sp.totalPrice)){
+                    rowObject["totalPrice"] = 'N/A'
+                } else {
+                    rowObject["totalPrice"] = sp.totalPrice;
+                }
                 newLargestRequiredValue = Math.max(newLargestRequiredValue, sp.numPallets);
                 rowObject["numPalletsStored"] = sp.numPalletsStored;
                 var fits = rowObject["palletsRequired"] <= rowObject["numPalletsStored"];
