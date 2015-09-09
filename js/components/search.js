@@ -97,6 +97,12 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
         }
     });
     
+    $('input[name="postcode"]').keyup(function(){
+        if ($("#search-form .input-field.last").hasClass('invalid-postcode')){
+            resultsMap.enableSearch();
+        }
+    })
+    
     loom.addOnSuccessCallback("search-form", function(response){
         haveDoneASearch = true;
 		var $searchResInfoBox = $(".search-result-info-box");
@@ -140,6 +146,17 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
                    }
                    response.results[i].estimatedPrice = estimatedTotalPrice ? estimatedTotalPrice.toFixed(2) :  "N/A";
                    var row = template.bind(response.results[i]);
+                   row.find('td[data-field="rating"]').attr("data-rating", response.results[i].rating);
+                   if (response.results[i].rating){
+                       var j = 0;
+                       do{
+                           row.find('td[data-field="rating"]').append('<span class="ion-android-star rating"><em class="sr-only">*</em></span>');
+                           j++;
+                       }
+                       while(j<response.results[i].rating)
+                   }else{
+                       row.find('td[data-field="rating"]').append('<span>No Rating</span>');
+                   }
                    $("#search-results-table tbody ").append(row);
                }
 			   $(".continue-links.footer.form-footer .button.action.large.next").attr("href", response.results[0].href);

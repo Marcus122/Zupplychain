@@ -33,6 +33,8 @@ var handler = function(app) {
     app.get("/warehouse-registration-complete/:warehouse_id", warehouseRegistrationComplete)
 };
 
+var POSTCODE_NOT_FOUND = 'Postcode not Found';
+
 
 function warehouseRegistrationComplete(req,res) {
     res.render("registration-complete",req.data);
@@ -83,11 +85,18 @@ function warehouseAuth(req,res,next){
 function createWarehouse(req,res){
 	Utils.getLatLong(req.body.postcode,function(err,latlng){
 		if (latlng.lat === null && latlng.lng === null){
-			req.warehouse = warehouse.createWarehouseObject(req.body);
-			req.warehouse.geo.lat = null; 
-			req.warehouse.geo.lng = null;
-			setResponse(req,res);
-		}else{
+			//req.warehouse = warehouse.createWarehouseObject(req.body);
+			//req.warehouse.geo.lat = null; 
+			//req.warehouse.geo.lng = null;
+			//setResponse(req,res);
+			if (err){
+				setErrorResponse('Geolocation Error',res);
+			}else{
+				setPostcodeNotFoundResponse(POSTCODE_NOT_FOUND,res);
+			}
+		}else if(err){
+			setErrorResponse('Geolocation Error',res);
+		}else if (!err){
 			req.body.geo = latlng;
 			req.body.loc = { 'type' : 'Point', 'coordinates' : [latlng.lng, latlng.lat] };
 			warehouse.create(req.data.user,req.body,function(err,Warehouse){
@@ -187,9 +196,19 @@ function updateWarehouse(req,res){
 		function(callback){
 			if(req.body.postcode != req.warehouse.postcode){
 				Utils.getLatLong(req.body.postcode,function(error,latlng){
-					req.body.geo=latlng;
-					req.body.loc = { 'type' : 'Point', 'coordinates' : [latlng.lng, latlng.lat] };
-					callback(error);
+					if (latlng.lat === null || latlng.lng === null){
+						if (error){
+							callback('Geolocation Error',res);
+						}else{
+							callback(POSTCODE_NOT_FOUND,res);
+						}
+					}else if(error){
+						callback('Geolocation Error',res);
+					}else{
+						req.body.geo=latlng;
+						req.body.loc = { 'type' : 'Point', 'coordinates' : [latlng.lng, latlng.lat] };
+						callback(error);
+					}
 				});
 			}else{
 				callback(null);
@@ -197,13 +216,21 @@ function updateWarehouse(req,res){
 		}
 
 	],function (err, result) {
-		warehouse.update(req.warehouse,req.body,function(err){
-			if(err){
-				setErrorResponse(err,res);
-			}else{
-				setResponse(req,res);
-			}
-		});
+		if (!err || err === '' || err === null || err === "" || err === undefined){
+			warehouse.update(req.warehouse,req.body,function(err){
+				if(err){
+					setErrorResponse(err,res);
+				}else{
+					setResponse(req,res);
+				}
+			});
+		}else{
+			 if (err === POSTCODE_NOT_FOUND){
+				 setPostcodeNotFoundResponse(POSTCODE_NOT_FOUND,res);
+			 }else{
+			 	setErrorResponse(err,res);
+			 }
+		 }
 	});
 }
 
@@ -212,6 +239,11 @@ function setResponse(req,res){
     var output = { error: null, data: req.warehouse.toObject({
 		versionKey:false
 	}) };
+    res.end(JSON.stringify(output) + "\n");
+}
+function setPostcodeNotFoundResponse(err,res){
+	res.writeHead(200, {"Content-Type": "application/json"});
+    var output = { error: true, data: err };
     res.end(JSON.stringify(output) + "\n");
 }
 function setStorageResponse(req,res,next){

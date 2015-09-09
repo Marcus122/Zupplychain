@@ -48,7 +48,7 @@ var aggregateStorage = function(theStorages, VolumeDiscounts) {
         for (var i in storages) {
             var freeSpaces = storages[i].getFreeSpacesAtDate(wcDate);
             if (freeSpaces == 0) {
-                continue;
+                //continue;
             }
             storagesThisWeek.push({
                 _id : storages[i]._id,

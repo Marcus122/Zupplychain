@@ -44,3 +44,39 @@ exports.update = function(storage,data,cb){
 	storage.set(data);
 	storage.save(cb);
 }
+exports.getStorageName = function(storage,cb){
+    Storage.load(storage._id, function(err,chosenStorage){
+        storage.name = chosenStorage.name;
+        cb();
+    });
+}
+exports.buildStorageNamesAndRenderPage = function(req,res,page){
+    var i = 0,
+        key,
+        x = 0;
+    
+    var storagesLoop = function (chosenStorage,page){
+    exports.getStorageName(chosenStorage[x],function(){
+        
+        x++;
+        
+        if(x<chosenStorage.length){
+            storagesLoop(chosenStorage,page);
+        }else if (x===chosenStorage.length){
+            i++;
+            x=0;
+        }
+        
+        if (i === Object.keys(req.data.quote.storageProfile).length){
+            res.render(page,req.data);
+        }
+        
+    });
+    }
+    
+    for (key in req.data.quote.storageProfile){
+        if(req.data.quote.storageProfile.hasOwnProperty(key)){
+            storagesLoop(req.data.quote.storageProfile[key].storages,page);
+        }
+    }
+}

@@ -74,6 +74,7 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
             }
             
             initWarehouseProfileRowChanger();
+            initTransport();
             
 		}
         
@@ -95,6 +96,44 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
                     $('.change-warehouse-profile-row-number .view-less').hide();
                 });
             }
+        }
+        
+        function initTransport(){
+            
+            if ($('select[name="transport"]').val() === "1"){
+                $('.input-field[data-field="dispatch-location"]').show();
+                $('input[name="dispatchLocation"]').attr("required","required")
+            }
+            
+            $('button[name="open-transport-fields"]').click(function(){
+                $(this).parent('.main.row.transport').find('.six.columns').show();
+                $(this).hide();
+            });
+            $('button[name="close-transport-fields"]').click(function(){
+                $(this).parent('.six.columns').hide();
+                $(this).parent('.six.columns').next('.six.columns').hide();
+                $('button[name="open-transport-fields"]').show();
+            })
+            $('select[name="transport"]').change(function(){
+                if($(this).val() === "1"){
+                    $('.input-field[data-field="dispatch-location"]').show();
+                    $('input[name="dispatchLocation"]').attr("required","required")
+                }else{
+                    $('.input-field[data-field="dispatch-location"]').hide();
+                    $('input[name="dispatchLocation"]').removeAttr("required")
+                    $('input[name="dispatchLocation"]').val("");
+                }
+            });
+            
+            $('input[name="paymentTermsAccepted"], input[name="transportTermsAccepted"]').change(function(){
+                if($(this).is(":checked")){
+                    $('button[name="accept"]').show();
+                    $('button[name="decline"]').hide();
+                }else if (!$('input[name="paymentTermsAccepted"]').is(":checked") && !$('input[name="transportTermsAccepted"]').is(":checked")){
+                    $('button[name="accept"]').hide();
+                    $('button[name="decline"]').show();
+                }
+            })
         }
         
         function providerOfferReplySuccess(response) {

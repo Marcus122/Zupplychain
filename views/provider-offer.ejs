@@ -41,6 +41,8 @@
                                 <div class="row">
                                     <div class="columns three"><span>Website</span>
                                     <%=quote.userData.website%></div>
+                                    <div class="columns three"><span>Transport</span>
+                                    <%=config.transport[quote.transport.type]%></div>
                                 </div>
                             </div>
                         </div>
@@ -112,6 +114,9 @@
 				                <input type="hidden" name="quoteId" value="<%= quote._id %>" />
 				            </div>
                             <div class="content-box">
+                                <div class="input-field">
+                                    <input type="hidden" name="transportType" value='<%= quote.transport.type %>'/>
+                                </div>
                                 <div class="header">
                                     <h2>Your Payment Terms</h2>
                                 </div>
@@ -148,8 +153,7 @@
                                             <label for = "paymentType">Final Payment</label>
                                             <select name="finalPayment">
                                                 <option value="0">To Agreed Terms</option>
-                                                <option value="1">Unknown</option>
-                                                <option value="2">In Full</option>  
+                                                <option value="1">In Full Before Final Dispatch</option>
                                             </select>
                                         </div>
                                         <div class="input-field check checkbox">
@@ -157,6 +161,38 @@
                                         </div>
                                     </div>
                                 </div>
+                                <%if (quote.transport.type === "1"){%>
+                                    <div class="main row transport">
+                                        <button type="button" name="open-transport-fields" class="action mini">Show Transport</button>
+                                        <div class="six columns" style="display:none;">
+                                            <div class="input-field">
+                                                <h3>Dispatch Location</h3>
+                                                <p><%= quote.transport.dispatchLocation.split(" ")[0] %></p>
+                                            </div>
+                                            <div class="input-field">
+                                                <h3>To</h3>
+                                                <p><%= quote.warehouse.postcode %></p>
+                                                <input type="hidden" name="dispatchLocation" value='<%= quote.transport.dispatchLocation.split(" ")[0] %>'/>
+                                            </div>
+                                            <button type="button" name="close-transport-fields" class="action mini">Hide Transport</button>
+                                        </div>
+                                        <div class="six columns" style="display:none;">
+                                            <div class="input-field">
+                                                <h3>Number of Pallets</h3>
+                                                <p><%=session.whSC.sc[0].totalPallets%></p>
+                                            </div>
+                                            <div class="input-field">
+                                                <h3>Distance</h3>
+                                                <p>5</p>
+                                                <input type="hidden" name="distance" value='5'/>
+                                            </div>
+                                            <div class="input-field">
+                                                <label for="transportQuote">Quote £</label>
+                                                <input name="transportQuote" type="number" min="0.00" value="0.00"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <%}%>
                             </div>
                             <div class="content-box action row">
                                 <div class="eight columns">

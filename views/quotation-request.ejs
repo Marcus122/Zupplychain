@@ -1,5 +1,5 @@
  <% include ./partials/top%>   
-	<main class="warehouse-profile quote-request">
+	<main class="warehouse-profile quote-request quotation-request">
 		<div class="banner">
 			<h1>Request for Storage</h1>
 		</div>
@@ -130,7 +130,7 @@
                                         <em class="search-value"><%=temperatures[session.whSC.sc[0].temp]%></em> 
 									</div>
                                 </div>
-								<% //include ./partials/multi-used/mini-warehouse-profile %>
+								<% include ./partials/multi-used/mini-warehouse-profile %>
                             </div>
                         </div>
 			<div class="warehouse-pricing">
@@ -162,7 +162,17 @@
                                         <div class="input-field">
                                             <label for="position">Position at Company</label><input name="position" type="text" required="required" />
                                         </div>
-                                        
+                                        <div class="input-field">
+                                            <label for="transport">Transport*</label>
+                                            <select name="transport" required="required">
+                                                <option value="0">Arrange Own Transport</option>
+                                                <option value="1">Get Quote From Provider</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-field" data-field="dispatch-location" style="display:none;">
+                                            <label for="dispatch-location">Dispatch Location*</label>
+                                            <input type="text" name="dispatchLocation"/>
+                                        </div>
                                     </div>
                                     <div class="six columns">
                                         <div class="input-field">

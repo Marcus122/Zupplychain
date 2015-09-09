@@ -114,21 +114,21 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			$registration.on("submit",function(ev){
 				ev.preventDefault();
 				saveWarehouse(function(result){
-					var checkResult = checkSaveWarehouseResultAndGetMsg(result);
-					if (checkResult.error === false){
+					//var checkResult = checkSaveWarehouseResultAndGetMsg(result);
+					if (result.error === false || result.error === null){
 						window.location = $registration.attr('action');
-					} else if (checkResult.error === true){
-						Alerts.showErrorMessage(checkResult.message);
+					} else if (result.error === true){
+						Alerts.showErrorMessage(result.data);
 					}
 				});
 			});
 			$registration.find('.save').on("click",function(ev){
 				saveWarehouse(function(result){
-					var checkResult = checkSaveWarehouseResultAndGetMsg(result);
-					if (checkResult.error === false){
+					//var checkResult = checkSaveWarehouseResultAndGetMsg(result);
+					if (result.error === false || result.error === null){
 							saveRegistration();
-					}else if (checkResult.error === true){
-						Alerts.showErrorMessage(checkResult.message);
+					}else if (result.error === true){
+						Alerts.showErrorMessage(result.data);
 					}
 				});
 			});
@@ -143,7 +143,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				}else if (warehouseResult.error === true){
 					result = {error:true, message:"An Error has Occurred, Check your Internet Connection, if the Problem Persists Contact an Administrator"}
 				}
-				return result;	
+				return result;
 			}
 			function saveWarehouse(cb){
 				if( lm.isFormValid($registration.attr('id')) ){

@@ -1,7 +1,7 @@
 "use strict";
 var searchController= require("../controllers/search.js");
 var warehouseController= require("../controllers/warehouses.js");
-
+var userWarehouse = require("../controllers/user-warehouses.js");
 var local = require("../local.config.js");
 var Utils = require("../utils.js");
 
@@ -32,6 +32,7 @@ var handler = function(app) {
 
 function searchHandler(req,res){
     var resultsData = req.data.results;
+    //resultsData.userWarehouse = res.data.userWarehouse;
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify(resultsData));
 }
@@ -97,7 +98,19 @@ function doSearch(query,req,res,next) {
             req.data.error = error;
         }
         req.data.results = results;
-        next(); 
+        getSelectedWarehousesbyUser(req,function(err,userWarehouse){
+            req.data.userWarehouse = userWarehouse;
+            next();
+        }); 
+    });
+}
+
+function getSelectedWarehousesbyUser(req,cb){
+    userWarehouse.loadByUser(req.data.user._id,req,function(err,result){
+        if(!err){
+            req.data.userWarehouse = result;
+            cb();
+        }
     });
 }
 

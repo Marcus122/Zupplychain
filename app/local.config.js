@@ -41,7 +41,7 @@ exports.config = {
     ],
     
     finalPayment : [
-        "To Aggreed Terms",
+        "To Agreed Terms",
         "Unknown",
         "In Full"
     ],
@@ -100,5 +100,15 @@ exports.config = {
         26 : "6 months",
         38 : "9 months",
         52 : "12 months"
+    },
+    
+    transport : [
+        "Arrange Own Transport",
+        "Get Quote From Storage Provider"
+    ],
+    
+    acceptStatus : {
+        true : "Accepted",
+        false : "Declined"
     }
 };

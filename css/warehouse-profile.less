@@ -109,12 +109,31 @@
                     .accepted-by-customer{
                         color:@primary;
                     }
+                    .declined-by-customer{
+                        color:@invalid-dark;
+                    }
                 }
             }
             .content-box.action.row{
                 .five.columns.submit-request-container.confirm-contract{
                     float:right;
                 }  
+            }
+        }
+        #provider-offer-form,
+        #provider-offer-reply-form,
+        #provider-confirm-contract{
+            .content-box .main.row:nth-child(2){
+                margin-bottom: 0;
+                padding-bottom: 0;
+            }
+        }
+        #provider-offer-form{
+           .content-box .main.row.transport{
+               margin-bottom:0;
+                .six.columns:nth-child(2){
+                    margin-left:0;
+                }
             }
         }
          .main{
@@ -471,6 +490,29 @@
             padding-top:10px;
             height:30px;
             padding-left:50px;
+        }
+    }
+}
+
+.warehouse-profile.provider-offer-reply,
+.warehouse-profile.quotation-request{
+    .content-box.search-criteria-summary{
+        min-height: 255px;
+        max-height: 1000px;
+        .row{
+            width:72%;
+        }
+        .main{
+            min-height: 255px;
+            max-height: 1000px;
+            .search-result-info-box .inner-box{
+                .distance{
+                    float:right;
+                }
+                span.selected{
+                    display:none;
+                }
+            }
         }
     }
 }

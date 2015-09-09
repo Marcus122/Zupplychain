@@ -26,7 +26,7 @@ define(["jquery"], function ($) {
 					cb(response);
 				},
 				error:function(jqXHR, textStatus, errThrown){
-					err = {error: true, errText:'Geocoding Error'};
+					err = JSON.parse(jqXHR.responseText);
 					cb(err);
 				}
 			});

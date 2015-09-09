@@ -352,6 +352,7 @@
 }
 #results-area{
     position:relative;
+    overflow:initial;
     .main{
         position:relative;
     }
@@ -364,6 +365,15 @@
         width:100%;
         height:5px;
         cursor:n-resize;
+    }
+    .header .tool-tip.hint--top{
+        position: absolute;
+        right: 0;
+        margin-right: 193px;
+        margin-top: 11px;
+    }
+    .header .tool-tip.hint--top:after{
+        left:-232px;
     }
 }
 @media @mobile{

@@ -6,7 +6,8 @@ local = require("../local.config.js"),
 search = require("../controllers/search.js"),
 quote = require("../controllers/quote.js"),
 async = require("async"),
-Utils = require("../utils.js");
+Utils = require("../utils.js"),
+userWarehouse = require("../controllers/user-warehouses.js");
 
 var handler = function(app) {
 	app.param('warehouse_id', warehouse.load);
@@ -37,17 +38,48 @@ function providerOfferConfirmReply(req,res) {
 
 function updateQuoteReply(req,res) {
     //update the quote.
-    res.writeHead(200, {"Content-Type": "application/json"});
-    res.end(JSON.stringify({"error" : false, "redirectURL" : "/provider-offer-reply-confirm"}));  
+    var quoteId = req.body.quoteId;
+    var offerData = {};
+    var transport = {};
+    offerData.paymentTerms = req.body.paymentTerms;
+    offerData.paymentType = req.body.paymentType;
+    offerData.prepaymentRequired = req.body.prepaymentRequired;
+    offerData.finalPayment = req.body.finalPayment;
+    offerData.paymentTermsAccepted = req.body.paymentTermsAccepted;
+    quote.addOfferData(quoteId,offerData, function(err) {
+            if (!err) {
+                transport.type = req.body.transportType;
+                transport.dispatchLocation = req.body.dispatchLocation;
+                transport.distance = req.body.distance;
+                transport.quote = req.body.transportQuote;
+                transport.transportTermsAccepted = req.body.transportTermsAccepted;
+                quote.updateTransportData(quoteId,transport,function(err,transport){
+                    if (!err){
+                        res.writeHead(200, {"Content-Type": "application/json"});
+                        res.end(JSON.stringify({"error" : false, "redirectURL" : "/provider-offer-reply-confirm"}));  
+                    }else{
+                        console.log("error updating transport");
+                        setErrorResponse(err,res);
+                    }
+                });
+            }else{
+                console.log("error creating quote");
+                setErrorResponse(err,res);
+            }
+    }); 
 }
 
 function providerOfferReply(req,res) {
-            req.data.config = local.config;
-            req.data.page = 'provider-offer-reply';
-            req.data.quote = req.quote.toObject();
-            console.log("quote that was loaded:");
-            console.log(req.data.quote);
-            res.render("provider-offer-reply",req.data);
+    req.data.config = local.config;
+    req.data.page = 'provider-offer-reply';
+    req.data.quote = req.quote.toObject();
+    var query = search.getFromSession(req, function(err, query){
+        if (!err) {
+            req.data.quote.warehouse.distanceFromSearch = Utils.distanceInMiles(query.geo,req.data.quote.warehouse.geo)
+        }
+    });
+    res.render("provider-offer-reply",req.data);
+    console.log(req.data.quote);
 }
 
 
@@ -60,15 +92,27 @@ function providerOfferConfirm(req,res) {
 function updateQuote(req,res) {
     var quoteId = req.body.quoteId;
     var offerData = {};
+    var transport = {};
     offerData.paymentTerms = req.body.paymentTerms;
     offerData.paymentType = req.body.paymentType;
     offerData.prepaymentRequired = req.body.prepaymentRequired;
     offerData.finalPayment = req.body.finalPayment;
-    quote.addOfferData(quoteId,offerData, function(err, quote) {
+    quote.addOfferData(quoteId,offerData, function(err) {
             if (!err) {
-                res.writeHead(200, {"Content-Type": "application/json"});
-                res.end(JSON.stringify({"error" : false, "redirectURL" : "/provider-offer-confirm/" + quoteId }) + "\n");  
-            } else {
+                transport.type = req.body.transportType;
+                transport.dispatchLocation = req.body.dispatchLocation;
+                transport.distance = req.body.distance;
+                transport.quote = req.body.transportQuote;
+                quote.updateTransportData(quoteId,transport,function(err,transport){
+                    if (!err){
+                        res.writeHead(200, {"Content-Type": "application/json"});
+                        res.end(JSON.stringify({"error" : false, "redirectURL" : "/provider-offer-confirm/" + quoteId }) + "\n"); 
+                    }else{
+                        console.log("error updating transport");
+                        setErrorResponse(err,res);
+                    }
+                });
+            }else{
                 console.log("error creating quote");
                 setErrorResponse(err,res);
             }
@@ -76,24 +120,12 @@ function updateQuote(req,res) {
 }
 
 function providerOffer(req,res) {
-    
+        
     req.data.config = local.config;
     req.data.quote = req.quote.toObject();
     req.data.page = 'provider-offer';
-    console.log("quote that was loaded:");
-    console.log(req.data.quote);
-    // req.data.quote.storages = [];
-    // var storage = {};
-    // for (var key in req.data.quote.storageProfile){
-    //     if(req.data.quote.storageProfile.hasOwnProperty(key)){
-    //         storage.key = [];
-    //         for (var i = 0; i<req.data.quote.storageProfile[key].storages.length; i++){
-    //             var chosenStorage = storage.load(req,res,null,req.data.quote.storageProfile[key].storages[i]._id)
-    //              storage.key.push(storage.load(req,res,null,req.data.quote.storageProfile[key].storages[i]._id));
-    //         }
-    //     }
-    // }
-    res.render("provider-offer",req.data);
+    storage.buildStorageNamesAndRenderPage(req,res,"provider-offer");
+    
 }
 
 function createQuote(req,res) {
@@ -122,6 +154,7 @@ function createQuote(req,res) {
                                       }else{
                                           req.session.whSC.chosenWHs.push(req.data.warehouse.id);
                                         }
+                                        createUserWarehouse(req.data.user.id,req.body.warehouseId,storageProfile);
                                        res.writeHead(200, {"Content-Type": "application/json"});
                                         var quoteId = result._id;
                                         res.end(JSON.stringify({"error" : false, "redirectURL" : "/quotation-request-confirm/" + quoteId }) + "\n");  
@@ -146,6 +179,41 @@ function createQuote(req,res) {
     });    
 }
 
+function createUserWarehouse(userId,warehouseId,storageProfile){
+    var i = 0,
+        validFrom,
+        validFromDate,
+        validTo,
+        validToDate,
+        len = Object.keys(storageProfile).length;
+    
+    for(var key in storageProfile){
+        if(storageProfile.hasOwnProperty(key)){
+            if (i === 0){
+                validFrom = key;
+            }else if ((i+1) === len ){
+                validTo = key;
+            }
+            i++;
+        }
+    }
+    
+    validFromDate = new Date(validFrom);
+    validToDate = new Date(validTo);
+    validToDate.setDate(validToDate.getDate() + 6);
+    validToDate.setHours(23);
+    validToDate.setMinutes(59);
+    validToDate.setSeconds(59);
+    
+    userWarehouse.createUserWarehouse(userId,warehouseId,validToDate,validFromDate,function(err,result){
+        if(err){
+            console.log("Failed to create a user warehouse record");
+        }else{
+            console.log(result);
+        }
+    });
+}
+
 function quotationRequest(req,res) {
     req.data.warehouse = req.warehouse;
     req.data.page = 'quotation-request';
@@ -155,6 +223,7 @@ function quotationRequest(req,res) {
         var query = search.getFromSession(req, function(err, query){
             if (!err) {
                 req.data.warehouse.generateStorageProfile(query);
+                req.data.warehouse.distanceFromSearch = Utils.distanceInMiles(query.geo,req.data.warehouse.geo)
             }
             res.render("quotation-request",req.data);
         });
@@ -165,7 +234,7 @@ function providerConfirmContract(req,res){
     req.data.quote = req.quote.toObject();
     req.data.page = 'provider-confirm-contract';
     req.data.config = local.config;
-    res.render("provider-confirm-contract",req.data);
+    storage.buildStorageNamesAndRenderPage(req,res,"provider-confirm-contract");
 }
 
 function confirmContract(req,res) {
@@ -175,7 +244,6 @@ function confirmContract(req,res) {
 }
 
 function contractConfirmed(req,res) {
-    console.log("wooo");
     res.render("contract-confirmed", req.data);
 }
 

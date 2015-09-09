@@ -4,8 +4,11 @@ var Quote = require("../data/quote.js"),
 	ObjectId = Schema.ObjectId;
     
 exports.addOfferData = function(quoteId, offerData, cb) {
-    //Quote.markModified('offerData');
     Quote.update({"_id" : quoteId}, { $set: { "offerData": offerData }}, {},cb);
+}
+
+exports.updateTransportData = function(quoteId,transport,cb){
+    Quote.update({"_id" : quoteId}, { $set: { "transport": transport }}, {},cb);
 }
 
 exports.createQuote = function(formData,user,warehouseId,storageProfile,search,cb) {
@@ -26,6 +29,11 @@ exports.createQuote = function(formData,user,warehouseId,storageProfile,search,c
     quote.userData.telephone = formData.telephone;
     quote.userData.mobile = formData.mobile;
     quote.userData.website = formData.website;
+    quote.userData.transport = formData.transport;
+    
+    quote.transport = {};
+    quote.transport.type = formData.transport;
+    quote.transport.dispatchLocation = formData.dispatchLocation
     
     var myQuote = new Quote(quote);
     //myQuote.markModified('userData');

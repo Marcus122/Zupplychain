@@ -47,6 +47,7 @@ var fields = {
 		to:Number,
 		perc:Number
 	}],
+    rating: {type: Number}
 };
 
 var warehouseSchema = new Schema(fields);

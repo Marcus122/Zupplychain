@@ -72,6 +72,10 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         var fromDate = dateFromInput($from);
         var nextFromDate = dateFromInput($nextFrom);
         
+        if($to.attr('type') != 'date'){
+            return;
+        }
+        
         //from and to dates are each other's min and max.
         if (fromDate) {
             $to.attr("min", fromDate.toISOString().substr(0,10));
@@ -120,7 +124,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
     initVolDiscountTablebehaviour();
     
     function initPopup() {
-        $(".close-me").click(function(){
+        $(".close-me, .popup-buttons .save .done").click(function(){
             $(this).closest(".popup-window").hide();
         });
         
@@ -699,10 +703,11 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         //Volume Discount stuff
         
         $(document).on("change", "input[name='noDiscount']", function(evt) {
-            thisVal = $(this).val();
+            var thisVal = $(this).val();
             var $row = $("#volume-discount-table").find("tbody tr").first();
             $row.find(".js-from").html(thisVal);
             $row.find("input[name='to']").attr("min",thisVal);
+            $row.find("input[name='from']").val(thisVal);
             lm.rebind($(this).closest("form"));
         });
         

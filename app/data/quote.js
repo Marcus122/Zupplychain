@@ -17,7 +17,8 @@ var fields = {
 	warehouse       : { type : Schema.ObjectId, ref: 'warehouse' },
     search          : { type : Schema.ObjectId, ref: 'search' }, //search contains the useageProfile.
     storageProfile  : Schema.Types.Mixed,
-    offerData     : Schema.Types.Mixed
+    offerData       : Schema.Types.Mixed,
+    transport       : Schema.Types.Mixed,
 };
 
 var quoteSchema = new Schema(fields);

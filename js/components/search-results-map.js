@@ -68,16 +68,23 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery", "loom/loomAl
                 geocoder = new google.maps.Geocoder();
                 geocoder.geocode( { 'address': postcode, "componentRestrictions":restrictions}, function(results, status) {
                     if (status === google.maps.GeocoderStatus.OK) {
-                      
-                      var latlong = results[0].geometry.location;
-                        var loc2 = new google.maps.LatLng(latlong.latitude, latlong.longitude);
-                        centerLatLong = latlong;
-                        map.setCenter(latlong);
-                        setRadius(radius);
+                      if (results[0].partial_match === undefined){
+                        var latlong = results[0].geometry.location;
+                            var loc2 = new google.maps.LatLng(latlong.latitude, latlong.longitude);
+                            centerLatLong = latlong;
+                            map.setCenter(latlong);
+                            setRadius(radius);
+                            enableSearch();
+                      }else if (results[0].partial_match == true){
+                          Alerts.showErrorMessage("Postcode Not Found");
+                          disableSearch('Please Enter a Valid Postcode to Complete a Search');
+                      }
                     } else if (status === google.maps.GeocoderStatus.ZERO_RESULTS) {
-                        Alerts.showErrorMessage("Postcode Not Found")
+                        Alerts.showErrorMessage("Postcode Not Found");
+                        disableSearch('Please Enter a Valid Postcode to Complete a Search');
                     } else {
                       console.log('Geocode was not successful for the following reason: ' + status);
+                      disableSearch('Geocode was not successful for the following reason: ' + status);
                     }
                 });
             }
@@ -124,6 +131,22 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery", "loom/loomAl
             markers = [];
             selectedMarkerIndex = 0;
             $('#search-results-info').fadeOut();  
+        }
+        
+        function disableSearch(message){
+            $('#search-form .input-field.last').addClass('invalid-postcode');
+            $('#search-form .input-field.last button.action').hide();
+            $('#search-form .input-field.last .search-nag').hide();
+            $('#search-form .input-field.last p.invalid-postcode-message').html(message);
+            $('#search-form .input-field.last p.invalid-postcode-message').show();
+        }
+        
+        function enableSearch(){
+            $('#search-form .input-field.last').removeClass('invalid-postcode');
+            $('#search-form .input-field.last button.action').show();
+            $('#search-form .input-field.last .search-nag').show();
+            $('#search-form .input-field.last p.invalid-postcode-message').html("");
+            $('#search-form .input-field.last p.invalid-postcode-message').hide();   
         }
         
         function load(data) {
@@ -285,7 +308,8 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery", "loom/loomAl
 
         return {
             load:load,
-            setRadius:setRadius
+            setRadius:setRadius,
+            enableSearch:enableSearch
         }
 
     }
