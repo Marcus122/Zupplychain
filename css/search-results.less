@@ -394,6 +394,10 @@
 #search-results-table tr  {
        position:relative;
 }
+#search-results-table tr[data-selected="true"]{
+    background-color:@very-light-grey;
+    color:#d3d3d3;
+}
 #search-results-table .selected {
     background-color:lighten(#d4e6a5,10%);
     td:nth-child(9){

@@ -1,7 +1,7 @@
 "use strict";
 var searchController= require("../controllers/search.js");
 var warehouseController= require("../controllers/warehouses.js");
-var userWarehouse = require("../controllers/user-warehouses.js");
+var userWh = require("../controllers/user-warehouses.js");
 var local = require("../local.config.js");
 var Utils = require("../utils.js");
 
@@ -32,7 +32,7 @@ var handler = function(app) {
 
 function searchHandler(req,res){
     var resultsData = req.data.results;
-    //resultsData.userWarehouse = res.data.userWarehouse;
+    resultsData.userWarehouse = req.data.userWarehouse;
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify(resultsData));
 }
@@ -94,22 +94,82 @@ function saveSearch(query,req) {
 
 function doSearch(query,req,res,next) {
     searchController.search_storage(query, function(error, results) {
+        var today = new Date();
         if (error) {
             req.data.error = error;
         }
         req.data.results = results;
-        getSelectedWarehousesbyUser(req,function(err,userWarehouse){
-            req.data.userWarehouse = userWarehouse;
-            next();
-        }); 
+        if(req.body.hasSearch !== undefined){
+            if (req.body.hasSearch === "true"){
+                getSelectedWarehousesbyUser(req,function(err,userWarehouse){
+                    if (userWarehouse){
+                        var tempUserWarehouse = userWarehouse;
+                        var deleteIndexes = [];
+                        for (var i = 0; i < tempUserWarehouse.length; i++){
+                            for (var key in tempUserWarehouse[i]){
+                                if (tempUserWarehouse[i].hasOwnProperty(key) && key === "validFrom"){
+                                    if (today < tempUserWarehouse[i][key]){
+                                        deleteIndexes.push(i);
+                                    }
+                                }else if (tempUserWarehouse[i].hasOwnProperty(key) && key === "validTo"){
+                                    if (today > tempUserWarehouse[i][key]){
+                                        //deleteUserWarehouse(tempUserWarehouse[i]['_id']); Can't get this to work
+                                        deleteIndexes.push(i);
+                                    }
+                                }
+                            }
+                        }
+                        var len = deleteIndexes.length;
+                        for (var j = len-1; j>=0; j--){
+                            var index = deleteIndexes.indexOf(j);
+                            if (index > -1){
+                            userWarehouse.splice(index,1);
+                            }
+                        }
+                    }
+                    req.data.userWarehouse = userWarehouse;
+                    next();
+                });
+            }
+        }else{
+            deleteUserWarehouseByUser(req,function(err){
+                next();
+            });
+        } 
     });
 }
 
 function getSelectedWarehousesbyUser(req,cb){
-    userWarehouse.loadByUser(req.data.user._id,req,function(err,result){
+    if (req.data.user._id){
+        userWh.loadByUser(req.data.user,req,function(err,result){
+            if(!err){
+                var userWarehouse = [];
+                for (var i = 0; i < result.length; i++){
+                    userWarehouse.push(result[i]._doc);
+                }
+                cb(err,userWarehouse);
+            }
+        });
+    }else{
+        cb();
+    }
+}
+
+function deleteUserWarehouseByUser(req,cb){
+    if (req.data.user._id){
+        userWh.removeByUser(req.data.user,function(err,result){
+            if(!err){
+                cb();
+            }
+        });
+    }else{
+        cb();
+    }
+}
+
+function deleteUserWarehouse(id){
+    userWh.remove(id,function(err,result){
         if(!err){
-            req.data.userWarehouse = result;
-            cb();
         }
     });
 }

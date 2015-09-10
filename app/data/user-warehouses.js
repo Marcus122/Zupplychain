@@ -14,20 +14,26 @@ var userWarehouseSchema = new Schema(fields);
 userWarehouseSchema.statics = {
 	load: function (id,cb){
 		this.findOne({ _id : id })
-			.populate('user')
-			.populate('warehouse')
 			
 	       .exec(cb);
 	},
 	loadByUser: function(user,cb){
-		this.find({'user': user._id})
-			.exec(cb);
+		this.find({'user': user._id}, function (err,docs){
+			cb(err,docs);
+		})
 	},
 	loadByWarehouse: function(warehouse,cb){
 		this.find({'warehouse':warehouse._id})
-			.populate('user')
-			.populate('warehouse')
 			
+			.exec(cb);
+	},
+	removeByUser: function(user,cb){
+		this.remove({'user': user._id}, function (err){
+			cb(err);
+		})
+	},
+	remove: function(id,cb){
+		this.remove({_id: id})
 			.exec(cb);
 	}
 }

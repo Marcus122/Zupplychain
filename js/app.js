@@ -1,7 +1,7 @@
 //Just config and loads the main.js file as the main entry point.
 
 require.config({
-    urlArgs: "bust=" + (new Date()).getTime(),
+    //urlArgs: "bust=" + (new Date()).getTime(),
     baseUrl : '/js',
     deps: ["main"], //entry point for the app.
 	paths: { 

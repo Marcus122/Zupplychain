@@ -6,7 +6,6 @@
 	}else{
 		fromRequest = true;
 		var temp = "";
-		console.log(warehouse);
 		warehouseName = warehouse.name;
 		city = warehouse.city;
 		postcode = warehouse.postcode.split(" ")[0];
@@ -30,13 +29,13 @@
 		<hr/>
 		<img class="js-image" src="<%= '/images/' + mainPhoto %>" alt="an external view of a warehouse " />
 		<div class="info">
-			<a class="button mini action view-details <%= user.email ? "" : "register-before-click " %>view-warehouse-link" href="<%= href %>">View details</a>
+		    <a class="button mini action view-details <%= user.email ? "" : "register-before-click " %>view-warehouse-link" href="<%= href %>">View details</a>
 			<div class="ratings js-rating">
+				<!--<span class="ion-android-star rating"><em class="sr-only">*</em></span>
 				<span class="ion-android-star rating"><em class="sr-only">*</em></span>
 				<span class="ion-android-star rating"><em class="sr-only">*</em></span>
 				<span class="ion-android-star rating"><em class="sr-only">*</em></span>
-				<span class="ion-android-star rating"><em class="sr-only">*</em></span>
-				<span class="ion-android-star rating"><em class="sr-only">*</em></span>
+				<span class="ion-android-star rating"><em class="sr-only">*</em></span>-->
 			</div>
 			<div class="temperatures js-temperatures">
 				<!--<span class="ion-thermometer cold icon-box"></span>

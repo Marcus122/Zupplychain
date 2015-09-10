@@ -248,6 +248,17 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery", "loom/loomAl
             resultsElem.find(".js-size").html(data.size);
             resultsElem.find(".js-height").html(data.height);
             var $temps = resultsElem.find(".js-temperatures");
+            resultsElem.find('.js-rating span').remove();
+            if (data.rating){
+                var j = 0;
+                do{
+                    resultsElem.find('.js-rating').append('<span class="ion-android-star rating"><em class="sr-only">*</em></span>');
+                    j++;
+                }
+                while(j<data.rating)
+            }else{
+                resultsElem.find('.js-rating').append('<span>No Rating</span>');
+            }
             $temps.html('');
             for (var i in data.storageTemps) {
                 $temps.append("<span class='icon-box temp-" + data.storageTemps[i] +  "'></span>")

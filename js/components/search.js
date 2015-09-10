@@ -85,25 +85,25 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
     });
 	
 	function triggerSearch(){
-		$postcode.trigger("blur")
+		$postcode.trigger("blur");
 		$maxDistance.trigger("change");
-		$("#search-form").submit();
+        var newInputField = $("<div class='input-field has-search success'></div>");
+        var hasSearchInput = $("<input>").attr("type", "hidden").attr("name","hasSearch").val("true");
+        //$("#search-form").append(newInputField);
+        //$("#search-form").find('div.has-search').append("<input type='text' name='hasSearch' value='true' required='required'/>");
+        //loom.rebind($("#search-form"));
+        //loom.addOnSuccessCallback("search-form", function(response){
+        //    searchFormSuccess(response);
+       // });
+        $("#search-form").submit();
+        //$("#search-form").find('div.has-search').remove();
+        //loom.rebind($("#search-form"));
+       // loom.addOnSuccessCallback("search-form", function(response){
+      //      searchFormSuccess(response);
+      //  });
 	}
     
-    $("#search-form").submit(function() {
-        if (!resultsMap) {
-            resultsMap = new ResultsMap($("input[name='postcode']").val(), $("input[name='max-distance']").val(), $("input[name='postcode']"));
-            $(".js-map-results-container").slideDown(); //needs to be visible for map to load successfully.
-        }
-    });
-    
-    $('input[name="postcode"]').keyup(function(){
-        if ($("#search-form .input-field.last").hasClass('invalid-postcode')){
-            resultsMap.enableSearch();
-        }
-    })
-    
-    loom.addOnSuccessCallback("search-form", function(response){
+    function searchFormSuccess(response){
         haveDoneASearch = true;
 		var $searchResInfoBox = $(".search-result-info-box");
         var res = resultsMap.load(response.results);
@@ -130,6 +130,12 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
                 });
             }
             var numResults = response.results.length;
+            if (response.userWarehouse !== undefined ){
+                var numSelWh = response.userWarehouse.length;
+            }else{
+                var numSelWh = 0;
+            }
+            var userWarehousesFound = 0;
             var resultsWord = numResults != 1 ? " results loaded" : " result loaded";
             Alerts.showSuccessMessage(response.results.length + resultsWord);
             require(["templates/templates"], function(Templates){
@@ -150,12 +156,23 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
                    if (response.results[i].rating){
                        var j = 0;
                        do{
-                           row.find('td[data-field="rating"]').append('<span class="ion-android-star rating"><em class="sr-only">*</em></span>');
+                           row.find('td[data-field="rating"]').append('<span class="ion-android-star rating"><em class="sr-only">*</em></span>');                    
                            j++;
                        }
                        while(j<response.results[i].rating)
                    }else{
                        row.find('td[data-field="rating"]').append('<span>No Rating</span>');
+                   }
+                   if (userWarehousesFound < numSelWh && numSelWh > 0){
+                        for (var k = 0; k < response.userWarehouse.length; k++){
+                            if (response.results[i]._id === response.userWarehouse[k].warehouse ){
+                                row.attr('data-selected',true);
+                                row.find('td:last-child a').hide();
+                                row.find('td:last-child').append('<p>You have already selected this warehouse</p>')
+                                userWarehousesFound;
+                                break;
+                            }
+                        }
                    }
                    $("#search-results-table tbody ").append(row);
                }
@@ -178,6 +195,23 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
         } else {
             Alerts.showErrorMessage("No results found for your search");
         }
+    }
+    
+    $("#search-form").submit(function() {
+        if (!resultsMap){
+            resultsMap = new ResultsMap($("input[name='postcode']").val(), $("input[name='max-distance']").val(), $("input[name='postcode']"));
+            $(".js-map-results-container").slideDown(); //needs to be visible for map to load successfully.
+        }
+    });
+    
+    $('input[name="postcode"]').keyup(function(){
+        if ($("#search-form .input-field.last").hasClass('invalid-postcode')){
+            resultsMap.enableSearch();
+        }
+    })
+    
+    loom.addOnSuccessCallback("search-form", function(response){
+        searchFormSuccess(response);
     });
     
     loom.addOnErrorCallback("search-form", function(response){

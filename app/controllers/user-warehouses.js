@@ -30,7 +30,6 @@ exports.loadByUser = function(userId,req,next){
 			console.log("Failed to load user warehouse by user id");
 			return next(new Error('not found'));
 		}else{
-			req.data.userWarehouse = userWarehouse.toString();
 			return next(err,userWarehouse);
 		}
 	});
@@ -43,6 +42,28 @@ exports.loadByWarehouse = function(req,res,next,warehouseId){
 			return next(new Error('not found'));
 		}else{
 			req.userWarehouse = userWarehouse;
+			return next();
+		}
+	});
+}
+
+exports.removeByUser = function(user,next){
+	UserWh.removeByUser(user,function(err){
+		if (err){
+			console.log("Failed to remove document(s)");
+			return next(new Error('not removed'));
+		}else{
+			return next();
+		}
+	});
+}
+
+exports.remove = function(id,next){
+	UserWh.remove(id,function(err){
+		if (err){
+			console.log("Failed to remove document(s)");
+			return next(new Error('not removed'));
+		}else{
 			return next();
 		}
 	});
