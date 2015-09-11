@@ -53,6 +53,7 @@ function completeRegistration(req,res){
 	req.data.user.password = req.body.password;
 	req.data.user.contact = req.body.contact;
 	req.data.user.name = req.body.name;
+	req.data.user.type = req.body["user-type"];
 	User.register(req.data.user,function(err){
 		if(err){
 			var backURL=req.header('Referer') 
@@ -71,6 +72,7 @@ function saveRegistration(req,res){
 	}
 	req.data.user.email = req.body.email;
 	req.data.user.password = req.body.password;
+	req.data.user.type = req.body["user-type"];
 	User.update(req.data.user,function(err){
 		res.writeHead(200, {"Content-Type": "application/json"});
 		if(err){

@@ -1,6 +1,6 @@
 <%	var fromRequest;
 
-	if (typeof warehouse === 'undefined'){
+	if (page !== undefined && page === 'search'){
 		fromRequest = false;
 		warehouseName = city = postcode = size = height = href = mainPhoto = temp = miles = "";
 	}else{
@@ -13,11 +13,14 @@
 		height = warehouse.height;
 		href = "/warehouse-profile/" + warehouse._id + "?fromSearch=true";
 		mainPhoto = warehouse.defaultPhoto || warehouse.photos[0] || "not-found.jpg";
+		console.log('######################');
+		console.log(warehouse.storageTemps);
 		for (var i in warehouse.storageTemps) {
 			temp = temp + "<span class='icon-box temp-" + warehouse.storageTemps[i] +  "'></span>"
 		}
 		var milePluralOrSingle = warehouse.distanceFromSearch == "1" || warehouse.distanceFromSearch == 1 ? " mile" : " miles" ;
 		miles = "<span class='miles'>" + warehouse.distanceFromSearch + "</span>" + milePluralOrSingle + " from search";
+		rating = warehouse.rating;
 	}
 %>
 <div class="search-result-info-box fixed" id="search-results-info" style="display:none">
@@ -29,13 +32,20 @@
 		<hr/>
 		<img class="js-image" src="<%= '/images/' + mainPhoto %>" alt="an external view of a warehouse " />
 		<div class="info">
-		    <a class="button mini action view-details <%= user.email ? "" : "register-before-click " %>view-warehouse-link" href="<%= href %>">View details</a>
+			<%if (page !== undefined && page === 'search'){%>
+		   		<a class="button mini action view-details <%= user.email ? "" : "register-before-click " %>view-warehouse-link" href="<%= href %>">View details</a>
+			<%}%>
 			<div class="ratings js-rating">
-				<!--<span class="ion-android-star rating"><em class="sr-only">*</em></span>
-				<span class="ion-android-star rating"><em class="sr-only">*</em></span>
-				<span class="ion-android-star rating"><em class="sr-only">*</em></span>
-				<span class="ion-android-star rating"><em class="sr-only">*</em></span>
-				<span class="ion-android-star rating"><em class="sr-only">*</em></span>-->
+				<%if (typeof rating !== 'undefined'){
+					var j = 0;
+					do{%>
+						<span class="ion-android-star rating"><em class="sr-only">*</em></span>
+						<%j++;
+					}
+					while(j<rating)
+				}else{
+					%><span>No Rating</span><%
+				}%>
 			</div>
 			<div class="temperatures js-temperatures">
 				<!--<span class="ion-thermometer cold icon-box"></span>

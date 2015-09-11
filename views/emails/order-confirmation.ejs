@@ -94,18 +94,48 @@ subtitle = "Please review the details below";
  <p class="term" id="vat-message" style="font-size:smaller;margin-top:0;float:left;">*All prices excluding VAT charged at the applicable rate</p>
 <table width="100%" style="font-size:14px;border:2px solid #ccc;border-radius:5px;text-align:left;color:#555;" cellspacing="0" cellpadding="15">
     <tr>
-        <td style="font-weight:bold;">Payment Terms</td>
-        <td>Payment must reach us at least 2 weeks before goods are put into storage</td>
+        <td style="font-weight:bold;">Payment Type:</td>
+        <td>Payment accepted by <%= config.paymentTypes[quote.offerData.paymentType]%></td>
     </tr>
     <tr>
-        <td style="font-weight:bold;"> Payment Methods</td>
-        <td>
-            <ul style="padding-left:15px;">
-            <li>Credit Card</li>
-            <li>Debit or bank transfer</li>
-            </ul>
-        </td>
-        <td>Add contact details of both parties</td>
+        <td style="font-weight:bold;">Payment Terms:</td>
+        <td>Payment to be made within <%= config.paymentTerms[quote.offerData.paymentTerms]%> of invoice date</td>
+    </tr>
+    <tr>
+        <td style="font-weight:bold;">Prepayment Required:</td>
+        <td><%= config.prepaymentRequired[quote.offerData.prepaymentRequired]%></td>
+    </tr>
+    <tr>
+        <td style="font-weight:bold;">Final Payment:</td>
+        <td><%= config.finalPayment[quote.offerData.finalPayment]%></td>
+    </tr>
+</table>
+<table width="100%" style="font-size:14px;margin-top:20px;border:2px solid #ccc;border-radius:5px;text-align:left;color:#555;" cellspacing="0" cellpadding="15">
+    <tr>
+        <td style="font-weight:bold; width:158px;">Dispatch Location:</td>
+        <td><%= quote.transport.dispatchLocation.split(" ")[0] %></td>
+    </tr>
+    <tr>
+        <td style="font-weight:bold; width:158px;">To:</td>
+        <td><%= quote.warehouse.postcode %></td>
+    </tr>
+    <tr>
+        <td style="font-weight:bold; width:158px;">Distance:</td>
+        <td>5</td>
+    </tr>
+    <tr>
+        <td style="font-weight:bold; width:158px;">Quote £:</td>
+        <td><%= quote.transport.quote %></td>
+    </tr>
+</tr>
+<table width="100%" style="font-size:14px;margin-top:20px;border:2px solid #ccc;border-radius:5px;text-align:left;color:#555;" cellspacing="0" cellpadding="15">
+    <tr>
+        <td style="font-weight:bold;">Telephone:</td>
+        <td><%= warehouse.telephone %></td>
+    </tr>
+    <tr>
+        <td style="font-weight:bold;">Mobile:</td>
+        <td><%= warehouse.mobile %></td>
     </tr>
 </table>
 <button class="button action" onClick="window.print()">PRINT</button>

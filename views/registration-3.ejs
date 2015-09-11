@@ -441,10 +441,15 @@
 								<%}%>
 								<div class="input-field no-success-validation-style">
 									<input data-pattern="(?=.*[A-z])(?=.*[0-9])" type="password" name="password" placeholder="Password" minlength="8" required/>
+								</div>
+								<div class="input-field no-success-validation-style">
+									<input data-loom-confirm="password" data-pattern="(?=.*[A-z])(?=.*[0-9])" type="password" name="confirm-password" placeholder="Confirm Password" minlength="8" required/>
 									<ul class="messages">
-										 <li class="msg-info">Password must be at least 8 characters in length and contain at least one number.</li>
-										 <li class="msg-error">Password must be at least 8 characters in length and contain at least one number.</li>
+										 <li class="msg-info">Password must be at least 8 characters in length, contain at least one number and both passwords must match.</li>
 									 </ul>
+								</div>
+								<div class="input-field">
+									<input type="hidden" name="user-type" value="1"/>
 								</div>
 								<div class="check checkbox input-field">
 									<input required type="checkbox" name="accept" id="accept"/>

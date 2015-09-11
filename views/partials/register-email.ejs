@@ -1,4 +1,4 @@
-<%if(!user.email){%>
+<%if(!user.email){%> <!--USERS ONLY-->
 <div class="popup-window " id="register-email-popup" style="display:none">
 	<div class="small register">
 		<div class="popup-main content-box secondary">
@@ -11,12 +11,17 @@
 						<div class="input-field no-success-validation-style">
 							<input type="email" name="email" placeholder="Email" required/>
 						</div>
-						<div class="input-field no-success-validation-style with-message">
+						<div class="input-field no-success-validation-style">
 							<input type="password" name="password" placeholder="Password" minlength="8" required/>
+						</div>
+						<div class="input-field no-success-validation-style with-message">
+							<input data-loom-confirm="password" type="password" name="confirm-password" placeholder="Confirm Password" minlength="8" required/>
 							<ul class="messages">
-								 <li class="msg-info">Contain at least 8 characters in length and at least one number.</li>
-								 <li class="msg-error">Contain at least 8 characters in length and at least one number.</li>
+								 <li class="msg-info">Contain at least 8 characters in length and at least one number.<br/>Both passwords must match.</li>
 							 </ul>
+						</div>
+						<div class="input-field">
+							<input type="hidden" name="user-type" value="0"/>
 						</div>
 						<span>You will be taken to the result page</span>
 						<button class="action done">save</button>

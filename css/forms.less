@@ -117,7 +117,7 @@ input[type="checkbox"]{
 	color:@light-text;
 }
 .input-field .messages{
-  max-height: 0;
+  max-height: 500px;
   transition: max-height .2s ease-out;
   -webkit-transition: max-height .2s ease-out;
   overflow: hidden;
@@ -144,21 +144,21 @@ input[type="checkbox"]{
     	background-color: #edf8f0;
     }
 }
-.input-field.error .messages,
-.input-field.invalid .messages {
-    max-height: 500px;
-}
+//.input-field.error .messages,
+//.input-field.invalid .messages {
+    //max-height: 500px;
+//}
 .input-field.invalid input, .input-field.invalid select {
   border-color: #dd4a3e;
 }
 .input-field.alert input, .input-field.alert select {
   border-color: #edb648;
 }
-.input-field input:focus ~ .messages, .input-field select:focus ~ .messages {
-  max-height: 500px;
-  transition: max-height .4s ease-in;
-  -webkit-transition: max-height .4s ease-in;
-}
+//.input-field input:focus ~ .messages, .input-field select:focus ~ .messages {
+  //max-height: 500px;
+  //transition: max-height .4s ease-in;
+  //-webkit-transition: max-height .4s ease-in;
+//}
 .input-field.error-required .msg-alert {
   display: block;
 }
@@ -178,13 +178,18 @@ input[type="checkbox"]{
 }
 .input-field.error .msg-info ,
 .input-field.success .msg-info {
-  display: none;
+  //display: block;
 }
 .input-field.success .messages .msg-info {
 	display:none;
 }
 .input-field.error-required .msg-info, .input-field.error-required .msg-error {
-  display: none;
+  //display: none;
+  transition: max-height .2s ease-out;
+  -webkit-transition: max-height .2s ease-out;
+}
+.input-field.error-required .msg-info{
+    display:none;
 }
 .input-field.error.error-required input, .input-field.error.error-required select, .input-field.error.error-required textarea{
   border-color: #edb648;
@@ -207,6 +212,10 @@ form.storage-search{
             width:100%;
         }
     .input-field{
+        &.hidden{
+            margin-top:0;
+            margin-bottom:0;
+        }
         width:170px;
         display:inline-block;
         .unit-padding-right(2);

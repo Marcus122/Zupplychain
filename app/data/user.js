@@ -12,7 +12,8 @@ var fields = {
 	name: {type:String},
 	contact: {type:String},
 	active: { type: Boolean, default: false },
-	created: { type: Date , default: Date.now }
+	created: { type: Date , default: Date.now },
+	type: {type: Number}
 };
 
 var userSchema = new Schema(fields);

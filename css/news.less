@@ -1,6 +1,9 @@
 #news{
+	height:auto;
+	overflow:hidden;
 	.banner{
 		margin-bottom: 0;
+		margin-top:0;
 	}
 	.news-posts, .other-posts, .news-post{
 		margin-top: 20px;
@@ -59,10 +62,19 @@
 	.secondary-post{
 		margin-left: 0;
 	}
+	.footer{
+		height: 46px;
+		position: absolute;
+		bottom: 0;
+		width: 100%;	
+	}
 	.news-container {
 		 background-color: #D7D7D7;
 		 display: inline-block;
 		 width: 100%;
+		 height: auto;
+		 float:left;
+		 padding-bottom:11rem;
 		 a.back{
 			color: #000;
 			position: relative;
@@ -178,10 +190,16 @@
 	.eight.columns{
 		margin-left: 20px;
 	}
+	.prev,.next{
+		margin-top:20px;
+	}
+	.next{
+		float:right;
+	}
 }
 .footer {
 	position: relative;
-	top: -6px;
+	//top: -6px;
 	.container .news-home{
 		float: left;
 	}

@@ -73,13 +73,17 @@ function providerOfferReply(req,res) {
     req.data.config = local.config;
     req.data.page = 'provider-offer-reply';
     req.data.quote = req.quote.toObject();
+    req.data.temperatures = local.config.temperatures;
     var query = search.getFromSession(req, function(err, query){
         if (!err) {
-            req.data.quote.warehouse.distanceFromSearch = Utils.distanceInMiles(query.geo,req.data.quote.warehouse.geo)
+            warehouse.load(req,res,function(){
+                req.warehouse.generateStorageProfile(query);
+                req.data.quote.warehouse.storageTemps = req.warehouse.storageTemps;
+                req.data.quote.warehouse.distanceFromSearch = Utils.distanceInMiles(query.geo,req.data.quote.warehouse.geo)
+                res.render("provider-offer-reply",req.data);
+            },req.data.quote.warehouse._id) 
         }
     });
-    res.render("provider-offer-reply",req.data);
-    console.log(req.data.quote);
 }
 
 

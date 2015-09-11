@@ -114,7 +114,7 @@
 				                <input type="hidden" name="quoteId" value="<%= quote._id %>" />
 				            </div>
                             <div class="content-box">
-                                <div class="input-field">
+                                <div class="input-field hidden">
                                     <input type="hidden" name="transportType" value='<%= quote.transport.type %>'/>
                                 </div>
                                 <div class="header">
@@ -163,8 +163,7 @@
                                 </div>
                                 <%if (quote.transport.type === "1"){%>
                                     <div class="main row transport">
-                                        <button type="button" name="open-transport-fields" class="action mini">Show Transport</button>
-                                        <div class="six columns" style="display:none;">
+                                        <div class="six columns">
                                             <div class="input-field">
                                                 <h3>Dispatch Location</h3>
                                                 <p><%= quote.transport.dispatchLocation.split(" ")[0] %></p>
@@ -174,9 +173,8 @@
                                                 <p><%= quote.warehouse.postcode %></p>
                                                 <input type="hidden" name="dispatchLocation" value='<%= quote.transport.dispatchLocation.split(" ")[0] %>'/>
                                             </div>
-                                            <button type="button" name="close-transport-fields" class="action mini">Hide Transport</button>
                                         </div>
-                                        <div class="six columns" style="display:none;">
+                                        <div class="six columns">
                                             <div class="input-field">
                                                 <h3>Number of Pallets</h3>
                                                 <p><%=session.whSC.sc[0].totalPallets%></p>

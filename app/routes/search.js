@@ -19,6 +19,7 @@ var handler = function(app) {
         req.data.minDurationOptions = local.config.minDurationOptions;
         req.data.palletTypes = local.config.palletTypes;
         req.data.temperatures = local.config.temperatures;
+        req.data.page = 'search';
 		res.render("search",req.data);
 	});
     

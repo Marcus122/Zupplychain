@@ -37,6 +37,7 @@ function createUser(req,res,cb){
 	}
     req.data.user.email = req.body.email;
 	req.data.user.password = req.body.password;
+	req.data.user.type = req.body["user-type"];
 	user_controller.create(req, res, req.data.user ,function(err,user){
         if (err) {
             setErrorResponse(req, res);

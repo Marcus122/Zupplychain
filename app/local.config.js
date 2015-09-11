@@ -17,14 +17,19 @@ exports.config = {
     
     test : "test",
     
+    userTypes: [
+        "user",
+        "provider"
+    ],
+    
     companyDetails : {
         "telephone" : "01888 888 888",
         "fax" : "01888 888 888",
-        "addressLine1" : "Unit 99",
-        "addressLine2" : "Address line 2",
-        "city" : "city",
+        "addressLine1" : "64-68 Blackburn Street",
+        "addressLine2" : "Radcliffe",
+        "city" : "Manchester",
         "county" : "county",
-        "postcode" : "postcode"
+        "postcode" : "M26 2JS"
     },
     
     paymentTerms : [
