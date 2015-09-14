@@ -99,11 +99,23 @@ function redirectToStart(res){
 function fileOutput(req,res){
 	var files=[];
 	res.writeHead(200, {"Content-Type": "application/json"});
-	for(i in req.files){
+	for(var i in req.files){
 		var file={};
 		file.name = req.files[i].originalFilename;
 		files.push(file);
 	}
 	res.end(JSON.stringify(files));
+}
+function setResponse(req,res){
+	res.writeHead(200, {"Content-Type": "application/json"});
+    var output = { error: null, data: req.warehouse.toObject({
+		versionKey:false
+	}) };
+    res.end(JSON.stringify(output) + "\n");
+}
+function setErrorResponse(err,res){
+	res.writeHead(500, {"Content-Type": "application/json"});
+    var output = { error: true, data: err };
+    res.end(JSON.stringify(output) + "\n");
 }
 module.exports = handler;

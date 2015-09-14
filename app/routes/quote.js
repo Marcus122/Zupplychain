@@ -45,14 +45,19 @@ function updateQuoteReply(req,res) {
     offerData.paymentType = req.body.paymentType;
     offerData.prepaymentRequired = req.body.prepaymentRequired;
     offerData.finalPayment = req.body.finalPayment;
-    offerData.paymentTermsAccepted = req.body.paymentTermsAccepted;
+    offerData.paymentTermsAccepted = 'true';
     quote.addOfferData(quoteId,offerData, function(err) {
             if (!err) {
                 transport.type = req.body.transportType;
                 transport.dispatchLocation = req.body.dispatchLocation;
                 transport.distance = req.body.distance;
                 transport.quote = req.body.transportQuote;
-                transport.transportTermsAccepted = req.body.transportTermsAccepted;
+                if (req.body["transport-terms-accepted"] === 'true'){
+                    transport.transportTermsAccepted = 'true';
+                }else if (req.body["transport-terms-declined"] === 'true'){
+                    transport.transportTermsAccepted = 'false';
+                }
+                transport.providerDeclined = req.body["decline-transport-request"];
                 quote.updateTransportData(quoteId,transport,function(err,transport){
                     if (!err){
                         res.writeHead(200, {"Content-Type": "application/json"});
@@ -107,6 +112,7 @@ function updateQuote(req,res) {
                 transport.dispatchLocation = req.body.dispatchLocation;
                 transport.distance = req.body.distance;
                 transport.quote = req.body.transportQuote;
+                transport.providerDeclined = req.body["decline-transport-request"];
                 quote.updateTransportData(quoteId,transport,function(err,transport){
                     if (!err){
                         res.writeHead(200, {"Content-Type": "application/json"});

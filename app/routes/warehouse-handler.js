@@ -6,7 +6,9 @@ local = require("../local.config.js"),
 search = require("../controllers/search.js"),
 quote = require("../controllers/quote.js"),
 async = require("async"),
-Utils = require("../utils.js");
+Utils = require("../utils.js"),
+fh = require("../controllers/file-handler.js"),
+multiparty = require('multiparty');
 
 var handler = function(app) {
 	app.param('warehouse_id', warehouse.load);
@@ -38,6 +40,27 @@ var POSTCODE_NOT_FOUND = 'Postcode not Found';
 
 function warehouseRegistrationComplete(req,res) {
     res.render("registration-complete",req.data);
+}
+
+function uploadDocument(document,res,folder,warehouseId){
+	var form = new multiparty.Form();
+	fh.createDir(folder + warehouseId,function(err){
+		if(!err){
+			form.parse(document, function(err,fields,files){
+				document.files - files[0];
+				document.fields - fields;
+				for (var i in files[0]){
+					fh.writeFile(folder + warehouseId + '/' + files[0][i].path,function(err){
+						if(err){
+							setErrorResponse(err,res);
+						}
+					});
+				}
+			});
+		}else{
+			setErrorResponse(err,res);
+		}
+	})
 }
 
 function updateVolumeDiscount(req,res) {
@@ -104,6 +127,9 @@ function createWarehouse(req,res){
 					setErrorResponse(err,res);
 				}else{
 					req.warehouse = Warehouse;
+					for (var i = 0; i <= req.body.documents.length; i++){
+						uploadDocument(req.body.documents[i],res,local.config.upload_folders[0],warehouse.id);
+					}
 					setResponse(req,res);
 				}
 			});

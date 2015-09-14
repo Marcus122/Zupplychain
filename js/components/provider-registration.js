@@ -155,8 +155,10 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			}
 			var $addPhoto = $('#add-photo');
 			var $uploadPhoto = $('#photos');
-		        var $defaultPhotoInput = $("input#deafultPhoto");
+		    var $defaultPhotoInput = $("input#deafultPhoto");
 			var $photoArea = $('#upload-photos');
+			var $documentArea = $('#document-area');
+			var $documentRow = $('#document-row');
 			$addPhoto.on("click",function(ev){
 				ev.preventDefault();
 				var files=$uploadPhoto.prop("files");
@@ -180,6 +182,11 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			$photoArea.on("click",".trash-button",function(ev){
 				ev.preventDefault();
 				$(this).closest('.document').remove();
+			});
+			
+			$documentArea.on("click",".add-button",function(ev){
+				ev.preventDefault();
+				$(this).closest($documentRow).clone().appendTo($documentArea);
 			});
             
             $(document).on("click", ".make-default-photo", function(evt) {
@@ -327,7 +334,11 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 						object[array].push($input.attr('value'));
 					}
 				}else{
-					object[array].push($input.val());
+					if($input.attr('type') === 'file'){
+						//object[array].push($input.prop("files"));
+					}else{
+						object[array].push($input.val());
+					}
 				}
 			}else{
 				if(name){

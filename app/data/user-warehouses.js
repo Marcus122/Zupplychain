@@ -28,12 +28,10 @@ userWarehouseSchema.statics = {
 			.exec(cb);
 	},
 	removeByUser: function(user,cb){
-		this.remove({'user': user._id}, function (err){
-			cb(err);
-		})
+		this.find({'user': user._id}).remove().exec(cb);
 	},
 	remove: function(id,cb){
-		this.remove({_id: id})
+		this.find({_id: id}).remove()
 			.exec(cb);
 	}
 }

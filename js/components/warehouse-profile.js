@@ -113,7 +113,7 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
                 $(this).parent('.six.columns').hide();
                 $(this).parent('.six.columns').next('.six.columns').hide();
                 $('button[name="open-transport-fields"]').show();
-            })
+            });
             $('select[name="transport"]').change(function(){
                 if($(this).val() === "1"){
                     $('.input-field[data-field="dispatch-location"]').show();
@@ -125,15 +125,41 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
                 }
             });
             
-            $('input[name="paymentTermsAccepted"], input[name="transportTermsAccepted"]').change(function(){
+            // $('input[name="paymentTermsAccepted"], input[name="transportTermsAccepted"]').change(function(){
+            //     if($(this).is(":checked")){
+            //         $('button[name="accept"]').show();
+            //         $('button[name="decline"]').hide();
+            //     }else if (!$('input[name="paymentTermsAccepted"]').is(":checked") && !$('input[name="transportTermsAccepted"]').is(":checked")){
+            //         $('button[name="accept"]').hide();
+            //         $('button[name="decline"]').show();
+            //     }
+            // });
+            
+            if($('input[name="transport-terms-accepted"]') > 0 && $('input[name="transport-terms-declined"]') > 0 &&
+            !$('input[name="transport-terms-accepted"]').is(":checked") && !$('input[name="transport-terms-declined"]').is(":checked")){
+                $('.submit-request-container').find('button[name="accept"]').prop('disabled',true);
+                $('.submit-request-container').find('button[name="decline"]').prop('disabled',true);
+            }
+            
+            $('input[name="transport-terms-accepted"], input[name="transport-terms-declined"]').change(function(){
                 if($(this).is(":checked")){
-                    $('button[name="accept"]').show();
-                    $('button[name="decline"]').hide();
-                }else if (!$('input[name="paymentTermsAccepted"]').is(":checked") && !$('input[name="transportTermsAccepted"]').is(":checked")){
-                    $('button[name="accept"]').hide();
-                    $('button[name="decline"]').show();
+                    $(this).parent('.input-field').siblings('.input-field').find('input[type="checkbox"]').attr('checked',false);
                 }
-            })
+                
+                if(!$(this).is(':checked') && !$(this).parent('.input-field').siblings('.input-field').find('input[type="checkbox"]').is(':checked')){
+                    $('.submit-request-container').find('button[name="accept"]').prop('disabled',true);
+                    $('.submit-request-container').find('button[name="decline"]').prop('disabled',true);
+                }else{
+                    if($('.submit-request-container').find('button[name="accept"]').is(':disabled')){
+                        $('.submit-request-container').find('button[name="accept"]').prop('disabled',false);
+                    }
+                    
+                    if($('.submit-request-container').find('button[name="decline"]').is(':disabled')){
+                        $('.submit-request-container').find('button[name="decline"]').prop('disabled',false);
+                    }
+                }
+                
+            });
         }
         
         function providerOfferReplySuccess(response) {

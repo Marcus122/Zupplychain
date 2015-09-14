@@ -50,7 +50,7 @@ exports.loadByWarehouse = function(req,res,next,warehouseId){
 exports.removeByUser = function(user,next){
 	UserWh.removeByUser(user,function(err){
 		if (err){
-			console.log("Failed to remove document(s)");
+			console.log(err);
 			return next(new Error('not removed'));
 		}else{
 			return next();

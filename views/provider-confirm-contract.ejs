@@ -118,64 +118,70 @@
                                     <h2>Your Payment Terms</h2>
                                 </div>
                                 <div class="main row">
-                                    <div class="six columns">
+                                    <div class="five columns">
                                         <div class="input-field">
                                             <p>Payment Type Accepted</p>
                                             <p><b><%= config.paymentTypes[quote.offerData.paymentType] %></b></p>
-                                            <p class="<%= config.acceptStatus[quote.offerData.paymentTermsAccepted].toLowerCase() %>-by-customer"><%= config.acceptStatus[quote.offerData.paymentTermsAccepted] %> by customer</p>
                                         </div>
                                         <div class="input-field">
                                             <p>Payment Terms</p>
                                             <p><b><%= config.paymentTerms[quote.offerData.paymentTerms] %></b></p>
-                                            <p class="<%= config.acceptStatus[quote.offerData.paymentTermsAccepted].toLowerCase() %>-by-customer"><%= config.acceptStatus[quote.offerData.paymentTermsAccepted] %> by customer</p>
                                         </div>
                                     </div>
-                                    <div class="six columns">
+                                    <div class="five columns">
                                         <div class="input-field">
                                             <p>Prepayment Required</p>
                                             <p><b><%= config.prepaymentRequired[quote.offerData.prepaymentRequired] %></b></p>
-                                            <p class="<%= config.acceptStatus[quote.offerData.paymentTermsAccepted].toLowerCase() %>-by-customer"><%= config.acceptStatus[quote.offerData.paymentTermsAccepted] %> by customer</p>
                                         </div>
                                         <div class="input-field">
                                             <p>Final Payment</p>
                                             <p><b><%= config.finalPayment[quote.offerData.finalPayment] %></b></p>
-                                            <p class="<%= config.acceptStatus[quote.offerData.paymentTermsAccepted].toLowerCase() %>-by-customer"><%= config.acceptStatus[quote.offerData.paymentTermsAccepted] %> by customer</p>
                                         </div>
                                     </div>
+                                    <div class="two columns accept-status-box <%= config.acceptStatus[quote.offerData.paymentTermsAccepted].toLowerCase() %>-by-customer">
+                                        <p class="<%= config.acceptStatus[quote.offerData.paymentTermsAccepted].toLowerCase() %>-by-customer"><%= config.acceptStatus[quote.offerData.paymentTermsAccepted] %> by customer</p>
+                                    </div>
                                 </div>
-                                <%if (quote.transport.type === "1"){%>
+                                <%if(quote.transport.providerDeclined === "true"){%>
                                     <div class="main row transport">
                                         <div class="six columns">
                                             <div class="input-field">
+                                                <p class="declined-by-provider">You declined the transport request</p>
+                                             </div>
+                                         </div>
+                                     </div>
+                                <%}else if (quote.transport.type === "1"){%>
+                                    <div class="main row transport">
+                                        <div class="five columns">
+                                            <div class="input-field">
                                                 <p>Dispatch Location</p>
                                                 <p><b><%= quote.transport.dispatchLocation.split(" ")[0] %></b></p>
-                                                <p class="<%= config.acceptStatus[quote.transport.transportTermsAccepted].toLowerCase() %>-by-customer"><%= config.acceptStatus[quote.transport.transportTermsAccepted] %> by customer</p>
                                             </div>
                                             <div class="input-field">
                                                 <p>To</p>
                                                 <p><b><%= quote.warehouse.postcode %></b></p>
-                                                <p class="<%= config.acceptStatus[quote.transport.transportTermsAccepted].toLowerCase() %>-by-customer"><%= config.acceptStatus[quote.transport.transportTermsAccepted] %> by customer</p>
                                             </div>
                                             <div class="input-field">
                                                 <p>Quote £</p>
                                                 <p><b><%= quote.transport.quote %></b></p>
-                                                <p class="<%= config.acceptStatus[quote.transport.transportTermsAccepted].toLowerCase() %>-by-customer"><%= config.acceptStatus[quote.transport.transportTermsAccepted] %> by customer</p>
                                             </div>
                                         </div>
-                                        <div class="six columns">
+                                        <div class="five columns">
                                             <div class="input-field">
                                                 <p>Number of Pallets</p>
                                                 <p><b><%=session.whSC.sc[0].totalPallets%></b></p>
-                                                <p class="<%= config.acceptStatus[quote.transport.transportTermsAccepted].toLowerCase() %>-by-customer"><%= config.acceptStatus[quote.transport.transportTermsAccepted] %> by customer</p>
                                             </div>
                                             <div class="input-field">
                                                 <p>Distance</p>
                                                 <p><b>5</b></p>
-                                                <p class="<%= config.acceptStatus[quote.transport.transportTermsAccepted].toLowerCase() %>-by-customer"><%= config.acceptStatus[quote.transport.transportTermsAccepted] %> by customer</p>
                                             </div>
+                                        </div>
+                                        <div class="six columns">
                                             <div class="input-field check checkbox">
-                                                <label for="terms">I have read and accept the Zupplychain Terms and Conditions<input type="checkbox" name="terms" id="terms" required="required"/></label>
-                                            </div>
+                                            <label for="terms">I have read and accept the Zupplychain Terms and Conditions<input type="checkbox" name="terms" id="terms" required="required"/></label>
+                                        </div>
+                                        <div class="two columns accept-status-box <%= config.acceptStatus[quote.transport.transportTermsAccepted].toLowerCase() %>-by-customer">
+                                            <p class="<%= config.acceptStatus[quote.transport.transportTermsAccepted].toLowerCase() %>-by-customer"><%= config.acceptStatus[quote.transport.transportTermsAccepted] %> by customer</p>
                                         </div>
                                     </div>
                                 <%}%>
