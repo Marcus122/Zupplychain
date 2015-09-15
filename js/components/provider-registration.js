@@ -109,6 +109,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 		}
 		function step1(){
 			var $registration = $('#registration');
+			var documents = [];
 			if(!$registration.length) return;
             
 			$registration.on("submit",function(ev){
@@ -148,7 +149,19 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			function saveWarehouse(cb){
 				if( lm.isFormValid($registration.attr('id')) ){
 					bindFormToObject($registration,warehouse);
+					if (documents.length > 0){
+						//warehouse.documents = documents;
+						var data = new FormData();
+						$.each(documents, function(key, value)
+						{
+							data.append(key, value);
+						});
+						//warehouse.documents = data;
+					}
 					Warehouse.update(warehouse,function(result){
+						for (var i = 0; i < documents.length; i++){
+							Warehouse.uploadDocuments(documents[i]);
+						}
 						if(cb) cb(result);
 					});
 				}
@@ -157,8 +170,8 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			var $uploadPhoto = $('#photos');
 		    var $defaultPhotoInput = $("input#deafultPhoto");
 			var $photoArea = $('#upload-photos');
-			var $documentArea = $('#document-area');
-			var $documentRow = $('#document-row');
+			var $addDocument = $('#add-document');
+			var $documentArea = $('#upload-documents');
 			$addPhoto.on("click",function(ev){
 				ev.preventDefault();
 				var files=$uploadPhoto.prop("files");
@@ -179,15 +192,26 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					}
 				});
 			});
+			$addDocument.click(function(){
+				var uploadTemplate = templates.getTemplate("upload-document");
+				var $uploadTemplate = uploadTemplate.bind(data);
+				$uploadTemplate.find(".file-name").html($('input[name="file-title"]').val())
+				$uploadTemplate.find('input[name="document"]').val($("#docs").prop("files")[0].name);
+				$('#upload-documents').append($uploadTemplate)
+				documents.push($("#docs").prop("files"));
+			})
 			$photoArea.on("click",".trash-button",function(ev){
 				ev.preventDefault();
 				$(this).closest('.document').remove();
 			});
-			
-			$documentArea.on("click",".add-button",function(ev){
+			$documentArea.on("click",".trash-button",function(ev){
 				ev.preventDefault();
-				$(this).closest($documentRow).clone().appendTo($documentArea);
-			});
+				$(this).closest('.document').remove();
+			})
+			// $documentArea.on("click",".add-button",function(ev){
+			// 	ev.preventDefault();
+			// 	$(this).closest($documentRow).clone().appendTo($documentArea);
+			// });
             
             $(document).on("click", ".make-default-photo", function(evt) {
                 $("#defaultPhoto").val($(this).data("photo"));

@@ -12,6 +12,8 @@ exports.config = {
 	},
 
     static_content: "../static/",
+    
+    document_folder: __dirname + '/../docs/',
 	
 	upload_folders: [
          __dirname + '/../docs/',

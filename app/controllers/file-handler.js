@@ -4,7 +4,7 @@ var fs = require('fs'),
 exports.version = "0.1.0";
 
 exports.createDir = function(dir,cb){
-	fs.mkdir(dir,function(err){
+	fs.mkdir(dir,0755,function(err){
 		if (err){
 			if (err.coder === 'EEXIST'){
 				 cb(null) //The folder already exists, that's fine

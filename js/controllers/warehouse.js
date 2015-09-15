@@ -16,6 +16,7 @@ define(["jquery"], function ($) {
 			}else{
 				new_url = url;
 			}
+			
 			$.ajax({
 				url: new_url,
 				type:'POST',
@@ -31,6 +32,30 @@ define(["jquery"], function ($) {
 				}
 			});
 		}
+		
+	function uploadDocuments(files){
+		//if(!files) return cb();
+		var data = new FormData();
+		$.each(files, function(key, value)
+		{
+			data.append(key, value);
+		});
+		$.ajax({
+			url: '/documents/upload',
+			type: 'POST',
+			data: data,
+			cache: false,
+			dataType: 'json',
+			processData: false, // Don't process the files
+			contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+			success: function(data){
+				//cb(data);
+			},
+			error: function(){
+				//cb();
+			}
+		})
+	}
         
         function updateVolumeDiscount(warehouse,volumeDiscountData,cb){
         //data in format: {noDiscount : 20, discounts [from: 21, to: 25, perc: 4]}}
@@ -95,7 +120,8 @@ define(["jquery"], function ($) {
 			updateStorageBatch:updateStorageBatch,
 			getStorage:getStorage,
 			updateStorage:updateStorage,
-            updateVolumeDiscount:updateVolumeDiscount
+            updateVolumeDiscount:updateVolumeDiscount,
+			uploadDocuments:uploadDocuments
 		}
 	}
 		

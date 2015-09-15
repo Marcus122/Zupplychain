@@ -188,12 +188,13 @@
 											<option>Operator License</option>
 										</select>-->
 										<input class="columns three" type="text" name="file-title" placeholder="Title"/>
-										<input class="columns five" type="file" id="docs" data-array="documents"/>
+										<input class="columns five" type="file" id="docs"/>
 										<div class="columns one">
 											<button id="add-document" type="button" class="attach primary mini"><span>add</span></button>
-											<button type="button" class="add-button"></button>
 										</div>
 									</div>
+								</div>
+								<div id="upload-documents" class="row documents-upload-area">
 								</div>
 							</fieldset>
 						</div>
@@ -231,6 +232,9 @@
 	 </script>
 	  <script type="text/template" id="save-registration">
 	  	 <% include ./partials/save-registration%>
+	  </script>
+	  <script type="text/template" id="upload-document">
+	  	 <% include ./partials/upload-document%>
 	  </script>
  <% include ./partials/bottom%>
  

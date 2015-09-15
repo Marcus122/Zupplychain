@@ -33,6 +33,7 @@ var handler = function(app) {
 	app.get('/storage/:storage_id', setStorageResponse );
     app.post('/warehouse/:warehouse_id/volumeDiscount',updateVolumeDiscount);
     app.get("/warehouse-registration-complete/:warehouse_id", warehouseRegistrationComplete)
+	app.post('/documents/upload',uploadDocument);
 };
 
 var POSTCODE_NOT_FOUND = 'Postcode not Found';
@@ -42,25 +43,27 @@ function warehouseRegistrationComplete(req,res) {
     res.render("registration-complete",req.data);
 }
 
-function uploadDocument(document,res,folder,warehouseId){
+function uploadDocument(req,res){
 	var form = new multiparty.Form();
-	fh.createDir(folder + warehouseId,function(err){
-		if(!err){
-			form.parse(document, function(err,fields,files){
-				document.files - files[0];
-				document.fields - fields;
+	//fh.createDir(local.config.upload_folders[0] + 'test',function(err){
+		//if(!err){
+			form.parse(req, function(err,fields,files){
+				req.files - files[0];
+				req.fields - fields;
 				for (var i in files[0]){
-					fh.writeFile(folder + warehouseId + '/' + files[0][i].path,function(err){
+					fh.renameFile(files[0][i].path, local.config.upload_folders[0] + 'test' + '/' + files[0][i].originalFilename,function(err){
 						if(err){
 							setErrorResponse(err,res);
+						}else{
+							//setResponse(req,res);
 						}
 					});
 				}
 			});
-		}else{
-			setErrorResponse(err,res);
-		}
-	})
+		//}else{
+		//	setErrorResponse(err,res);
+		//}
+	//})
 }
 
 function updateVolumeDiscount(req,res) {
@@ -122,15 +125,17 @@ function createWarehouse(req,res){
 		}else if (!err){
 			req.body.geo = latlng;
 			req.body.loc = { 'type' : 'Point', 'coordinates' : [latlng.lng, latlng.lat] };
+			//var documents = req.body.documents;
+			//delete req.body.documents;
 			warehouse.create(req.data.user,req.body,function(err,Warehouse){
 				if(err){
 					setErrorResponse(err,res);
 				}else{
 					req.warehouse = Warehouse;
-					for (var i = 0; i <= req.body.documents.length; i++){
-						uploadDocument(req.body.documents[i],res,local.config.upload_folders[0],warehouse.id);
-					}
+					//uploadDocument(req,documents,res,local.config.upload_folders[0],warehouse.id,function(){
 					setResponse(req,res);
+					//});
+					
 				}
 			});
 		}
