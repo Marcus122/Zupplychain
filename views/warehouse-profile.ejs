@@ -143,10 +143,8 @@
                     <div class="main">
                     <ul>
                            <% for( var i= 0; i<warehouse.documents.length;i++ ){%>
-    								<li><%=warehouse.documents[i]%></li>
+    								<li><a target="__blank" href="<%= warehouse.documents[i].path %>"><%=warehouse.documents[i].title%></a></li>
                         <%}%>
-                            <li>Insurance Details</li>
-                            <li>P115L</li>
                         </ul>
                     </div>
                 </div>

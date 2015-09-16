@@ -29,7 +29,6 @@ var fields = {
 	specifications: [String],
 	photos: [String],
     defaultPhoto: String,
-	documents: [{filename:String, type:String}],
 	active: { type: Boolean, default: false },
 	created: { type: Date , default: Date.now },
 	storage: [{ type: Schema.ObjectId, ref: 'storage' }],
@@ -47,7 +46,8 @@ var fields = {
 		to:Number,
 		perc:Number
 	}],
-    rating: {type: Number}
+    rating: {type: Number},
+    documents: Schema.Types.Mixed
 };
 
 var warehouseSchema = new Schema(fields);
@@ -88,6 +88,13 @@ warehouseSchema.statics = {
 			})
 		  .populate('user')
 		  .exec(cb);
+  },
+  remove: function(id){
+      this.find({_id: id}).remove().exec(function(err){
+          if (err){
+              console.log(err);
+          }
+      });
   },
   
   //TODO: this should no longer be used anywhere.. check and delete.

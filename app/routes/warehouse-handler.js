@@ -33,7 +33,7 @@ var handler = function(app) {
 	app.get('/storage/:storage_id', setStorageResponse );
     app.post('/warehouse/:warehouse_id/volumeDiscount',updateVolumeDiscount);
     app.get("/warehouse-registration-complete/:warehouse_id", warehouseRegistrationComplete)
-	app.post('/documents/upload',uploadDocument);
+	app.post('/documents/upload/:warehouse_id',uploadDocument);
 };
 
 var POSTCODE_NOT_FOUND = 'Postcode not Found';
@@ -45,25 +45,52 @@ function warehouseRegistrationComplete(req,res) {
 
 function uploadDocument(req,res){
 	var form = new multiparty.Form();
-	//fh.createDir(local.config.upload_folders[0] + 'test',function(err){
-		//if(!err){
+	var numSuccessfulCbs = 0;
+	var documents = [];
+	if (req.warehouse.documents !== undefined){
+		documents = req.warehouse.documents;
+	}
+	fh.createDir(local.config.upload_folders[0] + req.warehouse.id,function(err){
+		if(!err){
 			form.parse(req, function(err,fields,files){
 				req.files - files[0];
 				req.fields - fields;
-				for (var i in files[0]){
-					fh.renameFile(files[0][i].path, local.config.upload_folders[0] + 'test' + '/' + files[0][i].originalFilename,function(err){
-						if(err){
-							setErrorResponse(err,res);
-						}else{
-							//setResponse(req,res);
-						}
-					});
+				for (var i in files){
+					for (var j in files[i]){
+						fh.renameFile(files[i][j].path, local.config.upload_folders[0] + req.warehouse.id + '/' + files[i][j].originalFilename,function(err){
+							if(err){
+								if ((req.warehouse.storage === undefined || req.warehouse.storage.length === 0)){
+									//Delete the documents if they are creating a new warehouse
+									fh.deleteFolderRecursive(local.config.upload_folders[0] + req.warehouse.id);
+									warehouse.removeWarehouse(req.warehouse._id);//Remove this warehouse we are in step1 so it will create another later
+								}
+								setErrorResponse('Document Upload Error',res);
+							}else{
+								documents.push({"title":fields.title[numSuccessfulCbs],"path":local.config.upload_folder_rel_path[0] + req.warehouse.id + '/' + files[numSuccessfulCbs][j].originalFilename});
+								numSuccessfulCbs ++;
+								if (numSuccessfulCbs === Object.keys(files).length){
+									warehouse.updateWarehouseDocuments(req.warehouse.id,documents,function(err){
+										if (!err){
+											setResponse(req,res);
+										}else{
+											if ((req.warehouse.storage === undefined || req.warehouse.storage.length === 0)){
+												//Delete the documents if they are creating a new warehouse
+												fh.deleteFolderRecursive(local.config.upload_folders[0] + req.warehouse.id);
+												warehouse.removeWarehouse(req.warehouse._id);//Remove this warehouse we are in step1 so it will create another later
+											}
+											setErrorResponse('Document Upload Error',res);
+										}
+									})
+								}
+							}
+						});
+					}
 				}
 			});
-		//}else{
-		//	setErrorResponse(err,res);
-		//}
-	//})
+		}else{
+			setErrorResponse('Document Upload Error',res);
+		}
+	})
 }
 
 function updateVolumeDiscount(req,res) {
@@ -111,10 +138,6 @@ function warehouseAuth(req,res,next){
 function createWarehouse(req,res){
 	Utils.getLatLong(req.body.postcode,function(err,latlng){
 		if (latlng.lat === null && latlng.lng === null){
-			//req.warehouse = warehouse.createWarehouseObject(req.body);
-			//req.warehouse.geo.lat = null; 
-			//req.warehouse.geo.lng = null;
-			//setResponse(req,res);
 			if (err){
 				setErrorResponse('Geolocation Error',res);
 			}else{
@@ -125,17 +148,12 @@ function createWarehouse(req,res){
 		}else if (!err){
 			req.body.geo = latlng;
 			req.body.loc = { 'type' : 'Point', 'coordinates' : [latlng.lng, latlng.lat] };
-			//var documents = req.body.documents;
-			//delete req.body.documents;
 			warehouse.create(req.data.user,req.body,function(err,Warehouse){
 				if(err){
 					setErrorResponse(err,res);
 				}else{
 					req.warehouse = Warehouse;
-					//uploadDocument(req,documents,res,local.config.upload_folders[0],warehouse.id,function(){
 					setResponse(req,res);
-					//});
-					
 				}
 			});
 		}

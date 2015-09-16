@@ -6,6 +6,9 @@ var Warehouse = require("../data/warehouse.js"),
 /**
  * Warehouse class.
  */
+exports.updateWarehouseDocuments = function(warehouseId,documents,cb){
+    Warehouse.update({"_id" : warehouseId}, { $set: { "documents": documents }}, {},cb);
+}
 exports.createWarehouseObject = function(data){
 	var warehouse = new Warehouse(data);
 	return warehouse;
@@ -57,7 +60,9 @@ exports.warehouse_by_user = function (user,callback) {
 		}
 	});
 };
-
+exports.removeWarehouse = function(id){
+	Warehouse.remove(id);
+}
 exports.updateVolumeDiscount = function(warehouse, data, cb) {
     warehouse.noDiscount = data.noDiscount;
     warehouse.discounts = data.discounts;

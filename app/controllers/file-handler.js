@@ -6,7 +6,7 @@ exports.version = "0.1.0";
 exports.createDir = function(dir,cb){
 	fs.mkdir(dir,0755,function(err){
 		if (err){
-			if (err.coder === 'EEXIST'){
+			if (err.code === 'EEXIST'){
 				 cb(null) //The folder already exists, that's fine
 			}else{
 				cb(err) //Something else has gone wrong, we need to report this
@@ -41,5 +41,21 @@ exports.writeFile = function(path,data,cb){
 			});
 		}
 	});
+}
+
+exports.deleteFolderRecursive = function(path){
+	var files = [];
+	if(fs.existsSync(path)){
+		files = fs.readdirSync(path);
+		files.forEach(function(file,index){
+			var currentPath = path + '/' + file
+			if(fs.lstatSync(currentPath).isDirectory()){
+				exports.deleteFolderRecursive(currentPath);
+			}else{
+				fs.unlinkSync(currentPath);
+			}
+		});
+		fs.rmdirSync(path);
+	}
 }
 

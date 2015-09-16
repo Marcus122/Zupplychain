@@ -33,15 +33,19 @@ define(["jquery"], function ($) {
 			});
 		}
 		
-	function uploadDocuments(files){
-		//if(!files) return cb();
+	function uploadDocument(warehouseId,files,documentTitles,cb){
+		if(!files) return;
 		var data = new FormData();
+		var err;
 		$.each(files, function(key, value)
 		{
-			data.append(key, value);
+			data.append(key, value[0]);
+		});
+		$.each(documentTitles, function(key, value){
+			data.append("title", value);
 		});
 		$.ajax({
-			url: '/documents/upload',
+			url: '/documents/upload/' + warehouseId,
 			type: 'POST',
 			data: data,
 			cache: false,
@@ -49,10 +53,11 @@ define(["jquery"], function ($) {
 			processData: false, // Don't process the files
 			contentType: false, // Set content type to false as jQuery will tell the server its a query string request
 			success: function(data){
-				//cb(data);
+				cb(data);
 			},
-			error: function(){
-				//cb();
+			error: function(jqXHR, textStatus, errThrown){
+				err = JSON.parse(jqXHR.responseText);
+				cb(err);
 			}
 		})
 	}
@@ -121,7 +126,7 @@ define(["jquery"], function ($) {
 			getStorage:getStorage,
 			updateStorage:updateStorage,
             updateVolumeDiscount:updateVolumeDiscount,
-			uploadDocuments:uploadDocuments
+			uploadDocument:uploadDocument
 		}
 	}
 		

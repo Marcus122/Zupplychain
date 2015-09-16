@@ -20,6 +20,11 @@ exports.config = {
          __dirname + '/../images/'
     ],
     
+    upload_folder_rel_path: [
+        '/docs/',
+        '/images'
+    ],
+    
     test : "test",
     
     userTypes: [

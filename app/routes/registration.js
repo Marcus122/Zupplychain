@@ -88,7 +88,7 @@ function uploadFile(req,res,next){
 		req.files = files[0];
 		req.fields = fields;
 		for( i in files[0] ){
-			fs.rename(files[0][i].path, local.config.upload_folder + files[0][i].originalFilename);
+			fs.rename(files[0][i].path, local.config.upload_folder[1] + files[0][i].originalFilename);
 		}
 		next();
     });
