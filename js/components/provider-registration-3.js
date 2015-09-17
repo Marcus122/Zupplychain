@@ -63,6 +63,23 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         return null;
     }
     
+    function setNumberValidators($to,$from,$nextFrom){
+        var to = $to.val();
+        var fromVal = $from.val();
+        var nextFrom = $nextFrom.val();
+        if (fromVal){
+            $to.attr("min",fromVal);
+        }
+        if (to){
+            $from.attr("max", to);
+        }
+        if (nextFrom){
+            $nextFrom.attr("min",to);
+            $to.attr("max", nextFrom);
+        }else{
+            $to.attr("max", $("input[name='noDiscount']").attr("max"));
+        }
+    }
     
     function setValidatorsOnRow($thisRow,$nextRow) {
         var $to = $thisRow.find("input[name='to']");
@@ -73,6 +90,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         var nextFromDate = dateFromInput($nextFrom);
         
         if($to.attr('type') != 'date'){
+            setNumberValidators($to,$from,$nextFrom);
             return;
         }
         
@@ -124,7 +142,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
     initVolDiscountTablebehaviour();
     
     function initPopup() {
-        $(".close-me, .popup-buttons .save .done").click(function(){
+        $(".close-me").click(function(){
             $(this).closest(".popup-window").hide();
         });
         
@@ -713,10 +731,10 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         
         $(document).on("submit","#discount-form", function(evt){
             evt.preventDefault();
-            saveVolumeDiscount(false);
+            saveVolumeDiscount(false,$('#volume-discount-popup'));
         });
         
-        function saveVolumeDiscount(calledFromSaveEverything) {
+        function saveVolumeDiscount(calledFromSaveEverything,$popup) {
             var $form = $("#discount-form");
             var $rows = $form.find(".js-single-discount");
             unmarkAllTheseRows($rows);
@@ -741,6 +759,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                 warehouse.id=$('input[name="warehouse"]').val();
                 Warehouse.updateVolumeDiscount(warehouse,discountData, function(){
                     Alerts.showSuccessMessage("data saved");
+                    $popup.hide();
                 });
             } else {
                 unmarkAllTheseRows($rows);

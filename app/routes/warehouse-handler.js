@@ -34,6 +34,7 @@ var handler = function(app) {
     app.post('/warehouse/:warehouse_id/volumeDiscount',updateVolumeDiscount);
     app.get("/warehouse-registration-complete/:warehouse_id", warehouseRegistrationComplete)
 	app.post('/documents/upload/:warehouse_id',uploadDocument);
+	app.post('/images/upload/:warehouse_id',uploadImage);
 };
 
 var POSTCODE_NOT_FOUND = 'Postcode not Found';
@@ -41,6 +42,27 @@ var POSTCODE_NOT_FOUND = 'Postcode not Found';
 
 function warehouseRegistrationComplete(req,res) {
     res.render("registration-complete",req.data);
+}
+
+function uploadImage(req,res){
+	var form = new multiparty.Form();
+	fh.createDir(local.config.upload_folders[1] + req.warehouse.id,function(err){
+		if(!err){
+			form.parse(req, function(err,fields,files){
+				for (var i in files){
+					for (var j in files[i]){
+						fh.renameFile(fields.tempLocation[i],local.config.upload_folders[1] + req.warehouse.id + '/' + files[i][j].originalFilename,function(err){
+							if(err){
+								
+							}else{
+								setResponse(req,res);
+							}
+						});
+					}
+				}
+			});
+		}
+	});
 }
 
 function uploadDocument(req,res){

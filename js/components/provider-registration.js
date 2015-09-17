@@ -111,6 +111,8 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			var $registration = $('#registration');
 			var documents = [];
 			var documentTitles = [];
+			var images = [];
+			var imageTempLocations = [];
 			if(!$registration.length) return;
             
 			$registration.on("submit",function(ev){
@@ -126,6 +128,8 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 									Alerts.showErrorMessage(result.data);
 								}
 							});
+						}else{
+							window.location = $registration.attr('action');
 						}
 					} else if (result.error === true){
 						if (result.data.message !== undefined){
@@ -148,6 +152,8 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 										Alerts.showErrorMessage(result.data);
 									}
 								});
+							}else{
+								saveRegistration();
 							}
 					}else if (result.error === true){
 						if (result.data.message !== undefined){
@@ -180,21 +186,14 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				}
 			}
 			function uploadDocuments(warehouseId,cb){
-				var uploadResult;
-				//for (var i = 0; i < documents.length; i++){
-					Warehouse.uploadDocument(warehouseId,documents,documentTitles,function(result){
-						// if (result.error === true){
-						// 	uploadResult = result;
-						// }
-						// if (i === documents.length){
-						// 	if (uploadResult !== undefined && uploadResult !== null && uploadResult !== ""){
-						// 		result = uploadResult;
-						// 	}
-						// 	if(cb) cb(result)
-						// }
-						if(cb) cb(result)
-					});
-				//}
+				Warehouse.uploadDocument(warehouseId,documents,documentTitles,function(result){
+					if(cb) cb(result)
+				});
+			}
+			function uploadImages(warehouseID,cb){
+				Warehouse.uploadImage(warehouseID,images,imageTempLocations,function(result){
+					if(cb) cb(result);
+				})
 			}
 			var $addPhoto = $('#add-photo');
 			var $uploadPhoto = $('#photos');
@@ -204,20 +203,22 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			var $documentArea = $('#upload-documents');
 			$addPhoto.on("click",function(ev){
 				ev.preventDefault();
-				var files=$uploadPhoto.prop("files");
+				var files = $uploadPhoto.prop("files");
 				if(!files) return;
 				sendFile(files,function(data){
 					if(!warehouse.photos) warehouse.photos=[];
+					images.push(files);
+					imageTempLocations.push('/images/tmp/' + data[i].name);
 					var template = templates.getTemplate("warehouse-image");
 					for( i in data){
 						var image = data[i];
 						image.file = '/images/' + data[i].name;
 						var $image = template.bind( image );
-                        $("#defaultPhoto").val(image.name);
-                        $(".document").removeClass("isDefault");
-                        console.log($image);
+                       $("#defaultPhoto").val(image.name);
+                       $(".document").removeClass("isDefault");
+                       console.log($image);
 						$photoArea.append($image);
-                        $image.find('.image').parent().addClass("isDefault");
+                       $image.find('.image').parent().addClass("isDefault");
 						$uploadPhoto.val("");
 					}
 				});
@@ -231,7 +232,6 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 						$uploadTemplate.find(".file-name").html($('input[name="file-title"]').val())
 						$uploadTemplate.attr('data-index',documents.length)
 						$('#upload-documents').append($uploadTemplate);
-						//$("#docs")[0].files[0].title = $('input[name="file-title"]').val();
 						documentTitles.push($('input[name="file-title"]').val());
 						documents.push($("#docs").prop("files"));
 					}else{

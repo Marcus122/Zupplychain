@@ -287,7 +287,7 @@
                                                     <span class="js-from"><%= thisDiscount.from %></span>
                                                 </td>
                                                 <td data-th="To" class="input-field no-success-validation-style discount-to">
-                                                    <input data-bind-max="total" required data-bind-value="to" data-bind-min="from" type="number" name="to" value="<%=thisDiscount.to %>"/>
+                                                    <input data-bind-max="total" required data-bind-value="to" data-bind-min="from" type="number" name="to" value="<%=thisDiscount.to %>" max="<%= warehouse.totalPalletSpaces %>"/>
                                                 </td>
                                                 <td data-th="% Discount" class="input-field no-success-validation-style discount-value">
                                                     <input data-loom-type="decimal" data-loom-decimal-places="2" required data-bind-value="perc" name="perc"  type="number" min="0" step="0.5" value="<%=thisDiscount.perc%>"/>
@@ -308,7 +308,7 @@
                                                     <span class="js-from"> <%= blankRowFrom %></span>
                                                 </td>
                                                 <td data-th="To" class="input-field no-success-validation-style discount-to">
-                                                    <input data-bind-max="total" required data-bind-value="to" data-bind-min="from" type="number" name="to" value=""/>
+                                                    <input data-bind-max="total" required data-bind-value="to" data-bind-min="from" type="number" name="to" value="" max="<%= warehouse.totalPalletSpaces %>"/>
                                                 </td>
                                                 <td data-th="% Discount" class="input-field no-success-validation-style discount-value">
                                                     <input data-loom-type="decimal" data-loom-decimal-places="2" required data-bind-value="perc" name="perc"  type="number" min="0" step="0.5" placeholder="0.00"/>

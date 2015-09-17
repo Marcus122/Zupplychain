@@ -125,7 +125,11 @@
                                         </div>
                                         <div class="input-field">
                                             <p>Payment Terms</p>
-                                            <p><b><%= config.paymentTerms[quote.offerData.paymentTerms] %></b></p>
+                                             <%if(quote.offerData.paymentTerms === '3'){%>
+                                                <p><b><%= quote.offerData.manualPaymentTerms %></b></p>
+                                              <%}else{%>
+                                                <p><b><%= config.paymentTerms[quote.offerData.paymentTerms] %></b></p>
+                                              <%}%>
                                         </div>
                                     </div>
                                     <div class="five columns">

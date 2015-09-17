@@ -1,4 +1,4 @@
-
+var googleDistance = require('google-distance');
 function addDaysToDate(date, days) {
     date.setDate(date.getDate() + days);
     return date;
@@ -97,5 +97,18 @@ module.exports.checkUserSameAgainstLoadedWarehouse = function(warehouse,user){
     }else{
         return false;//The user must be a customer, they need to log in as a provider
     }
+}
+
+module.exports.calculateQuickestRoadDistanceBetweenPoints = function(origin,destination,cb){
+    googleDistance.get(
+        {
+        origin: origin,
+        destination: destination,
+        units: 'imperial'
+        },
+        function(err,data){
+            cb(data.distance.replace(' mi',""));
+        }
+    )
 }
 

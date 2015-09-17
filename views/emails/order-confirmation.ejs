@@ -99,7 +99,11 @@ subtitle = "Please review the details below";
     </tr>
     <tr>
         <td style="font-weight:bold;">Payment Terms:</td>
-        <td>Payment to be made within <%= config.paymentTerms[quote.offerData.paymentTerms]%> of invoice date</td>
+        <%if(quote.offerData.paymentTerms === '3'){%>
+            <td>Payment to be made within <%= quote.offerData.manualPaymentTerms%> of invoice date</td>
+        <%}else{%>
+            <td>Payment to be made within <%= config.paymentTerms[quote.offerData.paymentTerms]%> of invoice date</td>
+        <%}%>
     </tr>
     <tr>
         <td style="font-weight:bold;">Prepayment Required:</td>

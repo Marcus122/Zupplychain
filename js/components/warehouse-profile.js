@@ -75,6 +75,7 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
             
             initWarehouseProfileRowChanger();
             initTransport();
+            initPaymentTerms();
             
 		}
         
@@ -160,6 +161,17 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
                 }
                 
             });
+        }
+        
+        function initPaymentTerms(){
+            $('select[name="paymentTerms"]').change(function(){
+                if ($(this).val() === '3'){
+                    $(this).parent().next('.input-field').show();
+                }else{
+                    $(this).parent().next('.input-field').hide();
+                    $(this).parent().next('.input-field').find('input').val("");
+                }
+            })
         }
         
         function providerOfferReplySuccess(response) {

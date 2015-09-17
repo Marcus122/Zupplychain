@@ -105,8 +105,12 @@
                                        </div>
                                             <div class="input-field">
                                             <h3>Payment Terms</h3>
-                                            <p>Payment to be made within <%= config.paymentTerms[quote.offerData.paymentTerms]%> of invoice date</p>
-                                            <input type="hidden" name="paymentTerms" value="<%= quote.offerData.paymentTerms%>"/> 
+                                            <%if(quote.offerData.paymentTerms === '3'){%>
+                                                <p>Payment to be made within <%= quote.offerData.manualPaymentTerms%> of invoice date</p>
+                                            <%}else{%>
+                                                <p>Payment to be made within <%= config.paymentTerms[quote.offerData.paymentTerms]%> of invoice date</p>
+                                            <%}%>
+                                            <input type="hidden" name="paymentTerms" value="<%= quote.offerData.paymentTerms%>"/>
                                         </div>
                                     </div>
                                     <div class="six columns">
@@ -119,6 +123,9 @@
                                             <h3>Final Payment</h3>
                                             <p>Final Payment: <%= config.finalPayment[quote.offerData.finalPayment]%></p>
                                             <input type="hidden" name="finalPayment" value="<%= quote.offerData.finalPayment%>"/>
+                                        </div>
+                                        <div class="input-field">
+                                            <input type="hidden" name="other-payment-terms" value="<%= quote.offerData.manualPaymentTerms%>"/>
                                         </div>
                                     </div>
                                 </div>

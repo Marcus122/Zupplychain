@@ -42,6 +42,11 @@ function updateQuoteReply(req,res) {
     var offerData = {};
     var transport = {};
     offerData.paymentTerms = req.body.paymentTerms;
+    if (offerData.paymentTerms === '3'){//Other
+        offerData.manualPaymentTerms = req.body["other-payment-terms"];
+    }else{
+        offerData.manualPaymentTerms = "";
+    }
     offerData.paymentType = req.body.paymentType;
     offerData.prepaymentRequired = req.body.prepaymentRequired;
     offerData.finalPayment = req.body.finalPayment;
@@ -103,6 +108,15 @@ function updateQuote(req,res) {
     var offerData = {};
     var transport = {};
     offerData.paymentTerms = req.body.paymentTerms;
+    if (offerData.paymentTerms === '3'){//Other
+        offerData.manualPaymentTerms = req.body["other-payment-terms"];
+        if(offerData.manualPaymentTerms.substring(offerData.manualPaymentTerms.length - 4) !== 'Days' || 
+        offerData.manualPaymentTerms.substring(offerData.manualPaymentTerms.length - 4) !== 'days'){
+            offerData.manualPaymentTerms = offerData.manualPaymentTerms + ' days';
+        }
+    }else{
+        offerData.manualPaymentTerms = "";
+    }
     offerData.paymentType = req.body.paymentType;
     offerData.prepaymentRequired = req.body.prepaymentRequired;
     offerData.finalPayment = req.body.finalPayment;
@@ -134,8 +148,10 @@ function providerOffer(req,res) {
     req.data.config = local.config;
     req.data.quote = req.quote.toObject();
     req.data.page = 'provider-offer';
-    storage.buildStorageNamesAndRenderPage(req,res,"provider-offer");
-    
+    Utils.calculateQuickestRoadDistanceBetweenPoints(req.data.quote.transport.dispatchLocation,req.data.quote.warehouse.postcode,function(distance){
+        req.data.distance = distance
+        storage.buildStorageNamesAndRenderPage(req,res,"provider-offer");
+    });
 }
 
 function createQuote(req,res) {

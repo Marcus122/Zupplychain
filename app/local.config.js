@@ -17,7 +17,8 @@ exports.config = {
 	
 	upload_folders: [
          __dirname + '/../docs/',
-         __dirname + '/../images/'
+         __dirname + '/../images/',
+         __dirname + '/../images/tmp/'
     ],
     
     upload_folder_rel_path: [
@@ -45,7 +46,8 @@ exports.config = {
     paymentTerms : [
         "7 days",
         "14 days",
-        "28 days"
+        "28 days",
+        "Other"
     ],
     
     prepaymentRequired : [
