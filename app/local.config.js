@@ -17,13 +17,13 @@ exports.config = {
 	
 	upload_folders: [
          __dirname + '/../docs/',
-         __dirname + '/../images/',
+         __dirname + '/../images/warehouse-images/',
          __dirname + '/../images/tmp/'
     ],
     
     upload_folder_rel_path: [
         '/docs/',
-        '/images'
+        '/images/'
     ],
     
     test : "test",

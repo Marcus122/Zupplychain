@@ -87,17 +87,17 @@ function uploadFile(req,res,next){
 	 form.parse(req, function(err, fields, files) {
 		req.files = files[0];
 		req.fields = fields;
-		// for(var i in files[0] ){
-		// 	fs.mkdir(local.config.upload_folders[2],function(err){
-		// 		if(err){
-		// 			if(err.code === 'EEXIST'){}
-		// 		}
-		// 		fs.rename(files[0][i].path, local.config.upload_folders[2] + files[0][i].originalFilename);//Temporary folder until it is uploaded correctly
-		// 		next();
-		// 	});
-		fs.rename(files[0][i].path, local.config.upload_folders[1] + files[0][i].originalFilename);
-		next();
-		//}
+		 for(var i in files[0] ){
+		 	fs.mkdir(local.config.upload_folders[2],function(err){
+		 		if(err){
+		 			if(err.code === 'EEXIST'){}
+		 		}
+		 		fs.rename(files[0][i].path, local.config.upload_folders[2] + files[0][i].originalFilename);//Temporary folder until it is uploaded correctly
+		 		next();
+			});
+		//fs.rename(files[0][i].path, local.config.upload_folders[1] + files[0][i].originalFilename);
+		//next();
+		}
     });
 }
 function redirectToStart(res){

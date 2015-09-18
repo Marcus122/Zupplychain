@@ -167,9 +167,13 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
             $('select[name="paymentTerms"]').change(function(){
                 if ($(this).val() === '3'){
                     $(this).parent().next('.input-field').show();
+                    $(this).parent().next('.input-field').find('input').prop("required",true);
+                    lm.rebind($(this).closest('form'));
                 }else{
                     $(this).parent().next('.input-field').hide();
                     $(this).parent().next('.input-field').find('input').val("");
+                    $(this).parent().next('.input-field').find('input').removeAttr("required")
+                    lm.rebind($(this).closest('form'));
                 }
             })
         }

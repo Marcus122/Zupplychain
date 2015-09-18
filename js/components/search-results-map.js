@@ -144,7 +144,7 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery", "loom/loomAl
         function enableSearch(){
             $('#search-form .input-field.last').removeClass('invalid-postcode');
             $('#search-form .input-field.last button.action').show();
-            $('#search-form .input-field.last .search-nag').show();
+            //$('#search-form .input-field.last .search-nag').show();
             $('#search-form .input-field.last p.invalid-postcode-message').html("");
             $('#search-form .input-field.last p.invalid-postcode-message').hide();   
         }
@@ -263,7 +263,7 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery", "loom/loomAl
             for (var i in data.storageTemps) {
                 $temps.append("<span class='icon-box temp-" + data.storageTemps[i] +  "'></span>")
             }
-            setTimeout(function(){resultsElem.find('.js-image').prop("src", "/images/" + mainPhoto).removeClass("rotateY90");}, 300 );
+            setTimeout(function(){resultsElem.find('.js-image').prop("src", "/images/warehouse-images/" + mainPhoto).removeClass("rotateY90");}, 300 );
         }
 
         function resizeMap(){

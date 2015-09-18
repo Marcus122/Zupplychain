@@ -46,6 +46,8 @@ function warehouseRegistrationComplete(req,res) {
 
 function uploadImage(req,res){
 	var form = new multiparty.Form();
+	var numSuccessfullCb = 0;
+	var photos = []
 	fh.createDir(local.config.upload_folders[1] + req.warehouse.id,function(err){
 		if(!err){
 			form.parse(req, function(err,fields,files){
@@ -53,9 +55,16 @@ function uploadImage(req,res){
 					for (var j in files[i]){
 						fh.renameFile(fields.tempLocation[i],local.config.upload_folders[1] + req.warehouse.id + '/' + files[i][j].originalFilename,function(err){
 							if(err){
-								
+								//Todo some form of error handling
+								setErrorResponse('Image Upload Error',res);
 							}else{
-								setResponse(req,res);
+								photos.push(req.warehouse.id + '/' + files[numSuccessfullCb][j].originalFilename)
+								numSuccessfullCb ++;
+								if (numSuccessfullCb === Object.keys(files).length){
+									warehouse.updateWarehousePhoto(req.warehouse.id,photos,function(err){
+										setResponse(req,res);
+									});
+								}
 							}
 						});
 					}
@@ -82,7 +91,6 @@ function uploadDocument(req,res){
 						fh.renameFile(files[i][j].path, local.config.upload_folders[0] + req.warehouse.id + '/' + files[i][j].originalFilename,function(err){
 							if(err){
 								if ((req.warehouse.storage === undefined || req.warehouse.storage.length === 0)){
-									//Delete the documents if they are creating a new warehouse
 									fh.deleteFolderRecursive(local.config.upload_folders[0] + req.warehouse.id);
 									warehouse.removeWarehouse(req.warehouse._id);//Remove this warehouse we are in step1 so it will create another later
 								}
@@ -96,7 +104,6 @@ function uploadDocument(req,res){
 											setResponse(req,res);
 										}else{
 											if ((req.warehouse.storage === undefined || req.warehouse.storage.length === 0)){
-												//Delete the documents if they are creating a new warehouse
 												fh.deleteFolderRecursive(local.config.upload_folders[0] + req.warehouse.id);
 												warehouse.removeWarehouse(req.warehouse._id);//Remove this warehouse we are in step1 so it will create another later
 											}

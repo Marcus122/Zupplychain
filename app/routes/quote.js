@@ -7,7 +7,8 @@ search = require("../controllers/search.js"),
 quote = require("../controllers/quote.js"),
 async = require("async"),
 Utils = require("../utils.js"),
-userWarehouse = require("../controllers/user-warehouses.js");
+userWarehouse = require("../controllers/user-warehouses.js"),
+emailer = require("../controllers/emailer.js")
 
 var handler = function(app) {
 	app.param('warehouse_id', warehouse.load);
@@ -100,6 +101,13 @@ function providerOfferReply(req,res) {
 function providerOfferConfirm(req,res) {
     var quoteId = req.params.quote_id;
     //at this point we can send the email.
+    //emailer.sendMail(req,res,"","matthew.alton@weaveability.com","Provider Offer",function(err){
+     //   if(err){
+            //do something
+     //   }else{
+           // res.render("provider-offer-confirm", req.data);
+      //  }
+    //});
     res.render("provider-offer-confirm", req.data);
 }
 
@@ -148,10 +156,14 @@ function providerOffer(req,res) {
     req.data.config = local.config;
     req.data.quote = req.quote.toObject();
     req.data.page = 'provider-offer';
-    Utils.calculateQuickestRoadDistanceBetweenPoints(req.data.quote.transport.dispatchLocation,req.data.quote.warehouse.postcode,function(distance){
-        req.data.distance = distance
+    if(req.data.quote.transport.dispatchLocation){
+        Utils.calculateQuickestRoadDistanceBetweenPoints(req.data.quote.transport.dispatchLocation,req.data.quote.warehouse.postcode,function(distance){
+            req.data.distance = distance
+            storage.buildStorageNamesAndRenderPage(req,res,"provider-offer");
+        });
+    }else{
         storage.buildStorageNamesAndRenderPage(req,res,"provider-offer");
-    });
+    }
 }
 
 function createQuote(req,res) {

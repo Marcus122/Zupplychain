@@ -27,7 +27,7 @@ var fields = {
 	officeHours: { type:String },
 	services: [String],
 	specifications: [String],
-	photos: [String],
+	photos: Schema.Types.Mixed,
     defaultPhoto: String,
 	active: { type: Boolean, default: false },
 	created: { type: Date , default: Date.now },

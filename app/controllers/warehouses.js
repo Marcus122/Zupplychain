@@ -9,12 +9,18 @@ var Warehouse = require("../data/warehouse.js"),
 exports.updateWarehouseDocuments = function(warehouseId,documents,cb){
     Warehouse.update({"_id" : warehouseId}, { $set: { "documents": documents }}, {},cb);
 }
+exports.updateWarehousePhoto = function(warehouseId,photos,cb){
+    Warehouse.update({"_id" : warehouseId}, { $set: { "photos": photos }}, {},cb);
+}
 exports.createWarehouseObject = function(data){
 	var warehouse = new Warehouse(data);
 	return warehouse;
 }
 exports.create = function (user,data,cb) {
 	var warehouse = exports.createWarehouseObject(data);
+	if (warehouse.defaultPhoto){
+		warehouse.defaultPhoto = warehouse.id + '/' + warehouse.defaultPhoto;
+	}
 	warehouse.user = user._id;
 	warehouse.save(function(err){
 		if (!err) {

@@ -164,12 +164,12 @@
 												<span class="file-name columns four">
                                                     <%=warehouse.photos[i];%>
                                                 </span>
-												<input type="hidden" name="photo" data-array="photos" value="<%=warehouse.photos[i];%>"/>
+												<!--<input type="hidden" name="photo" data-array="photos" value="<%=warehouse.photos[i];%>"/>-->
 												<div class="columns one">
 													<button type="button" href="#" class="trash-button"><span>Delete</span></button>
 												</div>
                                                         <span class="default-photo-label">Main image</span>
-                                                        <button data-photo="<%=warehouse.photos[i];%>" class="tiny simple make-default-photo" type="button">Use as main image
+                                                        <button data-photo="<%=warehouse.id;%>/<%=warehouse.photos[i];%>" class="tiny simple make-default-photo" type="button">Use as main image
                                                         </button>
 											</div>
 										<%}

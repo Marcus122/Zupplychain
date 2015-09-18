@@ -59,3 +59,13 @@ exports.deleteFolderRecursive = function(path){
 	}
 }
 
+exports.readFile = function(path,cb){
+	fs.readFile(path,function(err,content){
+		if(err){
+			cb(err);
+		}else{
+			cb(null,content);
+		}
+	});
+}
+

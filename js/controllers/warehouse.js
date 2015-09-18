@@ -34,61 +34,69 @@ define(["jquery"], function ($) {
 		}
 		
 	function uploadDocument(warehouseId,files,documentTitles,cb){
-		if(!files) return;
-		var data = new FormData();
-		var err;
-		$.each(files, function(key, value)
-		{
-			data.append(key, value[0]);
-		});
-		$.each(documentTitles, function(key, value){
-			data.append("title", value);
-		});
-		$.ajax({
-			url: '/documents/upload/' + warehouseId,
-			type: 'POST',
-			data: data,
-			cache: false,
-			dataType: 'json',
-			processData: false, // Don't process the files
-			contentType: false, // Set content type to false as jQuery will tell the server its a query string request
-			success: function(data){
-				cb(data);
-			},
-			error: function(jqXHR, textStatus, errThrown){
-				err = JSON.parse(jqXHR.responseText);
-				cb(err);
-			}
-		})
+		if (files.length > 0){
+			if(!files) return;
+			var data = new FormData();
+			var err;
+			$.each(files, function(key, value)
+			{
+				data.append(key, value[0]);
+			});
+			$.each(documentTitles, function(key, value){
+				data.append("title", value);
+			});
+			$.ajax({
+				url: '/documents/upload/' + warehouseId,
+				type: 'POST',
+				data: data,
+				cache: false,
+				dataType: 'json',
+				processData: false, // Don't process the files
+				contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+				success: function(data){
+					cb(data);
+				},
+				error: function(jqXHR, textStatus, errThrown){
+					err = JSON.parse(jqXHR.responseText);
+					cb(err);
+				}
+			});
+		}else{
+			cb({error:null})
+		}
 	}
 
 	function uploadImage(warehouseId,files,tempLocations,cb){
-		if(!files) return;
-		var data = new FormData();
-		var err;
-		$.each(files, function(key, value)
-		{
-			data.append(key, value[0]);
-		});
-		$.each(tempLocations, function(key, value){
-			data.append("tempLocation", value);
-		});
-		$.ajax({
-			url: '/images/upload/' + warehouseId,
-			type: 'POST',
-			data: data,
-			cache: false,
-			dataType: 'json',
-			processData: false, // Don't process the files
-			contentType: false, // Set content type to false as jQuery will tell the server its a query string request
-			success: function(data){
-				cb(data);
-			},
-			error: function(jqXHR, textStatus, errThrown){
-				err = JSON.parse(jqXHR.responseText);
-				cb(err);
-			}
-		})
+		if (files.length > 0){
+			if(!files) return;
+			var data = new FormData();
+			var err;
+			$.each(files, function(key, value)
+			{
+				data.append(key, value[0]);
+			});
+			$.each(tempLocations, function(key, value){
+				data.append("tempLocation", value);
+			});
+			$.ajax({
+				url: '/images/upload/' + warehouseId,
+				type: 'POST',
+				data: data,
+				cache: false,
+				dataType: 'json',
+				processData: false, // Don't process the files
+				contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+				success: function(data){
+					cb(data);
+				},
+				error: function(jqXHR, textStatus, errThrown){
+					err = JSON.parse(jqXHR.responseText);
+					cb(err);
+				}
+			})
+		}else{
+			cb({error:null})
+		}
 	}
         
         function updateVolumeDiscount(warehouse,volumeDiscountData,cb){

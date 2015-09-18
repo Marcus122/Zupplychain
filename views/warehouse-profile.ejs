@@ -87,10 +87,10 @@
 					</div>
 					<div class="main">
                         <div class="carousel">
-                            <img src="/images/<%= warehouse.defaultPhoto || warehouse.photos && warehouse.photos[0] || 'not-found.jpg' %>" class="placeholder" alt="placeholder" />
+                            <img src="/images/warehouse-images/<%= warehouse.defaultPhoto || warehouse.photos && warehouse.photos[0] || 'not-found.jpg' %>" class="placeholder" alt="placeholder" />
                             <ul class="thumbnails">
                             <% for (var i = 0; i < warehouse.photos.length; i++) { %>
-                                <li><img src="/images/<%= warehouse.photos[i] %>" alt="an image of the warehouse"/></li>
+                                <li><img src="/images/warehouse-images/<%= warehouse.photos[i] %>" alt="an image of the warehouse"/></li>
                             <%}%>
                                 <!--<li><img src="/images/whouse1.jpg" alt="a warehouse"  /></li>
                                 <li><img src="/images/whouse2.jpg" alt="a warehouse"  /></li>
@@ -106,11 +106,11 @@
             <div class="columns six">
 				<div class="content-box warehouse-features">
 					<div class="header">
-						<h2>Services and Features</h2>
+						<h2>Services,Features and Rating</h2>
 					</div>
                     <div class="main row">
                       <div class="row">
-                            <div class="columns six">
+                            <div class="columns four">
                                 <h4>Services</h4>
                                 <ul>
                                     <% for( var i= 0; i<warehouse.services.length;i++ ){%>
@@ -121,7 +121,7 @@
                                     <%}%>
                                 </ul>
                             </div>
-                            <div class="columns six">
+                            <div class="columns four">
                                 <h4>Features</h4>
                                 <p>Size: <%= warehouse.size %>m<sup>2</sup>  <br/>
                             Height: <%= warehouse.height %>m</p>
@@ -132,22 +132,39 @@
                                     <% } %>
                                 </div>
                             </div>
+                            <div class="columns four">
+                                <h4>Rating</h4>
+                                <div class="ratings js-rating">
+                                    <%if (typeof warehouse.rating !== 'undefined'){
+                                        var j = 0;
+                                        do{%>
+                                            <span class="ion-android-star rating"><em class="sr-only">*</em></span>
+                                            <%j++;
+                                        }
+                                        while(j<warehouse.ratingrating)
+                                    }else{
+                                        %><span>Not Yet Rated</span><%
+                                    }%>
+                                </div>
+                            </div>
                        </div>
 					</div>
 				</div>
-                <div class="content-box warehouse-documents">
-                    <div class="header">
-                        <h2>Warehouse Documents</h2>
-                        
+                <%if(warehouse.documents){%>
+                    <div class="content-box warehouse-documents">
+                        <div class="header">
+                            <h2>Warehouse Documents</h2>
+                            
+                        </div>
+                        <div class="main">
+                        <ul>
+                            <% for( var i= 0; i<warehouse.documents.length;i++ ){%>
+                                        <li><a target="__blank" href="<%= warehouse.documents[i].path %>"><%=warehouse.documents[i].title%></a></li>
+                            <%}%>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="main">
-                    <ul>
-                           <% for( var i= 0; i<warehouse.documents.length;i++ ){%>
-    								<li><a target="__blank" href="<%= warehouse.documents[i].path %>"><%=warehouse.documents[i].title%></a></li>
-                        <%}%>
-                        </ul>
-                    </div>
-                </div>
+                <%}%>
             </div>
 			</div>
 			

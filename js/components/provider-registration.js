@@ -113,6 +113,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			var documentTitles = [];
 			var images = [];
 			var imageTempLocations = [];
+			var photosAdded = false;
 			if(!$registration.length) return;
             
 			$registration.on("submit",function(ev){
@@ -120,17 +121,13 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				saveWarehouse(function(result){
 					//var checkResult = checkSaveWarehouseResultAndGetMsg(result);
 					if (result.error === false || result.error === null){
-						if (documents.length > 0){
-							uploadDocuments(result.data._id,function(result){
-								if(result.error === false || result.error === null){
-									window.location = $registration.attr('action');
-								}else if (result.error === true){
-									Alerts.showErrorMessage(result.data);
-								}
-							});
-						}else{
-							window.location = $registration.attr('action');
-						}
+						uploadFiles(result.data._id,function(result){
+							if(result.error === false || result.error === null){
+								window.location = $registration.attr('action');
+							}else if (result.error === true){
+								Alerts.showErrorMessage(result.data);
+							}
+						});
 					} else if (result.error === true){
 						if (result.data.message !== undefined){
 							Alerts.showErrorMessage(result.data.message);
@@ -144,17 +141,13 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				saveWarehouse(function(result){
 					//var checkResult = checkSaveWarehouseResultAndGetMsg(result);
 					if (result.error === false || result.error === null){
-							if (documents.length > 0){
-								uploadDocuments(result.data._id,function(result){
-									if(result.error === false || result.error === null){
-										saveRegistration();
-									}else if (result.error === true){
-										Alerts.showErrorMessage(result.data);
-									}
-								});
-							}else{
+						uploadFiles(result.data._id,function(result){
+							if(result.error === false || result.error === null){
 								saveRegistration();
+							}else if (result.error === true){
+								Alerts.showErrorMessage(result.data);
 							}
+						});
 					}else if (result.error === true){
 						if (result.data.message !== undefined){
 							Alerts.showErrorMessage(result.data.message);
@@ -180,20 +173,24 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			function saveWarehouse(cb){
 				if( lm.isFormValid($registration.attr('id')) ){
 					bindFormToObject($registration,warehouse);
+					if (photosAdded === true){
+						warehouse.photos = [];
+					}
 					Warehouse.update(warehouse,function(result){
 						if(cb) cb(result);
 					});
 				}
 			}
-			function uploadDocuments(warehouseId,cb){
+			function uploadFiles(warehouseId,cb){
 				Warehouse.uploadDocument(warehouseId,documents,documentTitles,function(result){
-					if(cb) cb(result)
+					if (result.error === false || result.error === null){
+						Warehouse.uploadImage(warehouseId,images,imageTempLocations,function(result){
+							if(cb) cb(result);
+						});
+					}else if (result.error === true){
+						if(cb) cb(result);
+					}
 				});
-			}
-			function uploadImages(warehouseID,cb){
-				Warehouse.uploadImage(warehouseID,images,imageTempLocations,function(result){
-					if(cb) cb(result);
-				})
 			}
 			var $addPhoto = $('#add-photo');
 			var $uploadPhoto = $('#photos');
@@ -207,19 +204,20 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				if(!files) return;
 				sendFile(files,function(data){
 					if(!warehouse.photos) warehouse.photos=[];
-					images.push(files);
-					imageTempLocations.push('/images/tmp/' + data[i].name);
+					images.push($uploadPhoto.prop("files"));
 					var template = templates.getTemplate("warehouse-image");
-					for( i in data){
+					photosAdded = true;
+					for(var i in data){
 						var image = data[i];
-						image.file = '/images/' + data[i].name;
+						image.file = '/images/tmp/' + data[i].name;
 						var $image = template.bind( image );
+						imageTempLocations.push('./images/tmp/' + data[i].name);
                        $("#defaultPhoto").val(image.name);
                        $(".document").removeClass("isDefault");
                        console.log($image);
 						$photoArea.append($image);
                        $image.find('.image').parent().addClass("isDefault");
-						$uploadPhoto.val("");
+						//$uploadPhoto.val("");
 					}
 				});
 			});
@@ -245,6 +243,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			$photoArea.on("click",".trash-button",function(ev){
 				ev.preventDefault();
 				$(this).closest('.document').remove();
+				//Check Photos added
 			});
 			$documentArea.on("click",".trash-button",function(ev){
 				ev.preventDefault();
