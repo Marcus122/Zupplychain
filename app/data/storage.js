@@ -15,9 +15,9 @@ var fields = {
 	sortOrder:{type: Number },
 	//noDiscount:{type: Number },
 	basicPricing:{
-		price: { type: Number, default:0, get:getPrice, set:setPrice },
-		charge:{ type: Number, default:0, get:getPrice, set:setPrice },
-		reserve:{ type: Number, default:0, get:getPrice, set:setPrice }
+		price: { type: Number, get:getPrice, set:setPrice },
+		charge:{ type: Number, get:getPrice, set:setPrice },
+		reserve:{ type: Number, get:getPrice, set:setPrice }
 	},
 	pricing: [{
 		from:Date,

@@ -143,7 +143,20 @@ warehouseSchema.statics = {
     return aggStorage;
   },
   
-  
+  checkBasicPricingSet: function(storages,discounts,query){
+      var matchingStorages = [];
+      var volumeDiscounts = discounts;
+      for (var j=0; j<storages.length; j++){
+          if (storages[j].basicPricing.price > 0){
+              matchingStorages.push(storages[j]);
+          }
+      }
+      if (matchingStorages.length == 0) {
+          return false;
+      }
+      var aggStorage = new AggregateStorage(matchingStorages, volumeDiscounts);
+      return aggStorage;
+  },
   
   search_by_query: function(query, cb) {
     var warehouseAPI = this;
@@ -181,6 +194,9 @@ warehouseSchema.statics = {
         var warehouseAPI = this;
         var editableResult = warehouse.toObject();
         var aggStorage = warehouseAPI.storagesToAggregateStorage(warehouse, query);
+        if (aggStorage){
+          aggStorage = warehouseAPI.checkBasicPricingSet(aggStorage.getStorages(),aggStorage.getVolumeDiscount(),query);
+        }
         if (aggStorage && aggStorage.palletsWillFitAtThisDate(query.startDate, query.totalPallets)) {
             editableResult.storageProfile = aggStorage.generateContractStorageProfile(query.useageProfile);
             editableResult.distanceFromSearch = Utils.distanceInMiles(editableResult.geo , query.geo );

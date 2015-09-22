@@ -31,6 +31,14 @@ var aggregateStorage = function(theStorages, VolumeDiscounts) {
         return filledStorageProfile;
     }
     
+    function getStorages(){
+        return storages;
+    }
+    
+    function getVolumeDiscount(){
+        return volumeDiscounts;
+    }
+    
     function palletsWillFitAtThisDate(wcDate, numPallets) {
         var storagesThisWeek = getStoragesAsTheyAreThisWeek(wcDate);
         var totalSpace = 0;
@@ -74,20 +82,30 @@ var aggregateStorage = function(theStorages, VolumeDiscounts) {
         var storagesUsed = [];
         var numPalletsLeft = numPallets;
         var highestPriceOfAnyStorageUsed = {};
+        var storageRemoved = false;
         var increaseInPallets = Math.max( 0, numPallets - numLastWeek);
         
         if (numPallets == 0) { //this lets us still do a price calculation even for weeks where useage = 0;
             highestPriceOfAnyStorageUsed = { price: 0, charge: 0, reserve: 0}; 
         }
-        
-        storagesThisWeek.sort(function(x,y) { return x.price.price > y.price.price });
+        for (var i = 0; i < storagesThisWeek.length; i++){
+            if (storageRemoved === true){
+                i--;
+                storageRemoved = false;
+            }
+            if(storagesThisWeek[i].price.toObject().price === undefined){
+                storageRemoved = true;
+                storagesThisWeek.splice(i,1);
+            }
+        }
+        storagesThisWeek.sort(function(x,y) { return x.price.toObject().price > y.price.toObject().price });
         for (var i in storagesThisWeek) {
             var numPalletsInThisStorage = Math.min(storagesThisWeek[i].numSpaces, numPalletsLeft);
             storagesThisWeek[i].numPalletsStored = numPalletsInThisStorage;
             numPalletsLeft -= numPalletsInThisStorage;
             highestPriceOfAnyStorageUsed = storagesThisWeek[i].price; //since these are sorted by price we are filling from the cheapest, so subsequent loops will overwrite this leaving us with the highest price.
             storagesUsed.push(storagesThisWeek[i]);
-            if (numPalletsLeft > 0) {
+            if (numPalletsLeft > 0) {//Remove alny storages with no pricing
                 storagesThisWeek[i].full = true;
             } else {
                 storagesThisWeek[i].full = false;
@@ -146,7 +164,9 @@ var aggregateStorage = function(theStorages, VolumeDiscounts) {
         generateContractStorageProfile:generateContractStorageProfile,
         palletsWillFitAtThisDate:palletsWillFitAtThisDate,
         getPriceForFirstWeek:getPriceForFirstWeek,
-        getAvailableStorageTemps:getAvailableStorageTemps
+        getAvailableStorageTemps:getAvailableStorageTemps,
+        getStorages:getStorages,
+        getVolumeDiscount:getVolumeDiscount
     }
     
 }

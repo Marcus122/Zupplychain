@@ -13,15 +13,25 @@
 			<form class="storage-search loom-form" action="/search" id="search-form" novalidate>
             <div class="input-field">
 					<label for="postcode">Target Postcode/City</label>
-					<input type="text" name="postcode" required="required" minlength="3" value="<%= session.whSC ? session.whSC.sc[0].postcode : " "%>"/>
+					<!--<input type="text" name="postcode" required="required" minlength="3" value="<%= session.whSC ? session.whSC.sc[0].postcode : " "%>"/>-->
+					<input type="text" name="postcode" required="required" minlength="3" disabled value="<%= session.whSC ? session.whSC.sc[0].postcode : 'Bury'%>"/>
 				</div>
                 <div class="input-field number" >
 					<label for="max-distance">Max Distance (miles)</label>
-					<input type="number"  step="5" name="max-distance" min="1" required="required" value="<%=session.whSC ? session.whSC.sc[0].maxDistance : 25 %>"/>
+					<!--<input type="number"  step="5" name="max-distance" min="1" required="required" value="<%=session.whSC ? session.whSC.sc[0].maxDistance : 25 %>"/>-->
+					<input type="number"  step="5" name="max-distance" min="1" required="required" disabled value="<%=session.whSC ? session.whSC.sc[0].maxDistance : 25 %>"/>
 				</div>
 				<div class="input-field">
 					<label for="pallet-type">Pallet Type</label>
-					<select name="pallet-type" id="pallet-type" required="required">
+					<!--<select name="pallet-type" id="pallet-type" required="required">
+						<%
+						for (var i in palletTypes){%>
+							<option value="<%=i%>" <%if (session.whSC && session.whSC.sc[0].palletType == i){%>
+																	selected
+																<%}%>><%=palletTypes[i]%></option>
+						<%}%>
+					</select>-->
+					<select name="pallet-type" id="pallet-type" required="required" disabled>
 						<%
 						for (var i in palletTypes){%>
 							<option value="<%=i%>" <%if (session.whSC && session.whSC.sc[0].palletType == i){%>
@@ -39,7 +49,8 @@
 				
 				<div class="input-field">
 					<label for="description">What are you storing?</label>
-					<input type="text" name="description" minlength="0" maxlength="100" placeholder="" required="required" value="<%= session.whSC ? session.whSC.sc[0].description : "" %>"/>
+					<!--<input type="text" name="description" minlength="0" maxlength="100" placeholder="" required="required" value="<%= session.whSC ? session.whSC.sc[0].description : "" %>"/>-->
+					<input type="text" name="description" minlength="0" maxlength="100" placeholder="" required="required" disabled value="<%= session.whSC ? session.whSC.sc[0].description :  'Shoes'%>"/>
 				</div><br/>
 				<%
 					var minDate = new Date();
@@ -48,7 +59,8 @@
 				%>
 				<div class="input-field">
 					<label for="start-date">Start Date</label>
-					<input type="date" name="start-date" data-loom-add-controls="true" readonly required="required" min="<%=minDate.toISOString().substring(0, 10)%>" max="<%=maxDate.toISOString().substring(0, 10)%>" value="<%= session.whSC ? session.whSC.sc[0].startDate : today.toISOString().substring(0, 10)%>"/>
+					<!--<input type="date" name="start-date" data-loom-add-controls="true" readonly required="required" min="<%=minDate.toISOString().substring(0, 10)%>" max="<%=maxDate.toISOString().substring(0, 10)%>" value="<%= session.whSC ? session.whSC.sc[0].startDate : today.toISOString().substring(0, 10)%>"/>-->
+					<input type="date" name="start-date" data-loom-add-controls="true" readonly required="required" min="<%=minDate.toISOString().substring(0, 10)%>" max="<%=maxDate.toISOString().substring(0, 10)%>" disabled value="<%= session.whSC ? session.whSC.sc[0].startDate : today.toISOString().substring(0, 10)%>"/>
 				</div>
 				<div class="input-field">
 					<label for="minDuration">Estimated Period</label>
@@ -79,7 +91,15 @@
 				
 				<div class="input-field">
 					<label for="temperature">Storage Type</label>
-					<select name="temperature">
+					<!--<select name="temperature">
+						<%var temps = temperatures;
+						for (var i in temps){%>
+								<option value="<%=i%>" <%if (session.whSC && session.whSC.sc[0].temp == i){%>
+																	selected
+															   <%}%>><%=temps[i]%></option>
+						<%}%>
+					</select>-->
+					<select name="temperature" disabled>
 						<%var temps = temperatures;
 						for (var i in temps){%>
 								<option value="<%=i%>" <%if (session.whSC && session.whSC.sc[0].temp == i){%>
@@ -87,7 +107,6 @@
 															   <%}%>><%=temps[i]%></option>
 						<%}%>
 					</select>
-					
 				</div>
 				<div class="input-field last">
                     <div class="search-nag" style="">

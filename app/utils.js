@@ -107,7 +107,11 @@ module.exports.calculateQuickestRoadDistanceBetweenPoints = function(origin,dest
         units: 'imperial'
         },
         function(err,data){
-            cb(data.distance.replace(' mi',""));
+            if (err){
+                cb(err);
+            }else{
+            cb(null,data.distance);
+            }
         }
     )
 }

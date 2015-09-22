@@ -13,6 +13,8 @@ exports.config = {
 
     static_content: "../static/",
     
+    googleDistanceMatrixErrText: "Unable to Determine Distance",
+    
     document_folder: __dirname + '/../docs/',
 	
 	upload_folders: [
@@ -127,5 +129,9 @@ exports.config = {
     acceptStatus : {
         true : "Accepted",
         false : "Declined"
+    },
+    
+    headers: {
+       "addressHeader": "Registered Address:"
     }
 };

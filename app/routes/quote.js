@@ -157,8 +157,12 @@ function providerOffer(req,res) {
     req.data.quote = req.quote.toObject();
     req.data.page = 'provider-offer';
     if(req.data.quote.transport.dispatchLocation){
-        Utils.calculateQuickestRoadDistanceBetweenPoints(req.data.quote.transport.dispatchLocation,req.data.quote.warehouse.postcode,function(distance){
-            req.data.distance = distance
+        Utils.calculateQuickestRoadDistanceBetweenPoints(req.data.quote.transport.dispatchLocation,req.data.quote.warehouse.postcode,function(err,distance){
+            if(err){
+                req.data.distance = local.config.googleDistanceMatrixErrText;
+            }else{
+                req.data.distance = distance
+            }
             storage.buildStorageNamesAndRenderPage(req,res,"provider-offer");
         });
     }else{

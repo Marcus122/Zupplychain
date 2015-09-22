@@ -140,8 +140,8 @@
                                             </select>
                                         </div>
                                         <div class="input-field" style="display:none;">
-                                            <label for = "other-payment-terms">Please Specify</label>
-                                            <input name="other-payment-terms" type="text" placeholder="Please Specify"/>
+                                            <label for = "other-payment-terms">Please Specify (Days)</label>
+                                            <input name="other-payment-terms" type="text" placeholder="Please Specify (Days)"/>
                                         </div>
                                     </div>
                                     <div class="six columns">
@@ -183,16 +183,18 @@
                                             </div>
                                             <div class="input-field">
                                                 <h3>Estimated Miles</h3>
-                                                <p><%= distance %></p>
+                                                <p <%if (distance === config.googleDistanceMatrixErrText ){%>
+                                                    class="distance-error"
+                                                <%}%>
+                                                ><%= distance %></p>
                                                 <input type="hidden" name="distance" value="<%= distance %>"/>
                                             </div>
                                             <div class="input-field">
                                                 <label for="transportQuote">Quote £</label>
-                                                <input name="transportQuote" type="number" min="0.00" value="0.00"/>
-                                                <span>or</span>
+                                                <input name="transportQuote" type="number" min="0" value="00"/>
                                             </div>
                                             <div class="input-field check">
-                                                <label for="decline-transport-request">Decline Transport Request<input type="checkbox" name="decline-transport-request" id="decline-transport-request"/></label>
+                                                <label for="decline-transport-request">Or Decline Transport Request<input type="checkbox" name="decline-transport-request" id="decline-transport-request"/></label>
                                             </div>
                                             <div class="input-field check checkbox">
                                                 <label for="terms">I have read and accept the ZupplyChain Terms and Conditions<input type="checkbox" name="terms" id="terms" required="required"/></label>
@@ -203,7 +205,7 @@
                             </div>
                             <div class="content-box action row">
                                 <div class="eight columns">
-                                    <p>Press the SUBMIT button to reply the the customer's storage request with your payment terms. You will be notified by email when the customer accepts or rejects your offer.</p> 
+                                    <p>Press the SUBMIT button to reply to the customer's storage request with your payment terms. You will be notified by email when the customer accepts or rejects your offer.</p> 
                                 </div>
                                 <div class="four columns submit-request-container">
                                     <button type="submit" class="button action">SUBMIT OFFER</button>

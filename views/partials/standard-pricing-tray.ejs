@@ -1,6 +1,7 @@
 <div class="standard-pricing-tray">
     <a class="open-tray-link">Standard Pricing</a>
     <div class="tray">
+        <span class="aside">Storages with no price will not will not be taken into consideration when a user searches for a warehouse.</span></p>
             <div class="row">
                 <div class="columns six">
                     <p>This is the price you will be charging for all periods <em>except</em> those specified in date specific pricing.</p>
@@ -14,7 +15,7 @@
                     <label for="standard-pricing-price">Price per Pallet (&pound; per Week)</label><input name="standard-pricing-price" class="currency" type="text" data-loom-type="decimal" data-loom-decimal-places="2" value="<%=Number(storage.basicPricing.price) != 0 ? storage.basicPricing.price : ""%>" required="required"/>
                 </div>
                 <div class="input-field columns six no-success-validation-style">
-                    <label for="standard-pricing-handling-charge">Handling Charge (&pound; per Pallet)</label><input name="standard-pricing-handling-charge" class="currency" type="text" data-loom-type="decimal" data-loom-decimal-places="2" value="<%=storage.basicPricing.charge %>" required="required" />
+                    <label for="standard-pricing-handling-charge">Handling Charge (&pound; per Pallet)</label><input name="standard-pricing-handling-charge" class="currency" type="text" data-loom-type="decimal" data-loom-decimal-places="2" value="<%=Number(storage.basicPricing.charge) != 0 ? storage.basicPricing.charge : ""%>" required="required"/>
                 </div>
             </div>
             <div class="row controls">

@@ -176,13 +176,12 @@
                                                 <p><b><%=session.whSC.sc[0].totalPallets%></b></p>
                                             </div>
                                             <div class="input-field">
-                                                <p>Distance</p>
-                                                <p><b>5</b></p>
+                                                <p>Estimated Miles</p>
+                                                <p <%if (quote.transport.distance === config.googleDistanceMatrixErrText ){%>
+                                                    class="distance-error"
+                                                <%}%>
+                                                ><b><%= quote.transport.distance %></b></p>
                                             </div>
-                                        </div>
-                                        <div class="six columns">
-                                            <div class="input-field check checkbox">
-                                            <label for="terms">I have read and accept the Zupplychain Terms and Conditions<input type="checkbox" name="terms" id="terms" required="required"/></label>
                                         </div>
                                         <div class="two columns accept-status-box <%= config.acceptStatus[quote.transport.transportTermsAccepted].toLowerCase() %>-by-customer">
                                             <p class="<%= config.acceptStatus[quote.transport.transportTermsAccepted].toLowerCase() %>-by-customer"><%= config.acceptStatus[quote.transport.transportTermsAccepted] %> by customer</p>
@@ -191,6 +190,10 @@
                                 <%}%>
                             </div>
                             <div class="content-box action row">
+                                <div>
+                                    <div class="six columns input-field check checkbox">
+                                    <label for="terms">I have read and accept the Zupplychain Terms and Conditions<input type="checkbox" name="terms" id="terms" required="required"/></label>
+                                </div>
                                 <div class="five columns submit-request-container confirm-contract">
                                     <button type="submit" class="button action">SEND ACKNOWLEDGEMENT</button>
                                     <span>OR</span>

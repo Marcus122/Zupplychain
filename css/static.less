@@ -85,16 +85,8 @@
 		padding: 10px;
 		position: relative;
 		border-radius:7px;
-	}
-	.available-soon{
-		border: 1px solid @invalid-dark;
-		color: @invalid-dark;
-		//margin-left:114px;
-	}
-	.register-now{
 		border: 1px solid @highlight;
 		color: @highlight;
-		//margin-left:40px;
 	}
 	.customers-header,
 	.providers-header{
@@ -141,3 +133,20 @@
 #customer .what-is .main.four-points{
 	padding-bottom: 68px;
 }
+
+.free-registration{
+	position:absolute;
+	right: 90px;
+	top: 34%;
+	text-align: center;
+}
+
+ @media @mobile{
+     #home-page .banner{
+         .free-registration{
+            position:relative;
+            left:0;
+            top:0;
+         }
+     }
+ }

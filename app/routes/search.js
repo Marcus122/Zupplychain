@@ -45,17 +45,36 @@ function isNewSearchCompatableWithSessionSearch(newSearch, sessionSearch) {
     )
 }
 
+function isSessionSearchEqualToQuery(newSearch, sessionSearch){
+    return(
+        newSearch.totalPallets === sessionSearch.totalPallets &&
+        newSearch.minDuration === sessionSearch.minDuration &&
+        newSearch.postcode === sessionSearch.postcode &&
+        newSearch.radius === sessionSearch.radius &&
+        parseInt(newSearch.palletType) === sessionSearch.palletType &&
+        newSearch.weight === sessionSearch.weight &&
+        newSearch.height === sessionSearch.height &&
+        parseInt(newSearch.temp) === sessionSearch.temp &&
+        newSearch.startDate.valueOf() === new Date(sessionSearch.startDate).valueOf() &&
+        newSearch.description === sessionSearch.description &&
+        newSearch.maxDistance === newSearch.maxDistance &&
+        newSearch.radiusInMetres === newSearch.radiusInMetres
+    )
+}
+
 function saveSearchAndDoSearch(req,res, next){
     var query = getQueryFromRequest(req); //this has a new blank useage profile.. we need to check if we need to preserve the old one..
-    
+    var sameSearch;
     searchController.getFromSession(req, function(err, sessionQuery) {
         if (!err && sessionQuery && sessionQuery.useageProfile) { //does an existing query exist in the session with a useageprofile attached?
             if  (isNewSearchCompatableWithSessionSearch(query, sessionQuery) ) { //compare the session search to the new one. if all the important values are the same then we should preserve the existing useage profile. If numPallets etc. have changed then it makes sense to use a blank useage profile.
-                var sameSearch = true;
                 query.useageProfile = sessionQuery.useageProfile;
+            }
+            if (isSessionSearchEqualToQuery(query,sessionQuery)){
+                sameSearch = true;
             }else{
                 sameSearch = false;
-            }  
+            } 
         }       
         saveSearch(query, req);
         doSearch(query, req, res, sameSearch, next); 
@@ -102,38 +121,12 @@ function checkQueryAgainstSession(){
 
 function doSearch(query,req,res,sameSearch,next) {
     searchController.search_storage(query, function(error, results) {
-        var today = new Date();
         if (error) {
             req.data.error = error;
         }
         req.data.results = results;
             if (sameSearch === true || sameSearch == undefined){
                 getSelectedWarehousesbyUser(req,function(err,userWarehouse){
-                    if (userWarehouse){
-                        // var tempUserWarehouse = userWarehouse;
-                        // var deleteIndexes = [];
-                        // for (var i = 0; i < tempUserWarehouse.length; i++){
-                        //     for (var key in tempUserWarehouse[i]){
-                        //         if (tempUserWarehouse[i].hasOwnProperty(key) && key === "validFrom"){
-                        //             if (today < tempUserWarehouse[i][key]){
-                        //                 deleteIndexes.push(i);
-                        //             }
-                        //         }else if (tempUserWarehouse[i].hasOwnProperty(key) && key === "validTo"){
-                        //             if (today > tempUserWarehouse[i][key]){
-                        //                 //deleteUserWarehouse(tempUserWarehouse[i]['_id']); Can't get this to work
-                        //                 deleteIndexes.push(i);
-                        //             }
-                        //         }
-                        //     }
-                        // }
-                        // var len = deleteIndexes.length;
-                        // for (var j = len-1; j>=0; j--){
-                        //     var index = deleteIndexes.indexOf(j);
-                        //     if (index > -1){
-                        //     userWarehouse.splice(index,1);
-                        //     }
-                        // }
-                    }
                     req.data.userWarehouse = userWarehouse;
                     next();
                 });

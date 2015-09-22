@@ -22,6 +22,17 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
                 console.log(indexOfInputThatWasFocused);
             });
             
+            $("#choose-this-warehouse").click(function(e){
+                e.preventDefault();
+                var $popup = $("#choose-this-warehouse-popup");
+                $popup.css({position:"absolute", top:$('#estimated-total-cost').offset().top-400 });
+                $popup.show();
+            });
+            
+            $("#choose-this-warehouse-popup .close").click(function(){
+                $("#choose-this-warehouse-popup").hide();
+            });
+            
             //world's simplest image gallery :)
             $(".thumbnails img").click( function(evt) {
                 $(".placeholder").attr("src", $(this).attr("src"));
@@ -78,6 +89,21 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
             initPaymentTerms();
             
 		}
+        
+        function rebindFormByJqueryObj($form,addSuccessCb){
+            lm.rebind($form);
+            if(addSuccessCb === true){
+                if ($form.length > 0) {
+                    lm.addOnSuccessCallback($form.attr('id'), function(response) {
+                        if (response.error) {
+                            providerOfferError();
+                        } else {
+                            providerOfferSuccess(response);
+                        }
+                    });
+                }
+            }
+        }
         
         function initWarehouseProfileRowChanger(){
             $('.change-warehouse-profile-row-number .view-less').hide();
@@ -168,12 +194,12 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
                 if ($(this).val() === '3'){
                     $(this).parent().next('.input-field').show();
                     $(this).parent().next('.input-field').find('input').prop("required",true);
-                    lm.rebind($(this).closest('form'));
+                    rebindFormByJqueryObj($(this).closest('form'),true);
                 }else{
                     $(this).parent().next('.input-field').hide();
                     $(this).parent().next('.input-field').find('input').val("");
-                    $(this).parent().next('.input-field').find('input').removeAttr("required")
-                    lm.rebind($(this).closest('form'));
+                    $(this).parent().next('.input-field').find('input').removeAttr("required");
+                    rebindFormByJqueryObj($(this).closest('form'),true);
                 }
             })
         }

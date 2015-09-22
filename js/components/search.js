@@ -15,9 +15,14 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
        require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) {
                     $(".search-results").show();
                     $.scrollTo(".search-results", {duration : 100, offset : -0 });
-                });
-                
+                    $("#search-description-popup").css({position:"absolute", top:$('.search-results').offset().top-500 });
+                });  
     }
+    
+    openSearchPopup();
+    resultsMap = new ResultsMap($("input[name='postcode']").val(), $("input[name='max-distance']").val(), $("input[name='postcode']"));
+    $(".js-map-results-container").slideDown(); //needs to be visible for map to load successfully.
+    //These threee method calls above are here for the temporary search solution, they will be removed later
     
     $("#search-form input, #search-form select").on("change keyup",function(){
        if (haveDoneASearch) {
@@ -43,6 +48,10 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
         $("#register-email-popup").hide();
     });
     
+    $("#search-description-popup .close").click(function() {
+        $("#search-description-popup").hide();
+    });
+    
     $(".change-map-lock-status").click(function(){
         if( $(this).hasClass('unlock-map')){
             $(this).removeClass('unlock-map');
@@ -54,20 +63,20 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
     });
     
     $(document).on("click", ".register-before-click", function(evt){
-        evt.preventDefault();
-        var requestedUrl = $(evt.target).prop("href");
-        var $popup = $("#register-email-popup");
-        //bind up an onsuccess for the popup form that redirects to requested url once they've registered.
-        loom.addOnSuccessCallback("#register-email-form", function(response){
-            window.location.href = requestedUrl;
-        });
-        loom.addOnErrorCallback("#register-email-form", function(response){
-            Alerts.showErrorMessage("There was an error storing your details");
-            window.location.href = requestedUrl;
-        });
-        //show the popup.
-        $popup.show();
-        $popup.find("input[name='email']").focus(); //focus the first input.
+        // evt.preventDefault();
+        // var requestedUrl = $(evt.target).prop("href");
+        // var $popup = $("#register-email-popup");
+        // //bind up an onsuccess for the popup form that redirects to requested url once they've registered.
+        // loom.addOnSuccessCallback("#register-email-form", function(response){
+        //     window.location.href = requestedUrl;
+        // });
+        // loom.addOnErrorCallback("#register-email-form", function(response){
+        //     Alerts.showErrorMessage("There was an error storing your details");
+        //     window.location.href = requestedUrl;
+        // });
+        // //show the popup.
+        // $popup.show();
+        // $popup.find("input[name='email']").focus(); //focus the first input.
     });
     
     $('#search-results-table').on("loomSort",function(){
@@ -83,24 +92,18 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
             resultsMap.setRadius($("input[name='max-distance']").val());
         }
     });
+    
+    function openSearchPopup(){
+        var $popup = $("#search-description-popup");
+        $popup.show();
+    }
 	
 	function triggerSearch(){
 		$postcode.trigger("blur");
 		$maxDistance.trigger("change");
         var newInputField = $("<div class='input-field has-search success'></div>");
         var hasSearchInput = $("<input>").attr("type", "hidden").attr("name","hasSearch").val("true");
-        //$("#search-form").append(newInputField);
-        //$("#search-form").find('div.has-search').append("<input type='text' name='hasSearch' value='true' required='required'/>");
-        //loom.rebind($("#search-form"));
-        //loom.addOnSuccessCallback("search-form", function(response){
-        //    searchFormSuccess(response);
-       // });
         $("#search-form").submit();
-        //$("#search-form").find('div.has-search').remove();
-        //loom.rebind($("#search-form"));
-       // loom.addOnSuccessCallback("search-form", function(response){
-      //      searchFormSuccess(response);
-      //  });
 	}
     
     function searchFormSuccess(response){
@@ -127,6 +130,7 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
             } else {
                 require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) { 
                     $.scrollTo("#results-area", {duration : 600, offset : -90 });
+                    $("#search-description-popup").css({position:"absolute", top:$('.search-results').offset().top-500 });
                 });
             }
             var numResults = response.results.length;

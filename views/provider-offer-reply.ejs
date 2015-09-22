@@ -162,9 +162,12 @@
                                                 <p><%=session.whSC.sc[0].totalPallets%></p>
                                             </div>
                                             <div class="input-field">
-                                                <h3>Distance</h3>
-                                                <p>5</p>
-                                                <input type="hidden" name="distance" value='5'/>
+                                                <h3>Estimated Miles</h3>
+                                                <p <%if (quote.transport.distance === config.googleDistanceMatrixErrText ){%>
+                                                    class="distance-error"
+                                                <%}%>
+                                                ><%= quote.transport.distance %></p>
+                                                <input type="hidden" name="distance" value='<%= quote.transport.distance %>'/>
                                             </div>
                                             <!--<div class="input-field check checkbox">
                                                 <label for="transportTermsAccepted">I accept<input type="checkbox" name="transport-terms-accepted" id="terms"/> or decline<input type="checkbox" name="transport-terms-declined" id="terms"/> the above transport quote</label>

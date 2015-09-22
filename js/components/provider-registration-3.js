@@ -528,10 +528,26 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
              return true;
         }
         
+        function shouldIgnoreTheseInputs(inputs){
+             for (var i=0;i<inputs.length;i++) {
+                 if ($(inputs[i]).val() != "") {
+                     
+                     return false;
+                 }
+             }
+             console.log("found a inputs to ignore");
+             return true;
+        }
         
         function markThisRowToBeSkipped($row) {
             $($row).find(".input-field").addClass("loom-ignore");
             $($row).addClass("skipThisRow");
+        }
+        
+        function markTheseInputsToBeSkipped(inputs) {
+            for (var i = 0; i<inputs.length; i++){
+                $(inputs[i]).parent(".input-field").addClass("loom-ignore");
+            }
         }
         
         function unmarkAllTheseRows($rows) {
@@ -585,9 +601,9 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                 var $this = $(fieldSetForThisStorage);
                 var storageId= $this.data("storageId");
                 var storage = {"_id" : storageId};
+                storage.pallets = getAvailabilityJSONFromFieldSet($this) || [];
                 storage.basicPricing = getBasicPricingJSONFromFieldset($this) || null;
                 storage.pricing = getDateSpecificPricingJSONFromFieldSet($this) || [];
-                storage.pallets = getAvailabilityJSONFromFieldSet($this) || [];
                 /*if (storage.basicPricing == null) { //no point saving if there's no basic pricing set... turns out there is a point.
                     return false;
                 }*/
@@ -597,6 +613,12 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
             function getBasicPricingJSONFromFieldset($fieldset){
                 var priceInput = $fieldset.find("input[name='standard-pricing-price']");
                 var formId = priceInput.closest("form").attr("id");
+                var inputs = [$fieldset.find('input[name="standard-pricing-price"]'),$fieldset.find('input[name="standard-pricing-handling-charge"]')];
+                if (shouldIgnoreTheseInputs(inputs)){
+                     markTheseInputsToBeSkipped(inputs);
+                     Alerts.showInfoMessage("You have not added pricing for a storage name. Without pricing, this warehouse will not appear in searches.");
+                }
+                lm.rebind($('#'+formId));
                 if (lm.isFormValid(formId)) {
                     var price  = $fieldset.find("input[name='standard-pricing-price']").val();
                     var charge = $fieldset.find("input[name='standard-pricing-handling-charge']").val(); 
@@ -662,11 +684,11 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                 var $avail = $fieldset.find(".js-availability-inputs-container");
                 var formId = $avail.closest("form").attr("id");
                 var $rows = $avail.find(".js-single-availability-inputs-container");
-                for (var i =0;i<$rows.length;i++){
-                    if (shouldIgnoreThisRow($rows[i])) {
-                        markThisRowToBeSkipped($rows[i]);
-                    } 
-                }
+                // for (var i =0;i<$rows.length;i++){
+                //     if (shouldIgnoreThisRow($rows[i])) {
+                //         markThisRowToBeSkipped($rows[i]);
+                //     } 
+                // }
                 lm.rebind($('#'+formId));
                 if (lm.isFormValid(formId)) {
                     var $rowsToProcess = getRowsWithoutSkipped($rows);

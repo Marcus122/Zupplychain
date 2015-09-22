@@ -9,7 +9,7 @@ var fields = {
     user: { type: Schema.ObjectId, ref: 'users' },
     palletType : {type: Number},
     totalPallets : {type: Number},
-    desription : {type : String},
+    description : {type : String},
     postcode : {type : String},
     maxDistance : {type : Number },
     height : {type : Number},

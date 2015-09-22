@@ -5,6 +5,7 @@
 				<span><%=warehouse.name%></span> profile
 			</h1>
 		</div>
+        <% include ./partials/choose-this-warehouse-popup%>  
         <section>
         <%if (session.whSC != undefined && session.whSC.sc){%>
                 <div class="search-header">
@@ -88,15 +89,17 @@
 					<div class="main">
                         <div class="carousel">
                             <img src="/images/warehouse-images/<%= warehouse.defaultPhoto || warehouse.photos && warehouse.photos[0] || 'not-found.jpg' %>" class="placeholder" alt="placeholder" />
-                            <ul class="thumbnails">
-                            <% for (var i = 0; i < warehouse.photos.length; i++) { %>
-                                <li><img src="/images/warehouse-images/<%= warehouse.photos[i] %>" alt="an image of the warehouse"/></li>
+                            <%if (warehouse.photos !== undefined){%>
+                                <ul class="thumbnails">
+                                <% for (var i = 0; i < warehouse.photos.length; i++) { %>
+                                    <li><img src="/images/warehouse-images/<%= warehouse.photos[i] %>" alt="an image of the warehouse"/></li>
+                                <%}%>
+                                    <!--<li><img src="/images/whouse1.jpg" alt="a warehouse"  /></li>
+                                    <li><img src="/images/whouse2.jpg" alt="a warehouse"  /></li>
+                                    <li><img src="/images/whouse3.jpg" alt="a warehouse"  /></li>
+                                    <li><img src="/images/whouse4.jpg" alt="a warehouse"  /></li>-->
+                                </ul>
                             <%}%>
-                                <!--<li><img src="/images/whouse1.jpg" alt="a warehouse"  /></li>
-                                <li><img src="/images/whouse2.jpg" alt="a warehouse"  /></li>
-                                <li><img src="/images/whouse3.jpg" alt="a warehouse"  /></li>
-                                <li><img src="/images/whouse4.jpg" alt="a warehouse"  /></li>-->
-                            </ul>
                         </div>
 						<p><%=warehouse.description%></p>
                         
