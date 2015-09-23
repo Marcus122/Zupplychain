@@ -1,3 +1,6 @@
-node_modules
-images/uploads
+node_modules/
+images/uploads/
 secret.json
+*.pdf
+*.png
+*.jpg

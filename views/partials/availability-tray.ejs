@@ -53,6 +53,7 @@
                                     lastPallets = thisPallets;
                                     }//end for %>
                                     <!-- add a blank row -->
+									<%if(storage.pallets.length === 0){%>
                                     <tr class="js-single-availability-inputs-container">
 										<td data-th="From" class="input-field no-success-validation-style">
 											<input readonly required="required" type="date" data-loom-limit-day-of-week="1" name="from" class="datepicker" data-bind-value="from" data-loom-add-controls="true" min="<%= lastPallets ? utils.formatDate(lastPallets.to) : utils.formatDate(lastMonday)%> " max="<%=utils.formatDate(endOfNextYear)%>" value="<%=lastPallets ? utils.formatDate(utils.addDays(lastPallets.to,1)) : utils.formatDate(lastMonday)%>"/>
@@ -75,6 +76,7 @@
 											</button>
 										</td>
 									</tr>
+									<%}%>
                                     
 									</tbody>
 								</table>

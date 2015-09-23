@@ -104,13 +104,15 @@ module.exports.calculateQuickestRoadDistanceBetweenPoints = function(origin,dest
         {
         origin: origin,
         destination: destination,
-        units: 'imperial'
+        units: 'imperial',
+        durationInTraffic: false
         },
         function(err,data){
             if (err){
                 cb(err);
             }else{
             cb(null,data.distance);
+            console.log(data);
             }
         }
     )

@@ -336,9 +336,9 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
             $(this).closest('tr').remove();
             setDateValidators(this);
             lm.rebind($form);
-            /*if ($rows.length == 1) { //no rows left //uncomment this if you want to enforce at least one row.
-                $form.find(".add").trigger("click");					
-            }*/
+            if ($rows.length == 1) { //no rows left //uncomment this if you want to enforce at least one row.
+                $form.find(".add button").trigger("click");					
+            }
         });
     }
     
@@ -490,9 +490,17 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         
         $("#save-and-finish").click(function(ev) {
             clearSkipMarkerRows();
-            saveEverything(completeRegistration);
+            if ($('input[name="user-active"]').val() === "true"){
+                saveEverything(redirectToURL($(this).data('redirect')));
+            }else if($('input[name="user-active"]').val() === "false"){
+                saveEverything(completeRegistration);
+            }
             //then check for error and redirect to next page.
         });
+        
+        function redirectToURL(url){
+            window.location.href = url;
+        }
         
         function saveSingleStorage(id) {
             var target = $("#pricing-container-" + id);
@@ -567,11 +575,11 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                     if (response.error !== undefined && response.error === true && response.data !== undefined && response.data === "Users do not Match"){
                         window.location.href = '/'; //The users don't match, they have been logged out, now send them to the home page.
                     }else{
-                        alertWhSavedAndCallback(cb)
+                        alertWhSavedAndCallback(cb)//The callback is always asking them to register, need to determine whether they need to
                         //if it all went ok, redirect them to the next page.
                     }
                 }else{
-                    alertWhSavedAndCallback(cb);
+                    alertWhSavedAndCallback(cb);//The callback is always asking them to register, need to determine whether they need to
                 }
             });
 
@@ -616,7 +624,6 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                 var inputs = [$fieldset.find('input[name="standard-pricing-price"]'),$fieldset.find('input[name="standard-pricing-handling-charge"]')];
                 if (shouldIgnoreTheseInputs(inputs)){
                      markTheseInputsToBeSkipped(inputs);
-                     Alerts.showInfoMessage("You have not added pricing for a storage name. Without pricing, this warehouse will not appear in searches.");
                 }
                 lm.rebind($('#'+formId));
                 if (lm.isFormValid(formId)) {
