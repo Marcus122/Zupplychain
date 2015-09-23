@@ -14,7 +14,7 @@ var random = Math.random()*100;
 random = random.toString();
 data.live=false;
 var port = 8081;
-var bind_address = "localhost";
+var bind_address = "0.0.0.0";
 var live_port = 80;
 var live_bind_address = "46.20.238.210";
 

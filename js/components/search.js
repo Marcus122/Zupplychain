@@ -19,7 +19,10 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
                 });  
     }
     
-    openSearchPopup();
+    if($('input[name="first-search"]').val() === "true"){
+        openSearchPopup();
+    }
+    
     resultsMap = new ResultsMap($("input[name='postcode']").val(), $("input[name='max-distance']").val(), $("input[name='postcode']"));
     $(".js-map-results-container").slideDown(); //needs to be visible for map to load successfully.
     //These threee method calls above are here for the temporary search solution, they will be removed later

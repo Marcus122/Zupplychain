@@ -20,7 +20,24 @@ var handler = function(app) {
         req.data.palletTypes = local.config.palletTypes;
         req.data.temperatures = local.config.temperatures;
         req.data.page = 'search';
-		res.render("search",req.data);
+        if (req.session.firstSearch === undefined){
+            req.session.firstSearch = "true";
+        }else{
+            req.session.firstSearch = "false";
+        }
+        searchController.getFromSession(req,function(err,results){
+            if (err){
+                if (err !== 'couldnt get from session'){
+                    res.writeHead(500, {"Content-Type": "application/json"});
+                    var output = { error: true, data: err };
+                    res.end(JSON.stringify(output) + "\n");
+                }
+            }else{
+                req.data.query = results;
+                console.log(results);
+            }
+            res.render("search",req.data);
+        })
 	});
     
     app.post('/useage-profile', updateUseageProfileAndLoadWarehouse, function(req, res) {
@@ -95,6 +112,7 @@ function saveSearch(query,req) {
                 if (!query.id) { //was getting a weird bug where id was coming back undefined.
                     query._id = search._id;
                 }
+                req.data.searchId = query._id;
                 searchController.saveToSession(query,req);
             }
         });
@@ -113,10 +131,6 @@ function saveSearch(query,req) {
             }
         });
     });   */
-}
-
-function checkQueryAgainstSession(){
-    
 }
 
 function doSearch(query,req,res,sameSearch,next) {
@@ -253,7 +267,8 @@ function getQueryFromRequest(req) {
             "startDate"         : startDate, 
             "description"       : req.body.description, 
             "maxDistance"       : radius, 
-            "useageProfile"     : useageProfile
+            "useageProfile"     : useageProfile,
+            "id"                : req.body["search-id"]
         };
         return query;
 }

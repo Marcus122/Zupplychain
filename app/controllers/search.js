@@ -20,10 +20,17 @@ exports.saveSearch = function(search, cb) {
 }
 
 exports.getFromSession = function(req, cb) {
-    if (req.session.whSC) {
+    if (req.session.search) {
         console.log("loading search from session");
-        console.log("id is" + req.session.whSC.sc[0]._id);
-        cb(false,req.session.whSC.sc[0]);
+        console.log("id is" + req.session.search.id);
+        Search.load(req.session.search.id,function(err,results){
+            if(err){
+                cb(err);
+            }else{
+                cb(false,results);
+            }
+        })
+        //cb(false,req.session.whSC.sc[0]);
     } else {
         cb("couldnt get from session");
     }
@@ -37,8 +44,9 @@ exports.saveToSession = function(search,req,cb) {
         search.startDate = new Date(search.startDate);
     }
     search.startDate = search.startDate.toISOString().substr(0,10);
-    var searchJSON = { "sc" : [search] };
-    req.session.whSC = searchJSON;
+    //var searchJSON = { "sc" : [search] };
+    //req.session.whSC = searchJSON;
+    req.session.search = {"id":search._id};
     if(cb) {
         cb();
     }

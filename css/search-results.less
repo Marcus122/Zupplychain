@@ -352,6 +352,7 @@
     max-height: 1000px;
     text-align:center;
     background-color:#ccc;
+    width:100%;
 }
 .warehouse-pricing {
 	overflow-x: scroll !important;
@@ -370,6 +371,7 @@
     overflow:initial;
     .main{
         position:relative;
+        width:100%;
     }
     .footer{
         position:relative;
@@ -396,6 +398,21 @@
 		float:none;
 		display:block;
 	}
+    .content-box.map-container .header{ 
+        .lock-map-container{
+            position:absolute;
+            right:0;
+            margin-right:20px;
+            top:-5px;
+            button{
+                width:22%;
+            }
+        }
+        .tool-tip.hint--top{
+            margin-right: 164px !important;
+            margin-top: 2px !important;
+        }
+    }
 }
 
 .storage-matched{
