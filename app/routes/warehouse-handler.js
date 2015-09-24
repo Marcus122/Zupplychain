@@ -142,7 +142,7 @@ function updateVolumeDiscount(req,res) {
 function warehouseProfile (req,res){
     req.data.warehouse = req.warehouse;
 
-    if (req.query.fromSearch && req.session.whSC && req.session.whSC.sc && req.session.whSC.sc.length > 0) {
+    if (req.query.fromSearch && req.session.search && Object.keys(req.session.search).length > 0) {
         req.data.minDurationOptions = local.config.minDurationOptions;
         req.data.temperatures = local.config.temperatures;
 		req.data.page = 'warehouse-profile';

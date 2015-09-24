@@ -85,6 +85,12 @@
 .content-box.map-container {
     .unit-margin-vertical(2);
     position:relative;
+    .footer.key{
+        .frozen-bonded-box,
+        .hot-chilled-box{
+            display:inline;
+        }
+    }
     .header{
         background-color:@secondary;
         h2 {
@@ -398,25 +404,79 @@
 		float:none;
 		display:block;
 	}
-    .content-box.map-container .header{ 
-        .lock-map-container{
-            position:absolute;
-            right:0;
-            margin-right:20px;
-            top:-5px;
-            button{
-                width:22%;
+    .content-box.map-container{ 
+        .header{
+            h2{
+                font-size:1.2rem;
+            }
+            .lock-map-container{
+                position:absolute;
+                right:0;
+                margin-right:20px;
+                top:-5px;
+                button{
+                    width:22%;
+                }
+            }
+            .tool-tip.hint--top{
+                margin-right: 164px !important;
+                margin-top: 2px !important;
             }
         }
-        .tool-tip.hint--top{
-            margin-right: 164px !important;
-            margin-top: 2px !important;
+        .footer.key{
+            em{
+                position:absolute;
+            }
+            .hot-chilled-box{
+                margin-left: 33px;
+                width:100%;
+                display:block;
+            }
+            .frozen-bonded-box{
+                margin-left: 33px;
+                width: 100%;
+                margin-top:5px;
+                display:block;
+                dd:nth-child(2){
+                    margin-right: 4.4rem;
+                    margin-right: 34px;
+                }
+            }
+            
         }
     }
-}
-
-.storage-matched{
-	
+    #search-results-table{
+        box-sizing: border-box;
+        display: block;
+        border-radius: 0;
+        table,thead,tbody,th,td,tr{
+            display:block;
+        }
+        thead tr{
+            position:absolute;
+            top:-9999px;
+            left:-9999px;
+        }
+        td:before{
+            border:none;
+            top:6px;
+            left:6px;
+            width: 45px;
+            padding-right:10px;
+            white-space:nowrap;
+        }
+        tr { border-bottom: 1px solid #d7d7d7;  max-width:100%; }
+        tr:last-of-type { border-bottom: 0; }
+        td { border:none; max-width:100%; word-wrap:break-word; }
+        td:before{ text-transform:uppercase; font-weight:bold;  }
+        td:nth-of-type(1) { display:none; }
+        td:nth-of-type(2):before { content: "Warehouse:"; }
+        td:nth-of-type(3):before { content: "Town:"; }
+        td:nth-of-type(4):before { content: "Distance (Miles):"; }
+        td:nth-of-type(5):before { content: "Weekly Price at Start Date (£ Per Pallet):"; }
+        td:nth-of-type(6):before { content: "In / Out Price (£ Per Pallet):"; }
+        td:nth-of-type(7):before { content: "Estimated Total Price:"; }
+    }
 }
 
 #search-results-table thead th:first-child{

@@ -62,7 +62,6 @@
                 for (var wcDate in warehouse.storageProfile)
                 { 
                     var storageProfile = warehouse.storageProfile[wcDate]%>
-                    <% console.log(storageProfile) %>
                 <tr class="animated <%= storageProfile.numPalletsLeft == 0 ? "full" : "not-full" %>">
                     <td class="week-commencing" data-week-commencing="<%= wcDate %>" ><%= utils.printFormatDate(new Date(wcDate)) %></td>
                     <td class="bar-container" >

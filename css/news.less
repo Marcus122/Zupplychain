@@ -51,8 +51,12 @@
 		padding-top: 2rem;
 		padding-bottom: 20px;
 		padding-bottom: 2rem;
+		position:relative;
 		.button.action.mini{
-			float: right;
+			position: absolute;
+			right: 0;
+			margin-right: 30px;
+			top: 33px;
 		}
 		span:nth-child(3){
 			font-size: .9em;
@@ -202,5 +206,25 @@
 	//top: -6px;
 	.container .news-home{
 		float: left;
+	}
+}
+
+@media @mobile{
+	#news .eight.columns,
+	#news .other-posts{
+		margin-left:0;
+		margin-left:0;
+		float:left;
+		padding:0 20px;
+	}
+	#news .main-footer .button.action.mini{
+		position:initial;
+		margin-right:0;
+		top:0;
+	}
+	.footer .container{
+		width: 75%;
+		padding: 0;
+		margin: 0;
 	}
 }

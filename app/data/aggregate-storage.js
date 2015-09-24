@@ -98,7 +98,7 @@ var aggregateStorage = function(theStorages, VolumeDiscounts) {
                 storagesThisWeek.splice(i,1);
             }
         }
-        storagesThisWeek.sort(function(x,y) { return x.price.toObject().price > y.price.toObject().price });
+        storagesThisWeek.sort(function(x,y) { return x.price.price > y.price.price });
         for (var i in storagesThisWeek) {
             var numPalletsInThisStorage = Math.min(storagesThisWeek[i].numSpaces, numPalletsLeft);
             storagesThisWeek[i].numPalletsStored = numPalletsInThisStorage;

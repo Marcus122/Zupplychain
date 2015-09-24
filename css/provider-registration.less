@@ -609,3 +609,50 @@ input.currency{
 .tool-tip{
 	line-height:20px;
 }
+
+@media @mobile{
+	.form-footer button{
+		margin-left:0;
+		margin-right:0;
+	}
+	.tabs li{
+		font-size: 1rem;
+		&:after{
+			font-size:13px;
+		}	
+	}
+	#define-space{
+		.content-box .main{
+			overflow:initial;
+			fieldset:first-of-type{
+				width:100%;
+			}
+		}
+	}
+	button[data-type="pricing"],
+	button[data-type="availability"]{
+		margin-left:0 !important;
+	}
+	button[data-type="pricing"]{
+		width: 49px;
+	}
+	.popup-window .popup-buttons .add{
+		margin-right:0;
+	}
+	.popup-window .popup-buttons .save button{
+		margin-left:10px;
+	}
+	td[data-th="Available Pallets"] .edit-data:before,
+	td[data-th="Pricing"] .edit-data:before{
+		content: 'ADD \a';
+		white-space: pre;
+	}
+	td[data-th="Available Pallets"].success .edit-data:before,
+	td[data-th="Pricing"].success .edit-data:before {
+		content: 'EDIT \a';
+		white-space: pre;
+	}
+	.open-tray-link{
+		font-size:1.5rem !important;
+	}
+}
