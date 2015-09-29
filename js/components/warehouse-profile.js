@@ -308,13 +308,15 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
         
         function initUseageProfileChange() {
             $(document).on("keyup", ".warehouse-pricing table input",function(evt){
-                var newNum = parseInt($(this).val()),
-                    $parentTd = $(this).closest('td.input-field'),
-                    $refresh = $parentTd.find('.refresh');
-                if (isNaN(newNum) || $refresh.length > 0) {
-                     return;
+                if ($(this).parent('td').parent('tr').parent('tbody').parent('table').find('button.refresh').length === 0){
+                    var newNum = parseInt($(this).val()),
+                        $parentTd = $(this).closest('td.input-field'),
+                        $refresh = $parentTd.find('.refresh');
+                    if (isNaN(newNum) || $refresh.length > 0) {
+                        return;
+                    }
+                    $(this).after('<button class="refresh highlight tiny"/>');
                 }
-                $(this).after('<button class="refresh highlight tiny"/>');
             });
             
             $(document).on("click", ".warehouse-pricing table tr td .refresh", function(evt){

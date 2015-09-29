@@ -67,13 +67,18 @@ exports.search_storage = function(query, cb) {
 exports.generateBlankUseageProfile = function(startDate, numWeeks, qty) {
     var dateKey = startDate.toISOString().substr(0,10);
         var useageProfile = {}
+        var useageProfileArray = [];
         useageProfile[dateKey] = qty;
+        useageProfileArray.push(useageProfile);
+        useageProfile = {};
         
         var startDateCopy = new Date(startDate.toISOString());
         for (var i = 1; i < numWeeks; i++) {
             Utils.addDays(startDateCopy,7);
             var key = startDateCopy.toISOString().substr(0,10);
             useageProfile[key] = qty;
+            useageProfileArray.push(useageProfile);
+            useageProfile = {};
         }
-    return useageProfile;
+    return useageProfileArray;
 }

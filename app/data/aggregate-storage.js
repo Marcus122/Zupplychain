@@ -123,8 +123,6 @@ var aggregateStorage = function(theStorages, VolumeDiscounts) {
         var weeklySubTotal                              = (highestPriceOfAnyStorageUsed.price * (numPallets));//even if the storage doesn't fit, calc the price as if it did as an estimate.
         var weeklySubTotalWithDiscount                  = weeklySubTotal * (1 - (filledStorageProfile.volumeDiscount / 100));
         filledStorageProfile.totalPrice                 = (weeklySubTotalWithDiscount + totalHandlingCharge);
-        //console.log("storage Profile for week: #####################################");
-        //console.log(filledStorageProfile);
         return filledStorageProfile;
         
         function getVolumeDiscount(numPallets) {
@@ -146,16 +144,18 @@ var aggregateStorage = function(theStorages, VolumeDiscounts) {
         var weeklyProfilesIndexedByDate = {};
         var firstTimeThrough = true;
         var palletsRequiredLastWeek = 0;
-        for (var i in useageProfile) {
-            var numPallets = useageProfile[i];
-            var wcDate = Date.parse(i);
-            var thisWeekProfile = getStorageProfileForWeekCommencing(wcDate, numPallets, palletsRequiredLastWeek);
-            weeklyProfilesIndexedByDate[i] = thisWeekProfile;
-            if (firstTimeThrough) {
-                firstWeekProfile =  weeklyProfilesIndexedByDate[i]
-                firstTimeThrough = false;
+        for (var i = 0; i<useageProfile.length; i++){//We have to loop in reverse because Mongo is storing the usage profile in descending profile
+            for (var key in useageProfile[i]) {
+                var numPallets = useageProfile[i][key];
+                var wcDate = Date.parse(key);
+                var thisWeekProfile = getStorageProfileForWeekCommencing(wcDate, numPallets, palletsRequiredLastWeek);
+                weeklyProfilesIndexedByDate[key] = thisWeekProfile;
+                if (firstTimeThrough) {
+                    firstWeekProfile =  weeklyProfilesIndexedByDate[key]
+                    firstTimeThrough = false;
+                }
+                palletsRequiredLastWeek = numPallets;
             }
-            palletsRequiredLastWeek = numPallets;
         }
         return weeklyProfilesIndexedByDate;   
     }

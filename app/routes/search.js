@@ -197,27 +197,33 @@ function updateUseageProfileAndLoadWarehouse(req,res, next) {
         var newUseageProfile = getUseageProfileFromRequest(req);
         var indexOfRowThatChanged = 0;
         var newValueOfRowThatChanged = 0;
-        for (var i in newUseageProfile) {
-            indexOfRowThatChanged = i;//for now we can only change one row at a time so we only need to store one index.
-            newValueOfRowThatChanged = newUseageProfile[i];
-            if (i in currentUseageProfile) {
-                currentUseageProfile[i] = newUseageProfile[i];
+        for (var i = 0; i<newUseageProfile.length; i++) {
+            for (var key in newUseageProfile[i]){
+                newValueOfRowThatChanged = newUseageProfile[i][key];
+                for (var j = 0; j<currentUseageProfile.length; j++){
+                    if (key in currentUseageProfile[j]) {
+                        currentUseageProfile[j][key] = newUseageProfile[i][key];
+                        indexOfRowThatChanged = j;//for now we can only change one row at a time so we only need to store one index.
+                    }
+            }
             }
         }
         
         
         var weekNo = 0;
         //we look at the row that changed, and cascade that volume down to lower rows... this is a UI requirement.
-        for ( var k in currentUseageProfile) {
-            if (weekNo == 0) { //while we're here, we grab the first week pallet useage if it changed and update the search criteria totalPallets with this value.
-                if (indexOfRowThatChanged == k) {
-                    sessionQuery.totalPallets = newUseageProfile[k];
+        for ( var k = 0; k<currentUseageProfile.length; k++) {
+            for (var l in currentUseageProfile[k]){
+                if (weekNo == 0) { //while we're here, we grab the first week pallet useage if it changed and update the search criteria totalPallets with this value.
+                    if (indexOfRowThatChanged == k) {
+                        sessionQuery.totalPallets = newUseageProfile[k][l];
+                    }
                 }
+                if (new Date(l) > new Date(key)) {
+                    currentUseageProfile[k][l] = newValueOfRowThatChanged;
+                }
+                weekNo++;
             }
-            if (new Date(k) > new Date(i)) {
-                currentUseageProfile[k] = newValueOfRowThatChanged;
-            }
-            weekNo++;
         }
         sessionQuery.useageProfile = currentUseageProfile;
         warehouseController.getById(warehouseId, function(err, warehouse){
@@ -234,8 +240,11 @@ function getUseageProfileFromRequest(req) {
     var wcDate = new Date(req.body["wcDate"]);
     var newValue = parseInt(req.body["numPallets"]);
     var entry = {}
+    var entryArr = [];
     entry[wcDate.toISOString().substr(0,10)] = newValue;
-    return entry;
+    entryArr.push(entry);
+    entry = {};
+    return entryArr;
 }
 
 function getQueryFromRequest(req) {

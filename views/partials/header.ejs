@@ -12,7 +12,11 @@
 	<%if (user.email != undefined){%>
 		<nav class="user-links">
 			<p><span>Signed in as:</span><br/><span><%=user.email%></span></p>
-            <p><a href="/logout">signout</a>
+            <p><a href="/logout">Signout</a></p>
+		</nav>
+	<%}else{%>
+		<nav class="user-links">
+			<p><a href="/login">Login</a></p>
 		</nav>
 	<%}%>
 	</aside>

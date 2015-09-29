@@ -85,7 +85,7 @@
 							<fieldset class="main warehouse-details">
 								<div class="input-field">
 									<label for="description">Company and Warehouse Description</label>
-									<textarea id="description" name="description" placeholder="A short description about your company and warehouse"><%=warehouse.description%></textarea>
+									<textarea id="description" name="description" placeholder="A short description about your company and warehouse" data-loom-validators="complexTelephoneNumber"><%=warehouse.description%></textarea>
 								</div>
 								<div class="row">
 									<div class="input-field columns four small-input">
@@ -147,8 +147,8 @@
 							<fieldset class="main warehouse-documents">
 								<p>Upload any profile images and or quality assurance documents below.</p>
 								<div class="row documents">
-									<label  class="columns five" for="photos">Upload Warehouse Photos</label>
-									<input class="columns five" type="file" id="photos"/>
+									<label  class="columns three" for="photos">Upload Warehouse Photos</label>
+									<input class="columns seven" type="file" id="photos"/>
 									<div class="columns one">
 										<button id="add-photo" type="button" class="attach primary mini"><span>add</span></button>
 									</div>
@@ -181,16 +181,10 @@
 											<label for="docs">Upload Documents</label>
 											<div class="tool-tip hint--top" data-hint="Upload files here such as Insurance Certificates, ISO 14001, Fire Safety/Sprinkler Documentation, Operator License">?</div>
 										</div>
-										<!--<select class="columns three" id="doc-type">
-											<option>Insurance Certificate</option>
-											<option>ISO 14001</option>
-											<option>Fire Safety/Sprinkle documentation</option>
-											<option>Operator License</option>
-										</select>-->
-										<div class="input-field columns three file-title">
+										<input class="columns three" type="file" id="docs"/>
+										<div class="input-field columns five file-title">
 											<input type="text" name="file-title" placeholder="Title"/>
 										</div>
-										<input class="columns five" type="file" id="docs"/>
 										<div class="columns one">
 											<button id="add-document" type="button" class="attach primary mini"><span>add</span></button>
 										</div>

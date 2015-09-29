@@ -1,0 +1,47 @@
+<div data-view="admin" class="dashboard-container columns nine" style="display:none">
+	<form method="post" action="/save-details" id="save-details-form" novalidate="novalidate" class="loom-form">
+		<div class="secondary content-box">
+			<div class="header">
+				<h3>Admin</h3>
+			</div>
+			<fieldset class="main">
+				<div class="columns six">
+					<div class="input-field">
+						<label for="name">Name</label>
+						<input type="text" name="name"/>
+					</div>
+					<div class="input-field">
+						<label for="company-name">Company Name</label>
+						<input type="text" name="company-name"/>
+					</div>
+					<div class="input-field">
+						<label for="telephone">Telephone</label>
+						<input type="tel" name="telephone"/>
+					</div>
+					<div class="input-field">
+						<label for="addr-1">Address Line 1</label>
+						<input type="text" name="addr-1"/>
+					</div>
+				</div>
+				<div class="columns six">
+					<div class="input-field">
+						<label for="password">Password</label>
+						<input type="password" name="password"/>
+					</div>
+					<div class="input-field">
+						<label for="email">Email</label>
+						<input type="text" name="email" value="<%=user.email%>"/>
+					</div>
+					<div class="input-field">
+						<label for="mobile">Mobile</label>
+						<input type="tel" name="telephone"/>
+					</div>
+					<div class="input-field">
+						<label for="postcode">Postcode</label>
+						<input type="text" name="postcode" data-loom-validators="UKPostCode"/>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+	</form>
+</div>

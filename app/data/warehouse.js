@@ -47,7 +47,8 @@ var fields = {
 		perc:Number
 	}],
     rating: {type: Number},
-    documents: Schema.Types.Mixed
+    documents: Schema.Types.Mixed,
+    contacts: {type: Schema.ObjectId, ref: 'warehouseContacts' }
 };
 
 var warehouseSchema = new Schema(fields);
@@ -76,6 +77,7 @@ warehouseSchema.statics = {
 		this.findOne({ _id : id })
 		  .populate('storage')
 		  .populate('user')
+      .populate('contacts')
 		  .exec(cb);
   },
   loadByUser: function(user,cb){

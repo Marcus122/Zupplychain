@@ -5,8 +5,25 @@
 	</div>
 	<section>
 		<div class="main">
+			<div id="vertical-nav" class="columns two">
+				<ul>
+					<li data-view="admin"><a href="#admin">Admin</a></li>
+					<li data-view="warehouses"><a href="#warehouses">Warehouses</a></li>
+					<li data-view="contacts"><a href="#contacts">Contacts</a></li>
+					<li data-view="users"><a href="#users">Users</a></li>
+				</ul>
+			</div>
+			<% include ./partials/dashboard/tiles %>
+			<% include ./partials/dashboard/admin %>   
+			<% include ./partials/dashboard/warehouses %>
+			<% include ./partials/dashboard/contacts %>
 		</div>
 	</section>
+	<div class="continue-links footer form-footer">
+	<div class="container">
+		<a href="/" class="button simple news-home">home</a>
+    	<button class="action mini" style="display:none">save</button>
+	</div>
 </main>	
 <% include ./partials/bottom %>   
 <!--<main class="dashboard">

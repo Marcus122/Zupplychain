@@ -79,9 +79,13 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			var $form = $popup.find('form');
 			lm.rebind($form);
 			var form = lm.getForm($form.attr('id'));
-			form.addOnSuccessCallback(function(){
-				data.registered=true;
-				closePopup();
+			form.addOnSuccessCallback(function(result){
+				if (result.message !== undefined){
+					Alerts.showErrorMessage(result.message);
+				}else{
+					data.registered=true;
+					closePopup();
+				}
 			});
 		}
 		function completeRegistration(){
@@ -94,8 +98,10 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			lm.rebind($form);
 			var form = lm.getForm($form.attr('id'));
 			form.addOnSuccessCallback(function(data){
-				if (typeof data.redirect == 'string'){
+				if (typeof data.redirect == 'string' && typeof data.redirect !== 'undefined'){
 					window.location = data.redirect;
+				}else if (data.message !== undefined){
+					Alerts.showErrorMessage(data.message);
 				}else{
 					closePopup();
 				}
@@ -232,6 +238,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 						$('#upload-documents').append($uploadTemplate);
 						documentTitles.push($('input[name="file-title"]').val());
 						documents.push($("#docs").prop("files"));
+						$(this).closest('#document-area').find('input[name="file-title"]').val("");
 					}else{
 						$(this).closest('#document-area').find('.input-field.file-title').addClass('error').addClass('error-required');
 					}

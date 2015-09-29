@@ -13,7 +13,10 @@ var fields = {
 	contact: {type:String},
 	active: { type: Boolean, default: false },
 	created: { type: Date , default: Date.now },
-	type: {type: Number}
+	type: {type: Number},
+	mastersContacts: [{name: String,
+					   email: String,
+					   phoneNumber: Number }]
 };
 
 var userSchema = new Schema(fields);
@@ -29,5 +32,10 @@ userSchema.methods.getWarehouses = function(cb){
 }
 function setPassword(password){
     return passwordHash.isHashed(password) ? password : passwordHash.generate(password);
+}
+userSchema.statics = {
+	loadByEmail: function(email,cb){
+		this.find({'email':email}).exec(cb);
+	}
 }
 module.exports = mongoose.model('users', userSchema);

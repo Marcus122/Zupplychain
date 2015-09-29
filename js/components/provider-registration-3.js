@@ -283,7 +283,9 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
             }else{
                 date = new Date();
             }
-            data.from = date.toISOString().substring(0, 10);
+            if (templateName !== 'pricing-row'){
+                data.from = date.toISOString().substring(0, 10);
+            }
             var $newrow = template.bind(data);
             var $totalPalletsInput = $newrow.find("input[name='total']"); 
             if ($totalPalletsInput.length > 0) {
@@ -352,10 +354,10 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			lm.rebind($form);
 			var form = lm.getForm($form.attr('id'));
 			form.addOnSuccessCallback(function(data){
-				if (typeof data.redirect == 'string'){
+				if (typeof data.redirect == 'string' && typeof data.redirect !== 'undefined'){
 					window.location = data.redirect;
-				}else{
-					closePopup();
+				}else if (data.message !== undefined){
+					Alerts.showErrorMessage(data.message);
 				}
 			});
 		}
@@ -490,13 +492,46 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         
         $("#save-and-finish").click(function(ev) {
             clearSkipMarkerRows();
+            if(checkBasicPricingAndAvailabilityPopulated() === false){
+                callPAndAWarningPopup();
+            }else{
+                saveAndRegisterOrRedirect($(this).data('redirect'));
+            }
+        });
+        
+        $(document).on('click','button[name="acepted-p-and-a-terms"]',function(ev) {
+             $(this).closest('.popup-window').hide();
+             saveAndRegisterOrRedirect($('#save-and-finish').data('redirect'));
+        });
+        
+        function checkBasicPricingAndAvailabilityPopulated(){
+            var inputs = [$('input[name="standard-pricing-price"]'),$('input[name="standard-pricing-handling-charge"]'),$('.availability-table tr input[name="from"]'),$('.availability-table tr input[name="inUse"]'),$('.availability-table tr input[name="to"]')];
+            var allPopulated = true;
+            for (var i = 0; i<inputs.length; i++){
+                $(inputs[i]).each(function(){
+                    if ($(this).val() === ""){
+                        allPopulated = false;
+                    }
+                });
+            }
+            return allPopulated;
+        }
+        
+        function saveAndRegisterOrRedirect(redirectLink){
             if ($('input[name="user-active"]').val() === "true"){
-                saveEverything(redirectToURL($(this).data('redirect')));
+                saveEverything(redirectToURL(redirectLink));
             }else if($('input[name="user-active"]').val() === "false"){
                 saveEverything(completeRegistration);
             }
             //then check for error and redirect to next page.
-        });
+        }
+        
+        function callPAndAWarningPopup(){
+            var completeTemplate = templates.getTemplate("p-and-a-warning");
+            var $popup = completeTemplate.getElement();
+            $('body').append($popup);
+            centerPopup($popup);
+        }
         
         function redirectToURL(url){
             window.location.href = url;
@@ -527,7 +562,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         function shouldIgnoreThisRow($tr){
             $inputs = $($tr).find("input").not("input[name='from']").not(":disabled");
              for (var i=0;i<$inputs.length;i++) {
-                 if ($($inputs[i]).val() != "") {
+                 if ($($inputs[i]).val() !== "") {
                      
                      return false;
                  }
@@ -537,14 +572,15 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         }
         
         function shouldIgnoreTheseInputs(inputs){
+             var ignore = true;
              for (var i=0;i<inputs.length;i++) {
-                 if ($(inputs[i]).val() != "") {
-                     
-                     return false;
+                 if ($(inputs[i]).val() === "") {
+                     console.log("found a inputs to ignore");
+                     return true;
                  }
              }
-             console.log("found a inputs to ignore");
-             return true;
+             
+             return false;
         }
         
         function markThisRowToBeSkipped($row) {
@@ -691,11 +727,15 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                 var $avail = $fieldset.find(".js-availability-inputs-container");
                 var formId = $avail.closest("form").attr("id");
                 var $rows = $avail.find(".js-single-availability-inputs-container");
-                // for (var i =0;i<$rows.length;i++){
-                //     if (shouldIgnoreThisRow($rows[i])) {
-                //         markThisRowToBeSkipped($rows[i]);
-                //     } 
-                // }
+                var inputs = [];
+                for (var i = 0; i<$rows.length; i++){
+                    inputs.push($($rows[i]).find('input[name="from"]'));
+                    inputs.push($($rows[i]).find('input[name="to"]'));
+                    inputs.push($($rows[i]).find('input[name="inUse"]'));
+                }
+                if (shouldIgnoreTheseInputs(inputs)) {
+                    markTheseInputsToBeSkipped(inputs);
+                } 
                 lm.rebind($('#'+formId));
                 if (lm.isFormValid(formId)) {
                     var $rowsToProcess = getRowsWithoutSkipped($rows);

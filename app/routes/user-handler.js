@@ -1,6 +1,7 @@
 var user_controller = require("../controllers/users.js"),
-	local = require("../local.config.js");
-
+	local = require("../local.config.js"),
+	User = require("../controllers/users.js");
+	
 var handler = function(app) {
   app.post('/update-user', function(req, res) {
         console.log("in update user");
@@ -27,7 +28,33 @@ var handler = function(app) {
 		  });
 	  }
   });
+  
+  
+	app.get('/login',function(req,res){
+		res.render("login",req.data);
+	});
+	app.post('/login-user',login,function(req,res){
+		setResponse('Login Success',res);
+	});
+	app.get('/logout',logout,function(req,res){
+		res.redirect("/");
+	});
 };
+
+function logout(req,res,next) {
+    User.logout(req, res, function(err, cb){
+        next();
+    });
+}
+function login(req,res,next){
+    User.login(req, res, function(err, cb){
+		if (!err){
+        	next();
+		}else{
+			setResponse("The email address or password was incorrect",res);
+		}
+    });
+}
 
 function createUser(req,res,cb){
     if(!req.body.email || !req.body.password){

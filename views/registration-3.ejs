@@ -47,7 +47,7 @@
 													if(Number(storage.basicPricing.price) > 0){
 														pricingComplete=true;
 													}
-													if(storage.pallets && storage.pallets.length > 0){
+													if(storage.pallets && storage.pallets.length > 0 && storage.pallets[0].inUse !== null && storage.pallets[0].to !== ""){
 														palletsComplete=true;
 													}
 												%>
@@ -466,3 +466,7 @@
 		 <script type="text/template" id="pallet-row">
 		    <% include ./partials/pallet-row%> 
 		 </script>
+		 <script type="text/template" id="p-and-a-warning">
+		    <% include ./partials/pricing-and-availability-warning%> 
+		 </script>
+		 

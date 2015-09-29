@@ -56,8 +56,11 @@ function completeRegistration(req,res){
 	req.data.user.type = req.body["user-type"];
 	User.register(req.data.user,function(err){
 		if(err){
-			var backURL=req.header('Referer') 
-			return backURL ? res.redirect(backURL) : redirectToStart(res);
+			//var backURL=req.header('Referer') 
+		    //return backURL ? res.redirect(backURL) : redirectToStart(res);
+			res.writeHead(200, {"Content-Type": "application/json"});
+			res.end(JSON.stringify(err));
+			return;
 		}else{
 			res.send({redirect: '/registration-complete'});
 		}

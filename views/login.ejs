@@ -1,33 +1,54 @@
  <% include ./partials/top %>   
-            
-	<main>
+	<main id="login">
+		<div class="banner">
+			<h1>Login</h1>
+		</div>
 		<section>
-			<form method="post" action="/login" class="provider-form loom-form" data-loom-no-ajax="true" novalidate>
+			<form class="loom-form" action="/login-user" id="login-form" novalidate>
 				<div class="main">
 					<div class="content-box primary">
 						<div class="header">
 							<h3>Login</h3>
 						</div>
 						<fieldset class="main">
-							<div>
-								<div class="input-field">
-									<label for="name">Email*</label><input type="email" name="email" id="email" required>
+							<div class="main-container">
+								<div class="columns six">
+									<div class="input-field">
+										<label for="name">Email*</label><input type="email" name="email" id="email" required>
+									</div>
 								</div>
-								<div class="input-field">
-									<label for="email">Password*</label><input type="password" name="password" id="password" required>
-								</div>
-								<div>
-									<button class="action primary">Login</button>
+								<div class="columns six">
+									<div class="input-field">
+										<label for="email">Password*</label><input type="password" name="password" id="password" required>
+									</div>
+									<div class="button-container">
+										<a class="forgot-password text-link" href="#" >Forgot your passwords</a>
+										<button class="action primary">Login</button>
+									</div>
 								</div>
 							</div>
 							<% if( typeof loginFailed != "undefined" && loginFailed ){%>
 								<p>Login Failed</p>
 							<%}%>
+								<div class="not-registered-container">
+									<div class="columns six not-registered">
+										<p>Not Registered?</p>
+										<a href="/search" class="text-link">I am a user and I would like to book a space</a>
+									</div>
+									<div class="columns six not-registered">
+										<a href="/provider-registration-1" class="text-link">I am a provider and I would like to offer storage space</a>
+									</div>
+								</div>
 						</fieldset>
 					</div>
 					<p>*Required Fields</p>
 				</div>
 			</form>
 		</section>
+		<div class="continue-links footer form-footer">
+			<div class="container">
+				<a href="/" class="button simple home">home</a>
+			</div>
+		</div>
 	</main>
  <% include ./partials/bottom %>   

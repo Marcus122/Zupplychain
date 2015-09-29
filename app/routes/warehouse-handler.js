@@ -259,6 +259,7 @@ function batchStorage(req,res){
 		},function(err){
 			if(!err){	
 				req.warehouse.storage=storageArr;
+				req.warehouse.active=true;
 				req.warehouse.save(function(){
 					setResponse(req,res);
 				});

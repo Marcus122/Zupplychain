@@ -26,6 +26,11 @@ require(["jquery"], function($) {
                Search();
             });   
         }
+        if (onPage("login") || onPage("dashboard")){
+            require(["components/dashboard"], function(Dashboard) {
+               Dashboard();
+            });   
+        }
 		if (onPage("provider-registration-1") || onPage("provider-registration-2") || onPage("provider-registration-3")){
 			require(["components/provider-registration"],function(Registration){
 				Registration();

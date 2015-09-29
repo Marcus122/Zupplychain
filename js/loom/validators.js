@@ -162,6 +162,15 @@ define({
         return (thisYear < inputYear || (thisYear == inputYear && thisMonth < inputMonth) );
         
     },
+	complexTelephoneNumber : function(input){
+		var re = /\b[\d\+][\d\s\-\(\)]{6,}\d\b/;
+		var isPhoneNumberInInput =  re.test(input);
+		if (isPhoneNumberInInput === true){
+			return false;
+		}else{
+			return true;
+		}
+	},
 	
 	//Complex ones
 	getRequiredWhenOtherFieldSetValidator : function(otherInputField) {

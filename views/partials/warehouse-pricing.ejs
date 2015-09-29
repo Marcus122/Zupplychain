@@ -59,13 +59,14 @@
                 <% 
                 var runningTotal = 0;
                 var useageProfile = warehouse.useageProfile;
+                var index = 0;
                 for (var wcDate in warehouse.storageProfile)
                 { 
                     var storageProfile = warehouse.storageProfile[wcDate]%>
                 <tr class="animated <%= storageProfile.numPalletsLeft == 0 ? "full" : "not-full" %>">
                     <td class="week-commencing" data-week-commencing="<%= wcDate %>" ><%= utils.printFormatDate(new Date(wcDate)) %></td>
                     <td class="bar-container" >
-                        <div data-pallets-required="<%=useageProfile[wcDate] %>" class="useage-marker"></div>
+                        <div data-pallets-required="<%=useageProfile[index][wcDate]%>" class="useage-marker"></div>
                         <div class="bar <%= storageProfile.numPalletsLeft == 0 ? "full" : "not-full" %>" data-value="<%= storageProfile.numPalletsStored%>">
                         <%= storageProfile.numPalletsLeft == 0 ? "OK" : storageProfile.numPalletsStored %></div>
                     </td>
@@ -81,10 +82,10 @@
                     }%>
                     <td class="<%= !quoteView && "input-field" || "" %> no-success-validation-style">
                     <% if (quoteView) { %>
-                        <span><%=useageProfile[wcDate]%></span>
+                        <span><%=useageProfile[labels.indexOf('wcDate')][wcDate]%></span>
                     <% } else { %>
                         
-                            <input data-loom-type="number" data-start-date="<%= wcDate %>" type="text" value="<%=useageProfile[wcDate]%>" />
+                            <input data-loom-type="number" data-start-date="<%= wcDate %>" type="text" value="<%=useageProfile[index][wcDate]%>" />
                          
                     <% } %>
                     </td>
@@ -98,6 +99,7 @@
                 </tr>
                 <%
                         runningTotal += storageProfile.totalPrice;
+                        index ++;
                 } //end for
                 %>
             </tbody>

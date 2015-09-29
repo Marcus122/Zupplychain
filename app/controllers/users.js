@@ -24,12 +24,9 @@ exports.login = function(req,res,cb){
 	var loginFailed={error:"login failed"};
 	if(!req.body.email || !req.body.password) return cb(loginFailed);
 	User.findOne({email:req.body.email,active:true},function(err,user){
-        console.log("logging in");
-        console.log(req.body.email);
 		if(err || !user){
 			return cb(loginFailed);
 		}else{
-            console.log("username looks ok");
 			if( passwordHash.verify(req.body.password,user.password ) ){
 				setCookie(user,req,res);
 				cb(null,user);
@@ -49,29 +46,42 @@ exports.register = function(user,cb){
 	if(!user.email || !user.password){
 		return cb({error:"required fields"});
 	}
-	user.active=true;
-	//Activate each warehouse
-	//Dont need to wait for warehouses to update
-	user.getWarehouses(function(warehouses){
-		warehouses.forEach(function(warehouse){
-			warehouse.active=true;
-			warehouse.save();
-		});
-	});
-	user.save(function(err){
-		if(!err){	 
-			cb(null);
+	User.loadByEmail(user.email,function(err,results){
+		if(!err && results.length > 0){
+			return cb({message:"Email Address Already Exists"});
 		}else{
-			cb(err);
+			user.active=true;
+			//Activate each warehouse
+			//Dont need to wait for warehouses to update
+			user.getWarehouses(function(warehouses){
+				warehouses.forEach(function(warehouse){
+					warehouse.active=true;
+					warehouse.save();
+				});
+			});
+			user.save(function(err){
+				if(!err){	 
+					cb(null);
+				}else{
+					cb(err);
+				}
+			});
 		}
 	});
 }
 exports.update = function(user,cb){
-	user.save(function(err){
-		if(!err){
-			cb(null,user);
+	User.loadByEmail(user.email,function(err,results){
+		if(!err && results.length > 0){
+			return cb({message:"Email Address Already Exists"});
 		}else{
-			cb(err);
+			user.active=true;
+			user.save(function(err){
+				if(!err){
+					cb(null,user);
+				}else{
+					cb(err);
+				}
+			});
 		}
 	});
 }
