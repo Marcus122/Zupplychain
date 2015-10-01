@@ -445,6 +445,19 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
             if (!wasOpen) {
                 $traysToOpen.addClass("open");
                 $buttonThatWasClicked.closest(".button-cell").addClass("open");
+                if ($buttonThatWasClicked.data('type') === 'pricing'){
+                    if (checkSectionCompleted([$inUse,$to,$from])){
+                        $buttonThatWasClicked.closest(".button-cell").next('.button-cell').addClass("success");
+                    }else{
+                        $buttonThatWasClicked.closest(".button-cell").next('.button-cell').removeClass("success");
+                    } 
+                }else if($buttonThatWasClicked.data('type') === 'availability'){
+                    if (checkSectionCompleted([$price,$handlingCharge])){
+                        $buttonThatWasClicked.closest(".button-cell").prev('.button-cell').addClass("success");
+                    }else{
+                        $buttonThatWasClicked.closest(".button-cell").prev('.button-cell').removeClass("success");
+                    }  
+                }
             }else{
                 if ($buttonThatWasClicked.data('type') === 'pricing'){
                     if (checkSectionCompleted([$price,$handlingCharge])){
@@ -469,6 +482,11 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
             $trayHolderToOpen.find(".open-tray-link").removeClass("open");
             $trayHolderToOpen.find("div").first().find(".tray").addClass('open');
             $trayHolderToOpen.find("div").first().find(".open-tray-link").addClass("open");
+            
+            if ($trayHolderToOpen.find("form:nth-child(2)").find('div').first()){ //If it has two inner trays
+                $trayHolderToOpen.find("form:nth-child(2)").find('div').first().find('.tray').addClass('open');
+                $trayHolderToOpen.find("form:nth-child(2)").find('div').first().find(".open-tray-link").addClass('open');
+            }
             
         }
         

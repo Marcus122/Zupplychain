@@ -42,6 +42,10 @@ require(["jquery"], function($) {
             });
         }
         
+        $('input[type="date"]').click(function (){
+            $(this).datepicker().show();
+        });
+        
 	}
 	
 });

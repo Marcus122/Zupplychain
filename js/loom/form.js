@@ -64,10 +64,11 @@ define(["jquery", "./formField", "./loomConfig"],function($, FormField, Config){
 	   setupRadioInputs();
 	   setupFieldDependentValidators();
 	   setupConfirmationValidators();
-        setupFieldCompareValidators();
-        setupAutoPopulationOnSelection();
-        setupCopyOnCheck();
-        disableIfDisableOnLoadSet();
+       setupFieldCompareValidators();
+       setupAutoPopulationOnSelection();
+       setupCopyOnCheck();
+       disableIfDisableOnLoadSet();
+       setupFieldDoesNotMatchValidators();
         
         //TODO if we try to submit an invalid form, an invalid message appears.
         // if we then fill out the fields correctly, when we come back to the bottom of the form the messages is still there.
@@ -213,6 +214,17 @@ define(["jquery", "./formField", "./loomConfig"],function($, FormField, Config){
 					continue;
 				}
 				fields[i].setupFieldCompareValidators(getFieldByName(otherFieldName));
+			}
+		}
+        
+        function setupFieldDoesNotMatchValidators() {
+			var lim = fields.length;
+			for(var i = 0;i < lim; i++) {
+				var otherFieldName = fields[i].getNameOfDoesNotMatchField();
+				if (!otherFieldName) {
+					continue;
+				}
+				fields[i].setupFieldDoesNotMatchValidators(getFieldByName(otherFieldName));
 			}
 		}
         

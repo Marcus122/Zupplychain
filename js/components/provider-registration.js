@@ -28,6 +28,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			var $window = $(window);
 			var diff = $window.height() - $element.height();
 			var top = diff < 0 ? $window.scrollTop() + 25 : $window.scrollTop() + diff/2;
+			//var top = (screen.height/2) - (window.screen.availHeight/2);
 			if(top > 100){
 				top-=50;
 			}					
@@ -127,6 +128,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				saveWarehouse(function(result){
 					//var checkResult = checkSaveWarehouseResultAndGetMsg(result);
 					if (result.error === false || result.error === null){
+						
 						uploadFiles(result.data._id,function(result){
 							if(result.error === false || result.error === null){
 								window.location = $registration.attr('action');
@@ -147,6 +149,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				saveWarehouse(function(result){
 					//var checkResult = checkSaveWarehouseResultAndGetMsg(result);
 					if (result.error === false || result.error === null){
+						$('fieldset.form-footer a.tandc').after('<input name="id" value="' + result.data._id + '" type="hidden"/>')
 						uploadFiles(result.data._id,function(result){
 							if(result.error === false || result.error === null){
 								saveRegistration();
@@ -162,6 +165,20 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 						}
 					}
 				});
+			});
+			$registration.find('textarea[name="description"]').blur(function(){
+				if($(this).closest('.input-field').hasClass('error-complexTelephoneNumberNotInInput')){
+					$(this).parent().attr('data-hint','The description cannot contain phone numbers');
+				}else if(!$(this).closest('input-field').hasClass('error-complexTelephoneNumberNotInInput')){
+					$(this).parent().removeAttr('data-hint');
+				}
+				
+			});
+			$registration.find('textarea[name="description"]').keyup(function(){
+				if(!$(this).closest('input-field').hasClass('error-complexTelephoneNumberNotInInput')){
+					$(this).parent().removeAttr('data-hint');
+				}
+				
 			});
 			function checkSaveWarehouseResultAndGetMsg(warehouseResult){
 				var result;
@@ -200,44 +217,50 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			}
 			var $addPhoto = $('#add-photo');
 			var $uploadPhoto = $('#photos');
+			var $uploadDoc = $('#docs');
 		    var $defaultPhotoInput = $("input#deafultPhoto");
 			var $photoArea = $('#upload-photos');
 			var $addDocument = $('#add-document');
 			var $documentArea = $('#upload-documents');
 			$addPhoto.on("click",function(ev){
 				ev.preventDefault();
+				var index = 0;
 				var files = $uploadPhoto.prop("files");
 				if(!files) return;
 				sendFile(files,function(data){
 					if(!warehouse.photos) warehouse.photos=[];
+					index = images.length;
 					images.push($uploadPhoto.prop("files"));
+					$uploadPhoto.val("");
 					var template = templates.getTemplate("warehouse-image");
 					photosAdded = true;
 					for(var i in data){
 						var image = data[i];
 						image.file = '/images/tmp/' + data[i].name;
 						var $image = template.bind( image );
+						$image.attr('data-image-index',index)
 						imageTempLocations.push('./images/tmp/' + data[i].name);
-                       $("#defaultPhoto").val(image.name);
-                       $(".document").removeClass("isDefault");
-                       console.log($image);
+						if ($photoArea.find('.isDefault').length === 0){
+							$("#defaultPhoto").val(image.name);
+							$(".document").removeClass("isDefault");
+							$image.find('.image').parent().addClass("isDefault");
+						}
 						$photoArea.append($image);
-                       $image.find('.image').parent().addClass("isDefault");
-						//$uploadPhoto.val("");
 					}
 				});
 			});
 			$addDocument.click(function(){
-				if($("#docs").prop("files").length > 0){
+				if($uploadDoc.prop("files").length > 0){
 					if($(this).closest('#document-area').find('input[name="file-title"]').val() !== ""){
 						$(this).closest('#document-area').find('.input-field.file-title').removeClass('error').removeClass('error-required');
 						var uploadTemplate = templates.getTemplate("upload-document");
 						var $uploadTemplate = uploadTemplate.bind(data);
 						$uploadTemplate.find(".file-name").html($('input[name="file-title"]').val())
-						$uploadTemplate.attr('data-index',documents.length)
+						$uploadTemplate.attr('data-doc-index',documents.length)
 						$('#upload-documents').append($uploadTemplate);
 						documentTitles.push($('input[name="file-title"]').val());
-						documents.push($("#docs").prop("files"));
+						documents.push($uploadDoc.prop("files"));
+						$uploadDoc.val("");
 						$(this).closest('#document-area').find('input[name="file-title"]').val("");
 					}else{
 						$(this).closest('#document-area').find('.input-field.file-title').addClass('error').addClass('error-required');
@@ -249,20 +272,35 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			})
 			$photoArea.on("click",".trash-button",function(ev){
 				ev.preventDefault();
+				var index = parseInt($(this).closest('.document').attr('data-image-index'));
+				images.splice(index,1);
+				imageTempLocations.splice(index,1);
+				$('div[data-image-index]').each(function(){
+					var oldIndex = parseInt($(this).attr('data-image-index'));
+					if (oldIndex > index){
+						oldIndex --;
+						$(this).removeAttr('data-image-index');
+						$(this).attr('data-image-index',oldIndex);
+					}
+				})
+				if ($(this).closest('.row.document').hasClass('isDefault')){
+					$(this).closest('.row.document').next().addClass('isDefault');
+					$("#defaultPhoto").val($(this).closest('.row.document').next().find('.file-name').text());
+				}
 				$(this).closest('.document').remove();
 				//Check Photos added
 			});
 			$documentArea.on("click",".trash-button",function(ev){
 				ev.preventDefault();
-				var index = parseInt($(this).closest('.document').attr('data-index'));
+				var index = parseInt($(this).closest('.document').attr('data-doc-index'));
 				documents.splice(index,1);
 				$(this).closest('.document').remove();
-				$('div[data-index]').each(function(){
-					var oldIndex = parseInt($(this).attr('data-index'));
+				$('div[data-doc-index]').each(function(){
+					var oldIndex = parseInt($(this).attr('data-doc-index'));
 					if (oldIndex > index){
 						oldIndex --;
-						$(this).removeAttr('data-index');
-						$(this).attr('data-index',oldIndex);
+						$(this).removeAttr('data-doc-index');
+						$(this).attr('data-doc-index',oldIndex);
 					}
 				})
 			})

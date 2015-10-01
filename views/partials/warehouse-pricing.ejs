@@ -106,14 +106,14 @@
         </table>
         </form>
     </div>
-    <div class="change-warehouse-profile-row-number">
-        <button class="view-more action">View More Weeks</button>
-        <button class="view-less action">View Less Weeks</button>
-    </div>
     <div class="row">
         <div class="six columns">
        <% include ./volume-discount-table %>
         </div>
+    <div class="change-warehouse-profile-row-number">
+        <button class="view-more action">View More Weeks</button>
+        <button class="view-less action">View Less Weeks</button>
+    </div>
         <div id="estimated-total-cost" class="six columns">
            <span class="label">Estimated Total Cost (&pound;)*</span>
            <span class="price"><%= isNaN(runningTotal) ? "N/A" : runningTotal.toFixed(2) %></span><br/>

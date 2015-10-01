@@ -106,4 +106,20 @@ exports.user_by_email = function (email,callback) {
 function setCookie(user,req,res){
     req.session.user_id = user._id;
 	//res.cookie('session-id',user._id,local.cookie_config );
-}
+};
+exports.updateUsersName = function(name,id,cb){
+	User.updateUsersName(name,id,function(err){
+		if(err){
+			cb(err);
+		}else{
+			cb(null)
+		}
+	})	
+};
+exports.checkOldPassword = function(password,oldPassword,cb){
+	if(passwordHash.verify(oldPassword,password )){
+		cb(null);
+	}else{
+		cb(true);
+	}
+};

@@ -1,46 +1,52 @@
 <div data-view="admin" class="dashboard-container columns nine" style="display:none">
-	<form method="post" action="/save-details" id="save-details-form" novalidate="novalidate" class="loom-form">
+	<form method="post" action="/save-account-details" id="save-account-details-form" novalidate="novalidate" class="loom-form">
 		<div class="secondary content-box">
 			<div class="header">
-				<h3>Admin</h3>
+				<h3>Your Details</h3>
 			</div>
 			<fieldset class="main">
-				<div class="columns six">
-					<div class="input-field">
-						<label for="name">Name</label>
-						<input type="text" name="name"/>
-					</div>
-					<div class="input-field">
-						<label for="company-name">Company Name</label>
-						<input type="text" name="company-name"/>
-					</div>
-					<div class="input-field">
-						<label for="telephone">Telephone</label>
-						<input type="tel" name="telephone"/>
-					</div>
-					<div class="input-field">
-						<label for="addr-1">Address Line 1</label>
-						<input type="text" name="addr-1"/>
-					</div>
-				</div>
-				<div class="columns six">
-					<div class="input-field">
-						<label for="password">Password</label>
-						<input type="password" name="password"/>
-					</div>
+				<div class="columns twelve">
 					<div class="input-field">
 						<label for="email">Email</label>
-						<input type="text" name="email" value="<%=user.email%>"/>
+						<input required type="text" name="email" value="<%=user.email%>"/>
 					</div>
 					<div class="input-field">
-						<label for="mobile">Mobile</label>
-						<input type="tel" name="telephone"/>
+						<label for="name">Name</label>
+						<input required type="text" name="name" value="<%=user.name%>"/>
 					</div>
 					<div class="input-field">
-						<label for="postcode">Postcode</label>
-						<input type="text" name="postcode" data-loom-validators="UKPostCode"/>
+						<label for="comapny-name">Company Name</label>
+						<input required type="text" name="company-name" value="<%=warehouses[0].company%>"/>
 					</div>
 				</div>
+				<button class="action button" type="submit">Save</button>
+			</fieldset>
+		</div>
+	</form>
+	<form method="post" action="/change-password" id="change-password-form" novalidate="novalidate" class="loom-form">
+		<div class="secondary content-box">
+			<div class="header">
+				<h3>Your Password</h3>
+			</div>
+			<fieldset class="main">
+				<div class="columns twelve">
+					<div class="input-field">
+						<label for="old-password">Old Password</label>
+						<input required minlength="8" data-pattern="(?=.*[A-z])(?=.*[0-9])" type="password" name="old-password"/>
+					</div>
+					<div class="input-field">
+						<label for="new-password">New Password</label>
+						<input data-loom-does-not-match="old-password" required minlength="8" data-pattern="(?=.*[A-z])(?=.*[0-9])" type="password" name="new-password"/>
+					</div>
+					<div class="input-field">
+						<label for="confirm-password">Confirm New Password</label>
+						<input required data-loom-confirm="new-password" minlength="8" data-pattern="(?=.*[A-z])(?=.*[0-9])" type="password" name="confirm-password"/>
+						<ul class="messages">
+							<li class="msg-info">The new password must be at least 8 characters long and contain letters and numbers. The new password must not match the old password and both new password boxes must match.</li>
+						</ul>
+					</div>
+				</div>
+				<button class="action button" type="submit">Save</button>
 			</fieldset>
 		</div>
 	</form>

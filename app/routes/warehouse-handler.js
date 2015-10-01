@@ -54,7 +54,7 @@ function uploadImage(req,res){
 				for (var i in files){
 					for (var j in files[i]){
 						fh.renameFile(fields.tempLocation[i],local.config.upload_folders[1] + req.warehouse.id + '/' + files[i][j].originalFilename,function(err){
-							if(err){
+							if(err && err.code !== 'ENOENT'){
 								//Todo some form of error handling
 								setErrorResponse('Image Upload Error',res);
 							}else{
@@ -78,6 +78,7 @@ function uploadDocument(req,res){
 	var form = new multiparty.Form();
 	var numSuccessfulCbs = 0;
 	var documents = [];
+	var documentExists = false;
 	if (req.warehouse.documents !== undefined){
 		documents = req.warehouse.documents;
 	}
@@ -96,7 +97,15 @@ function uploadDocument(req,res){
 								}
 								setErrorResponse('Document Upload Error',res);
 							}else{
-								documents.push({"title":fields.title[numSuccessfulCbs],"path":local.config.upload_folder_rel_path[0] + req.warehouse.id + '/' + files[numSuccessfulCbs][j].originalFilename});
+								documentExists = false;
+								for (var k = 0; k<documents.length; k++){
+									if(documents[k].title === fields.title[numSuccessfulCbs] && documents[k].path === local.config.upload_folder_rel_path[0] + req.warehouse.id + '/' + files[numSuccessfulCbs][j].originalFilename){
+										documentExists = true;
+									}
+								}
+								if (documentExists === false){
+									documents.push({"title":fields.title[numSuccessfulCbs],"path":local.config.upload_folder_rel_path[0] + req.warehouse.id + '/' + files[numSuccessfulCbs][j].originalFilename});
+								}
 								numSuccessfulCbs ++;
 								if (numSuccessfulCbs === Object.keys(files).length){
 									warehouse.updateWarehouseDocuments(req.warehouse.id,documents,function(err){
@@ -121,6 +130,19 @@ function uploadDocument(req,res){
 		}
 	})
 }
+
+// function deleteDocuments(req,res){
+// 	var form = new multiparty.Form();
+// 	form.parse(req, function(err,fields,files){
+// 		for (var i in fields){
+// 			fh.deleteFile(local.config.upload_folders[0] + req.warehouse.id,fields[i],function(){
+// 				if(err){
+// 					
+// 				}else{
+// 					
+// 				}
+// 			})
+// }
 
 function updateVolumeDiscount(req,res) {
     var volumeDiscountData = {}

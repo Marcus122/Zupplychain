@@ -6,9 +6,10 @@ var handler = function(app) {
     app.get('/about-us', function (req,res) {
 		res.render("about-us",req.data);
 	});
-    
-    
-    
+    app.get('/contact-us', function (req,res) {
+        req.data.config = local.config;
+		res.render("contact-us",req.data);
+	});
     app.get('/emails', function (req,res) {
 		res.render("emails/selector",req.data);
 	});

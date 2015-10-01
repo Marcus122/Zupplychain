@@ -162,8 +162,9 @@ define({
         return (thisYear < inputYear || (thisYear == inputYear && thisMonth < inputMonth) );
         
     },
-	complexTelephoneNumber : function(input){
-		var re = /\b[\d\+][\d\s\-\(\)]{6,}\d\b/;
+	complexTelephoneNumberNotInInput : function(input){ //Validate if a UK telephone number is not in an input
+		//var re = /\b[\d\+][\d\s\-\(\)]{6,}\d\b/;
+		var re  = /(((\+44\s?\d{4}|\(?0\d{4}\)?)\s?\d{3}\s?\d{3})|((\+44\s?\d{3}|\(?0\d{3}\)?)\s?\d{3}\s?\d{4})|((\+44\s?\d{2}|\(?0\d{2}\)?)\s?\d{4}\s?\d{4}))(\s?\#(\d{4}|\d{3}))?\b/;
 		var isPhoneNumberInInput =  re.test(input);
 		if (isPhoneNumberInInput === true){
 			return false;
@@ -200,6 +201,12 @@ define({
 	getGreaterThanOtherField : function(otherInputField) {
 		return function(thisInputValue) {
 			return otherInputField.getValue() < thisInputValue;
+		}
+	},	
+	
+	doesNotMatchOtherField : function(otherInputField) {
+		return function(thisInputValue) {
+			return otherInputField.getValue() != thisInputValue;
 		}
 	}	
 	

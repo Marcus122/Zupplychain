@@ -180,7 +180,7 @@ function createQuote(req,res) {
             if (!warehouse) {
                 console.log("no warehouse");
             }
-            if (req.session.whSC && req.session.whSC.sc && req.session.whSC.sc.length > 0) {
+            if (req.session.search && Object.keys(req.session.search).length > 0) {
                 req.data.minDurationOptions = local.config.minDurationOptions;
                 req.data.temperatures = local.config.temperatures;
                 var query = search.getFromSession(req, function(err, query){
@@ -259,7 +259,7 @@ function createUserWarehouse(userId,warehouseId,storageProfile){
 function quotationRequest(req,res) {
     req.data.warehouse = req.warehouse;
     req.data.page = 'quotation-request';
-    if (req.session.whSC && req.session.whSC.sc && req.session.whSC.sc.length > 0) {
+    if (req.session.search && Object.keys(req.session.search).length > 0) {
         req.data.minDurationOptions = local.config.minDurationOptions;
         req.data.temperatures = local.config.temperatures;
         var query = search.getFromSession(req, function(err, query){

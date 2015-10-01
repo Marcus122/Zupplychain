@@ -33,6 +33,9 @@ userSchema.methods.getWarehouses = function(cb){
 function setPassword(password){
     return passwordHash.isHashed(password) ? password : passwordHash.generate(password);
 }
+function updateUsersName(name,id,cb){
+	this.update({_id:id},{$set:{name:name}}).exec(cb);
+}
 userSchema.statics = {
 	loadByEmail: function(email,cb){
 		this.find({'email':email}).exec(cb);

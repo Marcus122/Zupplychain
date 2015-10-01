@@ -1,0 +1,50 @@
+<% include ./partials/top %>            
+<main id="contact-us">
+	<div class="banner">
+		<h1>Contact Us</h1>
+	</div>
+	<section>
+		<div class="main">
+			<div class="banner row">
+				<div clas="columns five">
+					<h1>Find a solution today</h1>
+					<br/>
+					<h3>Whether you're providing warehouse space or searching for storage we can help you.</h3>
+				</div>
+			</div>
+			<div class="row boxes">
+				<div class="columns twelve">
+					<div class="secondary content-box">
+						<div class="header">
+							<h2>Contact Details</h2>
+						</div>
+						<fieldset class="main">
+							<p>Please fill in your details and we will contact you as soon as possible</p>
+							<div class="columns six">
+								<div class="input-field">
+									<label for="name">Name</label>
+									<input type="text" name="name"/>
+								</div>
+								<div class="input-field">
+									<label for="company-name">Company Name</label>
+									<input type="text" name="company-name"/>
+								</div>
+							</div>
+							<div class="columns six">
+								<div class="input-field">
+									<label for="email">Email</label>
+									<input type="text" name="email"/>
+								</div>
+								<div class="input-field">
+									<label for="telphone">Telephone</label>
+									<input type="tel" name="telephone"/>
+								</div>
+							</div>
+							<p>Zupplychain, <%=config.companyDetails.addressLine1%>, <%=config.companyDetails.addressLine2%>, <%=config.companyDetails.city%>, <%=config.companyDetails.postcode%></p>
+						</fieldset>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</main>

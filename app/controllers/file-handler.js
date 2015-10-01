@@ -69,3 +69,19 @@ exports.readFile = function(path,cb){
 	});
 }
 
+exports.deleteFile = function(path,file,cb){
+	var currPath;
+	if(path.substr(path.length - 1) === '/'){
+		currPath = currPath = path + '/' + file;
+	}else{
+		currPath = path + file;
+	}
+	fs.unlink(currPath,function(err){
+		if(err){
+			cb(err);
+		}else{
+			cb(null);
+		}
+	})
+}
+

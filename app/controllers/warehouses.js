@@ -18,7 +18,7 @@ exports.createWarehouseObject = function(data){
 }
 exports.create = function (user,data,cb) {
 	var warehouse = exports.createWarehouseObject(data);
-	if (warehouse.defaultPhoto){
+	if (warehouse.defaultPhoto && warehouse.defaultPhoto.indexOf(warehouse.id + '/')===-1){
 		warehouse.defaultPhoto = warehouse.id + '/' + warehouse.defaultPhoto;
 	}
 	warehouse.user = user._id;
@@ -52,6 +52,9 @@ exports.load = function(req,res,next,id) {
 	});
 };
 exports.update = function(warehouse,data,cb){
+	if (data.defaultPhoto && data.defaultPhoto.indexOf(warehouse.id + '/')===-1){
+		data.defaultPhoto =  warehouse.id + '/' + data.defaultPhoto;
+	}
 	warehouse.specifications=[];
 	warehouse.services=[];
 	warehouse.set(data);

@@ -11,6 +11,7 @@ define(["jquery","loom/loom","loom/loomAlerts"], function ($,Loom,Alerts) {
 		
 		initNavEvents();
 		initContactsTabs();
+		initAccountTab();
 		initPaging($("#warehouses-table"));
 		
 		loom.addOnSuccessCallback("login-form", function(response){
@@ -20,6 +21,24 @@ define(["jquery","loom/loom","loom/loomAlerts"], function ($,Loom,Alerts) {
 				window.location.href = '/dashboard';
 			}
         });
+		
+		function initAccountTab(){
+			loom.addOnSuccessCallback("save-account-details-form", function(response){
+				if (!response.error){
+					$(".user-links p span:nth-child(3)").text(response.data.email);
+					Alerts.showSuccessMessage(response.data.message);
+				}else if(response.error){
+					Alerts.showErrorMessage(response.data);
+				}
+			});
+			loom.addOnSuccessCallback("change-password-form", function(response){
+				if (response.data.successMessage){
+					Alerts.showSuccessMessage(response.data.successMessage);
+				}else{
+					Alerts.showErrorMessage(response.data);
+				}
+			});
+		}
 		
 		function initNavEvents(){
 			$('#vertical-nav ul li a').click(function(){

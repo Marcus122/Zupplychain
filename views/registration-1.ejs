@@ -85,7 +85,9 @@
 							<fieldset class="main warehouse-details">
 								<div class="input-field">
 									<label for="description">Company and Warehouse Description</label>
-									<textarea id="description" name="description" placeholder="A short description about your company and warehouse" data-loom-validators="complexTelephoneNumber"><%=warehouse.description%></textarea>
+									<div class="hint--top description-container">
+										<textarea id="description" name="description" placeholder="A short description about your company and warehouse" data-loom-validators="complexTelephoneNumberNotInInput"><%=warehouse.description%></textarea>
+									</div>
 								</div>
 								<div class="row">
 									<div class="input-field columns four small-input">
@@ -150,19 +152,19 @@
 									<label  class="columns three" for="photos">Upload Warehouse Photos</label>
 									<input class="columns seven" type="file" id="photos"/>
 									<div class="columns one">
-										<button id="add-photo" type="button" class="attach primary mini"><span>add</span></button>
+										<button id="add-photo" type="button" class="attach primary mini"><span>Upload</span></button>
 									</div>
 								</div>
 								<div id="upload-photos" class="row upload-area">
 									<%if(warehouse.photos){
 										for(var i=0;i<warehouse.photos.length;i++){
-											var url = "/images/" + warehouse.photos[i];%>
-											<div class="columns four row document <%=warehouse.defaultPhoto == warehouse.photos[i] ? "isDefault" : "" %>">
+											var url = "/images/warehouse-images/" + warehouse.photos[i];%>
+											<div data-image-index="<%=i%>" class="columns four row document <%=warehouse.defaultPhoto == warehouse.photos[i] ? "isDefault" : "" %>">
 												<div class="columns five image">
 													<img src="<%=url%>"/>
 												</div>
 												<span class="file-name columns four">
-                                                    <%=warehouse.photos[i];%>
+                                                    <%=warehouse.photos[i].replace(warehouse.id+'/',"");%>
                                                 </span>
 												<!--<input type="hidden" name="photo" data-array="photos" value="<%=warehouse.photos[i];%>"/>-->
 												<div class="columns one">
@@ -186,11 +188,25 @@
 											<input type="text" name="file-title" placeholder="Title"/>
 										</div>
 										<div class="columns one">
-											<button id="add-document" type="button" class="attach primary mini"><span>add</span></button>
+											<button id="add-document" type="button" class="attach primary mini"><span>Upload</span></button>
 										</div>
 									</div>
 								</div>
 								<div id="upload-documents" class="row documents-upload-area">
+									<%if(warehouse.documents){
+										for(var i=0;i<warehouse.documents.length;i++){%>
+											<div class="columns four row document" data-doc-index="<%=i%>">
+												<div class="columns five document-image">
+													<img src="./images/pdf.png"/>
+												</div>
+												<span class="file-name columns four"><%=warehouse.documents[i].title%>
+												</span>
+												<div class="columns one">
+													<button type="button" href="#" class="trash-button"><span>Delete</span></button>
+												</div>
+											</div>
+										<%}
+									}%>
 								</div>
 							</fieldset>
 						</div>
