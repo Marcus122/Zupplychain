@@ -9,7 +9,7 @@
 					<tr>
 						<th>Warehouse Name</th>
 						<th>Address</th>
-						<th>Pallet Space</th>
+						<th>View/Edit Warehouse</th>
 						<th><img src="./images/delete.png"></th>
 					</tr>
 				</thead>
@@ -18,12 +18,7 @@
 						<tr>
 							<td data-id="<%=warehouses[i].id%>"><%=warehouses[i].name%></td>
 							<td><%=warehouses[i].city%>, <%=warehouses[i].postcode%></td>
-							<% var palletSpace = 0;
-							   for (var j = 0; j<warehouses[i].storage.length; j++){
-							      palletSpace += parseInt(warehouses[i].storage[j].palletSpaces);
-								}
-						     %>
-							<td><%=palletSpace%></td>
+							<td><a class="action button" href="/view-edit-warehouse/<%=warehouses[i].id%>">View</a></td>
 							<td><input type="checkbox" name="delete-warehouse"/></td>
 						</tr>
 					<%}%>
@@ -31,8 +26,12 @@
 			</table>
 			<div class="add-new-warehouse-container">
 				<label for="add-new-warehouse">Add new warehouse</label>
-				<button name="add-new-warehouse" class="add-button primary"/>
+				<a href="/add-new-warehouse" class="button add-button primary"></a>
 			</div>
 		</div>
+	</div>
+	<div id="view-edit-warehouse" style="display:none;">
+	</div>
+	<div id="add-new-warehouse" style="display:none;">
 	</div>
 </div>

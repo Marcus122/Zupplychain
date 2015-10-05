@@ -30,7 +30,7 @@
 			<section class="tab-content">
 				<form data-loom-no-submit="true" method="post" action="/provider-registration-2" id="registration" novalidate class="provider-form loom-form">
                     <div class="input-field" style="display:none">
-                    <input type="hidden" name="defaultPhoto" id="defaultPhoto" value="<%=warehouse.defaultPhoto%>" />
+                    <input type="hidden" name="defaultPhoto" id="defaultPhoto" value="<%=warehouse.defaultPhoto%>"/>
                     </div>
 					<div class="main">
 						<div class="content-box primary">
@@ -160,19 +160,16 @@
 										for(var i=0;i<warehouse.photos.length;i++){
 											var url = "/images/warehouse-images/" + warehouse.photos[i];%>
 											<div data-image-index="<%=i%>" class="columns four row document <%=warehouse.defaultPhoto == warehouse.photos[i] ? "isDefault" : "" %>">
-												<div class="columns five image">
+												<div class="columns five image <%if(warehouse.photos[i] == warehouse.defaultPhoto){%>isDefault<%}%>">
 													<img src="<%=url%>"/>
 												</div>
-												<span class="file-name columns four">
-                                                    <%=warehouse.photos[i].replace(warehouse.id+'/',"");%>
-                                                </span>
-												<!--<input type="hidden" name="photo" data-array="photos" value="<%=warehouse.photos[i];%>"/>-->
+												<span class="file-name columns four"><%=warehouse.photos[i].replace(warehouse.id+'/',"");%></span>
+												<input type="hidden" name="photo" data-array="photos" value="<%=warehouse.photos[i];%>"/>
 												<div class="columns one">
 													<button type="button" href="#" class="trash-button"><span>Delete</span></button>
 												</div>
                                                         <span class="default-photo-label">Main image</span>
-                                                        <button data-photo="<%=warehouse.id;%>/<%=warehouse.photos[i];%>" class="tiny simple make-default-photo" type="button">Use as main image
-                                                        </button>
+                                                        <button data-photo="<%=warehouse.photos[i];%>" class="tiny simple make-default-photo" type="button">Use as main image</button>
 											</div>
 										<%}
 									}%>
@@ -195,12 +192,12 @@
 								<div id="upload-documents" class="row documents-upload-area">
 									<%if(warehouse.documents){
 										for(var i=0;i<warehouse.documents.length;i++){%>
-											<div class="columns four row document" data-doc-index="<%=i%>">
+											<div class="columns four row document">
 												<div class="columns five document-image">
 													<img src="./images/pdf.png"/>
 												</div>
-												<span class="file-name columns four"><%=warehouse.documents[i].title%>
-												</span>
+												<span class="file-name columns four"><%=warehouse.documents[i].title%></span>
+												<input type="hidden" name="relative-path" value="<%=warehouse.documents[i].path%>"/> 
 												<div class="columns one">
 													<button type="button" href="#" class="trash-button"><span>Delete</span></button>
 												</div>
@@ -238,8 +235,7 @@
 				<button type="button" href="#" class="trash-button"><span>Delete</span></button>
 			</div>
             <span class="default-photo-label">Main image</span>
-            <button data-bind-data-photo="name" class="tiny simple make-default-photo" type="button">Use as main image
-            </button>
+            <button data-bind-data-photo="name" class="tiny simple make-default-photo" type="button">Use as main image</button>
 		</div>
 	 </script>
 	  <script type="text/template" id="save-registration">

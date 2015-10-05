@@ -78,16 +78,18 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			$('body').append($popup);
 			centerPopup($popup);
 			var $form = $popup.find('form');
-			lm.rebind($form);
-			var form = lm.getForm($form.attr('id'));
-			form.addOnSuccessCallback(function(result){
-				if (result.message !== undefined){
-					Alerts.showErrorMessage(result.message);
-				}else{
-					data.registered=true;
-					closePopup();
-				}
-			});
+			if($form.length > 0){
+				lm.rebind($form);
+				var form = lm.getForm($form.attr('id'));
+				form.addOnSuccessCallback(function(result){
+					if (result.message !== undefined){
+						Alerts.showErrorMessage(result.message);
+					}else{
+						data.registered=true;
+						closePopup();
+					}
+				});
+			}
 		}
 		function completeRegistration(){
 			var completeTemplate = templates.getTemplate("complete-registration");
@@ -120,6 +122,8 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			var documentTitles = [];
 			var images = [];
 			var imageTempLocations = [];
+			var deletedDocuments = [];
+			var deletedImages = [];
 			var photosAdded = false;
 			if(!$registration.length) return;
             
@@ -128,11 +132,21 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				saveWarehouse(function(result){
 					//var checkResult = checkSaveWarehouseResultAndGetMsg(result);
 					if (result.error === false || result.error === null){
-						
-						uploadFiles(result.data._id,function(result){
+						var warehouseId = result.data._id;
+						$('fieldset.form-footer a.tandc').after('<input name="id" value="' + warehouseId + '" type="hidden"/>')
+						if ($(location).attr("pathname").indexOf('dashboard') != -1){
+							$('#define-space').find('input[name="warehouse_id"]').val(warehouseId);
+						}
+						deleteFiles(warehouseId,function(result){
 							if(result.error === false || result.error === null){
-								window.location = $registration.attr('action');
-							}else if (result.error === true){
+								uploadFiles(warehouseId,function(result){
+									if(result.error === false || result.error === null){
+										window.location = $registration.attr('action');
+									}else if (result.error === true){
+										Alerts.showErrorMessage(result.data);
+									}
+								});
+							}else if (result.error === true){ 
 								Alerts.showErrorMessage(result.data);
 							}
 						});
@@ -149,10 +163,17 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				saveWarehouse(function(result){
 					//var checkResult = checkSaveWarehouseResultAndGetMsg(result);
 					if (result.error === false || result.error === null){
-						$('fieldset.form-footer a.tandc').after('<input name="id" value="' + result.data._id + '" type="hidden"/>')
-						uploadFiles(result.data._id,function(result){
+						var warehouseId = result.data._id;
+						$('fieldset.form-footer a.tandc').after('<input name="id" value="' + warehouseId + '" type="hidden"/>')
+						deleteFiles(warehouseId,function(result){
 							if(result.error === false || result.error === null){
-								saveRegistration();
+								uploadFiles(warehouseId,function(result){
+									if(result.error === false || result.error === null){
+										saveRegistration();
+									}else if (result.error === true){
+										Alerts.showErrorMessage(result.data);
+									}
+								});
 							}else if (result.error === true){
 								Alerts.showErrorMessage(result.data);
 							}
@@ -204,6 +225,17 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					});
 				}
 			}
+			function deleteFiles(warehouseId,cb){
+				Warehouse.deleteDocuments(warehouseId,deletedDocuments,function(result){
+					if (result.error === false || result.error === null){
+						Warehouse.deleteImages(warehouseId,deletedImages,function(result){
+							if(cb) cb(result);
+						});
+					}else if (result.error === true){
+						if(cb) cb(result);
+					}
+				});
+			}
 			function uploadFiles(warehouseId,cb){
 				Warehouse.uploadDocument(warehouseId,documents,documentTitles,function(result){
 					if (result.error === false || result.error === null){
@@ -231,7 +263,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					if(!warehouse.photos) warehouse.photos=[];
 					index = images.length;
 					images.push($uploadPhoto.prop("files"));
-					$uploadPhoto.val("");
+					//$uploadPhoto.val("");
 					var template = templates.getTemplate("warehouse-image");
 					photosAdded = true;
 					for(var i in data){
@@ -260,7 +292,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 						$('#upload-documents').append($uploadTemplate);
 						documentTitles.push($('input[name="file-title"]').val());
 						documents.push($uploadDoc.prop("files"));
-						$uploadDoc.val("");
+						//$uploadDoc.val("");
 						$(this).closest('#document-area').find('input[name="file-title"]').val("");
 					}else{
 						$(this).closest('#document-area').find('.input-field.file-title').addClass('error').addClass('error-required');
@@ -272,17 +304,21 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			})
 			$photoArea.on("click",".trash-button",function(ev){
 				ev.preventDefault();
-				var index = parseInt($(this).closest('.document').attr('data-image-index'));
-				images.splice(index,1);
-				imageTempLocations.splice(index,1);
-				$('div[data-image-index]').each(function(){
-					var oldIndex = parseInt($(this).attr('data-image-index'));
-					if (oldIndex > index){
-						oldIndex --;
-						$(this).removeAttr('data-image-index');
-						$(this).attr('data-image-index',oldIndex);
-					}
-				})
+				var index = $(this).closest('.document').attr('data-image-index');
+				deletedImages.push($(this).parent().siblings('input[name="photo"]').val());
+				if (index !== "" && index !== undefined){
+					parseInt(index)
+					images.splice(index,1);
+					imageTempLocations.splice(index,1);
+					$('div[data-image-index]').each(function(){
+						var oldIndex = parseInt($(this).attr('data-image-index'));
+						if (oldIndex > index){
+							oldIndex --;
+							$(this).removeAttr('data-image-index');
+							$(this).attr('data-image-index',oldIndex);
+						}
+					})
+				}
 				if ($(this).closest('.row.document').hasClass('isDefault')){
 					$(this).closest('.row.document').next().addClass('isDefault');
 					$("#defaultPhoto").val($(this).closest('.row.document').next().find('.file-name').text());
@@ -292,18 +328,22 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			});
 			$documentArea.on("click",".trash-button",function(ev){
 				ev.preventDefault();
-				var index = parseInt($(this).closest('.document').attr('data-doc-index'));
-				documents.splice(index,1);
+				var index = $(this).closest('.document').attr('data-doc-index');
 				$(this).closest('.document').remove();
-				$('div[data-doc-index]').each(function(){
-					var oldIndex = parseInt($(this).attr('data-doc-index'));
-					if (oldIndex > index){
-						oldIndex --;
-						$(this).removeAttr('data-doc-index');
-						$(this).attr('data-doc-index',oldIndex);
-					}
-				})
-			})
+				deletedDocuments.push({path: $(this).parent().siblings('input[name="relative-path"]').val(),title: $(this).parent().siblings('.file-name').text()});
+				if (index !== "" && index !== undefined){
+					parseInt(index);
+					documents.splice(index,1);
+					$('div[data-doc-index]').each(function(){
+						var oldIndex = parseInt($(this).attr('data-doc-index'));
+						if (oldIndex > index){
+							oldIndex --;
+							$(this).removeAttr('data-doc-index');
+							$(this).attr('data-doc-index',oldIndex);
+						}
+					});
+				}
+			});
             
             $(document).on("click", ".make-default-photo", function(evt) {
                 $("#defaultPhoto").val($(this).data("photo"));
@@ -341,7 +381,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			$defineSpace.on("click",".next",updateForm);
 			$defineSpace.on("submit",function(ev){
 				ev.preventDefault();
-				ev.stopPropagation();
+				//ev.stopPropagation();
 				updateForm();
 				saveDefinedSpace(function(response){
 					if (response !== undefined){

@@ -34,7 +34,9 @@ var handler = function(app) {
     app.post('/warehouse/:warehouse_id/volumeDiscount',updateVolumeDiscount);
     app.get("/warehouse-registration-complete/:warehouse_id", warehouseRegistrationComplete)
 	app.post('/documents/upload/:warehouse_id',uploadDocument);
+	app.post('/documents/delete/:warehouse_id',deleteDocumentsAndEmptyDir);
 	app.post('/images/upload/:warehouse_id',uploadImage);
+	app.post('/images/delete/:warehouse_id',deleteImagesAndEmptyDir);
 };
 
 var POSTCODE_NOT_FOUND = 'Postcode not Found';
@@ -48,6 +50,10 @@ function uploadImage(req,res){
 	var form = new multiparty.Form();
 	var numSuccessfullCb = 0;
 	var photos = []
+	console.log(req.warehouse);
+	if (req.warehouse.photos !== undefined){
+		photos = req.warehouse.photos;
+	}
 	fh.createDir(local.config.upload_folders[1] + req.warehouse.id,function(err){
 		if(!err){
 			form.parse(req, function(err,fields,files){
@@ -131,18 +137,107 @@ function uploadDocument(req,res){
 	})
 }
 
-// function deleteDocuments(req,res){
-// 	var form = new multiparty.Form();
-// 	form.parse(req, function(err,fields,files){
-// 		for (var i in fields){
-// 			fh.deleteFile(local.config.upload_folders[0] + req.warehouse.id,fields[i],function(){
-// 				if(err){
-// 					
-// 				}else{
-// 					
-// 				}
-// 			})
-// }
+function deleteDocumentsAndEmptyDir(req,res){
+	var form = new multiparty.Form();
+	var documents = [];
+	var successfullCbs = 0
+	var file;
+	var docSpliced = false;
+	if (req.warehouse.documents !== undefined){
+		documents = req.warehouse.documents;
+	}
+	form.parse(req, function(err,fields,files){
+		for (var i in fields){
+			file = JSON.parse(fields[i]);
+			fh.deleteFile(__dirname + '/../../',file.path,function(){
+				if(err && err.code !== 'ENOENT'){
+					setErrorResponse('Document Delete Error',res);
+				}else{
+					successfullCbs ++;
+					if (successfullCbs === Object.keys(fields).length){
+						fh.readDir(local.config.upload_folders[0] + req.warehouse.id,function(err,files){
+							if (err && err.code !== 'ENOENT'){
+								setErrorResponse('Document Delete Error',res);
+							}else if (files.length === 0){
+								fh.deleteDir(local.config.upload_folders[0] + req.warehouse.id,function(err){
+									if (err && err.code !== 'ENOENT'){
+										setErrorResponse('Document Delete Error',res);
+									}
+								});
+							}
+						});
+						for (var j = 0; j<documents.length; j++){
+							if (docSpliced === true){
+								j --;
+							}
+							if (documents[j].title === file.title && documents[j].path === file.path){
+								documents.splice(j,1);
+								docSpliced = true;
+							}
+						}
+						warehouse.updateWarehouseDocuments(req.warehouse.id,documents,function(err){
+							if (!err){
+								setResponse(req,res);
+							}else{
+								setErrorResponse('Document Delete Error',res);
+							}
+						});
+					}
+				}
+			});
+		}
+	});
+}
+
+function deleteImagesAndEmptyDir(req,res){
+	var form = new multiparty.Form();
+	var photos = [];
+	var successfullCbs = 0
+	var photoSpliced = false;
+	if (req.warehouse.photos !== undefined){
+		photos = req.warehouse.photos;
+	}
+	form.parse(req, function(err,fields,files){
+		for (var i in fields){
+			fh.deleteFile(local.config.upload_folders[1],fields[i][0],function(){
+				if(err && err.code !== 'ENOENT'){
+					setErrorResponse('Photo Delete Error',res);
+				}else{
+					successfullCbs ++;
+					if (successfullCbs === Object.keys(fields).length){
+						fh.readDir(local.config.upload_folders[1] + req.warehouse.id,function(err,files){
+							if (err && err.code !== 'ENOENT'){
+								setErrorResponse('Photo Delete Error',res);
+							}else if (files.length === 0){
+								fh.deleteDir(local.config.upload_folders[1] + req.warehouse.id,function(err){
+									if (err && err.code !== 'ENOENT'){
+										setErrorResponse('Photo Delete Error',res);
+									}
+								});
+							}
+						});
+						for (var j = 0; j<photos.length; j++){
+							if (photoSpliced === true){
+								j --;
+							}
+							if (photos[j] === fields[i][0]){
+								photos.splice(j,1);
+								photoSpliced = true;
+							}
+						}
+						warehouse.updateWarehousePhoto(req.warehouse.id,photos,function(err){
+							if (!err){
+								setResponse(req,res);
+							}else{
+								setErrorResponse('Photo Delete Error',res);
+							}
+						});
+					}
+				}
+			});
+		}
+	});
+}
 
 function updateVolumeDiscount(req,res) {
     var volumeDiscountData = {}

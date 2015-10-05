@@ -55,6 +55,9 @@ exports.update = function(warehouse,data,cb){
 	if (data.defaultPhoto && data.defaultPhoto.indexOf(warehouse.id + '/')===-1){
 		data.defaultPhoto =  warehouse.id + '/' + data.defaultPhoto;
 	}
+	if (warehouse.photos !== undefined){
+		data.photos = warehouse.photos;
+	}
 	warehouse.specifications=[];
 	warehouse.services=[];
 	warehouse.set(data);

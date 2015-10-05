@@ -1,0 +1,130 @@
+<input type="hidden" name="user-active" value="<%= user.active %>"/>
+<div class="main" id="price-and-availability-user-data">
+	<div class="content-box primary">
+		<div class="header">
+			<h3>Define your Price and availability</h3>
+		</div>
+		<div class="main">
+			<table class="max price-and-availability js-all-storages">
+				<thead>
+					<tr>
+						<th>Storage Name</th>
+						<th>Pallet Spaces</th>
+						<th>Pricing</th>
+						<!--<th>Volume Discount</th>-->
+						<th>Available Pallets</th>
+						<!--<th>Progress</th>-->
+					</tr>
+				</thead>
+				<tbody>
+					<%for( var i=0; i<warehouse.storage.length;i++ ){
+						var storage = warehouse.storage[i];
+						var pricingComplete=false;
+						var palletsComplete=false;
+						if(Number(storage.basicPricing.price) > 0){
+							pricingComplete=true;
+						}
+						if(storage.pallets && storage.pallets.length > 0 && storage.pallets[0].inUse !== null && storage.pallets[0].to !== ""){
+							palletsComplete=true;
+						}
+					%>
+					<tr data-id="<%=storage._id %>">
+						<td class="text" data-th="Storage Name">
+							<span><%=storage.name%></span>
+						</td>
+						<td class="text" data-th="Pallet Spaces">
+							<span><%=storage.palletSpaces%></span>
+						</td>
+						
+						<td class="button-cell pricing <%= pricingComplete ?  'success' : '' %>" data-th="Pricing">
+							<span class="edit-data">DATA</span>
+							<button data-type="pricing" type="button" class="popup mini"/>
+						</td>
+						<!--<td class="button-cell discounts" data-th="Volume Discount">
+							<button data-template="volume"  type="button" class="secondary popup mini">click here</button>
+						</td>-->
+						
+						<td class="button-cell pallets <%= palletsComplete ? 'success' : ''%>" data-th="Available Pallets">
+							<span class="edit-data">DATA</span>
+							<button data-type="availability" type="button" class="popup mini"/>
+						</td>
+					
+						<!--<td data-th="Progress">
+							<div class="progress">
+								<div class="progress-bar"/>
+							</div>
+						</td>-->
+					</tr>
+
+					<tr class="trays" id="pricing-container-<%=storage._id %>">
+						<td colspan="4" class="js-storage" data-storage-id="<%=storage._id%>">
+							<div class="pricing-trays tray-holder">
+								<form  data-storage-id="<%=storage._id%>" id="standard-pricing-<%=storage._id %>" data-id="price-and-availability-user-data" class="loom-form provider-form standard-pricing-form" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" action="/complete-registration" novalidate>
+									<% include ../standard-pricing-tray %>
+								</form>
+								<form  data-storage-id="<%=storage._id%>" id="date-range-pricing-<%=storage._id %>" data-id="price-and-availability-user-data" class="loom-form provider-form date-range-pricing-form" data-storage_id="<%=storage._id%>" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" action="/complete-registration" novalidate>
+									<% include ../date-range-pricing-tray %>
+								</form>
+
+							</div>
+							<div class="availability-trays tray-holder">
+								<form  data-storage-id="<%=storage._id%>" id="availability-<%=storage._id %>"  class="loom-form provider-form availability-form" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" >
+									<% include ../availability-tray %>
+								</form>
+							</div>
+						</td>
+					</tr>
+					<%}%>
+				</tbody>
+			</table>
+			<!--<div class="row">
+				<!--<div class="columns five check checkbox input-field">
+					<input required type="checkbox" name="accept" id="accept"/>
+					<label for="accept">*I agree to the terms and conditions.</label>
+				</div>-->
+				<!--<div class="columns four offset-by-five">
+					<button href="#" class="view tertiary forward mini">View list of Documentation</button>
+				</div>
+				<div class="columns three">
+					<button href="#" class="view tertiary forward mini">View Terms &amp; Conditions</button>
+				</div>
+			</div>-->
+			<button href="#" class="add primary mini add-volume-discount">Add volume discount (optional)</button>
+		</div>
+	</div>
+	<!--<div class="content-box primary">
+		<div class="header">
+			<h3>Your Login Details</h3>
+		</div>
+		<fieldset class="main">
+			<div>
+				<div class="row">
+					<div class="input-field columns six">
+						<label for="name">Name*</label><input type="text" name="name" id="name" required>
+					</div>
+					<div class="input-field columns six">
+						<label for="email">Email*</label><input type="email" name="email" id="email" required>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field columns six">
+						<label for="tel">Contact Number*</label><input type="tel" name="contact" id="tel" required>
+					</div>
+					<div class="input-field columns six">
+						<label for="password">Password*</label><input type="password" name="password" id="password" required>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field columns six">
+						<label for="confirm-password">Confirm Password*</label><input type="password" name="confirm-password" id="confirm-password" required data-loom-confirm="password">
+					</div>
+				</div>
+			</div>
+		</fieldset>
+	</div>-->
+</div>
+<fieldset class="form-footer">
+	<input name="warehouse" type="hidden" value="<%=warehouse._id%>"/>
+	<a href="/provider-registration-2"><button class="back" type="button">Back</button></a>
+	<button data-redirect="/registration-complete" id="save-and-finish" class="action next">Save &amp; Finish</button>
+</fieldset>

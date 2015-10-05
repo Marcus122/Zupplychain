@@ -5,7 +5,6 @@ var User = require("../controllers/users.js"),
 	fs = require('fs');
 
 var handler = function(app) {
-	console.log(local.config.upload_folder);
 	app.get('/provider-registration', function(req,res){
 		res.render("registration",req.data);
 	});

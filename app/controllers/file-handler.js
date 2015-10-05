@@ -76,6 +76,8 @@ exports.deleteFile = function(path,file,cb){
 	}else{
 		currPath = path + file;
 	}
+	console.log(currPath);
+	console.log(__dirname);
 	fs.unlink(currPath,function(err){
 		if(err){
 			cb(err);
@@ -83,5 +85,25 @@ exports.deleteFile = function(path,file,cb){
 			cb(null);
 		}
 	})
+}
+
+exports.readDir = function(path,cb){
+	fs.readdir(path,function(err,files){
+		if(err){
+			cb(err)
+		}else{
+			cb(null,files);
+		}
+	});
+}
+
+exports.deleteDir = function(path,cb){
+	fs.rmdir(path,function(err){
+		if (err){
+			cb(err);
+		}else{
+			cb(null);
+		}
+	});
 }
 

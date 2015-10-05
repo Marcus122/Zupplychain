@@ -2,14 +2,22 @@ var warehouses = require("../controllers/warehouses.js");
 var warehouseContacts = require("../controllers/warehouse-contacts.js");
 var users = require("../controllers/users.js");
 var dashboard = require("../controllers/dashboard.js");
+var local = require("../local.config.js");
+var path = require('path');
 
 var handler = function(app) {
+	app.param('warehouse_id', warehouses.load);
+	
 	app.get('/dashboard', checkForLogon, function(req,res){
 		warehouses.warehouse_by_user(req.data.user,function(err,warehouses){
 			if(err){
 				setErrorResponse("Warehouse not found",res);
 			}else{
 				req.data.warehouses = warehouses;
+				req.data.temperatures = local.config.temperatures;
+				req.data.services = local.config.services;
+				req.data.palletTypes = local.config.palletTypes;
+				req.data.specifications = local.config.specifications;
 				res.render("dashboard",req.data);
 			}
 		});
@@ -49,6 +57,34 @@ var handler = function(app) {
 				setResponse({successMessage:'Details changed successfully'},res);
 			}
 		})
+	});
+	
+	app.get('/view-edit-warehouse/:warehouse_id',function(req,res){
+		req.data.warehouse = req.warehouse;
+		req.data.services = local.config.services;
+		req.data.specifications = local.config.specifications;
+		req.data.palletTypes = local.config.palletTypes;
+		req.data.temperatures = local.config.temperatures;
+        res.render('partials/dashboard/view-edit-warehouse',req.data);
+	});
+	
+	app.get('/add-new-warehouse',function(req,res){
+		warehouses.warehouse_by_user(req.data.user,function(err,warehouses){
+			if(err){
+				setErrorResponse("Warehouse not found",res);
+			}else{
+				req.data.temperatures = local.config.temperatures;
+				req.data.services = local.config.services;
+				req.data.palletTypes = local.config.palletTypes;
+				req.data.specifications = local.config.specifications;
+				req.data.warehouse = {};
+				req.data.warehouse.company = warehouses[0].company;
+				req.data.warehouse.photos = [];
+				req.data.warehouse.documents = [];
+				req.data.warehouse.storage = [];
+				res.render('partials/dashboard/view-edit-warehouse',req.data);
+			}
+		});
 	});
 	
 };

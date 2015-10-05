@@ -1,6 +1,7 @@
-define(["jquery","loom/loom","loom/loomAlerts"], function ($,Loom,Alerts) {
+define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","templates/templates"], function ($,Loom,Alerts,DBCntr,Templates) {
 	
     function Class() {
+		var templates = new Templates();
 		var LOGIN_FAILED_MESSAGE = "The email address or password was incorrect";
 		var loom = new Loom(),
 			$mainView = $('div[data-view="main"]'),
@@ -10,8 +11,9 @@ define(["jquery","loom/loom","loom/loomAlerts"], function ($,Loom,Alerts) {
 			$usersView = $('div[data-view="users"]');
 		
 		initNavEvents();
-		initContactsTabs();
+		initTabs();
 		initAccountTab();
+		initWarehouseTab();
 		initPaging($("#warehouses-table"));
 		
 		loom.addOnSuccessCallback("login-form", function(response){
@@ -40,6 +42,60 @@ define(["jquery","loom/loom","loom/loomAlerts"], function ($,Loom,Alerts) {
 			});
 		}
 		
+		function initWarehouseTab(){
+			$(document).on('click','#warehouses-table tbody tr td .button',function(e){
+				e.preventDefault();
+				DBCntr.loadWarehouse($(this).attr('href'),function(response){
+					var $warehouse = $(response);
+					$('#view-edit-warehouse').append($warehouse);
+					$('#view-edit-warehouse').show();
+					initTabs();
+					
+					require(["components/provider-registration"], function(Registration) {
+						Registration();
+						loom.rebind('registration');
+						loom.rebind('define-space');
+					});   
+				});
+			});
+			
+			$(document).on('click','.add-new-warehouse-container .button',function(e){
+				e.preventDefault();
+				DBCntr.loadWarehouse($(this).attr('href'),function(response){
+					$(response).find('#registration').attr('action','/registration-2');
+					$(response).find('#define-space').attr('action','/registration-3');
+					var $warehouse = $(response);
+					$('#add-new-warehouse').append($($warehouse));
+					$('#add-new-warehouse').show();
+					$('#add-new-warehouse').find('section.tabs').removeClass('tabs').find('li').removeClass('checked');
+					initTabs();
+					
+					require(["components/provider-registration"], function(Reg) {
+						Reg();
+						loom.rebind('registration');
+						loom.rebind('define-space');
+					});   
+				});
+			});
+			
+			$(document).on('submit','#registration',function(e){
+				var $tab = $('ul.tabs li:nth-child(2)');
+				var clickedTab = $tab.find('a').attr('href');
+				$('.tab-content ' + clickedTab).show().siblings().hide();
+				$tab.addClass('active').siblings().removeClass('active');
+				e.preventDefault();
+				$('#define-space').find("input[name='warehouse_id']").val($('input[name="id"]').val());
+			});
+			
+			$(document).on('submit','#define-space',function(e){
+				var $tab = $('ul.tabs li:nth-child(3)');
+				var clickedTab = $tab.find('a').attr('href');
+				$('.tab-content ' + clickedTab).show().siblings().hide();
+				$tab.addClass('active').siblings().removeClass('active');
+				e.preventDefault();
+			});
+		}
+		
 		function initNavEvents(){
 			$('#vertical-nav ul li a').click(function(){
 				var href = $(this).attr('href');
@@ -60,8 +116,8 @@ define(["jquery","loom/loom","loom/loomAlerts"], function ($,Loom,Alerts) {
 			});
 		}
 		
-		function initContactsTabs(){
-			$('.tabs .tab-links a').on('click',function(e){
+		function initTabs(){
+			$('.tabs ul.tabs a').on('click',function(e){
 				var clickedTab = $(this).attr('href');
 				$('.tab-content ' + clickedTab).show().siblings().hide();
 				$(this).parent('li').addClass('active').siblings().removeClass('active');

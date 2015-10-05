@@ -1,0 +1,57 @@
+<form class="loom-form" data-loom-no-submit="true" method="post" action="#" id="define-space" novalidate>
+	<input type="hidden" name="warehouse_id"/>
+	<div class="main">
+		<div class="content-box primary">
+			<div class="header">
+				<h3>Define your storage</h3>
+				<fieldset class="form-header">
+					<button class="action reg-2-example">View Example</button>
+				</fieldset>
+			</div>
+			<div class="main">
+				<fieldset>
+					<table class="max define-space responsive-table collapse">
+						<thead>
+							<tr>
+								<th>Storage Name <div class="tool-tip hint--bottom" data-hint="Use this column to define each type of storage area in your warehouse which has different characteristics either in terms of pallet types or how you wish to price it.  You can have as many storage names as suits, allowing you to specify different weight/heights and different pricing/availability. You can specify the same space more than once, e.g., ‘Pallets, 1m high, 200 spaces’ and ‘Double Pallets, 1m high, 100 spaces’">?</div></th>
+								<th>Pallet Type </th>
+								<th>Storage Type </th>
+								<th>Max Pallet Weight <br/> (kg) </th>
+								<th>Max Pallet Height <br/> (m) </th>
+								<th>Total Pallet Spaces <div class="tool-tip hint--left" data-hint="This is the total number of pallet spaces in your warehouse of the pallet name type. You can specify the number available at specific dates for Zupplychain users in Step 3">?</div></th>
+								<th><img src="../images/delete.png" alt="delete"/></th>
+							</tr>
+						</thead>
+						<tbody>
+							<%
+							if( !warehouse.storage || !warehouse.storage.length ){
+								var row = {};
+								row.name = "A";%>
+								<% include ../define-space-row %>
+							<%}else{
+								for( var i=0; i < warehouse.storage.length; i++ ){
+									row = warehouse.storage[i];%>
+									<% include ../define-space-row %>
+								<%}
+							}%>
+						</tbody>
+					</table>
+					<p class="new-pallet">
+						<span class="primary">Add additional storage name</span>
+						<button class="add-button"><span>add</span></button>
+					</p>
+				</fieldset>
+			</div>
+		</div>
+	</div>
+	<fieldset class="form-footer">
+		<a href="/provider-registration-1" class="back button">Back</a>
+		<button type="button" class="action save">Save</button>
+		<span>OR</span>
+		<button class="action next">Save &amp; Continue</button>
+	</fieldset>
+</form>
+<script type="text/template" id="define-space-row">
+	<% var row = {}; %>
+	<% include ../define-space-row %> 
+</script>

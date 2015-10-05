@@ -65,6 +65,64 @@ define(["jquery"], function ($) {
 			cb({error:null})
 		}
 	}
+	
+	function deleteDocuments(warehouseId,files,cb){
+		if (files.length > 0){
+			if(!files) return;
+			var data = new FormData();
+			var err;
+			$.each(files, function(key, value){
+				data.append('path', JSON.stringify(value));
+			});
+			$.ajax({
+				url: '/documents/delete/' + warehouseId,
+				type: 'POST',
+				data: data,
+				cache: false,
+				dataType: 'json',
+				processData: false, // Don't process the files
+				contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+				success: function(data){
+					cb(data);
+				},
+				error: function(jqXHR, textStatus, errThrown){
+					err = JSON.parse(jqXHR.responseText);
+					cb(err);
+				}
+			});
+		}else{
+			cb({error:null})
+		}
+	}
+	
+	function deleteImages(warehouseId,images,cb){
+		if (images.length > 0){
+			if(!images) return;
+			var data = new FormData();
+			var err;
+			$.each(images, function(key, value){
+				data.append('image', value);
+			});
+			$.ajax({
+				url: '/images/delete/' + warehouseId,
+				type: 'POST',
+				data: data,
+				cache: false,
+				dataType: 'json',
+				processData: false, // Don't process the files
+				contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+				success: function(data){
+					cb(data);
+				},
+				error: function(jqXHR, textStatus, errThrown){
+					err = JSON.parse(jqXHR.responseText);
+					cb(err);
+				}
+			});
+		}else{
+			cb({error:null})
+		}
+	}
 
 	function uploadImage(warehouseId,files,tempLocations,cb){
 		if (files.length > 0){
@@ -164,7 +222,9 @@ define(["jquery"], function ($) {
 			updateStorage:updateStorage,
             updateVolumeDiscount:updateVolumeDiscount,
 			uploadDocument:uploadDocument,
-			uploadImage:uploadImage
+			uploadImage:uploadImage,
+			deleteDocuments:deleteDocuments,
+			deleteImages:deleteImages
 		}
 	}
 		
