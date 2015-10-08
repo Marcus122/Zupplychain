@@ -43,6 +43,7 @@ var aggregateStorage = function(theStorages, VolumeDiscounts) {
         var storagesThisWeek = getStoragesAsTheyAreThisWeek(wcDate);
         var totalSpace = 0;
         for (var i in storagesThisWeek) {
+            //Do pallets fit method instead of below
             totalSpace += storagesThisWeek[i].numSpaces;
             if (totalSpace >= numPallets) {
                 return true;
@@ -100,6 +101,7 @@ var aggregateStorage = function(theStorages, VolumeDiscounts) {
         }
         storagesThisWeek.sort(function(x,y) { return x.price.price > y.price.price });
         for (var i in storagesThisWeek) {
+            //Also check whether pallets will fit and then insert as many pallets as we can in the available space
             var numPalletsInThisStorage = Math.min(storagesThisWeek[i].numSpaces, numPalletsLeft);
             storagesThisWeek[i].numPalletsStored = numPalletsInThisStorage;
             numPalletsLeft -= numPalletsInThisStorage;
@@ -144,7 +146,7 @@ var aggregateStorage = function(theStorages, VolumeDiscounts) {
         var weeklyProfilesIndexedByDate = {};
         var firstTimeThrough = true;
         var palletsRequiredLastWeek = 0;
-        for (var i = 0; i<useageProfile.length; i++){//We have to loop in reverse because Mongo is storing the usage profile in descending profile
+        for (var i = 0; i<useageProfile.length; i++){
             for (var key in useageProfile[i]) {
                 var numPallets = useageProfile[i][key];
                 var wcDate = Date.parse(key);

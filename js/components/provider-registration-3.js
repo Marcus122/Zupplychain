@@ -142,7 +142,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
     initVolDiscountTablebehaviour();
     
     function initPopup() {
-        $(".close-me").click(function(){
+        $(document).on('click',".close-me",function(){
             $(this).closest(".popup-window").hide();
         });
         
@@ -163,15 +163,18 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
     function initVolumeDiscount() {
         //When the user clicks save we save the volume discount to the warehouse.
         //In addition the call to save everything now also includes a step to save the volume discount of the warehouse.
-        $(".add-volume-discount").click(function() {
+        $(document).on('click',".add-volume-discount",function() {
             showVolumeDiscountPopup();
         });
         
         function showVolumeDiscountPopup(){
           //don't need the template stuff anymore.
-          var popup = $("#volume-discount-popup");
-          popup.show();
-          centerPopup(popup);
+          //var popup = $("#volume-discount-popup");
+          var volumeDiscount = templates.getTemplate("volume-discount");
+          if (!volumeDiscount) return;
+          var $popup = volumeDiscount.getElement();
+          $('body').append($popup);
+          centerPopup($popup);
         }    
     }
     
@@ -407,7 +410,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
             //TODO:
         }
         
-        $('.popup').on("click",function(evt){ 
+        $(document).on('click','.popup',function(evt){ 
                 var $this = $(this);
                 editButtonClick($this);
         });
@@ -508,14 +511,25 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
             }
         });
         
-        $("#save-and-finish").click(function(ev) {
+        $(document).on('click',"#save-and-finish",function(ev) {
             clearSkipMarkerRows();
-            if(checkBasicPricingAndAvailabilityPopulated() === false){
-                callPAndAWarningPopup();
+            if ($(location).attr("pathname").indexOf('dashboard') != -1){
+                saveEverything(openSavedPopup);
             }else{
-                saveAndRegisterOrRedirect($(this).data('redirect'));
+                if(checkBasicPricingAndAvailabilityPopulated() === false){
+                    callPAndAWarningPopup();
+                }else{
+                    saveAndRegisterOrRedirect($(this).data('redirect'));
+                }
             }
         });
+        
+        function openSavedPopup(){
+            var saveTemplate = templates.getTemplate("save-registration");
+            var $popup = saveTemplate.bind({});
+            $('body').append($popup);
+            centerPopup($popup);
+        }
         
         $(document).on('click','button[name="acepted-p-and-a-terms"]',function(ev) {
              $(this).closest('.popup-window').hide();

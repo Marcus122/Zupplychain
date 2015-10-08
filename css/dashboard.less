@@ -87,6 +87,17 @@
 		display: inline-block;
 		margin-top: 20px;
 	}
+	a.tile-button{
+		text-align: initial;
+		color: #333;
+		text-transform: initial;
+		padding: 0;
+		white-space: normal;
+		width:100%;
+	}
+	.dashboard-back{
+		float:left;
+	}
 	#vertical-nav{
 		margin:0;
 		background: #6a6666;
@@ -94,6 +105,9 @@
 		border-bottom-right-radius: 7px;
 		ul{
 			margin-bottom:0;
+			&.tabs{
+				border:none;
+			}
 		}
 		ul li{
 			margin:0;
@@ -135,8 +149,20 @@
 		text-align: center;
 		background-color: #6a6666;
 	}
-	section.master-contacts .main{
-		border: 1px solid #d7d7d7;
+	div[data-view="contacts"],
+	div[data-view="users"]{
+		section.master-contacts .main{
+			border: 1px solid #d7d7d7;
+		}
+		.registered-status-complete{
+			border: 1px solid @primary;
+			width: 20px;
+			height: 20px;
+			background-color: @primary;
+			border-radius: 14px;
+			margin-left: 42%;
+			margin-right: 50%;
+		}
 	}
 	select[name="warehouses"]{
 		margin-left: 0;
@@ -150,7 +176,6 @@
 	
 	.tabs{
 		width:100%;
-		display:inline-block;
 		border-bottom: 5px solid @primary;
 	}
 	.tab-links{
@@ -188,6 +213,18 @@
 		box-shadow:-1px 1px 1px rgba(0,0,0,0.15);
 		background:#fff;
 		margin-bottom:20px;
+		&.view-edit-warehouse{
+			background-color: #d7d7d7;
+    		box-shadow: none;
+			padding-bottom: 0;
+			padding-left: 0;
+			padding-right: 0;
+			border-radius: 0;
+			.content-box{
+		    	margin-bottom: 20px;
+    			margin-bottom: 2rem;
+			}
+		}
 		&:last-of-type{
 			margin:0;
 		}
@@ -195,6 +232,22 @@
 			display:none;
 			&.active{
 				display:block;
+			}
+		}
+	}
+	#view-edit-warehouse,
+	#add-new-warehouse{
+		section.tabs{
+			border-bottom: 30px solid #f28711;
+		}
+		ul.tabs{
+			border:none;
+		}
+		div.tab{
+			background-color:@tertiary;
+			.content-box.primary{
+				margin-left:20px;
+				margin-right:20px;
 			}
 		}
 	}

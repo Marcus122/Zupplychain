@@ -77,7 +77,6 @@ exports.config = {
 		"Container De-stuffing",
 		"Pick & Pack",
 		"Home Delivery",
-		"Additional Insurance"
 	],
 	specifications: [
         "Perimeter Fencing",

@@ -8,6 +8,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 		var warehouse={};
 		var lm = new Loom();
 		var data={};
+		var DASHBOARD_PAGE = 'dashboard';
 		
 		function initialize() {
 			step1();
@@ -134,7 +135,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					if (result.error === false || result.error === null){
 						var warehouseId = result.data._id;
 						$('fieldset.form-footer a.tandc').after('<input name="id" value="' + warehouseId + '" type="hidden"/>')
-						if ($(location).attr("pathname").indexOf('dashboard') != -1){
+						if ($(location).attr("pathname").indexOf(DASHBOARD_PAGE) != -1){
 							$('#define-space').find('input[name="warehouse_id"]').val(warehouseId);
 						}
 						deleteFiles(warehouseId,function(result){
@@ -334,6 +335,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				if (index !== "" && index !== undefined){
 					parseInt(index);
 					documents.splice(index,1);
+					documentTitles.splice(index,1);
 					$('div[data-doc-index]').each(function(){
 						var oldIndex = parseInt($(this).attr('data-doc-index'));
 						if (oldIndex > index){
@@ -349,7 +351,23 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                 $("#defaultPhoto").val($(this).data("photo"));
                 $("#upload-photos .document").removeClass("isDefault");
                 $(this).closest(".document").addClass("isDefault");
-            })
+            });
+			
+			$('input[name="allProdInsurance"]').change(function(){
+				if ($(this).is(":checked")){
+					$(this).val('Insured for Storing All Products');
+				}else{
+					$(this).val("");
+				}
+			});
+			
+			$('input[name="additionalInsurance"]').change(function(){
+				if ($(this).is(":checked")){
+					$(this).val('Additional Insurance');
+				}else{
+					$(this).val("");
+				}
+			});
             
 		}
 		function step2(){
@@ -480,6 +498,8 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			var $input = $(this);
 			var name = $input.attr('name');
 			var array = $input.data('array');
+			var json = $input.data('json');
+			var jsonKey;
 			if(array){
 				if(!object[array]){
 					object[array]=[];
@@ -495,6 +515,22 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					}else{
 						object[array].push($input.val());
 					}
+				}
+			}else if(json){
+				jsonKey = $input.attr('name');
+				if(!object[json]){
+					object[json] = {};
+				}
+				if($input.attr('type') === 'checkbox'){
+					if($input.is(':checked')){
+						object[json][jsonKey] = $input.attr('value');
+					}else{
+						object[json][jsonKey] = "";
+					}
+				}else if($input.attr('type') === 'file'){
+					//Do nothing
+				}else{
+					object[json][jsonKey] = ($input.val());
 				}
 			}else{
 				if(name){

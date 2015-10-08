@@ -114,6 +114,66 @@
 		</div>
 		<div class="content-box primary">
 			<div class="header">
+				<h3>Insurance</h3>
+			</div>
+			<fieldset class="main insurance-details">
+				<%if(warehouse.insurance){%>
+					<div class="input-field">
+						<%if( warehouse.insurance.allProdInsurance && warehouse.insurance.allProdInsurance.indexOf('Insured for Storing All Products') != -1 ){%>
+							<input data-json="insurance" type="checkbox" name="allProdInsurance" value="Insured for Storing All Products" checked>
+						<%}else{%>
+							<input data-json="insurance" type="checkbox" name="allProdInsurance" value="">
+						<%}%>
+						<label for="allProdInsurance">Please confirm you are insured for storing all products (except those in exceptions below)</label>
+					</div>
+					<div class="row">
+						<div class="input-field columns six">
+							<label for="minimumInsuranceLevel">Minimun insurance level per customer pallet</label>
+							<input data-json="insurance" type="text" name="minimumInsuranceLevel" value="<%=warehouse.insurance.minimumInsuranceLevel%>">
+						</div>
+						<div class="input-field columns six">
+							<%if( warehouse.insurance.additionalInsurance && warehouse.insurance.additionalInsurance.indexOf('Additional Insurance') != -1  ){%>
+								<input data-json="insurance" type="checkbox" name="additionalInsurance" value="Additional Insurance" checked>
+							<%}else{%>
+								<input data-json="insurance" type="checkbox" name="additionalInsurance" value="">
+							<%}%>
+							<label for="additionalInsurance">Aditional insurance available?</label>
+							<div class="tool-tip hint--top" data-hint="Are you able to offer full insurance for a customer’s product in your warehouse?">?</div>
+						</div>
+					</div>
+					<div class="input-field">
+						<label for="additionalInsuranceDescription">Additional Insurance Description</label>
+						<div class="hint--top description-container">
+							<textarea data-json="insurance" id="additional-insruance-description" name="additionalInsuranceDescription" placeholder="A short description of any adiontional insurance" data-loom-validators="complexTelephoneNumberNotInInput"><%=warehouse.insurance.additionalInsuranceDescription%></textarea>
+						</div>
+					</div>
+				<%}else{%>
+					<div class="input-field">
+						<input data-json="insurance" type="checkbox" name="allProdInsurance" value="">
+						<label for="allProdInsurance">Please confirm you are insured for storing all products (except those in exceptions below)</label>
+					</div>
+					<div class="row">
+						<div class="input-field columns six">
+							<label for="minimumInsuranceLevel">Minimun insurance level per customer pallet</label>
+							<input data-json="insurance" type="text" name="minimumInsuranceLevel">
+						</div>
+						<div class="input-field columns six">
+							<input data-json="insurance" type="checkbox" name="additionalInsurance" value="">
+							<label for="additionalInsurance">Aditional insurance available?</label>
+							<div class="tool-tip hint--top" data-hint="Are you able to offer full insurance for a customer’s product in your warehouse?">?</div>
+						</div>
+					</div>
+					<div class="input-field">
+						<label for="additionalInsuranceDescription">Additional Insurance Description</label>
+						<div class="hint--top description-container">
+							<textarea data-json="insurance" id="additional-insruance-description" name="additionalInsuranceDescription" placeholder="A short description of any adiontional insurance" data-loom-validators="complexTelephoneNumberNotInInput"></textarea>
+						</div>
+					</div>
+				<%}%>
+			</fieldset>
+		</div>
+		<div class="content-box primary">
+			<div class="header">
 				<h3>Uploads</h3>
 			</div>
 			<fieldset class="main warehouse-documents">
@@ -121,7 +181,7 @@
 				<div class="row documents">
 					<label  class="columns three" for="photos">Upload Warehouse Photos</label>
 					<input class="columns seven" type="file" id="photos"/>
-					<div class="columns one">
+					<div class="columns two upload">
 						<button id="add-photo" type="button" class="attach primary mini"><span>Upload</span></button>
 					</div>
 				</div>
@@ -151,10 +211,10 @@
 							<div class="tool-tip hint--top" data-hint="Upload files here such as Insurance Certificates, ISO 14001, Fire Safety/Sprinkler Documentation, Operator License">?</div>
 						</div>
 						<input class="columns three" type="file" id="docs"/>
-						<div class="input-field columns five file-title">
+						<div class="input-field columns four file-title">
 							<input type="text" name="file-title" placeholder="Title"/>
 						</div>
-						<div class="columns one">
+						<div class="columns two upload">
 							<button id="add-document" type="button" class="attach primary mini"><span>Upload</span></button>
 						</div>
 					</div>
@@ -193,4 +253,21 @@
 </form>
 <script type="text/template" id="save-registration">
 	<% include ../save-registration%>
+</script>
+<script type="text/template" id="warehouse-image">
+	<div class="columns four row document">
+		<div class="columns five image">
+			<img data-bind-src="file"/>
+		</div>
+		<span class="file-name columns four">@name@</span>
+		<input type="hidden" name="photo" data-array="photos" data-bind-value="name"/>
+		<div class="columns one">
+			<button type="button" href="#" class="trash-button"><span>Delete</span></button>
+		</div>
+		<span class="default-photo-label">Main image</span>
+		<button data-bind-data-photo="name" class="tiny simple make-default-photo" type="button">Use as main image</button>
+	</div>
+</script>
+<script type="text/template" id="upload-document">
+	<% include ../upload-document%>
 </script>

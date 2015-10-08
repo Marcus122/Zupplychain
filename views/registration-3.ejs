@@ -171,7 +171,7 @@
 									<table class="responsive-table columns seven" data-title="Basic pricing" id="default-pricing-table">
 										<thead><tr>
 											<th>Price per pallet per week (£)</th>
-											<th>Handling charge per pallet (In and Out) (£)</th>
+											<th>In and Out Handling charge per pallet (£ per Pallet) (£)</th>
 										</thead>
 										<tbody/>
 									</table>
@@ -201,7 +201,7 @@
 											<th>From (Monday)</th>
 											<th>To (Sunday)</th>
 											<th>Price per pallet per week (£)</th>
-											<th>Handling charge per pallet (In and Out) (£)</th>
+											<th>In and Out Handling charge (£ per Pallet)</th>
 											<th class="remove-col"/>
 										</tr>
 									</thead>
@@ -242,103 +242,10 @@
             %> 
 		 </script>
 
-			<div class="popup-window" id="volume-discount-popup" style="display:none;">
-				<div class="inner">
-					<div class="popup-main content-box secondary discount-popup tray">
-						<div class="header">
-							<h2>Volume Discount</h2>
-						</div>
-						<button class="close-me no-resize"><span>close</span></button>
-						<div class="main">
-							<div class="discount-inner">
-                            <%
-                                    warehouse.totalPalletSpaces = 0;
-                                    for (var j =0;j<warehouse.storage.length;j++) {
-                                        warehouse.totalPalletSpaces += warehouse.storage[j].palletSpaces;
-                                    }
-                                %>
-								<div class="discount-header">
-									<h2>Volume Discount</h2>
-									<span>Max number of pallets: <strong><%= warehouse.totalPalletSpaces %></strong></span>
-								</div>
-                                
-								<form method="post" id="discount-form" class="volume-discount-form loom-form" novalidate data-loom-no-submit="true">
-									<div class="input-field no-discount no-success-validation-style">
-										<label for="no-disc">No discount on orders with up to</label>
-										<input required type="number" name="noDiscount" min="0" data-bind-value="noDiscount" data-bind-max="palletSpaces" value="<%= warehouse.noDiscount || ''; %>" max="<%=warehouse.totalPalletSpaces%>"/>
-										<span>pallets</span>
-									</div>
-									<p>If you want to specify variations to your prices for large quantities, use this table. If not, your prices will apply to any quantity.</p>
-									<table class="show-title responsive-table" data-title="Volume Discount" id="volume-discount-table">
-										<thead>
-											<th>From</th>
-											<th>To</th>
-											<th class="discount-value">% Discount</th>
-											<th class="remove-col"/>
-										</thead>
-										<tbody>
-                                        <% 
-                                        var thisDiscount = null;
-                                        for (var i=0;i<warehouse.discounts.length;i++)  {
-                                            thisDiscount = warehouse.discounts[i];
-                                        %>
-                                            <tr class="js-single-discount">
-                                                <td data-th="From" class="discount-from">
-                                                    <input name="from" type="hidden" data-bind-value="from" value="<%=thisDiscount.from%>"/>
-                                                    <span class="js-from"><%= thisDiscount.from %></span>
-                                                </td>
-                                                <td data-th="To" class="input-field no-success-validation-style discount-to">
-                                                    <input data-bind-max="total" required data-bind-value="to" data-bind-min="from" type="number" name="to" value="<%=thisDiscount.to %>" max="<%= warehouse.totalPalletSpaces %>"/>
-                                                </td>
-                                                <td data-th="% Discount" class="input-field no-success-validation-style discount-value">
-                                                    <input data-loom-type="decimal" data-loom-decimal-places="2" required data-bind-value="perc" name="perc"  type="number" min="0" step="0.5" value="<%=thisDiscount.perc%>"/>
-                                                </td>
-                                                <td data-th="Remove" class="remove-col">
-                                                    <button type="button" class="trash-button">
-                                                        <span>Delete</span>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        <% }
-                                        var blankRowFrom = thisDiscount && thisDiscount.to + 1 || ( warehouse.noDiscount && warehouse.noDiscount + 1 || 0)  
-                                        %>
-                                        <!-- add a blank row -->
-                                        <tr class="js-single-discount">
-                                                <td data-th="From" class="discount-from">
-                                                    <input name="from" type="hidden" data-bind-value="from" value="<%= blankRowFrom %>"/>
-                                                    <span class="js-from"> <%= blankRowFrom %></span>
-                                                </td>
-                                                <td data-th="To" class="input-field no-success-validation-style discount-to">
-                                                    <input data-bind-max="total" required data-bind-value="to" data-bind-min="from" type="number" name="to" value="" max="<%= warehouse.totalPalletSpaces %>"/>
-                                                </td>
-                                                <td data-th="% Discount" class="input-field no-success-validation-style discount-value">
-                                                    <input data-loom-type="decimal" data-loom-decimal-places="2" required data-bind-value="perc" name="perc"  type="number" min="0" step="0.5" placeholder="0.00"/>
-                                                </td>
-                                                <td data-th="Remove" class="remove-col">
-                                                    <button type="button" class="trash-button">
-                                                        <span>Delete</span>
-                                                    </button>
-                                                </td>
-                                            </tr>
-										</tbody>
-									</table>
-                                        <div class="popup-buttons">
-                                                <div class="add">
-                                                    <button type="button" class="add-button"><span>add row</span></button>
-                                                </div>
-                                        </div>
-                                        <div class="popup-buttons">
-                                                <div class="save">
-                                                    <button class="action done">save</button>
-                                                </div>
-                                        </div>
-								</form>
-                            </div>
-						</div>
-					</div>
-				</div>
-            </div>
-		 </script>
+		
+		<script type="text/template" id="volume-discount">
+			<% include ./partials/volume-discount%>
+		</script>
 		 <script type="text/template" id="discount-row">
 		    <% include ./partials/discount-row %> 
 		 </script>

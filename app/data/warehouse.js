@@ -32,6 +32,12 @@ var fields = {
 	active: { type: Boolean, default: false },
 	created: { type: Date , default: Date.now },
 	storage: [{ type: Schema.ObjectId, ref: 'storage' }],
+  insurance: {
+    allProdInsurance: {type:String,default:""},
+    minimumInsuranceLevel: {type:String,default:""},
+    additionalInsurance: {type:String,default:""},
+    additionalInsuranceDescription: {type:String,default:""}
+  },
 	geo: {
 		lat: { type: Number },
 		lng: { type: Number }
@@ -120,6 +126,7 @@ warehouseSchema.statics = {
             });
   },*/
   
+  //Don't check pallet types match anymore
   storagesToAggregateStorage: function(warehouse, query) {  
     var storage = warehouse.storage;
     var volumeDiscounts = warehouse.discounts;
@@ -128,6 +135,7 @@ warehouseSchema.statics = {
     query.totalPallets = parseInt(query.totalPallets,10);
     var matchingStorages = [];
     var k = 0;
+    //Remove storages with pallet types that are too small so if quered 1.2 remove 1.0.
     for (var j=0; j<storage.length; j++){
         var palletTypeOK  = !query.palletType || storage[j].palletType == 0 || storage[j].palletType === query.palletType; //!palletType means any
         var maxWeightOK   = !query.weight || storage[j].maxWeight >= query.weight;

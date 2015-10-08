@@ -14,8 +14,11 @@
         background-color:#ccc;
     }
 }
-
+.row.documents{
+	margin-bottom:20px;
+}
 #upload-photos {
+	margin-bottom:20px;
     .document {
         .default-photo-label {
             color:@highlight;
@@ -54,10 +57,6 @@ label[for="photos"]{
 	margin-right:0 !important;
 }
 
-#photos[type="file"]{
-	margin-right:5%;
-}
-
 .tool-tip{
     cursor:help;
     display:inline-block;
@@ -82,7 +81,8 @@ label[for="photos"]{
 		width:30%;
 	}
 }
-.warehouse-details textarea{
+.warehouse-details textarea,
+.insurance-details textarea{
 	display: block;
 	.border-radius(10px,10px,10px,10px);
 	.unit-margin-top(2);
@@ -91,6 +91,29 @@ label[for="photos"]{
 }
 .warehouse-details .description-container{
 	width:100%;
+}
+.insurance-details{
+	label[for="minimumInsuranceLevel"]{
+		width:82%;
+		margin-bottom:2rem;
+		margin-bottom:20px;
+	}
+	label[for="additionalInsurance"]{
+		width:39%;
+		margin-right:0;
+	}
+	label[for="allProdInsurance"]{
+		width:80%;
+	}
+	label[for="additionalInsuranceDescription"]{
+		width:100%;
+	}
+	.row .input-field{
+		margin-bottom:0;
+	}
+	.hint:after, [data-hint]:after{
+		left: -232px;
+	}
 }
 .documents{
 	border-top: @tertiary 1px solid;
@@ -101,13 +124,19 @@ label[for="photos"]{
 		margin-top:@unit-px;
 	}
 	.input-field.file-title{
-		margin-left:5px;
+		input[name="file-title"]{
+			width:100%;
+		}
 	}
 	.columns.five:first-child{
 		margin-right:5%;
 		label{
 			margin-right:0;
 		}
+	}
+	#add-document,
+	#add-photo{
+		float:right;
 	}
 }
 #upload-documents{

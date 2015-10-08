@@ -158,7 +158,7 @@ function deleteDocumentsAndEmptyDir(req,res){
 						fh.readDir(local.config.upload_folders[0] + req.warehouse.id,function(err,files){
 							if (err && err.code !== 'ENOENT'){
 								setErrorResponse('Document Delete Error',res);
-							}else if (files.length === 0){
+							}else if (files && files.length === 0){
 								fh.deleteDir(local.config.upload_folders[0] + req.warehouse.id,function(err){
 									if (err && err.code !== 'ENOENT'){
 										setErrorResponse('Document Delete Error',res);

@@ -3,7 +3,11 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
     function Class() {
 		var templates = new Templates();
 		var LOGIN_FAILED_MESSAGE = "The email address or password was incorrect";
+		var ACTION_ADD_NEW_WAREHOUSE = "add-new-warehouse";
+		var ACTION_VIEW_EDIT_WAREHOUSE = "view-edit-warehouse";
 		var loom = new Loom(),
+			backLinks = [],
+			currentView = "#main",
 			$mainView = $('div[data-view="main"]'),
 			$adminView = $('div[data-view="admin"]'),
 			$warehouseView = $('div[data-view="warehouses"]'),
@@ -12,6 +16,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 		
 		initNavEvents();
 		initTabs();
+		triggerHashClick();
 		initAccountTab();
 		initWarehouseTab();
 		initPaging($("#warehouses-table"));
@@ -23,6 +28,11 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 				window.location.href = '/dashboard';
 			}
         });
+		
+		function triggerHashClick(){
+			var hash = $.trim(window.location.hash);
+			if(hash) $('a[href$="' + hash + '"]').trigger('click');
+		}
 		
 		function initAccountTab(){
 			loom.addOnSuccessCallback("save-account-details-form", function(response){
@@ -43,30 +53,58 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 		}
 		
 		function initWarehouseTab(){
+			
 			$(document).on('click','#warehouses-table tbody tr td .button',function(e){
 				e.preventDefault();
-				DBCntr.loadWarehouse($(this).attr('href'),function(response){
+				var $this = $(this);
+				var $warehouseContainer = $('#view-edit-warehouse');
+				DBCntr.loadWarehouse($this.attr('href'),function(response){
 					var $warehouse = $(response);
-					$('#view-edit-warehouse').append($warehouse);
-					$('#view-edit-warehouse').show();
+					$warehouseContainer.empty();
+					$warehouseContainer.append($warehouse);
+					$warehouseContainer.show();
 					initTabs();
+					prepareWarehouseView($this);
+					$warehouseContainer.find('input').prop('disabled',true);
+					$warehouseContainer.find('button').prop('disabled',true);
+					$warehouseContainer.find('textarea').prop('disabled',true);
+					$warehouseContainer.find('select').prop('disabled',true);
 					
 					require(["components/provider-registration"], function(Registration) {
 						Registration();
-						loom.rebind('registration');
-						loom.rebind('define-space');
+						$("#view-edit-warehouse form.loom-form").each(function(){//Rebind loom with all the warehouse forms
+							loom.rebind($(this));
+						});
 					});   
 				});
 			});
 			
+			$(document).on('click', '.toggle-view-edit',function(){
+				var $this = $(this);
+				var $tab = $this.closest('#view-edit-warehouse');
+				if ($this.hasClass('down')){
+					if($this.data('mode') === 'view'){
+						$tab.find('input').prop('disabled',true);
+						$tab.find('button').prop('disabled',true);
+						$tab.find('textarea').prop('disabled',true);
+						$tab.find('select').prop('disabled',true);
+					}else if($this.data('mode') === 'edit'){
+						$tab.find('input').prop('disabled',false);
+						$tab.find('button').prop('disabled',false);
+						$tab.find('textarea').prop('disabled',false);
+						$tab.find('select').prop('disabled',false);
+					}
+				}
+			});
+			
 			$(document).on('click','.add-new-warehouse-container .button',function(e){
 				e.preventDefault();
-				DBCntr.loadWarehouse($(this).attr('href'),function(response){
-					$(response).find('#registration').attr('action','/registration-2');
-					$(response).find('#define-space').attr('action','/registration-3');
+				var $this = $(this);
+				DBCntr.loadWarehouse($this.attr('href'),function(response){
 					var $warehouse = $(response);
 					$('#add-new-warehouse').append($($warehouse));
 					$('#add-new-warehouse').show();
+					prepareWarehouseView($this);
 					$('#add-new-warehouse').find('section.tabs').removeClass('tabs').find('li').removeClass('checked');
 					initTabs();
 					
@@ -83,8 +121,8 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 				var clickedTab = $tab.find('a').attr('href');
 				$('.tab-content ' + clickedTab).show().siblings().hide();
 				$tab.addClass('active').siblings().removeClass('active');
+				$('#add-new-warehouse ul li:first-child').addClass('checked');
 				e.preventDefault();
-				$('#define-space').find("input[name='warehouse_id']").val($('input[name="id"]').val());
 			});
 			
 			$(document).on('submit','#define-space',function(e){
@@ -92,16 +130,79 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 				var clickedTab = $tab.find('a').attr('href');
 				$('.tab-content ' + clickedTab).show().siblings().hide();
 				$tab.addClass('active').siblings().removeClass('active');
+				$('#add-new-warehouse ul li:nth-child(2)').addClass('checked');
 				e.preventDefault();
+				rebuilPricingAndAvailability();
+			});
+			
+			$(document).on('click','#define-space .save',function(e){
+				rebuilPricingAndAvailability();
+			});
+			
+			$(document).on('click',"#add-new-warehouse #save-and-finish",function(ev) {
+				$('#add-new-warehouse').empty();
 			});
 		}
 		
+		function rebuilPricingAndAvailability(){
+			DBCntr.rebuildPricingAndAvailability($('input[name="warehouse_id"]').val(),function(response){
+				$("#step-3").empty();
+				$("#step-3").append($(response));
+			});
+		}
+		
+		function rebuildWarehouseList(){
+			DBCntr.rebuildPricingAndAvailability($('input[name="warehouse_id"]').val(),function(response){
+				$('div[data-view="warehouses"]').empty();
+				$('div[data-view="warehouses"]').append($(response));
+			});
+		}
+		
+		function prepareWarehouseView($this){
+			var $viewEditButtons = $('.view-edit-buttons');
+			$this.closest('div[data-view="warehouses"]').find('.content-box[data-content="warehouses"]').hide();
+			$this.closest('.dashboard-container').parent('.main').css('background-color','initial');
+			//$this.closest('div[data-view="warehouses"]').find('input[type="date"]').datepicker().show();
+			loom = new Loom();
+			if($this.data('action') === ACTION_ADD_NEW_WAREHOUSE){
+				$viewEditButtons.hide();
+			}else if($this.data('action') === ACTION_VIEW_EDIT_WAREHOUSE){
+				$viewEditButtons.show();
+			}
+		}
+		
 		function initNavEvents(){
-			$('#vertical-nav ul li a').click(function(){
-				var href = $(this).attr('href');
+			$('#vertical-nav ul li a, a.tile-button').click(function(){
+				var $this = $(this);
+				$('div[data-view="warehouses"]').find('.content-box[data-content="warehouses"]').show();
+				$('#view-edit-warehouse').find('.row').remove();
+				$('#add-new-warehouse').find('.row').remove();
+				$this.parent('li').parent('ul').parent('#vertical-nav').parent('.main').css('background-color','#d7d7d7');
+				var href = $this.attr('href');
+				if (currentView !== "") backLinks.push(currentView);
+				currentView = href;
 				var $corrView = $('div[data-view="' + href.replace('#','') +'"]');
 				$corrView.show().siblings('.dashboard-container').hide();
-				$(this).parent('li').addClass('active').siblings().removeClass('active');
+				$this.parent('li').addClass('active').siblings().removeClass('active');
+			});
+			$('.dashboard-back').click(function(){
+				var length = backLinks.length;
+				$($(this).parent('.container').parent('.form-footer').prev('section').find('.main')[0]).css('background-color','#d7d7d7');
+				if (length > 0){
+					var $corrView = $('div[data-view="' + backLinks[length-1].replace('#','') +'"]');
+					$corrView.show().siblings('.dashboard-container').hide();
+					if ($('#vertical-nav ul li a[href="' + backLinks[length-1] + '"]').length > 0){
+						$('#vertical-nav ul li a[href="' + backLinks[length-1] + '"]').parent('li').addClass('active').siblings().removeClass('active');
+					}else{
+						$('li.active').removeClass('active');
+					}
+					backLinks.pop();
+					if (backLinks.length === 0){
+						currentView = "#main";
+					}
+				}else{
+					window.location.href = '/';
+				}
 			});
 		}
 		function initPaging($table){
@@ -118,9 +219,10 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 		
 		function initTabs(){
 			$('.tabs ul.tabs a').on('click',function(e){
-				var clickedTab = $(this).attr('href');
+				var $this = $(this);
+				var clickedTab = $this.attr('href');
 				$('.tab-content ' + clickedTab).show().siblings().hide();
-				$(this).parent('li').addClass('active').siblings().removeClass('active');
+				$this.parent('li').addClass('active').siblings().removeClass('active');
 				e.preventDefault();
 			});
 		}

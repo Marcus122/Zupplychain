@@ -1,5 +1,5 @@
 <div data-view="warehouses" class="dashboard-container columns nine" style="display:none">
-	<div class="secondary content-box">
+	<div class="secondary content-box" data-content="warehouses">
 		<div class="header">
 			<h3>Warehouses</h3>
 		</div>
@@ -18,7 +18,7 @@
 						<tr>
 							<td data-id="<%=warehouses[i].id%>"><%=warehouses[i].name%></td>
 							<td><%=warehouses[i].city%>, <%=warehouses[i].postcode%></td>
-							<td><a class="action button" href="/view-edit-warehouse/<%=warehouses[i].id%>">View</a></td>
+							<td><a data-action="view-edit-warehouse" class="action button" href="/view-edit-warehouse/<%=warehouses[i].id%>">View</a></td>
 							<td><input type="checkbox" name="delete-warehouse"/></td>
 						</tr>
 					<%}%>
@@ -26,7 +26,7 @@
 			</table>
 			<div class="add-new-warehouse-container">
 				<label for="add-new-warehouse">Add new warehouse</label>
-				<a href="/add-new-warehouse" class="button add-button primary"></a>
+				<a href="/add-new-warehouse" class="button add-button primary" data-action="add-new-warehouse"></a>
 			</div>
 		</div>
 	</div>

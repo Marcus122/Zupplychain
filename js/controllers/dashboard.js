@@ -22,8 +22,42 @@ define(["jquery"], function ($) {
 			});
 		}
 		
+		function rebuildPricingAndAvailability(warehouseId,cb){
+			var url = '/rebuild-pricing-and-availability/' + warehouseId;
+			$.ajax({
+				url: url,
+				type: 'GET',
+				dataType: 'html',
+				success: function(response){
+					cb(response)
+				},
+				error:function(jqXHR, textStatus, errThrown){
+					err = JSON.parse(jqXHR.responseText);
+					cb(err);
+				}
+			});
+		}
+		
+		function rebuildWarehouseList(warehouseId,cb){
+			var url = '/rebuild-warehouse-list/' + warehouseId;
+			$.ajax({
+				url: url,
+				type: 'GET',
+				dataType: 'html',
+				success: function(response){
+					cb(response)
+				},
+				error:function(jqXHR, textStatus, errThrown){
+					err = JSON.parse(jqXHR.responseText);
+					cb(err);
+				}
+			});
+		}
+		
 		return{
-			loadWarehouse:loadWarehouse
+			loadWarehouse:loadWarehouse,
+			rebuildPricingAndAvailability:rebuildPricingAndAvailability,
+			rebuildWarehouseList:rebuildWarehouseList
 		}
 	}
 	return c;

@@ -306,6 +306,35 @@ button.input-button{
     padding-bottom:0.7rem;
     border-radius: 0px 5px 5px 0px;
 }
+
+.view-edit-buttons {
+    display: inline-block;
+    float: right;
+    margin-bottom: 20px;
+    width:91px;
+    .toggle-view-edit.down{
+        background:@primary;
+        border: 1px solid @primary;
+        cursor:auto;
+    }
+    .toggle-view-edit{
+        background:@tertiary;
+        border:1px solid @tertiary;
+        cursor:pointer;  
+        float:left;
+    }
+    .toggle-view-edit[data-mode="view"]{
+        border-top-left-radius: 7px;
+        border-bottom-left-radius: 7px;
+        padding: 5% 5%;
+    }
+    .toggle-view-edit[data-mode="edit"]{
+        border-top-right-radius: 7px;
+        border-bottom-right-radius: 7px;
+        padding: 5% 8%;
+    }
+}
+
  
  /* Animation Keyframes */
  @keyframes rotate{

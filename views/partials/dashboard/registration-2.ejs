@@ -1,5 +1,5 @@
 <form class="loom-form" data-loom-no-submit="true" method="post" action="#" id="define-space" novalidate>
-	<input type="hidden" name="warehouse_id"/>
+	<input type="hidden" name="warehouse_id" <%if(warehouse.id !== undefined)%> value="<%=warehouse.id%>"/>
 	<div class="main">
 		<div class="content-box primary">
 			<div class="header">

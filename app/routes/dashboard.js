@@ -87,6 +87,16 @@ var handler = function(app) {
 		});
 	});
 	
+	app.get('/rebuild-pricing-and-availability/:warehouse_id',function(req,res){
+		req.data.warehouse = req.warehouse;
+		res.render('partials/dashboard/registration-3',req.data);
+	});
+	
+	app.get('/rebuild-warehouse-list/:warehouse_id',function(req,res){
+		req.data.warehouse = req.warehouse;
+		res.render('partials/dashboard/warehouses',req.data);
+	});
+	
 };
 
 function changePassword(req,cb){

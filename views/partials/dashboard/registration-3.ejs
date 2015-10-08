@@ -1,4 +1,5 @@
 <input type="hidden" name="user-active" value="<%= user.active %>"/>
+<input type="hidden" name="warehouse_id" <%if(warehouse.id !== undefined)%> value="<%=warehouse.id%>"/>
 <div class="main" id="price-and-availability-user-data">
 	<div class="content-box primary">
 		<div class="header">
@@ -128,3 +129,9 @@
 	<a href="/provider-registration-2"><button class="back" type="button">Back</button></a>
 	<button data-redirect="/registration-complete" id="save-and-finish" class="action next">Save &amp; Finish</button>
 </fieldset>
+<script type="text/template" id="volume-discount">
+	<% include ../volume-discount%>
+</script>
+<script type="text/template" id="discount-row">
+	<% include ../discount-row %> 
+</script>

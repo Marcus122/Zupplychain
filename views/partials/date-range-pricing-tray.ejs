@@ -13,6 +13,7 @@
         <div class="row">
             <div class="columns four">&nbsp;</div>
             <div class="copy-controls controls columns eight">
+            <div class="tool-tip hint--top" data-hint="Copy dates and prices from another storage to this one. You can then edit theses.">?</div>
                 <label for="copy-from">Copy from another storage?</label>
                 <select name="copy-from">
                     <%for( var i=0; i<warehouse.storage.length;i++ ){ 
@@ -34,7 +35,7 @@
                 <th>From W/C (Monday)</th>
                 <th>To (Sunday)</th>
                 <th>Price per Pallet (&pound; per Week)</th>
-                <th>Handling Charge (&pound; per Pallet)</th>
+                <th>In and Out Handling Charge (&pound; per Pallet)</th>
                 <th class="remove-col"/>
             </tr>
         </thead>
