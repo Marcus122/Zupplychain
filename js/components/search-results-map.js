@@ -225,10 +225,11 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery", "loom/loomAl
             if (!data){
                 return;
             }
-			if (data.photos[0] == undefined){
-				data.photos[0] = 'not-found.jpg'//Default image
-			}
-            var mainPhoto = data.defaultPhoto || data.photos[0] || "not-found.jpg";
+			// if (data.photos && data.photos[0] == undefined){
+			// 	data.photos[0] = 'not-found.jpg'//Default image
+			// }
+            //var mainPhoto = data.defaultPhoto || data.photos[0] || "not-found.jpg";
+            mainPhoto = data.defaultPhoto || "not-found.jpg";
             var postCodeFirstHalf = data.postcode.substr(0,2);//fallback if splitting on space fails.
             var postCodeSplit = data.postcode.split(" ");
             if (postCodeSplit.length > 1 && postCodeSplit[0].length > 1 && postCodeSplit.length <= 4) {

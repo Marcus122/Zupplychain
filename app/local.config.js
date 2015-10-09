@@ -38,6 +38,7 @@ exports.config = {
     companyDetails : {
         "telephone" : "01888 888 888",
         "fax" : "01888 888 888",
+        "email" : "info@zupplychain.com",
         "addressLine1" : "64-68 Blackburn Street",
         "addressLine2" : "Radcliffe",
         "city" : "Manchester",
@@ -87,14 +88,21 @@ exports.config = {
 		"Bulk Storage"	
 	],
     
+    // palletTypes : {
+    //     0 : "Any",
+    //     1 : "Standard Two way (1mx1.2m)",
+    //     2 : "Standard 4 way (1mx1.2m)",
+    //     3 : "Euro (0.8mx1.2m)",
+    //     4 : "1.2mx1.2m", 
+    //     5 : "0.8mx0.6m",
+    //     6 : "Other" 
+    // },
+    
     palletTypes : {
-        0 : "Any",
-        1 : "Standard Two way (1mx1.2m)",
-        2 : "Standard 4 way (1mx1.2m)",
-        3 : "Euro (0.8mx1.2m)",
-        4 : "1.2mx1.2m", 
-        5 : "0.8mx0.6m",
-        6 : "Other" 
+        0 : "0.8",
+        1 : "1.0",
+        2 : "1.2",
+        3 : "2.4"
     },
     
     temperatures : { // miss out 0 as we'll code for zero being a wild card.
@@ -132,5 +140,12 @@ exports.config = {
     
     headers: {
        "addressHeader": "Registered Address:"
-    }
+    },
+    
+    contactUsEnquires: [
+        'Offering Storage',
+        'Looking for Space',
+        'Media Enquires',
+        'Other'
+    ]
 };

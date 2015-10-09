@@ -32,6 +32,7 @@
 											<thead>
 												<tr>
 													<th>Storage Name</th>
+													<th>Pallet Width</th>
 													<th>Pallet Spaces</th>
 													<th>Pricing</th>
 													<!--<th>Volume Discount</th>-->
@@ -54,6 +55,9 @@
 												<tr data-id="<%=storage._id %>">
 													<td class="text" data-th="Storage Name">
 														<span><%=storage.name%></span>
+													</td>
+													<td class="text" data-th="Pallet Type">
+														<span><%=palletTypes[storage.palletType]%></span>
 													</td>
 													<td class="text" data-th="Pallet Spaces">
 														<span><%=storage.palletSpaces%></span>

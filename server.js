@@ -71,6 +71,7 @@ app.get("/" , function(req,res){
    res.render("index", req.data);
 });
 
+require('./app/routes/contact-us')(app);
 require('./app/routes/user-handler')(app);
 require('./app/routes/warehouse-handler')(app);
 require('./app/routes/registration')(app);

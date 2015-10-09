@@ -270,6 +270,9 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
                     $tr.find("input").val(selectedValue);
                     var $theTable = $(".warehouse-pricing table");
                     $tr.find("input").trigger("change");
+                    if ($(this).parent('td').closest('tr').parent('tbody').parent('table').find('button.refresh').length === 0){
+                        $tr.find("input").after('<button class="refresh highlight tiny"/>');
+                    }
                 });
             }            
         }
@@ -308,7 +311,7 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
         
         function initUseageProfileChange() {
             $(document).on("keyup", ".warehouse-pricing table input",function(evt){
-                if ($(this).parent('td').parent('tr').parent('tbody').parent('table').find('button.refresh').length === 0){
+                if ($(this).closest('td').parent('tr').parent('tbody').parent('table').find('button.refresh').length === 0){
                     var newNum = parseInt($(this).val()),
                         $parentTd = $(this).closest('td.input-field'),
                         $refresh = $parentTd.find('.refresh');

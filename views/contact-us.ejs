@@ -4,47 +4,87 @@
 		<h1>Contact Us</h1>
 	</div>
 	<section>
-		<div class="main">
-			<div class="banner row">
-				<div clas="columns five">
-					<h1>Find a solution today</h1>
-					<br/>
-					<h3>Whether you're providing warehouse space or searching for storage we can help you.</h3>
+		<form method="post" action="/send-email" id="contact-us" novalidate class="loom-form" autocomplete="off">
+			<div class="main">
+				<div class="banner row">
+					<div clas="columns five">
+						<h1>Find a solution today</h1>
+						<br/>
+						<h3>Whether you're providing warehouse space or searching for storage we can help you.</h3>
+					</div>
 				</div>
-			</div>
-			<div class="row boxes">
-				<div class="columns twelve">
-					<div class="secondary content-box">
-						<div class="header">
-							<h2>Contact Details</h2>
+				<div class="row boxes">
+					<div class="columns twelve">
+						<div class="secondary content-box">
+							<div class="header">
+								<h2>Contact Details</h2>
+							</div>
+							<fieldset class="main">
+								<div class="container">
+									<p>Please fill in your details and we will contact you as soon as possible</p>
+									<div class="columns six">
+										<div class="input-field">
+											<label for="name">Name</label>
+											<input type="text" name="name" required/>
+										</div>
+										<div class="input-field">
+											<label for="company-name">Company Name</label>
+											<input type="text" name="company-name" required/>
+										</div>
+										<div class="input-field">
+											<label for="your-enquiry">Your Enquiry</label>
+											<select name="your-enquiry" required>
+												<%for (var i = 0; i < config.contactUsEnquires.length; i++){%>
+													<option><%=config.contactUsEnquires[i]%></option>
+												<%}%>
+											</select>
+										</div>
+									</div>
+									<div class="columns six">
+										<div class="input-field">
+											<label for="email">Email</label>
+											<input type="text" name="email" required/>
+										</div>
+										<div class="input-field">
+											<label for="telphone">Telephone</label>
+											<input type="tel" name="telephone" required/>
+										</div>
+										<div class="input-field">
+											<label for="request-callback">Request callback</label>
+											<input type="checkbox" name="request-callback"/>
+										</div>
+									</div>
+									<div class="columns twelve">
+										<label for="message">Message</label>
+										<textarea name="message" data-loom-validator="complexTelephoneNumberNotInInput" placeholder="Type your message here" requiredrequired></textarea>
+									</div>
+									<div class="columns twelve button-container">
+										<button type="submit" class="action">Send</button>
+									</div>
+									<div class="columns twelve contact-details">
+										<p class="contact">Zupplychain, <%=config.companyDetails.addressLine1%>, <%=config.companyDetails.addressLine2%>, <%=config.companyDetails.city%>, <%=config.companyDetails.postcode%> <span class="contacting-details"><span class="telephone"><span>T:</span> <%=config.companyDetails.telephone%></span> | <span class="email"><span>E:</span> <%=config.companyDetails.email%></p></span></span>
+									</div>
+								</div>
+								<div class="not-registered-container">
+									<div class="columns six not-registered">
+										<p>Not Registered?</p>
+										<a href="/provider-registration-1" class="text-link">I am a Storage Provider and would like to offer storage space</a>
+									</div>
+									<div class="columns six not-registered">
+										<a href="/search" class="text-link">I am a Customer and would like to search for storage space</a>
+									</div>
+								</div>
+							</fieldset>
 						</div>
-						<fieldset class="main">
-							<p>Please fill in your details and we will contact you as soon as possible</p>
-							<div class="columns six">
-								<div class="input-field">
-									<label for="name">Name</label>
-									<input type="text" name="name"/>
-								</div>
-								<div class="input-field">
-									<label for="company-name">Company Name</label>
-									<input type="text" name="company-name"/>
-								</div>
-							</div>
-							<div class="columns six">
-								<div class="input-field">
-									<label for="email">Email</label>
-									<input type="text" name="email"/>
-								</div>
-								<div class="input-field">
-									<label for="telphone">Telephone</label>
-									<input type="tel" name="telephone"/>
-								</div>
-							</div>
-							<p>Zupplychain, <%=config.companyDetails.addressLine1%>, <%=config.companyDetails.addressLine2%>, <%=config.companyDetails.city%>, <%=config.companyDetails.postcode%></p>
-						</fieldset>
 					</div>
 				</div>
 			</div>
-		</div>
+		</form>
 	</section>
+	<div class="continue-links footer form-footer">
+		<div class="container">
+			<a href="/" class="button simple home">home</a>
+		</div>
+	</div>
 </main>
+<% include ./partials/bottom %>  

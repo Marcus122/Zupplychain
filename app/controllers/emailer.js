@@ -2,12 +2,13 @@ var nodemailer = require('nodemailer');
 var fh = require('../controllers/file-handler.js');
 var Quote = require("../controllers/quote.js");
 exports.version = "0.1.0";
+
 //At the moment this is just testing sending a html emails with node
 exports.buildTransporter = function(req,res,cb){
 	
 	fh.readFile('./secret.json',function(err,data){
 		if (err){
-			//Do something
+			cb(err)
 		}else{
 			var json = JSON.parse(data);
 			var transporter = nodemailer.createTransport("SMTP",{
@@ -19,21 +20,19 @@ exports.buildTransporter = function(req,res,cb){
 			});
 			
 			cb(transporter);
-			}
-	})	
+		}
+	});	
 }
 
-exports.sendMail = function(req,res,emailTemplate,receiver,subject,cb){
-	Quote.getById('55fc27f5858766240980bc4e',function(err,quote){
-		req.data.quote = quote;
-		res.render('emails/provider-request',req.data,function(err,viewString){
-			var html = viewString;
-		var mailOptions = {
-		from:    'no-reply@zupplychain.com',
+exports.sendMail = function(req,res,emailTemplate,receiver,from,subject,cb){
+		
+	var html = emailTemplate;
+	var mailOptions = {
+		from:    from,
 		to:      receiver,
 		subject: subject,
 		html:    html
-		}
+	}
 	
 	exports.buildTransporter(req,res,function(transporter){
 		transporter.sendMail(mailOptions,function(err,info){
@@ -44,8 +43,6 @@ exports.sendMail = function(req,res,emailTemplate,receiver,subject,cb){
 				cb(null);
 			}
 		});
+		
 	});
-		});
-	});
-	
 }

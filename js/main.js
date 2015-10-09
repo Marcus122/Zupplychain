@@ -31,6 +31,11 @@ require(["jquery"], function($) {
                Dashboard();
             });   
         }
+        if (onPage("contact-us")){
+            require(["components/contact-us"], function(ContactUs) {
+               //ContactUs();
+            });   
+        }
 		if (onPage("provider-registration-1") || onPage("provider-registration-2") || onPage("provider-registration-3")){
 			require(["components/provider-registration"],function(Registration){
 				Registration();

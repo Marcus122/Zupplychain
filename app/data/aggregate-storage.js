@@ -39,11 +39,11 @@ var aggregateStorage = function(theStorages, VolumeDiscounts) {
         return volumeDiscounts;
     }
     
-    function palletsWillFitAtThisDate(wcDate, numPallets) {
+    function palletsWillFitAtThisDate(wcDate, numPallets, palletType) {
         var storagesThisWeek = getStoragesAsTheyAreThisWeek(wcDate);
         var totalSpace = 0;
         for (var i in storagesThisWeek) {
-            //Do pallets fit method instead of below
+            //Do pallets fit method instead of below - This is checked in data/waehouse.js
             totalSpace += storagesThisWeek[i].numSpaces;
             if (totalSpace >= numPallets) {
                 return true;
@@ -101,7 +101,7 @@ var aggregateStorage = function(theStorages, VolumeDiscounts) {
         }
         storagesThisWeek.sort(function(x,y) { return x.price.price > y.price.price });
         for (var i in storagesThisWeek) {
-            //Also check whether pallets will fit and then insert as many pallets as we can in the available space
+            //Also check whether pallets will fit and then insert as many pallets as we can in the available space - This is done in data/warehouse
             var numPalletsInThisStorage = Math.min(storagesThisWeek[i].numSpaces, numPalletsLeft);
             storagesThisWeek[i].numPalletsStored = numPalletsInThisStorage;
             numPalletsLeft -= numPalletsInThisStorage;

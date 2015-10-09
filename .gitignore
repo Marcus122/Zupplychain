@@ -5,3 +5,5 @@ secret.json
 *.png
 *.jpg
 *.png
+*.doc
+*.docx

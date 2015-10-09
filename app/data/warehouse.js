@@ -126,6 +126,10 @@ warehouseSchema.statics = {
             });
   },*/
   
+  checkPalletWidthIsValidSize: function(selectedPalletWidth,palletSize){ //A valid size is a size which is the >= the selected pallet size
+    return Number(local.config.palletTypes[palletSize]) >= Number(local.config.palletTypes[selectedPalletWidth]);
+  },
+  
   //Don't check pallet types match anymore
   storagesToAggregateStorage: function(warehouse, query) {  
     var storage = warehouse.storage;
@@ -137,13 +141,16 @@ warehouseSchema.statics = {
     var k = 0;
     //Remove storages with pallet types that are too small so if quered 1.2 remove 1.0.
     for (var j=0; j<storage.length; j++){
-        var palletTypeOK  = !query.palletType || storage[j].palletType == 0 || storage[j].palletType === query.palletType; //!palletType means any
+        //var palletTypeOK  = !query.palletType || storage[j].palletType == 0 || storage[j].palletType === query.palletType; //!palletType means any
         var maxWeightOK   = !query.weight || storage[j].maxWeight >= query.weight;
         var maxHeightOK   = !query.height || storage[j].maxHeight >= query.height;
         var tempOK        = storage[j].temp === query.temp;
         
-        if (palletTypeOK && maxWeightOK && maxHeightOK && tempOK) {
-            matchingStorages.push(storage[j]);
+        // if (palletTypeOK && maxWeightOK && maxHeightOK && tempOK) {
+        //     matchingStorages.push(storage[j]);
+        // }
+        if(maxWeightOK && maxHeightOK && tempOK && this.checkPalletWidthIsValidSize(query.palletType,parseInt(storage[j].palletType))) {
+             matchingStorages.push(storage[j]);
         }
     }
     if (matchingStorages.length == 0) {
@@ -207,7 +214,7 @@ warehouseSchema.statics = {
         if (aggStorage){
           aggStorage = warehouseAPI.checkBasicPricingSet(aggStorage.getStorages(),aggStorage.getVolumeDiscount(),query);
         }
-        if (aggStorage && aggStorage.palletsWillFitAtThisDate(query.startDate, query.totalPallets)) {
+        if (aggStorage && aggStorage.palletsWillFitAtThisDate(query.startDate, query.totalPallets,query.palletType)) {
             editableResult.storageProfile = aggStorage.generateContractStorageProfile(query.useageProfile);
             editableResult.distanceFromSearch = Utils.distanceInMiles(editableResult.geo , query.geo );
             editableResult.firstWeekPrice = aggStorage.getPriceForFirstWeek();
