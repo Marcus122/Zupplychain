@@ -8,7 +8,7 @@
 				<div class="columns twelve">
 					<div class="input-field">
 						<label for="email">Email</label>
-						<input required type="text" name="email" value="<%=user.email%>"/>
+						<input required type="email" name="email" value="<%=user.email%>"/>
 					</div>
 					<div class="input-field">
 						<label for="name">Name</label>
@@ -16,7 +16,11 @@
 					</div>
 					<div class="input-field">
 						<label for="comapny-name">Company Name</label>
-						<input required type="text" name="company-name" value="<%=warehouses[0].company%>"/>
+						<input required type="text" name="company-name" value="<%=user.company.name%>"/>
+					</div>
+					<div class="input-field">
+						<label for="phone-number">Phone Number (Optional)</label>
+						<input type="tel" name="phone-number" value="<%=user.phoneNumber%>"/>
 					</div>
 				</div>
 				<button class="action button" type="submit">Save</button>

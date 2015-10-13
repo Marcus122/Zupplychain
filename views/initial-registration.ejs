@@ -1,0 +1,47 @@
+ <% include ./partials/top%>   
+ 	<div class="container">
+	 	<main id="initial-registration">
+			 <div class="banner">
+				 <h1>Register</h1>
+			</div>
+			<section class="user-fields">
+				<div class="main">
+					<form class="loom-form" id="contacts-registration" method="post" action="/register-contact/<%=user.id%>">
+						<div class="content-box">
+							<div class="header">
+								<h2>Register</h2>
+							</div>
+							<div class="main">
+								<div class="columns twelve">
+									<div class="input-field">
+										<label for="name">Name</label>
+										<input required name="name" type="text" value="<%=user.name%>"/>
+									</div>
+									<div class="input-field">
+										<label for="email">Email</label>
+										<input required name="email" type="email" value="<%=user.email%>"/>
+									</div>
+									<div class="input-field">
+										<label for="phone-number">Phone Number</label>
+										<input required name="phone-number" type="tel" value="<%=user.phoneNumber%>"/>
+									</div>
+									<div class="input-field">
+										<label for="password">Password</label>
+										<input required name="password" type="password" data-pattern="(?=.*[A-z])(?=.*[0-9])" minlength="8"/>
+									</div>
+									<div class="input-field">
+										<label for="confirm-password">Confirm Password</label>
+										<input required data-loom-confirm="password" name="confirm-password" type="password" data-pattern="(?=.*[A-z])(?=.*[0-9])" minlength="8"/>
+										<ul class="messages">
+											<li class="msg-info">Password must be at least 8 characters in length and contain at least one number and both passwords must match.</li>
+										</ul>
+									</div>
+								</div>
+								<button type="submit" name="register" class="button action">Register</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</section>
+		</main>
+ <% include ./partials/bottom%>   

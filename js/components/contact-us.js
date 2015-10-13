@@ -4,7 +4,7 @@ define(["jquery","loom/loom","loom/loomAlerts"], function ($,Loom,Alerts) {
 		var loom = new Loom;
 		
 		loom.addOnSuccessCallback('contact-us',function(result){
-			if(result.err === true){
+			if(result.error === true){
 				Alerts.showErrorMessage(result.data);
 			}else{
 				Alerts.showSuccessMessage(result.data);

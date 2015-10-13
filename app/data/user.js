@@ -10,13 +10,14 @@ var fields = {
 	email: { type: String },
 	password: {type:String, set:setPassword },
 	name: {type:String},
-	contact: {type:String},
 	active: { type: Boolean, default: false },
 	created: { type: Date , default: Date.now },
+	expiry: { type: Date , default: new Date(+new Date + 12096e5) },
 	type: {type: Number},
-	mastersContacts: [{name: String,
-					   email: String,
-					   phoneNumber: Number }]
+	phoneNumber: {type:String},
+	company: { type: Schema.ObjectId, ref: 'company' },
+	dashboardAccess: {type:String},
+	registerStatus: {type:Number}
 };
 
 var userSchema = new Schema(fields);
@@ -38,7 +39,7 @@ function updateUsersName(name,id,cb){
 }
 userSchema.statics = {
 	loadByEmail: function(email,cb){
-		this.find({'email':email}).exec(cb);
+		this.find({'email':email}).populate('company').exec(cb);
 	}
 }
 module.exports = mongoose.model('users', userSchema);

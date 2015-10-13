@@ -8,7 +8,8 @@ quote = require("../controllers/quote.js"),
 async = require("async"),
 Utils = require("../utils.js"),
 fh = require("../controllers/file-handler.js"),
-multiparty = require('multiparty');
+multiparty = require('multiparty'),
+company = require('../controllers/company');
 
 var handler = function(app) {
 	app.param('warehouse_id', warehouse.load);
@@ -23,7 +24,7 @@ var handler = function(app) {
 		if(req.data.user._id){ //If user is not logged in then create user
 			createWarehouse(req,res);
 		}else{
-			createUser(req, res);
+			createUserAndCompany(req, res);
 		}
 	});
 	app.post('/warehouse/:warehouse_id/storage',createStorage);
@@ -272,9 +273,19 @@ function warehouseProfile (req,res){
     }
 }
 
-function createUser(req,res){
-	user.create(req,res,{},function(err,user){
-		createWarehouse(req,res);
+function createUserAndCompany(req,res){
+	//createCompany(req,res,function(err,company){
+		user.create(req,res,{},function(err,user){
+			createWarehouse(req,res);
+		});
+	//});
+}
+function createCompany(req,res,cb){
+	var data = {name:req.body.company,
+				   warehouses: [],
+				   masterContacts: []}
+	company.create(req,res,data,function(err,company){
+		cb(err,company);
 	});
 }
 function warehouseAuth(req,res,next){
@@ -299,6 +310,7 @@ function createWarehouse(req,res){
 					setErrorResponse(err,res);
 				}else{
 					req.warehouse = Warehouse;
+					//company.updateCompanyWithWarehouse(warehouse);
 					setResponse(req,res);
 				}
 			});

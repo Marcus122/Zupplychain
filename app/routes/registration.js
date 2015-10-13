@@ -20,7 +20,47 @@ var handler = function(app) {
 	app.post('/complete-registration',completeRegistration);
 	app.post('/save-registration',saveRegistration);
 	app.post('/registration/upload',uploadFile,fileOutput);
+	app.get('/initial-registration/:userId',function(req,res){
+		User.user_by_id(req.params.userId,function(err,user){
+			if(err){
+				setErrorResponse('Oops someting went wrong',res)
+			}else{
+				if (user.epiry !== null && user.expiry >= Date.now()){
+					req.data.user = user;
+					res.render('initial-registration',req.data);
+				}else{
+					res.status(404).render('404', req.data);
+				}
+			}
+		});
+	});
+	app.post('/register-contact/:userId',registerContact);
 };
+function registerContact(req,res){
+	User.user_by_id(req.params.userId,function(err,user){
+		if(err){
+			setErrorResponse('Oops someting went wrong',res)
+		}else{
+			user.name = req.body.name;
+			user.email = req.body.email;
+			user.phoneNumber = req.body['phone-number'];
+			user.password = req.body.password;
+			user.active = true;
+			user.expiry = null;
+			User.update(user,function(err,user){
+				if(err && err.message !== "Email Address Already Exists"){
+					setErrorResponse('Oops someting went wrong',res)
+				}else{
+					User.login(req,res,function(err,user){
+						res.writeHead(200, {"Content-Type": "application/json"});
+						var output = {redirectUrl: '/dashboard'};
+						res.end(JSON.stringify(output) + "\n");
+					});
+				}
+			},true);
+		}
+	});
+}
 function registrationHandler(req,res){
 	//If active send to dashboard
 		if(req.data.user.active && 1== 2){ //disabled while we test stuff.

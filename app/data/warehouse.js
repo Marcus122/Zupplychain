@@ -1,6 +1,7 @@
 'use strict';
 
 var mongoose = require('mongoose'),
+  deepPopulate = require('mongoose-deep-populate')(mongoose),
 	Schema = mongoose.Schema,
 	ObjectId = Schema.ObjectId,
 	Storage = require("./storage.js"),
@@ -28,7 +29,7 @@ var fields = {
 	services: [String],
 	specifications: [String],
 	photos: Schema.Types.Mixed,
-    defaultPhoto: String,
+  defaultPhoto: String,
 	active: { type: Boolean, default: false },
 	created: { type: Date , default: Date.now },
 	storage: [{ type: Schema.ObjectId, ref: 'storage' }],
@@ -58,6 +59,7 @@ var fields = {
 };
 
 var warehouseSchema = new Schema(fields);
+warehouseSchema.plugin(deepPopulate);
 warehouseSchema.index({ loc: '2dsphere' });
 
 // INSTANCE METHODS
@@ -83,7 +85,7 @@ warehouseSchema.statics = {
 		this.findOne({ _id : id })
 		  .populate('storage')
 		  .populate('user')
-      .populate('contacts')
+      .deepPopulate(['contacts.creditController','contacts.invoiceController','contacts.pickingDispatch','contacts.goodsIn','contacts.transportCoordinator','contacts.enquiresController','contacts.availabilityController'])
 		  .exec(cb);
   },
   loadByUser: function(user,cb){

@@ -8,11 +8,14 @@ exports.version = "0.1.0";
 /**
  * User class.
  */
-exports.create = function (req,res,data,cb) {
+exports.create = function (req,res,data,cb,cookieSet) {
 	var user = new User(data);
+	cookieSet = cookieSet || true;//Set a cookie by default
 	user.save(function(err){
 		if (!err) {
-			setCookie(user,req,res);
+			if (cookieSet === undefined){
+				setCookie(user,req,res);
+			}
 			req.data.user=user;
 			return cb(null, user.toObject());
 		}else{
@@ -34,7 +37,7 @@ exports.login = function(req,res,cb){
 				cb(loginFailed);
 			}
 		}
-	});
+	}).populate('company');
 }
 exports.logout = function(req,res,cb){
     console.log("logging out");
@@ -69,9 +72,9 @@ exports.register = function(user,cb){
 		}
 	});
 }
-exports.update = function(user,cb){
+exports.update = function(user,cb,dontCheckEmailAddress){
 	User.loadByEmail(user.email,function(err,results){
-		if(!err && results.length > 0){
+		if(!err && results.length > 0 && dontCheckEmailAddress === undefined){
 			return cb({message:"Email Address Already Exists"});
 		}else{
 			user.active=true;
@@ -92,7 +95,7 @@ exports.user_by_id = function (id,callback) {
 		}else{
 			return callback(null,user)
 		}
-	});
+	}).populate('company');
 };
 exports.user_by_email = function (email,callback) {
 	User.findOne({'email':email},function(err,user){

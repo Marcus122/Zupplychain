@@ -34,7 +34,8 @@
     "node-geocoder": "^2.21.1",
     "nodemailer": "0.7.0",
     "password-hash": "*",
-    "uk-postcodes-node": "^0.2.3"
+    "uk-postcodes-node": "^0.2.3",
+    "mongoose-deep-populate": "^2.0.2"
   },
   "devDependencies": {
     "grunt": "^0.4.5",

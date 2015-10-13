@@ -36,7 +36,7 @@ require(["jquery"], function($) {
                //ContactUs();
             });   
         }
-		if (onPage("provider-registration-1") || onPage("provider-registration-2") || onPage("provider-registration-3")){
+		if (onPage("provider-registration-1") || onPage("provider-registration-2") || onPage("provider-registration-3") || onPage("initial-registration")){
 			require(["components/provider-registration"],function(Registration){
 				Registration();
 			});

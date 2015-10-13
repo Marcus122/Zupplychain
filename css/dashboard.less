@@ -69,12 +69,27 @@
 	// 		text-align:left;
 	// 	}
 	// }
+	.welcome-box,
+	.tasks-box{
+		.main.row{
+			padding: 10px;
+			text-align: center;
+			margin-bottom: 20px;
+			border-bottom-right-radius: 7px;
+    		border-bottom-left-radius: 7px;
+			table{
+				width:100%;
+			}
+			p span{
+				font-weight:bold;
+			}
+		}
+	}
 	.main{
 		padding-left:0;
 		padding-top:0;
 	}
 	a{
-		color: #fff;
 		text-decoration: initial;
 	}
 	.banner{
@@ -123,6 +138,7 @@
 			a{
 				display: block;
 				margin: 10px;
+				color: #fff;
 			}
 			&:last-child{
 				border-bottom-right-radius: 7px;
@@ -154,14 +170,35 @@
 		section.master-contacts .main{
 			border: 1px solid #d7d7d7;
 		}
-		.registered-status-complete{
-			border: 1px solid @primary;
+		.registered-status{
 			width: 20px;
 			height: 20px;
-			background-color: @primary;
 			border-radius: 14px;
 			margin-left: 42%;
 			margin-right: 50%;
+			&.complete{
+				border: 1px solid @primary;
+				background-color: @primary;
+			}
+			&.pending{
+				border: 1px solid @highlight;
+				background-color: @highlight;
+			}
+			&.expired{
+				border: 1px solid @invalid-dark;
+				background-color: @invalid-dark;
+			}
+		}
+		ul.two-tabs li{
+			&:first-of-type{
+				width:44%;
+				max-width:initial;
+			}
+			&:nth-child(2){
+				width:45.7%;
+				margin-right:0;
+				max-width:initial;
+			}
 		}
 	}
 	select[name="warehouses"]{

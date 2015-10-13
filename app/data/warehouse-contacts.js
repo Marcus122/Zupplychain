@@ -5,37 +5,17 @@ var mongoose = require('mongoose'),
 	ObjectId = Schema.ObjectId;
 	
 var fields = {
-	availabilityController: [{name: String,
-							  email: String,
-							  phoneNumber: Number,
-							  dashboardAccess: Boolean}],
-	enquiresController: [{name: String,
-						  emails: String,
-						  phoneNumber: Number,
-						  dashboardAccess: Boolean}],
-	transportCoordinator: [{name: String,
-							email: String,
-							phoneNumber: Number,
-							dashboardAccess: Boolean}],
-	goodsIn: [{name: String,
-			   email: String,
-			   phoneNumber: Number,
-			   dashboardAccess: Boolean}],
-	pickingDispatch: [{name: String,
-					   email: String,
-					   phoneNumber: Number,
-					   dashboardAccess: Boolean}],
-	invoiceController: [{name: String,
-						 email: String,
-						 phoneNumber: Number,
-						 dashboardAccess: Boolean}],
-	creditController: [{name: String,
-						email: String,
-						phoneNumber: Number,
-						dashboardAccess: Boolean}]
+	warehouse: { type: Schema.ObjectId, ref: 'warehouse' },
+	availabilityController: [{ type: Schema.ObjectId, ref: 'users',default: null }],
+	enquiresController: [{ type: Schema.ObjectId, ref: 'users',default: null }],
+	transportCoordinator: [{ type: Schema.ObjectId, ref: 'users',default: null }],
+	goodsIn: [{ type: Schema.ObjectId, ref: 'users',default: null }],
+	pickingDispatch: [{ type: Schema.ObjectId, ref: 'users',default: null }],
+	invoiceController: [{ type: Schema.ObjectId, ref: 'users',default: null }],
+	creditController: [{ type: Schema.ObjectId, ref: 'users',default: null }]
 };
 
-var warehouseContactsSchema = new Schema(fields);
+var warehouseContactsSchema = new Schema(fields,{ collection: 'warehouseContacts' });
 
 warehouseContactsSchema.statics = {
 	load: function (id,cb){

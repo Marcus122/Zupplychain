@@ -4,62 +4,14 @@
 			<h3>contacts</h3>
 		</div>
 		<div class="main">
-			<section class="master-contacts">
-				<div class="header curved">
-					<h2>Master Contacts</h2>
-				</div>
-				<div class="main">
-					<table class="simple dashboard-table">
-						<thead>
-							<tr>
-								<th>No.</th>
-								<th>Name</th>
-								<th>Email</th>
-								<th>Phone Number</th>
-								<th>Register Status</th>
-								<th><img src="./images/delete.png"/></th>
-							</tr>
-						</thead>
-						<tbody>
-							<td>1*</td>
-							<td data-field="name">Joe Bloggs</td>
-							<td data-field="email">joe.blogs@gmail.com</td>
-							<td data-field="phoneNumber">01616156565</td>
-							<td><div class="registered-status-complete"></div></td>
-							<td data-field="delete"><input type="checkbox" name="delete-contact"/></td>
-						</tbody>
-					</table>
-				</div>
-			</section>
-		</div>
-	</div>
-	<div class="secondary content-box">
-		<div class="header">
-			<h3>Select Warehouse</h3>
-		</div>
-		<div class="main">
-			<p>Please select your warehouse</p>
-			<select name="warehouses" class="columns four">
-				<%for(i = 0; i<warehouses.length; i++){%>
-					<option><%=warehouses[i].name%></option>
-				<%}%>
-			</select>
-			<button name="view-warehouse-contacts" class="action mini columns two">View</button>
-		</div>
-	</div>
-	<div class="secondary content-box">
-		<div class="header">
-			<h3>abc warehousing</h3>
-		</div>
-		<div class="main">
 			<section class="tabs">
-				<ul class="tab-links tabs">
-					<li class="active"><a href="#availability-controller">Availability Controller</a></li>
-					<li><a href="#enquires-controller">Enquires Controller</a></li>
+				<ul class="tab-links tabs two-tabs">
+					<li class="active"><a href="#master-contacts">Master Contacts</a></li>
+					<li><a href="#warehouse-contacts">Warehouse Contacts</a></li>
 				</ul>
 			</section>
 			<div class="tab-content">
-				<div id="availability-controller" class="tab active main">
+				<div data-contact-type="master-contacts" id="master-contacts" class="tab active main">
 					<table class="simple dashboard-table">
 						<thead>
 							<tr>
@@ -67,178 +19,47 @@
 								<th>Name</th>
 								<th>Email</th>
 								<th>Phone Number</th>
-								<th>Dashboard Access</th>
 								<th>Register Status</th>
 								<th><img src="./images/delete.png"/></th>
 							</tr>
 						</thead>
 						<tbody>
-							<td>1*</td>
-							<td data-field="name">Joe Bloggs</td>
-							<td data-field="email">joe.blogs@gmail.com</td>
-							<td data-field="phoneNumber">01616156565</td>
-							<td data-field="dashboardAccess"><input type="checkbox" name="dashboard-access"></td>
-							<td><div class="registered-status-complete"></div></td>
-							<td data-field="delete"><input type="checkbox" name="delete-contact"/></td>
+							<%for(var i = 0; i<masterContacts.length; i++){%>
+								<tr>
+									<td><%=i+1%>*</td>
+									<td data-field="name"><%=masterContacts[i].name%></td>
+									<td data-field="email"><%=masterContacts[i].email%></td>
+									<td data-field="phone-number"><%=masterContacts[i].phoneNumber%></td>
+									<td><div class="registered-status complete"></div></td>
+									<td data-field="delete"><input type="checkbox" name="delete-contact"/></td>
+								</tr>
+							<%}%>
 						</tbody>
 					</table>
+					<button type="button" name="save-new-contacts" class="button action">Save</button>
+					<label for="add-new-contact">Add new contact</label>
+					<button type="button" name="add-new-contact" class="add-button"></button>
 				</div>
-				<div id="enquires-controller" class="tab main">
-					<p>Tab 2 Conent</p>
+				<div id="warehouse-contacts" class="tab main">
+					<p>Please select your warehouse</p>
+					<select name="warehouses" class="columns four">
+						<%for(i = 0; i<warehouses.length; i++){%>
+							<option data-id="<%=warehouses[i]._id%>"><%=warehouses[i].name%></option>
+						<%}%>
+					</select>
+					<button name="view-warehouse-contacts" class="action mini columns two">View</button>
 				</div>
 			</div>
-			<section class="tabs">
-				<ul class="tab-links tabs">
-					<li class="active"><a href="#transport-cordinator">Transport Co-ordinator</a></li>
-					<li><a href="#goods-in">Goods-In</a></li>
-					<li><a href="#picking-dispatch">Picking Dispatch</a></li>
-					<li><a href="#invoice-controller">Invoice Controller</a></li>
-					<li><a href="#credit-conroller">Credit Controller</a></li>
-				</ul>
-			</section>
-			<div class="tab-content">
-				<div id="transport-coordinator" class="tab active">
-					<table class="simple dashboard-table">
-						<thead>
-							<tr>
-								<th>No.</th>
-								<th>Name</th>
-								<th>Email</th>
-								<th>Phone Number</th>
-								<th>Dashboard Access</th>
-								<th>Register Status</th>
-								<th><img src="./images/delete.png"/></th>
-							</tr>
-						</thead>
-						<tbody>
-							<td>1*</td>
-							<td data-field="name">Joe Bloggs</td>
-							<td data-field="email">joe.blogs@gmail.com</td>
-							<td data-field="phoneNumber">01616156565</td>
-							<td data-field="dashboardAccess"><input type="checkbox" name="dashboard-access"></td>
-							<td><div class="registered-status-complete"></div></td>
-							<td data-field="delete"><input type="checkbox" name="delete-contact"/></td>
-						</tbody>
-					</table>
-				</div>
-				<div id="goods-in" class="tab">
-					<table class="simple dashboard-table">
-						<thead>
-							<tr>
-								<th>No.</th>
-								<th>Name</th>
-								<th>Email</th>
-								<th>Phone Number</th>
-								<th>Dashboard Access</th>
-								<th>Register Status</th>
-								<th><img src="./images/delete.png"/></th>
-							</tr>
-						</thead>
-						<tbody>
-							<td>1*</td>
-							<td data-field="name">Joe Bloggs</td>
-							<td data-field="email">joe.blogs@gmail.com</td>
-							<td data-field="phoneNumber">01616156565</td>
-							<td data-field="dashboardAccess"><input type="checkbox" name="dashboard-access"></td>
-							<td><div class="registered-status-complete"></div></td>
-							<td data-field="delete"><input type="checkbox" name="delete-contact"/></td>
-						</tbody>
-					</table>
-				</div>
-				<div id="picking-dispatch" class="tab">
-					<table class="simple dashboard-table">
-						<thead>
-							<tr>
-								<th>No.</th>
-								<th>Name</th>
-								<th>Email</th>
-								<th>Phone Number</th>
-								<th>Dashboard Access</th>
-								<th>Register Status</th>
-								<th><img src="./images/delete.png"/></th>
-							</tr>
-						</thead>
-						<tbody>
-							<td>1*</td>
-							<td data-field="name">Joe Bloggs</td>
-							<td data-field="email">joe.blogs@gmail.com</td>
-							<td data-field="phoneNumber">01616156565</td>
-							<td data-field="dashboardAccess"><input type="checkbox" name="dashboard-access"></td>
-							<td><div class="registered-status-complete"></div></td>
-							<td data-field="delete"><input type="checkbox" name="delete-contact"/></td>
-						</tbody>
-					</table>
-				</div>
-				<div id="invoice-controller" class="tab">
-					<table class="simple dashboard-table">
-						<thead>
-							<tr>
-								<th>No.</th>
-								<th>Name</th>
-								<th>Email</th>
-								<th>Phone Number</th>
-								<th>Dashboard Access</th>
-								<th>Register Status</th>
-								<th><img src="./images/delete.png"/></th>
-							</tr>
-						</thead>
-						<tbody>
-							<td>1*</td>
-							<td data-field="name">Joe Bloggs</td>
-							<td data-field="email">joe.blogs@gmail.com</td>
-							<td data-field="phoneNumber">01616156565</td>
-							<td data-field="dashboardAccess"><input type="checkbox" name="dashboard-access"></td>
-							<td><div class="registered-status-complete"></div></td>
-							<td data-field="delete"><input type="checkbox" name="delete-contact"/></td>
-						</tbody>
-					</table>
-				</div>
-				<div id="credit-controller" class="tab">
-						<table class="simple dashboard-table">
-						<thead>
-							<tr>
-								<th>No.</th>
-								<th>Name</th>
-								<th>Email</th>
-								<th>Phone Number</th>
-								<th>Dashboard Access</th>
-								<th>Register Status</th>
-								<th><img src="./images/delete.png"/></th>
-							</tr>
-						</thead>
-						<tbody>
-							<td>1*</td>
-							<td data-field="name">Joe Bloggs</td>
-							<td data-field="email">joe.blogs@gmail.com</td>
-							<td data-field="phoneNumber">01616156565</td>
-							<td data-field="dashboardAccess"><input type="checkbox" name="dashboard-access"></td>
-							<td><div class="registered-status-complete"></div></td>
-							<td data-field="delete"><input type="checkbox" name="delete-contact"/></td>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="secondary content-box">
-		<div class="header">
-			<h3>Copy Contacts</h3>
-		</div>
-		<div class="main">
-			<p>Copy warehouse contacts</p>
-			<label for="from">From</label>
-			<select name="from" class="columns four">
-				<%for(i = 0; i<warehouses.length; i++){%>
-					<option><%=warehouses[i].name%></option>
-				<%}%>
-			</select>
-			<div class="right-arrow"></div>
-			<label for="to">From</label>
-			<select name="to" class="columns four">
-				<%for(i = 0; i<warehouses.length; i++){%>
-					<option><%=warehouses[i].name%></option>
-				<%}%>
-			</select>
 		</div>
 	</div>
 </div>
+<script type="text/template" id="master-contacts-row">
+	<tr data-status="new">
+		<td></td>
+		<td data-field="name"><input type="text" name="name"/></td>
+		<td data-field="email"><input type="email" name="email"/></td>
+		<td data-field="phone-number"><input type="tel" name="phone-number"/></td>
+		<td><div class="registered-status pending"></div></td>
+		<td data-field="delete"><input type="checkbox" name="delete-contact"/></td>
+	</tr>
+</script>

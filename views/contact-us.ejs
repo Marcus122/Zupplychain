@@ -7,7 +7,7 @@
 		<form method="post" action="/send-email" id="contact-us" novalidate class="loom-form" autocomplete="off">
 			<div class="main">
 				<div class="banner row">
-					<div clas="columns five">
+					<div class="columns five">
 						<h1>Find a solution today</h1>
 						<br/>
 						<h3>Whether you're providing warehouse space or searching for storage we can help you.</h3>
@@ -55,8 +55,10 @@
 										</div>
 									</div>
 									<div class="columns twelve">
-										<label for="message">Message</label>
-										<textarea name="message" data-loom-validator="complexTelephoneNumberNotInInput" placeholder="Type your message here" requiredrequired></textarea>
+										<div class="input-field">
+											<label for="message">Message</label>
+											<textarea name="message" data-loom-validator="complexTelephoneNumberNotInInput" placeholder="Type your message here" requiredrequired></textarea>
+										</div>
 									</div>
 									<div class="columns twelve button-container">
 										<button type="submit" class="action">Send</button>

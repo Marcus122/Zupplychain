@@ -15,11 +15,19 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			step2();
 			step3();
             postcodeAnywhereInit();
+			initInitialRegistration();
 			
 			$(document).on("click",".popup-window .close",function(){
 				$(this).closest('.popup-window').remove();
 			});
 			
+		}
+		function initInitialRegistration(){
+			lm.addOnSuccessCallback('contacts-registration',function(result){
+				if(result.redirectUrl){
+					window.location.href = result.redirectUrl;
+				}
+			})
 		}
 		function toPrice(num){
 			return Number(num).toFixed(2);

@@ -54,10 +54,45 @@ define(["jquery"], function ($) {
 			});
 		}
 		
+		function getWarehouseContacts(warehouseId,cb){
+			var url = '/get-warehouse-contacts/' + warehouseId;
+			$.ajax({
+				url:url,
+				type: 'GET',
+				dataType:'html',
+				success:function(response){
+					cb(response);
+				},
+				error:function(jqXHR,textStatus,errThrown){
+					err = JSON.parse(jqXHR.responseText);
+					cb(err);
+				}
+			})
+		}
+		
+		function createContact(data,cb){
+			var url = '/create-contact';
+			$.ajax({
+				url:url,
+				type: 'POST',
+				dataType:'json',
+				data: data,
+				success:function(response){
+					cb(response);
+				},
+				error:function(jqXHR,textStatus,errThrown){
+					err = JSON.parse(jqXHR.responseText);
+					cb(err);
+				}
+			})
+		}
+		
 		return{
 			loadWarehouse:loadWarehouse,
 			rebuildPricingAndAvailability:rebuildPricingAndAvailability,
-			rebuildWarehouseList:rebuildWarehouseList
+			rebuildWarehouseList:rebuildWarehouseList,
+			getWarehouseContacts:getWarehouseContacts,
+			createContact:createContact
 		}
 	}
 	return c;

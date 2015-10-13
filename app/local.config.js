@@ -98,6 +98,12 @@ exports.config = {
     //     6 : "Other" 
     // },
     
+    registerStatus: [
+        "pending",
+        "completed",
+        "expired"
+    ],
+    
     palletTypes : {
         0 : "0.8",
         1 : "1.0",

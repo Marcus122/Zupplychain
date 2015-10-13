@@ -19,6 +19,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 		triggerHashClick();
 		initAccountTab();
 		initWarehouseTab();
+		initContactsTab();
 		initPaging($("#warehouses-table"));
 		
 		loom.addOnSuccessCallback("login-form", function(response){
@@ -224,6 +225,63 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 				$('.tab-content ' + clickedTab).show().siblings().hide();
 				$this.parent('li').addClass('active').siblings().removeClass('active');
 				e.preventDefault();
+			});
+		}
+		
+		function initContactsTab(){
+			$('button[name="view-warehouse-contacts"]').on('click',function(){
+				var $this = $(this);
+				$('.warehouse-specific-contacts').remove();
+				DBCntr.getWarehouseContacts($(this).prev('select').find(':selected').data('id'),function(result){
+					if(result.err === true){
+						Alerts.showPersistentErrorMessage(result.data);
+					}else{
+						$this.closest('div[data-view="contacts"]').append(result);
+						initTabs();
+					}
+				});
+			});
+			$(document).on('click','button[name="add-new-contact"]',function(){
+				var $this = $(this),
+					templateId = $this.parent('div').data('contact-type') + '-row',
+					template = templates.getTemplate(templateId),
+					row = template.bind({});
+					
+					$this.siblings('table').find('tbody').append(row);
+			});
+			
+			$(document).on('click','button[name="save-new-contacts"]',function(){
+				var $this = $(this),
+					contactType = $this.parent('div').attr('id').replace(/-([a-z])/g, function (g) { return ' ' + g[1].toUpperCase(); }),
+					data = {},
+					rows = [],
+					cbDone = 0,
+					error = false;
+					
+					contactType = contactType.charAt(0).toUpperCase() + contactType.substring(1);
+					
+					rows = $this.siblings('table').find('tr[data-status="new"]');
+					data.warehouseContacts = $this.closest('.warehouse-specific-contacts').data('warehouse-contacts') || "";
+					data.role = contactType;
+					for (var i = 0; i<rows.length; i++){
+						data.email = $(rows[i]).find('td[data-field="email"]').find('input').val();
+						data.name = $(rows[i]).find('td[data-field="name"]').find('input').val();
+						data.phoneNumber = $(rows[i]).find('td[data-field="phone-number"]').find('input').val();
+						data.dashboardAccess = $(rows[i]).find('tr[data-status="new"]').find('td[data-field="dashboard-access"]').find('input').val();
+						DBCntr.createContact(data,function(response){
+							cbDone ++;
+							if(response.error === true){
+								error = true;
+							}
+							if (cbDone === rows.length){
+								if(error === true){
+									Alerts.showPersistentErrorMessage('Not all contacts have been added');
+								}else{
+									Alerts.showSuccessMessage('All contacts have been successfully added');
+								}
+							}
+						});
+					}
 			});
 		}
 		
