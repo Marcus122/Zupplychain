@@ -81,21 +81,24 @@ function isSessionSearchEqualToQuery(newSearch, sessionSearch){
 
 function saveSearchAndDoSearch(req,res, next){
     var query = getQueryFromRequest(req); //this has a new blank useage profile.. we need to check if we need to preserve the old one..
-    var sameSearch;
-    searchController.getFromSession(req, function(err, sessionQuery) {
-        if (!err && sessionQuery && sessionQuery.useageProfile) { //does an existing query exist in the session with a useageprofile attached?
-            if  (isNewSearchCompatableWithSessionSearch(query, sessionQuery) ) { //compare the session search to the new one. if all the important values are the same then we should preserve the existing useage profile. If numPallets etc. have changed then it makes sense to use a blank useage profile.
-                query.useageProfile = sessionQuery.useageProfile;
-            }
-            if (isSessionSearchEqualToQuery(query,sessionQuery)){
-                sameSearch = true;
-            }else{
-                sameSearch = false;
-            } 
-        }       
-        saveSearch(query, req);
-        doSearch(query, req, res, sameSearch, next); 
-        
+    Utils.getLatLong(query.postcode, function(error, geoData) {
+       query.geo =  {"lng": geoData.lng, "lat": geoData.lat};
+       query.loc = {"type" : "Point", "coordinates" : [query.geo.lng, query.geo.lat]} ; //always long then lat
+        var sameSearch;
+        searchController.getFromSession(req, function(err, sessionQuery) {
+            if (!err && sessionQuery && sessionQuery.useageProfile) { //does an existing query exist in the session with a useageprofile attached?
+                if  (isNewSearchCompatableWithSessionSearch(query, sessionQuery) ) { //compare the session search to the new one. if all the important values are the same then we should preserve the existing useage profile. If numPallets etc. have changed then it makes sense to use a blank useage profile.
+                    query.useageProfile = sessionQuery.useageProfile;
+                }
+                if (isSessionSearchEqualToQuery(query,sessionQuery)){
+                    sameSearch = true;
+                }else{
+                    sameSearch = false;
+                } 
+            }       
+            saveSearch(query, req);
+            doSearch(query, req, res, sameSearch, next); 
+        });
     });
         //do we have a useage profile saved? if so then...
     

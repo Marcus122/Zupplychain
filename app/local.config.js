@@ -99,9 +99,9 @@ exports.config = {
     // },
     
     registerStatus: [
-        "pending",
-        "completed",
-        "expired"
+        "Pending",
+        "Yes",
+        "Not Responded"
     ],
     
     palletTypes : {
@@ -152,6 +152,7 @@ exports.config = {
         'Offering Storage',
         'Looking for Space',
         'Media Enquires',
+        'Forgot your Password',
         'Other'
     ]
 };

@@ -11,10 +11,11 @@
 		</div>-->
 		<div class="banner">
 			<h1>Start your registration</h1>
+			<p class="desc medium-font">Follow our simple 3 step process to complete your registration</p>
 		</div>
-		<p class="tag-line">
+		<!--<p class="tag-line">
 			Follow our simple 3 step process to complete your registration
-		</p>
+		</p>-->
 		<div class="row">
 			<ul class="tabs">
 				<li class="four columns active checked"><span>Step 1</span> - Warehouse details</li>
@@ -155,7 +156,7 @@
 									</div>
 									<div class="row">
 										<div class="input-field columns six">
-											<label for="minimumInsuranceLevel">Minimun insurance level per customer pallet</label>
+											<label for="minimumInsuranceLevel">Minimun insurance level per customer pallet:</label>
 											<input data-json="insurance" type="text" name="minimumInsuranceLevel" value="<%=warehouse.insurance.minimumInsuranceLevel%>" spellcheck="true">
 										</div>
 										<div class="input-field columns six">
@@ -169,9 +170,8 @@
 										</div>
 									</div>
 									<div class="input-field">
-										<label for="additionalInsuranceDescription">Additional Insurance Description</label>
 										<div class="hint--top description-container">
-											<textarea data-json="insurance" id="additional-insruance-description" name="additionalInsuranceDescription" placeholder="A short description of any adiontional insurance" data-loom-validators="complexTelephoneNumberNotInInput"><%=warehouse.insurance.additionalInsuranceDescription%></textarea>
+											<textarea data-json="insurance" id="additional-insruance-description" name="additionalInsuranceDescription" placeholder="Please detail product exceptions and additional insurance cover" data-loom-validators="complexTelephoneNumberNotInInput"><%=warehouse.insurance.additionalInsuranceDescription%></textarea>
 										</div>
 									</div>
 								<%}else{%>
@@ -191,9 +191,8 @@
 										</div>
 									</div>
 									<div class="input-field">
-										<label for="additionalInsuranceDescription">Additional Insurance Description</label>
 										<div class="hint--top description-container">
-											<textarea data-json="insurance" id="additional-insruance-description" name="additionalInsuranceDescription" placeholder="A short description of any adiontional insurance" data-loom-validators="complexTelephoneNumberNotInInput"></textarea>
+											<textarea data-json="insurance" id="additional-insruance-description" name="additionalInsuranceDescription" placeholder="Please detail product exceptions and additional insurance cover" data-loom-validators="complexTelephoneNumberNotInInput"></textarea>
 										</div>
 									</div>
 								<%}%>
@@ -205,6 +204,7 @@
 							</div>
 							<fieldset class="main warehouse-documents">
 								<p>Upload any profile images and or quality assurance documents below.</p>
+								<p>You can come back and add these later once registered if you prefer.</p>
 								<div class="row documents">
 									<label  class="columns three" for="photos">Upload Warehouse Photos</label>
 									<input class="columns seven" type="file" id="photos"/>
@@ -235,7 +235,7 @@
 									<div id="document-row">
 										<div class="columns three">
 											<label for="docs">Upload Documents</label>
-											<div class="tool-tip hint--top" data-hint="Upload files here such as Insurance Certificates, ISO 14001, Fire Safety/Sprinkler Documentation, Operator License">?</div>
+											<div class="tool-tip hint--top" data-hint="Upload files here such as Insurance Certificates, ISO 14001, Fire Safety/Sprinkler Documentation, Product Storage Certification">?</div>
 										</div>
 										<input class="columns three" type="file" id="docs"/>
 										<div class="input-field columns four file-title">
@@ -262,7 +262,6 @@
 										<%}
 									}%>
 								</div>
-								<p>*You can come back and add these later once registered if you prefer.</p>
 							</fieldset>
 						</div>
 						<p>*Required Fields</p>

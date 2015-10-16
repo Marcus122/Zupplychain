@@ -8,6 +8,10 @@ exports.updateMasterContacts = function(company,user,cb){
 	Company.update({_id:company},{$push:{masterContacts:user}}).exec(cb);	
 }
 
+exports.updateWarehouses = function(company,warehouse,cb){
+	Company.update({_id:company},{$push:{warehouses:warehouse}}).exec(cb);	
+}
+
 exports.create = function(req,res,company,cb){
 		var comp = new Company(company);
 		comp.save(function(err){

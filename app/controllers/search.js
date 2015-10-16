@@ -54,14 +54,14 @@ exports.saveToSession = function(search,req,cb) {
 
 exports.search_storage = function(query, cb) {
     //need to convert postcode to lat lng and attach to the query.
-    var postcode = query.postcode;
-    Utils.getLatLong(postcode, function(error, geoData) {
-       query.geo =  {"lng": geoData.lng, "lat": geoData.lat};
-       query.loc = {"type" : "Point", "coordinates" : [query.geo.lng, query.geo.lat]} ; //always long then lat
+    //var postcode = query.postcode;
+    //Utils.getLatLong(postcode, function(error, geoData) {
+       //query.geo =  {"lng": geoData.lng, "lat": geoData.lat};
+      // query.loc = {"type" : "Point", "coordinates" : [query.geo.lng, query.geo.lat]} ; //always long then lat
        var result = warehouse.warehouse_by_query(query, function(error,res) {
            cb(null,res);
        });
-    });
+    //});
 }
 
 exports.generateBlankUseageProfile = function(startDate, numWeeks, qty) {
@@ -81,4 +81,14 @@ exports.generateBlankUseageProfile = function(startDate, numWeeks, qty) {
             useageProfile = {};
         }
     return useageProfileArray;
+}
+
+exports.loadSearch = function(searchId,cb){
+    Search.load(searchId,function(err,results){
+            if(err){
+                cb(err);
+            }else{
+                cb(false,results);
+            }
+      })
 }

@@ -9,6 +9,8 @@ var handler = function(app) {
 		req.data.telephone = req.body.telephone;
 		req.data.requestCallback = req.body["request-callback"];
 		req.data.message = req.body.message;
+		req.data.mailto = req.body.email;
+		req.data.subject = req.body['your-enquiry']
 		res.render('emails/contact-us',req.data,function(err,template){
 			if (!err){
 				emailer.sendMail(req,res,template,'matthew.alton@weaveability.com',req.body.email,req.body['your-enquiry'],function(err){

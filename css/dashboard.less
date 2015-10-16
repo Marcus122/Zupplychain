@@ -69,6 +69,16 @@
 	// 		text-align:left;
 	// 	}
 	// }
+	div[data-view="admin"]{
+		button.save{
+			float:right;
+		}
+	}
+	table#tasks{
+		td[data-field="task"]{
+			text-align:left;
+		}
+	}
 	.welcome-box,
 	.tasks-box{
 		.main.row{
@@ -82,6 +92,15 @@
 			}
 			p span{
 				font-weight:bold;
+			}
+		}
+	}
+	.welcome-box{
+		.main.row{
+			padding: 10px 10px 10px 0;
+			p{
+				text-align: left;
+				margin-left:20px;
 			}
 		}
 	}
@@ -112,6 +131,9 @@
 	}
 	.dashboard-back{
 		float:left;
+	}
+	.dashboard-tandc{
+		float:right;
 	}
 	#vertical-nav{
 		margin:0;
@@ -167,26 +189,28 @@
 	}
 	div[data-view="contacts"],
 	div[data-view="users"]{
+		.button-container{
+			#add-new-contact-container{
+				display:inline-block;
+				float:right;
+				button{
+					margin-left:10px;
+				}
+			}
+		}
 		section.master-contacts .main{
 			border: 1px solid #d7d7d7;
 		}
-		.registered-status{
-			width: 20px;
-			height: 20px;
-			border-radius: 14px;
-			margin-left: 42%;
-			margin-right: 50%;
+		p.registered-status{
+			margin-bottom:0;
 			&.complete{
-				border: 1px solid @primary;
-				background-color: @primary;
+				color:@primary;
 			}
 			&.pending{
-				border: 1px solid @highlight;
-				background-color: @highlight;
+				color:@highlight;
 			}
 			&.expired{
-				border: 1px solid @invalid-dark;
-				background-color: @invalid-dark;
+				color:@invalid-dark;
 			}
 		}
 		ul.two-tabs li{
@@ -198,6 +222,12 @@
 				width:45.7%;
 				margin-right:0;
 				max-width:initial;
+			}
+		}
+		ul.five-tabs li{
+			height:64px;
+			&:last-of-type{
+				margin-right:0;	
 			}
 		}
 	}
@@ -217,21 +247,22 @@
 	}
 	.tab-links{
 		margin-bottom:0;
-		li{
-			margin:0 5px;
-			float:left;
-			list-style:none;
-			padding-bottom:10px;
-			max-width:127px;
-			margin-left:0;
-			a{
+		a{
+			li{
+				margin:0 5px;
+				float:left;
+				list-style:none;
+				padding-bottom:10px;
+				width:122.5px;
+				margin-left:0;
 				font-size: 1.5rem;
-			}
-			&.active{
-				background:@primary;
-			}
-			&:after{
-				content:"";
+				color:#fff;
+				&.active{
+					background:@primary;
+				}
+				&:after{
+					content:"";
+				}
 			}
 		}
 		&:after{
@@ -246,10 +277,11 @@
 	}
 	.tab-content{
 		padding:15px;
-		border-radius:7px;
-		box-shadow:-1px 1px 1px rgba(0,0,0,0.15);
 		background:#fff;
 		margin-bottom:20px;
+		border: 1px solid rgba(0,0,0,0.15);
+		border-bottom-left-radius: 7px;
+		border-bottom-right-radius: 7px;
 		&.view-edit-warehouse{
 			background-color: #d7d7d7;
     		box-shadow: none;
@@ -279,6 +311,9 @@
 		}
 		ul.tabs{
 			border:none;
+			li span{
+				color:#fff;
+			}
 		}
 		div.tab{
 			background-color:@tertiary;

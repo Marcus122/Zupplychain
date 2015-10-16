@@ -240,15 +240,14 @@
 		<p>*Required Fields</p>
 	</div>
 	<fieldset class="form-footer">
-		
-				<a class="button simple tandc" href="#">VIEW TERMS AND CONDITIONS</a>
-		
 		<%if( warehouse._id ){%>
 			<input name="id" value="<%=warehouse._id%>" type="hidden"/>
 		<%}%>
-		<button type="button" class="action save">Save</button>
-		<span>OR</span>
-		<button class="action next">Save &amp; Continue</button>
+		<div data-function="save-buttons">
+			<button type="button" class="action save">Save</button>
+			<span>OR</span>
+			<button class="action next">Save &amp; Continue</button>
+		</div>
 	</fieldset>
 </form>
 <script type="text/template" id="save-registration">

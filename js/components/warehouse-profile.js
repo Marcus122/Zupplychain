@@ -23,10 +23,10 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
             });
             
             $("#choose-this-warehouse").click(function(e){
-                e.preventDefault();
-                var $popup = $("#choose-this-warehouse-popup");
-                $popup.css({position:"absolute", top:$('#estimated-total-cost').offset().top-400 });
-                $popup.show();
+                //e.preventDefault();
+                //var $popup = $("#choose-this-warehouse-popup");
+                //$popup.css({position:"absolute", top:$('#estimated-total-cost').offset().top-400 });
+                //$popup.show();
             });
             
             $("#choose-this-warehouse-popup .close").click(function(){

@@ -1,0 +1,9 @@
+<div id="warehouse-contacts" class="tab main">
+	<p>Please select your warehouse</p>
+	<select name="warehouses" class="columns four">
+		<%for(i = 0; i<warehouses.length; i++){%>
+			<option data-id="<%=warehouses[i]._id%>"><%=warehouses[i].name%></option>
+		<%}%>
+	</select>
+	<button name="view-warehouse-contacts" class="action mini columns two">View</button>
+</div>

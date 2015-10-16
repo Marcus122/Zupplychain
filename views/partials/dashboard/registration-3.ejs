@@ -10,6 +10,7 @@
 				<thead>
 					<tr>
 						<th>Storage Name</th>
+						<th>Pallet Width</th>
 						<th>Pallet Spaces</th>
 						<th>Pricing</th>
 						<!--<th>Volume Discount</th>-->
@@ -32,6 +33,9 @@
 					<tr data-id="<%=storage._id %>">
 						<td class="text" data-th="Storage Name">
 							<span><%=storage.name%></span>
+						</td>
+						<td class="text" data-th="Pallet Type">
+							<span><%=palletTypes[storage.palletType]%></span>
 						</td>
 						<td class="text" data-th="Pallet Spaces">
 							<span><%=storage.palletSpaces%></span>
@@ -126,12 +130,17 @@
 </div>
 <fieldset class="form-footer">
 	<input name="warehouse" type="hidden" value="<%=warehouse._id%>"/>
-	<a href="/provider-registration-2"><button class="back" type="button">Back</button></a>
-	<button data-redirect="/registration-complete" id="save-and-finish" class="action next">Save &amp; Finish</button>
+	<button class="back" type="button">Back</button>
+	<div data-function="save-buttons">
+		<button data-redirect="/registration-complete" id="save-and-finish" class="action next">Save</button>
+	</div>
 </fieldset>
 <script type="text/template" id="volume-discount">
 	<% include ../volume-discount%>
 </script>
 <script type="text/template" id="discount-row">
 	<% include ../discount-row %> 
+</script>
+<script type="text/template" id="p-and-a-warning">
+	<% include ../pricing-and-availability-warning%> 
 </script>

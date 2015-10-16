@@ -7,22 +7,24 @@
 		<div class="main">
 			<div id="vertical-nav" class="columns two">
 				<ul>
+					<li data-view="home"><a href="#main">Home</a></li>
 					<li data-view="admin"><a href="#admin">Account</a></li>
 					<li data-view="warehouses"><a href="#warehouses">Warehouses</a></li>
 					<li data-view="contacts"><a href="#contacts">Contacts</a></li>
-					<li data-view="users"><a href="#users">Users</a></li>
+					<li data-view="users"><a href="#messages">Messages</a></li>
 				</ul>
 			</div>
 			<% include ./partials/dashboard/tiles %>
 			<% include ./partials/dashboard/admin %>   
 			<% include ./partials/dashboard/warehouses %>
 			<% include ./partials/dashboard/contacts %>
-			<% include ./partials/dashboard/users %>
+			<% include ./partials/dashboard/messages %>
 		</div>
 	</section>
 	<div class="continue-links footer form-footer">
 	<div class="container">
 		<a href="#" class="button simple dashboard-back">back</a>
+		<a class="button simple tandc dashboard-tandc" href="#">VIEW TERMS AND CONDITIONS</a>
 	</div>
 </main>	
 <% include ./partials/bottom %>   

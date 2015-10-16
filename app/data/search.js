@@ -20,7 +20,11 @@ var fields = {
     created_at : { type: Date },
     updated_at : { type: Date },
     useageProfile : Schema.Types.Mixed,
-    storageProfile : Schema.Types.Mixed
+    storageProfile : Schema.Types.Mixed,
+    geo: {
+		lat: { type: Number },
+		lng: { type: Number }
+	}
 };
 
 var searchSchema = new Schema(fields);

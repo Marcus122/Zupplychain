@@ -28,10 +28,10 @@ exports.sendMail = function(req,res,emailTemplate,receiver,from,subject,cb){
 		
 	var html = emailTemplate;
 	var mailOptions = {
-		from:    from,
+		from:    'Bob Jim <bob@jim.com>',
 		to:      receiver,
 		subject: subject,
-		html:    html
+		html:    html,
 	}
 	
 	exports.buildTransporter(req,res,function(transporter){

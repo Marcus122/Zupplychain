@@ -17,11 +17,13 @@ var handler = function(app) {
 			}else{
 				companyCtrl.getMasterContactsUserData(req.data.user.toObject().company,function(err,masterContacts){
 					req.data.warehouses = warehouses;
+					req.data.warehouse = warehouses[0];
 					req.data.masterContacts = masterContacts;
 					req.data.temperatures = local.config.temperatures;
 					req.data.services = local.config.services;
 					req.data.palletTypes = local.config.palletTypes;
 					req.data.specifications = local.config.specifications;
+					req.data.registerStatus = local.config.registerStatus;
 					res.render("dashboard",req.data);
 				});
 			}
@@ -31,7 +33,7 @@ var handler = function(app) {
 	app.post('/update-contacts', function(req,res){
 		warehouses.load(req,res,function(err,warehouse){
 			if (!err){
-				warehouseContacts.createWarehouseContacts(warehouse,req.body.masterContacts,req.bosy.contacts,function(err){
+				warehouseContacts.createWarehouseContacts(warehouse,req.body.masterContacts,req.body.contacts,function(err){
 					if(!err){
 						setResponse('Contacts Saved',res);
 					}else{
@@ -45,7 +47,9 @@ var handler = function(app) {
 	});
 	
 	app.get('/get-warehouse-contacts/:warehouse_id',function(req,res){
-		res.render('partials/dashboard/warehouse-specific-contacts',req.warehouse);
+		req.data.warehouse = req.warehouse;
+		req.data.registerStatus = local.config.registerStatus;
+		res.render('partials/dashboard/warehouse-specific-contacts',req.data);
 	});
 	
 	app.post('/save-account-details',function(req,res){
@@ -64,6 +68,32 @@ var handler = function(app) {
 				setResponseWithErr('An error occurred while attempting to change your details',res);
 			}else{
 				setResponse({successMessage:'Details changed successfully'},res);
+			}
+		})
+	});
+	
+	app.post('/resend-register-email/:userId',function(req,res){
+		resendRegisterEmail(req,res,function(err){
+			if(err){
+				setResponseWithErr('An error occurred while attempting to resend the email',res);
+			}else{
+				setResponse('Email sent',res);
+			}
+		})
+	});
+	
+	app.get('/rebuild-contacts-view',function(req,res){
+		companyCtrl.warehouseByCompany(req.data.user.toObject().company,function(err,warehouses){
+			if (err){
+				setErrorResponse("Warehouse not found",res);
+			}else{
+				companyCtrl.getMasterContactsUserData(req.data.user.toObject().company,function(err,masterContacts){
+					req.data.warehouses = warehouses;
+					req.data.warehouse = warehouses[0];//If they only have one warehouse just return the first one
+					req.data.masterContacts = masterContacts;
+					req.data.registerStatus = local.config.registerStatus;
+					res.render("partials/dashboard/contacts",req.data);
+				});
 			}
 		})
 	});
@@ -97,26 +127,89 @@ var handler = function(app) {
 	});
 	
 	app.post('/create-contact',function(req,res){
-		createContact(req,res,function(err){
+		createContact(req,res,function(err,results){
 			if(err){
 				setResponseWithErr('Error: Contact not created',res);
 			}else{
-				setResponse('Contact Created',res)
+				setResponse(results,res);
 			}
 		});
 	});
 	
 	app.get('/rebuild-pricing-and-availability/:warehouse_id',function(req,res){
 		req.data.warehouse = req.warehouse;
+		req.data.palletTypes = local.config.palletTypes;
 		res.render('partials/dashboard/registration-3',req.data);
 	});
 	
-	app.get('/rebuild-warehouse-list/:warehouse_id',function(req,res){
-		req.data.warehouse = req.warehouse;
-		res.render('partials/dashboard/warehouses',req.data);
+	app.get('/rebuild-warehouse-dropdown-list/',function(req,res){
+		companyCtrl.warehouseByCompany(req.data.user.toObject().company,function(err,warehouses){
+			if(err){
+				setErrorResponse("Warehouse not found",res);
+			}else{
+				req.data.warehouses = warehouses;
+				res.render('partials/dashboard/warehouse-dropdown-list',req.data);
+			}
+		})
+	});	
+	
+	// app.get('/rebuild-warehouse-list/:warehouse_id',function(req,res){
+	// 	req.data.warehouse = req.warehouse;
+	// 	res.render('partials/dashboard/warehouses',req.data);
+	// });
+	
+	app.get('/rebuild-warehouse-list/',function(req,res){
+		companyCtrl.warehouseByCompany(req.data.user.toObject().company,function(err,warehouses){
+			if(err){
+				setErrorResponse("Warehouse not found",res);
+			}else{
+				req.data.warehouses = warehouses;
+				req.data.warehouse = warehouses[0];
+				res.render('partials/dashboard/warehouse-list',req.data);
+			}
+		})
 	});
 	
 };
+
+function resendRegisterEmail(req,res,cb){
+	users.user_by_id(req.params.userId,function(err,user){
+		if(err){
+			cb(err);
+		}else{
+			var emailContactData = {};
+				emailContactData.title = 'Complete Registration';
+				emailContactData.subtitle = 'Complete Registration';
+				emailContactData.referer = req.data.user.name;
+				emailContactData.role = req.body.role;
+				emailContactData.company = req.data.user.company.name;
+				emailContactData.link = req.protocol + '://' + req.headers.host + '/initial-registration/' + user._id.toString();
+				emailContactData.warehouse = "";
+				emailContactData.config = local.config;
+			res.render('emails/create-contact',emailContactData,function(err,template){
+				if(err){
+					cb(err);
+					//Delete the created user
+				}else{
+					emailer.sendMail(req,res,template,req.body.email,'info@zupplychain.com','Complete Registration',function(err){
+						if(err){
+							//Delete the created user
+						}else{
+							user.expiry = new Date(+new Date + 12096e5);
+							users.update(user,function(err){
+								if(err){
+									//Delete the created user
+								}else{
+									cb(null);
+								}
+							},true)
+						}
+					});
+				}
+			});
+		}
+	});
+}
 
 function changePassword(req,cb){
 	dashboard.changePassword(req.data.user,req.body['new-password'],function(err){
@@ -166,8 +259,10 @@ function saveAccountDetails(req,cb){
 
 function createContact(req,res,cb){
 	var data = {},
-		tableId,
-		cntr;
+		tableId = "",
+		cntr,
+		contacts = {},
+		contactsType = "";
 	data.email = req.body.email;
 	data.type = 1//hard coded for now
 	data.name = req.body.name;
@@ -176,38 +271,83 @@ function createContact(req,res,cb){
 	data.dashboardAccess = req.body.dashboardAccess;
 	data.registerStautus = 0;
 	data.company = req.data.user.company;
-	users.create(req,res,data,function(err,user){
+	dashboard.checkUserExistsandCreateUser(req,res,data,function(err,user,userExisted){
 		if(err){
 			cb(err);
 		}else{
+			if (user.constructor === Array){
+				user = user[0];//An email can only exist once so the first item will always be the one we want
+			}
 			if (req.body.role == 'Master Contacts'){
 				tableId = req.data.user.company._id;
 				cntr = companyCtrl;
+				contactsType = "Master Contacts";
 			}else{
 				tableId = req.body.warehouseContacts;
 				cntr = warehouseContacts;
+				contactsType = "Warehouse Contacts";
 			}
-			cntr['update' + req.body.role.replace(/\s/g, '')](tableId,user._id,function(err,result){
-				var emailContactData = {};
-				emailContactData.title = 'Complete Registration';
-				emailContactData.subtitle = 'Complete Registration';
-				emailContactData.referer = req.data.user.name;
-				emailContactData.role = req.body.role;
-				emailContactData.company = req.data.user.company.name;
-				emailContactData.link = req.protocol + '://' + req.headers.host + '/initial-registration/' + user._id.toString();
-				emailContactData.warehouse = "";
-				emailContactData.config = local.config;
-				res.render('emails/create-contact',emailContactData,function(err,template){
-					if(err){
-						cb(err);
-						//Delete the created user
-					}else{
-						emailer.sendMail(req,res,template,req.body.email,'info@zupplychain.com','Complete Registration',function(err){
-							cb(null);
+			if(tableId !== ""){
+				cntr['update' + req.body.role.replace(/\s/g, '')](tableId,user._id,function(err,result){
+					var emailContactData = {};
+					emailContactData.title = 'Complete Registration';
+					emailContactData.subtitle = 'Complete Registration';
+					emailContactData.referer = req.data.user.name;
+					emailContactData.role = req.body.role;
+					emailContactData.company = req.data.user.company.name;
+					emailContactData.link = req.protocol + '://' + req.headers.host + '/initial-registration/' + user._id.toString();
+					emailContactData.warehouse = "";
+					emailContactData.config = local.config;
+					if (userExisted === false){
+						res.render('emails/create-contact',emailContactData,function(err,template){
+							if(err){
+								cb(err);
+								//Delete the created user
+							}else{
+								emailer.sendMail(req,res,template,req.body.email,'info@zupplychain.com','Complete Registration',function(err){
+									cb(null);
+								});
+							}
 						});
+					}else{
+						cb(null);
 					}
 				});
-			});
+			}else{
+				contacts.warehouse = req.body.warehouseId;
+				var jsonCc = req.body.role.replace(/\s/g, '');
+				jsonCc = jsonCc.charAt(0).toLowerCase() + jsonCc.substring(1);
+				contacts[jsonCc] = [user._id];
+				cntr['create' + contactsType.replace(/\s/g, '')](contacts,function(err,result){
+					if(err){
+						//Delete the created user
+					}else{
+						var emailContactData = {};
+						emailContactData.title = 'Complete Registration';
+						emailContactData.subtitle = 'Complete Registration';
+						emailContactData.referer = req.data.user.name;
+						emailContactData.role = req.body.role;
+						emailContactData.company = req.data.user.company.name;
+						emailContactData.link = req.protocol + '://' + req.headers.host + '/initial-registration/' + user._id.toString();
+						emailContactData.warehouse = "";
+						emailContactData.config = local.config;
+						if (userExisted === false){
+							res.render('emails/create-contact',emailContactData,function(err,template){
+								if(err){
+									cb(err);
+									//Delete the created user
+								}else{
+									emailer.sendMail(req,res,template,req.body.email,'info@zupplychain.com','Complete Registration',function(err){
+										cb(null,result.toObject());
+									});
+								}
+							});
+						}else{
+							cb(null);
+						}
+					}
+				});
+			}
 		}
 	},false)
 }

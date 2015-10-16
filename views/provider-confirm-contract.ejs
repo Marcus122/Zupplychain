@@ -1,12 +1,12 @@
  <% include ./partials/top%>   
  <%
-    var session = { whSC : { sc : "" } };
+    var session = { search: { } };
     console.log("in template");
     //console.log(quote);
     console.log(typeof quote.search.startDate);
-    session.whSC.sc = [quote.search];
+    session.search = [quote.search];
     var warehouse = quote.warehouse;
-    session.whSC.sc[0].startDate = new Date(session.whSC.sc[0].startDate).toISOString();
+    quote.search.startDate = new Date(quote.search.startDate).toISOString();
     console.log(warehouse);
     var minDurationOptions = config.minDurationOptions;
     var temperatures = config.temperatures;
@@ -54,49 +54,49 @@
                                 <div class="row">
                                     <div class="columns two">
                                         <span>Target Postcode/City</span>
-                                        <em class="search-value"><%=session.whSC.sc[0].postcode%></em> 
+                                        <em class="search-value"><%=quote.search.postcode%></em> 
                                     </div>
                                     <div class="columns two">
                                         <span>Max Distance (miles)</span>
-                                        <em class="search-value"><%=session.whSC.sc[0].maxDistance%></em> 
+                                        <em class="search-value"><%=quote.search.maxDistance%></em> 
                                     </div>
                                     <div class="columns two">
                                         <span>  Pallet Type</span>
-					                    <% if(session.whSC.sc[0].palletType){%>
-                                           <em class="search-value"><%=session.whSC.sc[0].palletType%></em>
+					                    <% if(quote.search.palletType){%>
+                                           <em class="search-value"><%=quote.search.palletType%></em>
                                        <%}else{%>
                                            <em class="search-value">Any</em>
                                       <%}%>
                                     </div>
 				                    <div class="columns two">
 				                        <span>Qty</span>
-                                        <em class="search-value"><%=session.whSC.sc[0].totalPallets%></em> 
+                                        <em class="search-value"><%=quote.search.totalPallets%></em> 
 				                     </div>
                                     <div class="columns two">
 				                        <span>Product Description</span>
-                                        <em class="search-value"><%=session.whSC.sc[0].description%></em> 
+                                        <em class="search-value"><%=quote.search.description%></em> 
                                     </div>
                                     <div class="columns two">
                                         <span>Start Date</span>
-				                        <em class="search-value"><%=session.whSC.sc[0].startDate.substring(8,10)%>/<%=session.whSC.sc[0].startDate.substring(5,7)%>/<%=session.whSC.sc[0].startDate.substring(0,4)%></em> 
+				                        <em class="search-value"><%=quote.search.startDate.toString().substring(8,10)%>/<%=quote.search.startDate.toString().substring(5,7)%>/<%=quote.search.startDate.toString().substring(0,4)%></em> 
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="columns two">
 				                        <span>Expected Duration</span>
-                                        <em><%=minDurationOptions[parseInt(session.whSC.sc[0].minDuration,10)]%></em> 
+                                        <em><%=minDurationOptions[parseInt(quote.search.minDuration,10)]%></em> 
                                     </div>
                                     <div class="columns two">
                                         <span>Pallet Height (m)</span>
-                                        <em class="search-value"><%=parseInt(session.whSC.sc[0].height).toFixed(2)%></em> 
+                                        <em class="search-value"><%=parseInt(quote.search.height).toFixed(2)%></em> 
                                     </div>
                                     <div class="columns two">
                                         <span>Pallet Weight (kg)</span>
-                                        <em class="search-value"><%=session.whSC.sc[0].weight%></em> 
+                                        <em class="search-value"><%=quote.search.weight%></em> 
                                     </div>
 				                    <div class="columns two">
 				                        <span>Type</span>
-                                        <em class="search-value"><%=temperatures[session.whSC.sc[0].temp]%></em> 
+                                        <em class="search-value"><%=temperatures[quote.search.temp]%></em> 
 				                    </div>
                                 </div>
                             </div>
@@ -173,7 +173,7 @@
                                         <div class="five columns">
                                             <div class="input-field">
                                                 <p>Number of Pallets</p>
-                                                <p><b><%=session.whSC.sc[0].totalPallets%></b></p>
+                                                <p><b><%=quote.search.totalPallets%></b></p>
                                             </div>
                                             <div class="input-field">
                                                 <p>Estimated Miles</p>

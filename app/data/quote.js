@@ -38,7 +38,7 @@ quoteSchema.statics = {
           .populate('search')
 		  .populate('warehouse')
 		  .populate('user')
-          
+          .populate('search')
 		  .exec(cb);
   },
   loadByUser: function(user,cb){

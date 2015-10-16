@@ -5,7 +5,7 @@
 		</div>
 		<section>
             <input type="hidden" name="warehouse-id" id="warehouse-id" value="<%=warehouse._id%>" />
-            <% if (session.whSC != undefined && session.whSC.sc){ %>
+            <% if (query != undefined && Object.keys(query).length > 0){ %>
                 <div class="search-header">
                     <div class="row">
                         <div class="columns three back-to-search">
@@ -19,47 +19,47 @@
                                     <ul>
                                         <li>
                                            <span class="title">Pallet type</span>
-                                           <% if(session.whSC.sc[0].palletType){%>
-                                                <span class="search-value"><%=session.whSC.sc[0].palletType%></span>
+                                           <% if(query.palletType){%>
+                                                <span class="search-value"><%=query.palletType%></span>
                                            <%}else{%>
                                                <span class="search-value">Any</span>
                                            <%}%>
                                         </li>
                                         <li>
                                             <span class="title">Quantity</span>
-                                            <span class="search-value"><%=session.whSC.sc[0].totalPallets%></span> 
+                                            <span class="search-value"><%=query.totalPallets%></span> 
                                         </li>
                                         <li>
                                             <span class="title">Target postcode</span>
-                                            <span class="search-value"><%=session.whSC.sc[0].postcode%></span> 
+                                            <span class="search-value"><%=query.postcode%></span> 
                                         </li>
                                         <li>
                                             <span class="title">Max distance</span>
-                                            <span class="search-value"><%=session.whSC.sc[0].maxDistance%></span> 
+                                            <span class="search-value"><%=query.maxDistance%></span> 
                                         </li>
                                         <li>
                                             <span class="title">Product description</span>
-                                            <span class="search-value"><%=session.whSC.sc[0].description%></span> 
+                                            <span class="search-value"><%=query.description%></span> 
                                         </li>
                                         <li>
                                             <span class="title">Start date</span>
-                                            <span class="search-value"><%=session.whSC.sc[0].startDate.substring(8,10)%>/<%=session.whSC.sc[0].startDate.substring(5,7)%>/<%=session.whSC.sc[0].startDate.substring(0,4)%></span> 
+                                            <span class="search-value"><%=query.startDate.toString().substring(8,10)%>/<%=query.startDate.toString().substring(5,7)%>/<%=query.startDate.toString().substring(0,4)%></span> 
                                         </li>
                                         <li>
                                             <span class="title">Min Duration</span>
-                                            <span><%=minDurationOptions[parseInt(session.whSC.sc[0].minDuration,10)]%></span> 
+                                            <span><%=minDurationOptions[parseInt(query.minDuration,10)]%></span> 
                                         </li>
                                         <li>
                                             <span class="title">Height (m)</span>
-                                            <span class="search-value"><%=session.whSC.sc[0].height%></span> 
+                                            <span class="search-value"><%=query.height%></span> 
                                         </li>
                                         <li>
                                             <span class="title">Weight (kg)</span>
-                                            <span class="search-value"><%=session.whSC.sc[0].weight%></span> 
+                                            <span class="search-value"><%=query.weight%></span> 
                                         </li>
                                         <li>
                                             <span class="title">Type</span>
-                                            <span class="search-value"><%=temperatures[session.whSC.sc[0].temp]%></span> 
+                                            <span class="search-value"><%=temperatures[query.temp]%></span> 
                                         </li>
                                     </ul>
                                     <div class="edit-search">
@@ -85,49 +85,49 @@
                                 <div class="row">
                                     <div class="columns two">
 										<span>Target Postcode/City</span>
-										<em class="search-value"><%=session.whSC.sc[0].postcode%></em> 
+										<em class="search-value"><%=query.postcode%></em> 
                                     </div>
                                     <div class="columns two">
 										<span>Max Distance (miles)</span>
-										<em class="search-value"><%=session.whSC.sc[0].maxDistance%></em> 
+										<em class="search-value"><%=query.maxDistance%></em> 
                                     </div>
                                     <div class="columns two">
 										<span>  Pallet Type</span>
-										<% if(session.whSC.sc[0].palletType){%>
-                                           <em class="search-value"><%=session.whSC.sc[0].palletType%></em>
+										<% if(query.palletType){%>
+                                           <em class="search-value"><%=query.palletType%></em>
                                        <%}else{%>
                                            <em class="search-value">Any</em>
                                       <%}%>
                                     </div>
 									<div class="columns two">
 										<span>Qty</span>
-										<em class="search-value"><%=session.whSC.sc[0].totalPallets%></em> 
+										<em class="search-value"><%=query.totalPallets%></em> 
 									</div>
                                     <div class="columns two">
 										<span>Product Description</span>
-										<em class="search-value"><%=session.whSC.sc[0].description%></em> 
+										<em class="search-value"><%=query.description%></em> 
                                     </div>
                                     <div class="columns two">
 										<span>Start Date</span>
-										<em class="search-value"><%=session.whSC.sc[0].startDate.substring(8,10)%>/<%=session.whSC.sc[0].startDate.substring(5,7)%>/<%=session.whSC.sc[0].startDate.substring(0,4)%></em> 
+										<em class="search-value"><%=query.startDate.toString().substring(8,10)%>/<%=query.startDate.toString().substring(5,7)%>/<%=query.startDate.toString().substring(0,4)%></em> 
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="columns two">
 										<span>Minimum Duration</span>
-										<em><%=minDurationOptions[parseInt(session.whSC.sc[0].minDuration,10)]%></em> 
+										<em><%=minDurationOptions[parseInt(query.minDuration,10)]%></em> 
                                     </div>
                                     <div class="columns two">
 									  <span>Pallet Height (m)</span>
-									  <em class="search-value"><%=session.whSC.sc[0].height%></em> 
+									  <em class="search-value"><%=query.height%></em> 
                                     </div>
                                     <div class="columns two">
 									  <span>Pallet Weight (kg)</span>
-									   <em class="search-value"><%=session.whSC.sc[0].weight%></em> 
+									   <em class="search-value"><%=query.weight%></em> 
                                     </div>
 									<div class="columns two">
 										<span>Type</span>
-                                        <em class="search-value"><%=temperatures[session.whSC.sc[0].temp]%></em> 
+                                        <em class="search-value"><%=temperatures[query.temp]%></em> 
 									</div>
                                 </div>
 								<% include ./partials/multi-used/mini-warehouse-profile %>

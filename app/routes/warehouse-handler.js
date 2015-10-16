@@ -9,7 +9,8 @@ async = require("async"),
 Utils = require("../utils.js"),
 fh = require("../controllers/file-handler.js"),
 multiparty = require('multiparty'),
-company = require('../controllers/company');
+company = require('../controllers/company'),
+contacts = require('../controllers/warehouse-contacts.js')
 
 var handler = function(app) {
 	app.param('warehouse_id', warehouse.load);
@@ -22,9 +23,23 @@ var handler = function(app) {
 	
 	app.post('/warehouse', function(req, res) {
 		if(req.data.user._id){ //If user is not logged in then create user
-			createWarehouse(req,res);
+			createWarehouse(req,res,function(err,result){
+				if(err){
+					setErrorResponse(err,res);
+				}else{
+					req.warehouse = result;
+					company.updateWarehouses(req.data.user.company.toObject()._id,result._id,function(err,result){
+						if(err){
+							setErrorResponse(err,res);
+							//Maybe delete the user, warehouse and the company
+						}else{
+							setResponse(req,res);
+						}
+					});
+				}
+			});
 		}else{
-			createUserAndCompany(req, res);
+			createUserAndCompany(req,res);
 		}
 	});
 	app.post('/warehouse/:warehouse_id/storage',createStorage);
@@ -274,16 +289,50 @@ function warehouseProfile (req,res){
 }
 
 function createUserAndCompany(req,res){
-	//createCompany(req,res,function(err,company){
-		user.create(req,res,{},function(err,user){
-			createWarehouse(req,res);
-		});
-	//});
+	var usr = {};
+	createCompany(req,res,function(err,newCompany){
+		if (err){
+			setErrorResponse(err,res);
+		}else{
+			usr.company = newCompany;
+			user.create(req,res,usr,function(err,newUser){
+				if(err){
+					setErrorResponse(err,res);
+					//Maybe delete the company
+				}else{
+					company.updateMasterContacts(newCompany._id,newUser._id,function(err,result){
+						if(err){
+							setErrorResponse(err,res);
+							//Maybe delete the company and user
+						}else{
+							createWarehouse(req,res,function(err,Warehouse){
+								if (err){
+									setErrorResponse(err,res);
+									//Maybe delete the user and the company
+								}else{
+									req.warehouse = Warehouse;
+									company.updateWarehouses(newCompany._id,Warehouse._id,function(err,result){
+										if(err){
+											setErrorResponse(err,res);
+											//Maybe delete the user, warehouse and the company
+										}else{
+											setResponse(req,res);
+										}
+									});
+								}
+							});
+						}
+					});
+				}
+			});
+		}
+	});
 }
 function createCompany(req,res,cb){
-	var data = {name:req.body.company,
-				   warehouses: [],
-				   masterContacts: []}
+	var data = {};
+	data.name = req.body.company;
+	data.warehouses = [];
+	data.masterContacts = [];
 	company.create(req,res,data,function(err,company){
 		cb(err,company);
 	});
@@ -292,7 +341,9 @@ function warehouseAuth(req,res,next){
 	if(req.warehouse.user._id.equals( req.data.user._id) ) return next();
 	setResponse(req,res,next);
 }
-function createWarehouse(req,res){
+function createWarehouse(req,res,cb){
+	var contactsData = {};
+	var updateWarehouse = {};
 	Utils.getLatLong(req.body.postcode,function(err,latlng){
 		if (latlng.lat === null && latlng.lng === null){
 			if (err){
@@ -307,11 +358,29 @@ function createWarehouse(req,res){
 			req.body.loc = { 'type' : 'Point', 'coordinates' : [latlng.lng, latlng.lat] };
 			warehouse.create(req.data.user,req.body,function(err,Warehouse){
 				if(err){
-					setErrorResponse(err,res);
+					//setErrorResponse(err,res);
+					cb(err);
 				}else{
-					req.warehouse = Warehouse;
-					//company.updateCompanyWithWarehouse(warehouse);
-					setResponse(req,res);
+					//req.warehouse = Warehouse;
+					//setResponse(req,res);
+					contactsData.warehouse = Warehouse._id;
+					contacts.createWarehouseContacts(contactsData,function(err,contactsRes){
+						if(err){
+							cb(err);
+							//Maybe delete some stuff
+						}else{
+							updateWarehouse = Warehouse.toObject();
+							updateWarehouse.contacts = contactsRes._id;
+							warehouse.update(Warehouse,updateWarehouse,function(err){
+								if(err){
+									cb(err);
+									//Maybe delete some stuff
+								}else{
+									cb(false,Warehouse);
+								}
+							})
+						}
+					})
 				}
 			});
 		}

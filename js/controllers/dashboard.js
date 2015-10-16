@@ -38,14 +38,46 @@ define(["jquery"], function ($) {
 			});
 		}
 		
-		function rebuildWarehouseList(warehouseId,cb){
-			var url = '/rebuild-warehouse-list/' + warehouseId;
+		function rebuildWarehouseList(cb){
+			var url = '/rebuild-warehouse-list';
 			$.ajax({
 				url: url,
 				type: 'GET',
 				dataType: 'html',
 				success: function(response){
 					cb(response)
+				},
+				error:function(jqXHR, textStatus, errThrown){
+					err = JSON.parse(jqXHR.responseText);
+					cb(err);
+				}
+			});
+		}
+		
+		function rebuildWarehouseDropdownList(cb){
+			var url = '/rebuild-warehouse-dropdown-list';
+			$.ajax({
+				url: url,
+				type: 'GET',
+				dataType: 'html',
+				success: function(response){
+					cb(response)
+				},
+				error:function(jqXHR, textStatus, errThrown){
+					err = JSON.parse(jqXHR.responseText);
+					cb(err);
+				}
+			});
+		}
+		
+		function rebuildContactsView(cb){
+			var url = '/rebuild-contacts-view';
+			$.ajax({
+				url: url,
+				type: 'GET',
+				dataType: 'html',
+				success: function(response){
+					cb(false,response)
 				},
 				error:function(jqXHR, textStatus, errThrown){
 					err = JSON.parse(jqXHR.responseText);
@@ -87,12 +119,31 @@ define(["jquery"], function ($) {
 			})
 		}
 		
+		function resendRegisterEmail(userId,data,cb){
+			var url = '/resend-register-email/' + userId;
+			$.ajax({
+				url:url,
+				type: 'POST',
+				data: data,
+				success:function(response){
+					cb(response);
+				},
+				error:function(jqXHR,textStatus,errThrown){
+					err = JSON.parse(jqXHR.responseText);
+					cb(err);
+				}
+			})
+		}
+		
 		return{
 			loadWarehouse:loadWarehouse,
 			rebuildPricingAndAvailability:rebuildPricingAndAvailability,
 			rebuildWarehouseList:rebuildWarehouseList,
 			getWarehouseContacts:getWarehouseContacts,
-			createContact:createContact
+			createContact:createContact,
+			resendRegisterEmail:resendRegisterEmail,
+			rebuildContactsView:rebuildContactsView,
+			rebuildWarehouseDropdownList:rebuildWarehouseDropdownList
 		}
 	}
 	return c;

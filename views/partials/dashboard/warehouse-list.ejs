@@ -1,0 +1,20 @@
+<table class="simple dashboard-table" data-loom-num-per-page="5" id="warehouses-table">
+<thead>
+	<tr>
+		<th>Warehouse Name</th>
+		<th>Address</th>
+		<th>View/Edit Warehouse</th>
+		<th><img src="./images/delete.png"></th>
+	</tr>
+</thead>
+<tbody>
+	<%for (var i=0; i<warehouses.length; i++){%>
+		<tr>
+			<td data-id="<%=warehouses[i].id%>"><%=warehouses[i].name%></td>
+			<td><%=warehouses[i].city%>, <%=warehouses[i].postcode%></td>
+			<td><a data-action="view-edit-warehouse" class="action button" href="/view-edit-warehouse/<%=warehouses[i]._id%>">View</a></td>
+			<td><input type="checkbox" name="delete-warehouse"/></td>
+		</tr>
+	<%}%>
+</tbody>
+</table>

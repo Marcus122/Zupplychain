@@ -81,8 +81,10 @@
                         <%}
                     }%>
                     <td class="<%= !quoteView && "input-field" || "" %> no-success-validation-style">
+                    <%console.log(quoteView);%>
                     <% if (quoteView) { %>
-                        <span><%=useageProfile[labels.indexOf('wcDate')][wcDate]%></span>
+                        <!--<span><%=useageProfile[0][wcDate]%></span>-->
+                        <span><%=useageProfile[index][wcDate]%></span>
                     <% } else { %>
                         
                             <input data-loom-type="number" data-start-date="<%= wcDate %>" type="text" value="<%=useageProfile[index][wcDate]%>" />

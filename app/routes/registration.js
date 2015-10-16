@@ -25,7 +25,7 @@ var handler = function(app) {
 			if(err){
 				setErrorResponse('Oops someting went wrong',res)
 			}else{
-				if (user.epiry !== null && user.expiry >= Date.now()){
+				if (user.expiry !== null && user.expiry >= Date.now()){
 					req.data.user = user;
 					res.render('initial-registration',req.data);
 				}else{
@@ -93,6 +93,7 @@ function completeRegistration(req,res){
 	req.data.user.contact = req.body.contact;
 	req.data.user.name = req.body.name;
 	req.data.user.type = req.body["user-type"];
+	req.data.user.expiry = null;//This user is now completing their registration, so there is no need for an expiry date
 	User.register(req.data.user,function(err){
 		if(err){
 			//var backURL=req.header('Referer') 
@@ -115,6 +116,7 @@ function saveRegistration(req,res){
 	req.data.user.email = req.body.email;
 	req.data.user.password = req.body.password;
 	req.data.user.type = req.body["user-type"];
+	req.data.user.expiry = null;//This user is now completing their registration, so there is no need for an expiry date
 	User.update(req.data.user,function(err){
 		res.writeHead(200, {"Content-Type": "application/json"});
 		if(err){

@@ -1,5 +1,5 @@
 var local = require("../local.config.js");
-
+var Quote = require("../controllers/quote.js")
 var handler = function(app) {
     
     app.get('/about-us', function (req,res) {

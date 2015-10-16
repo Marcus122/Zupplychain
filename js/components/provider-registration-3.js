@@ -513,14 +513,14 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         
         $(document).on('click',"#save-and-finish",function(ev) {
             clearSkipMarkerRows();
-            if ($(location).attr("pathname").indexOf('dashboard') != -1){
-                saveEverything(openSavedPopup);
-            }else{
-                if(checkBasicPricingAndAvailabilityPopulated() === false){
-                    callPAndAWarningPopup();
+            if(checkBasicPricingAndAvailabilityPopulated() === true){
+                if ($(location).attr("pathname").indexOf('dashboard') != -1){
+                   saveEverything(openSavedPopup);
                 }else{
-                    saveAndRegisterOrRedirect($(this).data('redirect'));
+                  saveAndRegisterOrRedirect($(this).data('redirect'));
                 }
+            }else{
+               callPAndAWarningPopup();
             }
         });
         
@@ -533,7 +533,11 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         
         $(document).on('click','button[name="acepted-p-and-a-terms"]',function(ev) {
              $(this).closest('.popup-window').hide();
-             saveAndRegisterOrRedirect($('#save-and-finish').data('redirect'));
+             if ($(location).attr("pathname").indexOf('dashboard') != -1){
+                   saveEverything(openSavedPopup);
+             }else{
+                saveAndRegisterOrRedirect($('#save-and-finish').data('redirect'));
+             }
         });
         
         function checkBasicPricingAndAvailabilityPopulated(){

@@ -13,7 +13,7 @@ exports.create = function (req,res,data,cb,cookieSet) {
 	cookieSet = cookieSet || true;//Set a cookie by default
 	user.save(function(err){
 		if (!err) {
-			if (cookieSet === undefined){
+			if (cookieSet === undefined || cookieSet === true){
 				setCookie(user,req,res);
 			}
 			req.data.user=user;
@@ -38,6 +38,9 @@ exports.login = function(req,res,cb){
 			}
 		}
 	}).populate('company');
+}
+exports.checkUserExists = function(email){
+	User.findOne({email:email})
 }
 exports.logout = function(req,res,cb){
     console.log("logging out");

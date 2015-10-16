@@ -85,16 +85,12 @@ function providerOfferReply(req,res) {
     req.data.page = 'provider-offer-reply';
     req.data.quote = req.quote.toObject();
     req.data.temperatures = local.config.temperatures;
-    var query = search.getFromSession(req, function(err, query){
-        if (!err) {
-            warehouse.load(req,res,function(){
-                req.warehouse.generateStorageProfile(query);
-                req.data.quote.warehouse.storageTemps = req.warehouse.storageTemps;
-                req.data.quote.warehouse.distanceFromSearch = Utils.distanceInMiles(query.geo,req.data.quote.warehouse.geo)
-                res.render("provider-offer-reply",req.data);
-            },req.data.quote.warehouse._id) 
-        }
-    });
+    warehouse.load(req,res,function(){
+        req.warehouse.generateStorageProfile(req.data.quote.search);
+        req.data.quote.warehouse.storageTemps = req.warehouse.storageTemps;
+        req.data.quote.warehouse.distanceFromSearch = Utils.distanceInMiles(req.data.quote.search.geo,req.data.quote.warehouse.geo)
+        res.render("provider-offer-reply",req.data);
+    },req.data.quote.warehouse._id);
 }
 
 
@@ -167,7 +163,8 @@ function providerOffer(req,res) {
         });
     }else{
         storage.buildStorageNamesAndRenderPage(req,res,"provider-offer");
-    }
+    } 
+
 }
 
 function createQuote(req,res) {
@@ -185,16 +182,17 @@ function createQuote(req,res) {
                 req.data.temperatures = local.config.temperatures;
                 var query = search.getFromSession(req, function(err, query){
                     if (!err) {
+                        req.data.query = query;
                         req.data.warehouse.generateStorageProfile(query);
                         var storageProfile = req.data.warehouse.storageProfile
                         search.getFromSession(req, function(err, searchFromSession) {
                             if (!err) {
                                 quote.createQuote(req.body, req.data.user, req.body.warehouseId, storageProfile,  searchFromSession, function(err, result){
                                     if (!err) {
-                                      if (req.session.whSC.chosenWHs === undefined){
-                                          req.session.chosenWHs = [req.data.warehouse.id];
+                                      if (req.session.search.chosenWHs === undefined){
+                                          req.session.search.chosenWHs = [req.data.warehouse.id];
                                       }else{
-                                          req.session.whSC.chosenWHs.push(req.data.warehouse.id);
+                                          req.session.search.chosenWHs.push(req.data.warehouse.id);
                                         }
                                         createUserWarehouse(req.data.user.id,req.body.warehouseId,storageProfile);
                                        res.writeHead(200, {"Content-Type": "application/json"});
@@ -264,6 +262,7 @@ function quotationRequest(req,res) {
         req.data.temperatures = local.config.temperatures;
         var query = search.getFromSession(req, function(err, query){
             if (!err) {
+                req.data.query = query;
                 req.data.warehouse.generateStorageProfile(query);
                 req.data.warehouse.distanceFromSearch = Utils.distanceInMiles(query.geo,req.data.warehouse.geo)
             }
