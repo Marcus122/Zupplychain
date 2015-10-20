@@ -7,7 +7,7 @@ var host = local.config.db_config.host
 var database = local.config.db_config.database
 	? local.config.db_config.database : 'ZupplyChain';
 	
-
+var db;
 
 /**
  * Currently for initialisation, we just want to open
@@ -17,7 +17,7 @@ var database = local.config.db_config.database
 exports.init = function (callback) {
 	mongoose.connect('mongodb://' + host + '/' + database)
 
-	var db = mongoose.connection;
+	db = mongoose.connection;
 
 	db.on('error', function(err){ console.log(err) });
 	db.once('open', function (callback) {
@@ -27,3 +27,7 @@ exports.init = function (callback) {
     return db;
     
 };
+
+exports.getInstance = function(){
+	return db;
+}

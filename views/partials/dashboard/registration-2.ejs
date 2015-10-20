@@ -1,12 +1,12 @@
 <form class="loom-form" data-loom-no-submit="true" method="post" action="#" id="define-space" novalidate>
+	<div class="input-field">
+		<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
+	</div>
 	<input type="hidden" name="warehouse_id" <%if(warehouse.id !== undefined)%> value="<%=warehouse.id%>"/>
 	<div class="main">
 		<div class="content-box primary">
 			<div class="header">
 				<h3>Define your storage</h3>
-				<fieldset class="form-header">
-					<button class="action reg-2-example">View Example</button>
-				</fieldset>
 			</div>
 			<div class="main">
 				<fieldset>

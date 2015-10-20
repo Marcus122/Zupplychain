@@ -6,7 +6,7 @@
 		<div class="main">
 			<section class="tabs">
 				<ul class="tab-links tabs two-tabs">
-					<a href="#master-contacts"><li class="active">Company Master Contacts</li></a>
+					<a href="#master-contact"><li class="active">Company Master Contacts</li></a>
 					<a href="#warehouse-contacts"><li>Warehouse Contacts</li></a>
 				</ul>
 			</section>
@@ -20,13 +20,14 @@
 								<th>Email</th>
 								<th>Phone Number</th>
 								<th>Registered?</th>
+								<th><img src="/images/delete.png"></th>
 								<th></th>
 							</tr>
 						</thead>
 						<tbody>
 							<%for(var i = 0; i<masterContacts.length; i++){%>
 								<tr data-user-id="<%=masterContacts[i]._id.toString()%>">
-									<td><%=i+1%>*</td>
+									<td><%=i+1%><%if(i<2){%>*<%}%></td>
 									<td data-field="name"><%=masterContacts[i].name%></td>
 									<td data-field="email"><%=masterContacts[i].email%></td>
 									<td data-field="phone-number"><%=masterContacts[i].phoneNumber%></td>
@@ -45,25 +46,28 @@
 												<p class="registered-status complete"><%=registerStatus[1]%></p>
 										<%}%>
 									</td>
+									<td data-field="delete"><input type="checkbox" name="delete-contact"/></td>
 									<td data-field="resend-email"><%if(masterContacts[i].expiry < Date.now() && masterContacts[i].expiry !== null){%> <button name="resend-email" class="button action mini">Resend</button><%}%></td>
 								</tr>
 							<%}%>
 						</tbody>
 					</table>
-					<div class="columns twelve button-container">
-						<button type="button" name="save-new-contacts" class="button action">Save</button>
-						<div id="add-new-contact-container">
-							<label for="add-new-contacts">Add new contact</label>
-							<button type="button" name="add-new-contact" class="add-button"></button>
+						<div class="columns twelve button-container">
+							<button type="button" name="save-new-contacts" class="button action">Save</button>
+							<div id="add-new-contact-container">
+								<label for="add-new-contacts">Add new contact</label>
+								<button type="button" name="add-new-contact" class="add-button"></button>
+							</div>
 						</div>
-					</div>
 				</div>
 				<% include ../../partials/dashboard/warehouse-dropdown-list%>
 			</div>
 		</div>
 	</div>
 	<%if(warehouses.length === 1){%>
-		<% include ../../partials/dashboard/warehouse-specific-contacts%>
+		<div data-one-warehouse="true" style="display:none">
+			<% include ../../partials/dashboard/warehouse-specific-contacts%>
+		</div>
 	<%}%>
 </div>
 <script type="text/template" id="master-contacts-row">

@@ -11,23 +11,22 @@ var handler = function(app) {
 	app.param('warehouse_id', warehouses.load);
 	
 	app.get('/dashboard', checkForLogon, function(req,res){
-		companyCtrl.warehouseByCompany(req.data.user.toObject().company,function(err,warehouses){
+		dashboard.getWarehousesByUser(req.data.user,function(err,data){
 			if (err){
 				setErrorResponse("Warehouse not found",res);
 			}else{
-				companyCtrl.getMasterContactsUserData(req.data.user.toObject().company,function(err,masterContacts){
-					req.data.warehouses = warehouses;
-					req.data.warehouse = warehouses[0];
-					req.data.masterContacts = masterContacts;
-					req.data.temperatures = local.config.temperatures;
-					req.data.services = local.config.services;
-					req.data.palletTypes = local.config.palletTypes;
-					req.data.specifications = local.config.specifications;
-					req.data.registerStatus = local.config.registerStatus;
-					res.render("dashboard",req.data);
-				});
+				req.data.warehouses = data.warehouses;
+				req.data.warehouse = data.warehouses[0];
+				req.data.masterContacts = data.masterContacts;
+				req.data.temperatures = data.temperatures;
+				req.data.services = data.services;
+				req.data.palletTypes = data.palletTypes;
+				req.data.specifications = data.specifications;
+				req.data.registerStatus = data.registerStatus;
+				req.data.authorisations = data.authorisations;
+				res.render("dashboard",req.data);
 			}
-		})
+		});
 	});
 	
 	app.post('/update-contacts', function(req,res){
@@ -99,15 +98,19 @@ var handler = function(app) {
 	});
 	
 	app.get('/view-edit-warehouse/:warehouse_id',function(req,res){
+		var auth;
 		req.data.warehouse = req.warehouse;
 		req.data.services = local.config.services;
 		req.data.specifications = local.config.specifications;
 		req.data.palletTypes = local.config.palletTypes;
 		req.data.temperatures = local.config.temperatures;
-        res.render('partials/dashboard/view-edit-warehouse',req.data);
+        auth = local.config.authorisationsByAccessLvl[req.data.user.dashboardAccessLvl]
+		req.data.authorisations = local.config.authorisations[auth];
+		res.render('partials/dashboard/view-edit-warehouse',req.data);
 	});
 	
 	app.get('/add-new-warehouse',function(req,res){
+		var auth;
 		warehouses.warehouse_by_user(req.data.user,function(err,warehouses){
 			if(err){
 				setErrorResponse("Warehouse not found",res);
@@ -121,6 +124,8 @@ var handler = function(app) {
 				req.data.warehouse.photos = [];
 				req.data.warehouse.documents = [];
 				req.data.warehouse.storage = [];
+				auth = local.config.authorisationsByAccessLvl[req.data.user.dashboardAccessLvl]
+				req.data.authorisations = local.config.authorisations[auth];
 				res.render('partials/dashboard/view-edit-warehouse',req.data);
 			}
 		});
@@ -137,8 +142,11 @@ var handler = function(app) {
 	});
 	
 	app.get('/rebuild-pricing-and-availability/:warehouse_id',function(req,res){
+		var auth;
 		req.data.warehouse = req.warehouse;
 		req.data.palletTypes = local.config.palletTypes;
+		auth = local.config.authorisationsByAccessLvl[req.data.user.dashboardAccessLvl]
+		req.data.authorisations = local.config.authorisations[auth];
 		res.render('partials/dashboard/registration-3',req.data);
 	});
 	
@@ -151,12 +159,7 @@ var handler = function(app) {
 				res.render('partials/dashboard/warehouse-dropdown-list',req.data);
 			}
 		})
-	});	
-	
-	// app.get('/rebuild-warehouse-list/:warehouse_id',function(req,res){
-	// 	req.data.warehouse = req.warehouse;
-	// 	res.render('partials/dashboard/warehouses',req.data);
-	// });
+	});
 	
 	app.get('/rebuild-warehouse-list/',function(req,res){
 		companyCtrl.warehouseByCompany(req.data.user.toObject().company,function(err,warehouses){
@@ -271,6 +274,7 @@ function createContact(req,res,cb){
 	data.dashboardAccess = req.body.dashboardAccess;
 	data.registerStautus = 0;
 	data.company = req.data.user.company;
+	data.dashboardAccessLvl = local.config.dashboardAccessLevel[req.body.roleCC]
 	dashboard.checkUserExistsandCreateUser(req,res,data,function(err,user,userExisted){
 		if(err){
 			cb(err);

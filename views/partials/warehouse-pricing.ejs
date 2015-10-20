@@ -15,6 +15,9 @@
     </script>
     <div class="pricing-container">
         <form id="useageProfile-form" class="loom-form" data-loom-no-submit="true">
+        <div class="input-field">
+            <input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
+        </div>
         <%  
             //maxPallets calculation.. we should move this to a controller rather than the view.
             var maxPallets = 0;
@@ -108,11 +111,11 @@
         </table>
         </form>
     </div>
-    <div class="row">
+    <div class="row columns ten total-cost-container">
         <div class="six columns">
        <% include ./volume-discount-table %>
         </div>
-    <div class="change-warehouse-profile-row-number">
+    <div class="change-warehouse-profile-row-number columns twelve">
         <button class="view-more action">View More Weeks</button>
         <button class="view-less action">View Less Weeks</button>
     </div>

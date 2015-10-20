@@ -1,4 +1,7 @@
 <form data-loom-no-submit="true" method="post" action="#" id="registration" novalidate class="provider-form loom-form">
+	<div class="input-field">
+		<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
+	</div>
 	<div class="input-field" style="display:none">
 	<input type="hidden" name="defaultPhoto" id="defaultPhoto" value="<%=warehouse.defaultPhoto%>"/>
 	</div>

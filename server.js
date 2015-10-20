@@ -9,6 +9,8 @@ var mongostore = require("connect-mongo")(session);
 var crypto = require('crypto');
 var config = require('./app/local.config');
 var compression = require('compression');
+var helmet = require('helmet');
+var csurf = require('csurf');
 var data={};
 var random = Math.random()*100;
 random = random.toString();
@@ -39,11 +41,13 @@ app.use(compression());//
 
 app.use(cookieParser());
 
+app.use(helmet());
+
 var dbInstance = db.init();
 //Set the session object and set the secret value to a sha256 message digest
 //Must specify resave and saveUninitialized, it is depreciated otherwise
 
-app.use(session({secret: "mysecret", /*crypto.createHash('sha256').update(random).digest("hex"),*/
+app.use(session({secret: crypto.createHash('sha256').update(random).digest("hex"),
 				 resave: true,
 				 saveUninitialized: true,
                  store: new mongostore({ mongooseConnection: dbInstance })
@@ -54,14 +58,17 @@ app.use(bodyParser.json());
 
 app.use(express.static(__dirname, { maxAge: 86400000 })); //24 hours
 
+//Load session
+app.use(load(data));
+
+app.use(csurf());
+
 app.use(function(req, res, next){
 	res.locals.session = req.session;
 	res.locals.url = req.protocol + '://' + req.get('host') + req.originalUrl;
+	res.locals.csrfTokenFunction = req.csrfToken;
 	next()
 });
-
-//Load session
-app.use(load(data));
 
 app.get('/demo', function (req,res) {
     res.render("demo",req.data);

@@ -179,6 +179,9 @@
             </div>
             <div class="row">
                 <form action="/">
+                    <div class="input-field">
+                        <input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
+                    </div>
                     <div class="six columns">
                         <div class="input-field">
                             <label for="name">Name</label><input type="text" placeholder="Please enter your name"></input>

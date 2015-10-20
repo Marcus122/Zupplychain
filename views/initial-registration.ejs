@@ -7,6 +7,9 @@
 			<section class="user-fields">
 				<div class="main">
 					<form class="loom-form" id="contacts-registration" method="post" action="/register-contact/<%=user.id%>">
+						<div class="input-field">
+							<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
+						</div>
 						<div class="content-box">
 							<div class="header">
 								<h2>Register</h2>

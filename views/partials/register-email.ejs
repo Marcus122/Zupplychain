@@ -8,6 +8,9 @@
 			<button class="close no-resize"><span>close</span></button>
 			<div class="main">
 					<form  class="loom-form" action="/update-user" novalidate id="register-email-form">
+						<div class="input-field">
+							<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
+						</div>
 						<div class="input-field no-success-validation-style">
 							<input type="email" name="email" placeholder="Email" required/>
 						</div>

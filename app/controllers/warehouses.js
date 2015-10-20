@@ -1,4 +1,5 @@
 var Warehouse = require("../data/warehouse.js"),
+	warehouseContacts = require("../data/warehouse-contacts.js"),
 	mongoose = require('mongoose'),
 	utils = require("../utils"),
 	Schema = mongoose.Schema,
@@ -71,6 +72,29 @@ exports.warehouse_by_user = function (user,callback) {
 			return callback(err);
 		}else{
 			return callback(null,warehouses)
+		}
+	});
+};
+exports.warehouseByACOrECUser = function(userId,cb){
+	var userWarehouses = [],
+		cbCompleted = 0;
+	warehouseContacts.loadWarehousesContactsByACOrEC(userId,function(err,results){
+		if(err){
+			cb(err);
+		}else{
+			for (var i = 0; i<results.length; i++){
+				Warehouse.load(results[i].warehouse,function(err,warehouse){
+					if(err){
+						//This warehouse won't appear in the list
+					}else{
+						userWarehouses.push(warehouse)
+					}
+					cbCompleted ++;
+					if(cbCompleted === results.length){
+						cb(false,userWarehouses)
+					}
+				});
+			}
 		}
 	});
 };

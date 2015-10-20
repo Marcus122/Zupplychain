@@ -295,6 +295,7 @@ function createUserAndCompany(req,res){
 			setErrorResponse(err,res);
 		}else{
 			usr.company = newCompany;
+			usr.dashboardAccessLvl = 0;//Master Contact
 			user.create(req,res,usr,function(err,newUser){
 				if(err){
 					setErrorResponse(err,res);

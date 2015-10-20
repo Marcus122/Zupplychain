@@ -21,7 +21,10 @@ warehouseContactsSchema.statics = {
 	load: function (id,cb){
 		this.findOne({_id:id})
 		.exec(cb)
-	}
+	},
+	loadWarehousesContactsByACOrEC: function(userId,cb){
+    	this.find({$or:[{availabilityController:{$in:[userId]}},{enquiresController:{$in:[userId]}}]}).exec(cb);
+  	},
 }
 
 module.exports = mongoose.model('warehouseContacts',warehouseContactsSchema);

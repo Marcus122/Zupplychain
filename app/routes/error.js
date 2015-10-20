@@ -12,7 +12,11 @@ var handler = function(app) {
 		}*/ //commented out as not sure what it's doing?
 		console.error(err.stack);
 		// error page
-		res.status(500).render('500', req.data);
+		if(err.code == 'EBADCSRFTOKEN'){
+			res.status(403).render('403', req.data);
+		}else{
+			res.status(500).render('500', req.data);
+		}
 	});
 	app.use('*', function(req, res) {
 		try {

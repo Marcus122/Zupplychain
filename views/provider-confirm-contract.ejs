@@ -110,6 +110,9 @@
 			             </div>
 
                         <form class="loom-form row" action="/provider-confirm-contract" id="provider-confirm-contract">
+                            <div class="input-field">
+                                <input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
+                            </div>
                             <div class="input-field" style="display:none">
 				                <input type="hidden" name="quoteId" value="<%= quote._id %>" />
 				            </div>

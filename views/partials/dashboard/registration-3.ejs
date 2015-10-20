@@ -12,7 +12,9 @@
 						<th>Storage Name</th>
 						<th>Pallet Width</th>
 						<th>Pallet Spaces</th>
-						<th>Pricing</th>
+						<%if(authorisations.warehouse.pricing === true){%>
+							<th>Pricing</th>
+						<%}%>
 						<!--<th>Volume Discount</th>-->
 						<th>Available Pallets</th>
 						<!--<th>Progress</th>-->
@@ -40,11 +42,12 @@
 						<td class="text" data-th="Pallet Spaces">
 							<span><%=storage.palletSpaces%></span>
 						</td>
-						
-						<td class="button-cell pricing <%= pricingComplete ?  'success' : '' %>" data-th="Pricing">
-							<span class="edit-data">DATA</span>
-							<button data-type="pricing" type="button" class="popup mini"/>
-						</td>
+						<%if(authorisations.warehouse.pricing === true){%>
+							<td class="button-cell pricing <%= pricingComplete ?  'success' : '' %>" data-th="Pricing">
+								<span class="edit-data">DATA</span>
+								<button data-type="pricing" type="button" class="popup mini"/>
+							</td>
+						<%}%>
 						<!--<td class="button-cell discounts" data-th="Volume Discount">
 							<button data-template="volume"  type="button" class="secondary popup mini">click here</button>
 						</td>-->
@@ -62,8 +65,8 @@
 					</tr>
 
 					<tr class="trays" id="pricing-container-<%=storage._id %>">
-						<td colspan="4" class="js-storage" data-storage-id="<%=storage._id%>">
-							<div class="pricing-trays tray-holder">
+						<td colspan="5" class="js-storage" data-storage-id="<%=storage._id%>">
+							<div class="pricing-trays tray-holder" <%if(authorisations.warehouse.pricing === false){%>style="display:none;"<%}%>>
 								<form  data-storage-id="<%=storage._id%>" id="standard-pricing-<%=storage._id %>" data-id="price-and-availability-user-data" class="loom-form provider-form standard-pricing-form" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" action="/complete-registration" novalidate>
 									<% include ../standard-pricing-tray %>
 								</form>
@@ -94,7 +97,9 @@
 					<button href="#" class="view tertiary forward mini">View Terms &amp; Conditions</button>
 				</div>
 			</div>-->
-			<button href="#" class="add primary mini add-volume-discount">Add volume discount (optional)</button>
+			<%if(authorisations.warehouse.pricing === true){%>
+				<button href="#" class="add primary mini add-volume-discount">Add volume discount (optional)</button>
+			<%}%>
 		</div>
 	</div>
 	<!--<div class="content-box primary">

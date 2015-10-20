@@ -22,6 +22,7 @@
         &.invalid {
             span {
                 display:block;
+                .unit-margin-top(2);
             }
             a {
                 display:none;
@@ -35,10 +36,14 @@
 
     .warehouse-pricing {
         position:relative;
+        .total-cost-container{
+            float:right;
+        }
         .change-warehouse-profile-row-number{
             display: inline-block;
-            float:right;
-            margin-bottom: 20px;
+            button{
+                float:right;
+            }
         }
     }
 
@@ -204,6 +209,7 @@
         .unit-margin-top(2);
         text-align:right;
         font-size:18px;
+        float:right;
         .price {
             width:156px;
             display:inline-block;

@@ -99,6 +99,9 @@ warehouseSchema.statics = {
 		  .populate('user')
 		  .exec(cb);
   },
+  loadByWarehousesContacts: function(id,cb){
+    this.find({contacts:id}).exec(cb);
+  },
   remove: function(id){
       this.find({_id: id}).remove().exec(function(err){
           if (err){

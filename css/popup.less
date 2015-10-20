@@ -46,6 +46,14 @@
 	content:"";
 }
 .popup-window{
+	iframe{
+		width:100%;
+		height:100%;
+	}
+	.normal{
+		z-index: 100;
+		position:relative;
+	}
 	 .popup-buttons{
 		.unit-padding-vertical(1);
 		overflow:hidden;
@@ -90,6 +98,19 @@
 #register-email-popup{
     position:fixed;
     left:0;
+}
+
+.video-popup{
+	height:65%;
+	.normal{ 
+		height:100%;
+		.popup-main{
+			height:100%;
+			.main{
+				height:79%;
+			}
+		}
+	}
 }
 
 @media @full-width{

@@ -9,6 +9,9 @@
                 <!--<div class="columns six controls">
                     <% include ./net-gross-controls %>
                 </div>-->
+            <div class="input-field">
+                <input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
+            </div>
             </div>
             <div class="row">
                 <div class="input-field columns six no-success-validation-style">
@@ -16,6 +19,9 @@
                 </div>
                 <div class="input-field columns six no-success-validation-style">
                     <label for="standard-pricing-handling-charge">In and Out Handling Charge (&pound; per Pallet)</label><input name="standard-pricing-handling-charge" class="currency" type="text" data-loom-type="decimal" data-loom-decimal-places="2" value="<%=Number(storage.basicPricing.charge) != 0 ? storage.basicPricing.charge : ""%>" required="required"/>
+                </div>
+                <div class="input-field">
+                    <input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
                 </div>
             </div>
             <div class="row controls">

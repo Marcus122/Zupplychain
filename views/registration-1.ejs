@@ -1,4 +1,5 @@
  <% include ./partials/top%>   
+ 	<div class="overlay-vid"></div>
 	<main>
 		<!--<div class="row carousel">
 			<img src="/images/provider-banner.png" alt="Start your registration"/>
@@ -8,10 +9,12 @@
 				registration
 			</h1>
 			<p class="desc medium-font">Follow our simple 3 step process to complete your registration</p>
+			<button class="button mini action" data-action="view-reg-example">View Example</button>
 		</div>-->
 		<div class="banner">
 			<h1>Start your registration</h1>
 			<p class="desc medium-font">Follow our simple 3 step process to complete your registration</p>
+			<button class="button mini action" data-action="view-reg-example">View Example</button>
 		</div>
 		<!--<p class="tag-line">
 			Follow our simple 3 step process to complete your registration
@@ -30,7 +33,7 @@
 			%>
 			<section class="tab-content">
 				<form data-loom-no-submit="true" method="post" action="/provider-registration-2" id="registration" novalidate class="provider-form loom-form">
-                    <div class="input-field" style="display:none">
+					<div class="input-field" style="display:none">
                     <input type="hidden" name="defaultPhoto" id="defaultPhoto" value="<%=warehouse.defaultPhoto%>"/>
                     </div>
 					<div class="main">
@@ -40,6 +43,9 @@
 							</div>
 							<fieldset class="main">
 								<div class="columns six">
+									<div class="input-field">
+										<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
+									</div>
 									<div class="input-field">
 										<label for="company">Company Name*</label><input type="text" name="company" id="company" required value="<%=warehouse.company%>" spellcheck="true"/>
 									</div>
@@ -280,6 +286,7 @@
 				</form>
 			</section>
 		</div>
+		<%include ./partials/reg-help-bubble%>
 	</main>
 	 <script type="text/template" id="warehouse-image">
 		<div class="columns four row document">
@@ -302,4 +309,8 @@
 	  	 <% include ./partials/upload-document%>
 	  </script>
  <% include ./partials/bottom%>
+<script type="text/template"" id="video-popup">
+	<%include ./partials/video-popup%>
+</script>
+	 	
  

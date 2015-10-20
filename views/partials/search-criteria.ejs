@@ -14,7 +14,7 @@
 		<%}%>
 		<div class="main">
 			<form class="storage-search loom-form" action="/search" id="search-form" novalidate>
-            <div class="input-field">
+			<div class="input-field">
 					<label for="postcode">Target Postcode/City</label>
 					<!--<input type="text" name="postcode" required="required" minlength="3" value="<%= session.whSC ? session.whSC.sc[0].postcode : " "%>"/>-->
 					<input type="text" name="postcode" required="required" minlength="3" disabled value="<%= session.search ? query.postcode : 'Bury'%>"/>
@@ -121,6 +121,9 @@
 				<div class="input-field has-search">
 					<input type="hidden" name="hasSearch" value="true"/>
 			    </div>
+				<div class="input-field">
+					<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
+				</div>
 			</form>
 		</div>
 </section>

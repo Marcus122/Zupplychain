@@ -11,7 +11,7 @@
 	</div>
 	<%if (user.email != undefined){%>
 		<nav class="user-links">
-			<p><span>Signed in as:</span><br/><span><%=user.email%></span></p>
+			<p><span>Signed in as:</span><br/><a href="/dashboard"><%=user.email%></a></p>
             <p><a href="/logout">Signout</a></p>
 		</nav>
 	<%}else{%>
@@ -28,6 +28,7 @@
 			<li><a href="/news">news</a></li>
 			<li><a href="#">reviews</a></li>
 			<li><a href="#">testimonials</a></li>
+			<li><a href="/contact-us">Contact Us</a></li>
 		</ul>
 	</nav>
 	

@@ -141,6 +141,9 @@
 			</div>
 
                         <form class="loom-form row" action="/quotation-request" id="quotation-request-form">
+                         <div class="input-field">
+                            <input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
+                        </div>       
                                 <div class="input-field" style="display:none">
 				      <input type="hidden" name="warehouseId" value="<%= warehouse._id %>" />
 				  </div>

@@ -25,7 +25,6 @@ exports.create = function (req,res,data,cb,cookieSet) {
 }
 exports.login = function(req,res,cb){
 	var loginFailed={error:"login failed"};
-	if(!req.body.email || !req.body.password) return cb(loginFailed);
 	User.findOne({email:req.body.email,active:true},function(err,user){
 		if(err || !user){
 			return cb(loginFailed);
@@ -77,7 +76,7 @@ exports.register = function(user,cb){
 }
 exports.update = function(user,cb,dontCheckEmailAddress){
 	User.loadByEmail(user.email,function(err,results){
-		if(!err && results.length > 0 && dontCheckEmailAddress === undefined){
+		if(!err && results.length > 0 && (dontCheckEmailAddress === undefined || dontCheckEmailAddress === false)){
 			return cb({message:"Email Address Already Exists"});
 		}else{
 			user.active=true;

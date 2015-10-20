@@ -78,6 +78,9 @@
                     </div>
                     <div class="main">
                     <form class="storage-search">
+                        <div class="input-field">
+                            <input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
+                        </div>
                         <table class="simple responsive-table " >
                             <thead>
                                 <tr>
@@ -137,7 +140,9 @@
                     </div>
                     <div class="main primary">
                     <form class="storage-search" action="/find-storage">
-                            
+                            <div class="input-field">
+                                <input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
+                            </div>
                             <div class="input-field">
                                 <label for="pallet-type">Pallet Type</label>
                                 <select id="pallet-type" >
@@ -267,6 +272,9 @@
             </div>
             <div class="footer form-footer">
                 <form class="confirm-email">
+                    <div class="input-field">
+                        <input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
+                    </div>
                     <label for="email">Your Email:</label>
                     <input type="text" />
                     

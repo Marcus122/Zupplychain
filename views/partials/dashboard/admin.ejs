@@ -1,5 +1,8 @@
 <div data-view="admin" class="dashboard-container columns nine" style="display:none">
 	<form method="post" action="/save-account-details" id="save-account-details-form" novalidate="novalidate" class="loom-form">
+		<div class="input-field">
+			<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
+		</div>
 		<div class="secondary content-box">
 			<div class="header">
 				<h3>Your Details</h3>
@@ -34,6 +37,9 @@
 		</div>
 	</form>
 	<form method="post" action="/change-password" id="change-password-form" novalidate="novalidate" class="loom-form">
+		<div class="input-field">
+			<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
+		</div>
 		<div class="secondary content-box">
 			<div class="header">
 				<h3>Change Your Password</h3>
@@ -46,7 +52,7 @@
 				<div class="columns twelve">
 					<div class="input-field">
 						<label for="old-password">Old Password</label>
-						<input required minlength="8" data-pattern="(?=.*[A-z])(?=.*[0-9])" type="password" name="old-password" value="secret" disabled/>
+						<input required minlength="8" data-pattern="(?=.*[A-z])(?=.*[0-9])" type="password" name="old-password" value="This is a secret" disabled/>
 					</div>
 					<div class="input-field">
 						<label for="new-password">New Password</label>

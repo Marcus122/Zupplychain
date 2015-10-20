@@ -4,7 +4,8 @@ define(["jquery"], function ($) {
 		c= new Class();
 	}
 	function Class(){
-		var err;
+		var err,
+			csrf = $('meta[name="csrf-token"]').attr("content");
 		
 		function loadWarehouse(url,cb){
 			$.ajax({
@@ -12,6 +13,7 @@ define(["jquery"], function ($) {
 				type:'GET',
 				contentType: 'application/json; charset=utf-8',
 				dataType:'html',
+				headers: {'csrf-token':csrf},
 				success:function(response){
 					cb(response);
 				},
@@ -28,6 +30,7 @@ define(["jquery"], function ($) {
 				url: url,
 				type: 'GET',
 				dataType: 'html',
+				headers: {'csrf-token':csrf},
 				success: function(response){
 					cb(response)
 				},
@@ -44,6 +47,7 @@ define(["jquery"], function ($) {
 				url: url,
 				type: 'GET',
 				dataType: 'html',
+				headers: {'csrf-token':csrf},
 				success: function(response){
 					cb(response)
 				},
@@ -60,6 +64,7 @@ define(["jquery"], function ($) {
 				url: url,
 				type: 'GET',
 				dataType: 'html',
+				headers: {'csrf-token':csrf},
 				success: function(response){
 					cb(response)
 				},
@@ -76,6 +81,7 @@ define(["jquery"], function ($) {
 				url: url,
 				type: 'GET',
 				dataType: 'html',
+				headers: {'csrf-token':csrf},
 				success: function(response){
 					cb(false,response)
 				},
@@ -92,6 +98,7 @@ define(["jquery"], function ($) {
 				url:url,
 				type: 'GET',
 				dataType:'html',
+				headers: {'csrf-token':csrf},
 				success:function(response){
 					cb(response);
 				},
@@ -109,6 +116,7 @@ define(["jquery"], function ($) {
 				type: 'POST',
 				dataType:'json',
 				data: data,
+				headers: {'csrf-token':csrf},
 				success:function(response){
 					cb(response);
 				},
@@ -125,6 +133,7 @@ define(["jquery"], function ($) {
 				url:url,
 				type: 'POST',
 				data: data,
+				headers: {'csrf-token':csrf},
 				success:function(response){
 					cb(response);
 				},

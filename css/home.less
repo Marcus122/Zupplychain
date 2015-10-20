@@ -63,14 +63,11 @@
  }
  
  #home-page .banner{
-    background-image:url("/images/home-banner-sm.jpg");
-    background-repeat:no-repeat;
-    background-size:cover;
-    position:relative;
-    background-color:#EDEDED;
-    .unit-padding(3);
+    //background-image:url("/images/home-banner-sm.jpg");
+    &:extend(.generic-banner);
+    //.unit-padding(3);
     h1,h2,h3{
-        color:@dark-text;
+        color:#fff;
         text-align:left;
         padding:0px;
         text-transform:none;

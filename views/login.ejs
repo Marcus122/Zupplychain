@@ -11,6 +11,9 @@
 							<h3>Login</h3>
 						</div>
 						<fieldset class="main">
+							<div class="input-field">
+								<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
+							</div>
 							<div class="main-container">
 								<div class="columns six">
 									<div class="input-field">
@@ -22,7 +25,7 @@
 										<label for="email">Password*</label><input type="password" name="password" id="password" required>
 									</div>
 									<div class="button-container">
-										<a class="forgot-password text-link" href="#" >Forgot your password</a>
+										<a class="forgot-password text-link" href="/contact-us" >Forgot your password</a>
 										<button class="action primary">Login</button>
 									</div>
 								</div>
@@ -51,4 +54,7 @@
 			</div>
 		</div>
 	</main>
- <% include ./partials/bottom %>   
+ <% include ./partials/bottom %>  
+ <script type="text/template" id="403-warning">
+ 	<%include ./partials/403-popup%>
+</script> 

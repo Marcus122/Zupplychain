@@ -154,5 +154,49 @@ exports.config = {
         'Media Enquires',
         'Forgot your Password',
         'Other'
-    ]
+    ],
+    
+    authorisations:{
+        all:{
+            warehouse:
+            {
+                warehouseDetails:true,
+                storage:true,
+                pricing:true,
+                availability:true
+            },
+            contacts:true,
+        },
+        noPricing:{
+            warehouse:
+            {
+                warehouseDetails:true,
+                storage:true,
+                pricing:false,
+                availability:true
+            },
+            contacts:false,
+        },
+        accountOnly:{
+            warehouse:false,
+            contacts:false,
+        }
+    },
+    
+    authorisationsByAccessLvl: {
+      0:'all',
+      1:'noPricing',
+      2:'accountOnly'
+    },
+    
+    dashboardAccessLevel:{
+        'masterContact':0,
+        'availabilityController':1,
+        'enquiresController':1,
+        'transportCoordinator':2,
+        'goodsIn':2,
+        'pickingAndDispatch':2,
+        'invoiceController':2,
+        'creditController':2   
+    }
 };

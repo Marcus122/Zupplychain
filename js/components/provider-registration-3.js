@@ -684,6 +684,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                 storage.pallets = getAvailabilityJSONFromFieldSet($this) || [];
                 storage.basicPricing = getBasicPricingJSONFromFieldset($this) || null;
                 storage.pricing = getDateSpecificPricingJSONFromFieldSet($this) || [];
+                storage["_csrf"] = $($($this).find('input[name="_csrf"]')[0]).val();//They should have the same value
                 /*if (storage.basicPricing == null) { //no point saving if there's no basic pricing set... turns out there is a point.
                     return false;
                 }*/
@@ -860,6 +861,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                 }
                 discountData.discounts = discounts;
                 discountData.noDiscount = noDiscount;
+                discountData["_csrf"] = $form.find('input[name="_csrf"]').val();
                 var warehouse = {}
                 warehouse.id=$('input[name="warehouse"]').val();
                 Warehouse.updateVolumeDiscount(warehouse,discountData, function(){

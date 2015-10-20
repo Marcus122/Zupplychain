@@ -7,7 +7,8 @@ define(["jquery"], function ($) {
     
     function Class() {
 		var url = '/warehouse',
-			err;
+			err,
+			csrf = $('meta[name="csrf-token"]').attr("content");
 		
 		function update(warehouse,cb){
 			var new_url;
@@ -23,6 +24,7 @@ define(["jquery"], function ($) {
 				data: JSON.stringify(warehouse),
 				contentType: 'application/json; charset=utf-8',
 				dataType: 'json',
+				headers: {'csrf-token':csrf},
 				success:function(response){
 					cb(response);
 				},
@@ -51,6 +53,7 @@ define(["jquery"], function ($) {
 				data: data,
 				cache: false,
 				dataType: 'json',
+				headers: {'csrf-token':csrf},
 				processData: false, // Don't process the files
 				contentType: false, // Set content type to false as jQuery will tell the server its a query string request
 				success: function(data){
@@ -80,6 +83,7 @@ define(["jquery"], function ($) {
 				data: data,
 				cache: false,
 				dataType: 'json',
+				headers: {'csrf-token':csrf},
 				processData: false, // Don't process the files
 				contentType: false, // Set content type to false as jQuery will tell the server its a query string request
 				success: function(data){
@@ -109,6 +113,7 @@ define(["jquery"], function ($) {
 				data: data,
 				cache: false,
 				dataType: 'json',
+				headers: {'csrf-token':csrf},
 				processData: false, // Don't process the files
 				contentType: false, // Set content type to false as jQuery will tell the server its a query string request
 				success: function(data){
@@ -142,6 +147,7 @@ define(["jquery"], function ($) {
 				data: data,
 				cache: false,
 				dataType: 'json',
+				headers: {'csrf-token':csrf},
 				processData: false, // Don't process the files
 				contentType: false, // Set content type to false as jQuery will tell the server its a query string request
 				success: function(data){
@@ -166,6 +172,7 @@ define(["jquery"], function ($) {
 				data: JSON.stringify(volumeDiscountData),
 				contentType: 'application/json; charset=utf-8',
 				dataType: 'json',
+				headers: {'csrf-token':csrf},
 				success:function(response){
 					cb(response);
 				}
@@ -180,6 +187,7 @@ define(["jquery"], function ($) {
 				data: JSON.stringify(storage),
 				contentType: 'application/json; charset=utf-8',
 				dataType: 'json',
+				headers: {'csrf-token':csrf},
 				success:function(response){
 					cb(response);
 				},
@@ -197,6 +205,7 @@ define(["jquery"], function ($) {
 				data: JSON.stringify(storage),
 				contentType: 'application/json; charset=utf-8',
 				dataType: 'json',
+				headers: {'csrf-token':csrf},
 				success:function(response){
 					if(cb) cb(response);
 				}
@@ -209,6 +218,7 @@ define(["jquery"], function ($) {
 				type:'GET',
 				contentType: 'application/json; charset=utf-8',
 				dataType: 'json',
+				headers: {'csrf-token':csrf},
 				success:function(response){
 					cb(response);
 				}

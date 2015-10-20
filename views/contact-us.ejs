@@ -10,7 +10,7 @@
 					<div class="columns five">
 						<h1>Find a solution today</h1>
 						<br/>
-						<h3>Whether you're providing warehouse space or searching for storage we can help you.</h3>
+						<!--<h3>Whether you're providing warehouse space or searching for storage we can help you.</h3>-->
 					</div>
 				</div>
 				<div class="row boxes">
@@ -23,6 +23,9 @@
 								<div class="container">
 									<p>Please fill in your details and we will contact you as soon as possible</p>
 									<div class="columns six">
+										<div class="input-field">
+											<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
+										</div>
 										<div class="input-field">
 											<label for="name">Name</label>
 											<input type="text" name="name" required/>

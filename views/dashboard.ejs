@@ -9,15 +9,23 @@
 				<ul>
 					<li data-view="home"><a href="#main">Home</a></li>
 					<li data-view="admin"><a href="#admin">Account</a></li>
-					<li data-view="warehouses"><a href="#warehouses">Warehouses</a></li>
-					<li data-view="contacts"><a href="#contacts">Contacts</a></li>
+					<%if(authorisations.warehouse !== false){%>
+						<li data-view="warehouses"><a href="#warehouses">Warehouses</a></li>
+					<%}%>
+					<%if(authorisations.contacts === true){%>
+						<li data-view="contacts"><a href="#contacts">Contacts</a></li>
+					<%}%>
 					<li data-view="users"><a href="#messages">Messages</a></li>
 				</ul>
 			</div>
 			<% include ./partials/dashboard/tiles %>
-			<% include ./partials/dashboard/admin %>   
-			<% include ./partials/dashboard/warehouses %>
-			<% include ./partials/dashboard/contacts %>
+			<% include ./partials/dashboard/admin %>
+			<%if(authorisations.warehouse !== false){%>  
+				<% include ./partials/dashboard/warehouses %>
+			<%}%>
+			<%if(authorisations.contacts === true){%>
+				<% include ./partials/dashboard/contacts %>
+			<%}%>
 			<% include ./partials/dashboard/messages %>
 		</div>
 	</section>

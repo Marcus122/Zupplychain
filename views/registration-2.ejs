@@ -9,6 +9,7 @@
 				<div class="banner">
 					<h1>Continue your registration</h1>
 					<p class="desc medium-font">Follow our simple 3 step process to complete your registration</p>
+					<button class="button mini action" data-action="view-reg-example">View Example</button>
 				</div>
 				<div class="row">
 					<ul class="tabs">
@@ -23,12 +24,12 @@
 								<div class="content-box primary">
 									<div class="header">
 										<h3>Define your storage</h3>
-										<fieldset class="form-header">
-											<button class="action reg-2-example">View Example</button>
-										</fieldset>
 									</div>
 									<div class="main">
 										<fieldset>
+											<div class="input-field">
+												<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
+											</div>
 											<table class="max define-space responsive-table collapse">
 												<thead>
 													<tr>
@@ -72,6 +73,7 @@
 						</form>
 					</section>
 				</div>
+				<%include ./partials/reg-help-bubble%>
 			</main>
 		 <script type="text/template" id="define-space-row">
 			<% var row = {}; %>
@@ -81,3 +83,6 @@
 	  	 	<% include ./partials/save-registration%>
 	     </script>
          <% include ./partials/bottom %> 
+<script type="text/template"" id="video-popup">
+	<%include ./partials/video-popup%>
+</script>

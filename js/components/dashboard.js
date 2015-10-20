@@ -122,7 +122,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			$(document).on('click', '.toggle-view-edit',function(){
 				var $this = $(this);
 				var $tab = $this.parent().parent();
-				if ($this.hasClass('down')){
+				if (!$this.hasClass('down')){
 					if($this.data('mode') === 'view'){
 						changeToDisplayMode($tab);
 					}else if($this.data('mode') === 'edit'){
@@ -308,6 +308,11 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 				goToTab($this.attr('href'));
 				$this.find('li').addClass('active').parent().siblings().find('li').removeClass('active');
 				e.preventDefault();
+				if($this.attr('href') === '#warehouse-contacts' && $('div[data-one-warehouse="true"]').length > 0){
+					$('div[data-one-warehouse="true"]').show();
+				}else{
+					$('div[data-one-warehouse="true"]').hide();
+				}
 			});
 		}
 		
@@ -329,10 +334,24 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 				var $this = $(this),
 					templateId = $this.closest('.tab.main').data('contact-type') + '-row',
 					template = templates.getTemplate(templateId),
-					row = template.bind({});
-					$this.parent('div').prev('button[name="save-new-contacts"]').show();
-					$(row).find('td:first-of-type').html($this.parent('div').parent('.button-container').prev('table').find('tbody tr').length + 1 + '*');
-					$this.closest('.button-container').siblings('table').find('tbody').append(row);
+					row = template.bind({}),
+					maxRows = 2,
+					$rows = $this.closest('.button-container').siblings('table').find('tbody').find('tr'),
+					mandatoryRows = 2;
+					
+					if($this.closest('.tab.active.main').attr('id') === 'master-contacts'){
+						maxRows = 3;
+					}
+					
+					if($rows.length < maxRows){
+						$this.parent('div').prev('button[name="save-new-contacts"]').show();
+						if ($rows.length < mandatoryRows){
+							$(row).find('td:first-of-type').html($this.parent('div').parent('.button-container').prev('table').find('tbody tr').length + 1 + '*');
+						}else{
+							$(row).find('td:first-of-type').html($this.parent('div').parent('.button-container').prev('table').find('tbody tr').length + 1);
+						}
+						$this.closest('.button-container').siblings('table').find('tbody').append(row);
+					}
 			});
 			
 			$(document).on('click', 'button[name="resend-email"]',function(){
@@ -368,6 +387,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 					rows = $this.parent('div').siblings('table').find('tr[data-status="new"]');
 					data.warehouseContacts = $this.closest('.warehouse-specific-contacts').data('warehouse-contacts') || "";
 					data.role = contactType;
+					data.roleCC = $(this).closest('.tab-content').prev('.tabs').find('li.active').parent('a').attr('href').replace('#','').replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
 					data.warehouseId = $('select[name="warehouses"]').find(":selected").data('id');
 					for (var i = 0; i<rows.length; i++){
 						data.email = $(rows[i]).find('td[data-field="email"]').find('input').val();
@@ -402,27 +422,6 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 				$(rows[i]).find('td[data-field="name"]').html($(rows[i]).find('td[data-field="name"]').find('input').val());
 				$(rows[i]).find('td[data-field="phone-number"]').html($(rows[i]).find('td[data-field="phone-number"]').find('input').val());
 			}
-		}
-		
-		function buildContactsJson(){
-			var jsonArr = [];
-			var json = {};
-			var dbContactsOrder = ['availabilityController','enquiresController','transportCoordinator','goodsIn','pickingDispatch','invoiceController','creditController'];
-			var $availabilityController = $('div#availability-controller table');
-			var $enquiresController = $('div#enquires-controller table');
-			var $transportCoordinator = $('div#transport-coordinator table');
-			var $goodsIn = $('div#goods-in table');
-			var $pickingDispatch = $('div#picking-dispatch table');
-			var $invoiceController = $('div#invoiceController table');
-			var $creditController = $('div#creditController table');
-			var table = [$availabilityController,$enquiresController,$transportCoordinator,$goodsIn,$pickingDispatch,$invoiceController,$creditController]
-			// for (var i = 0; i<table.length; i++){
-			// 	for (var j = 0, row; row = table.rows[j]; j++){
-			// 		for (var k = 0, col; col = row.cells[k]; k++){
-			// 			var ontacts = getContactsJSON();
-			// 		}
-			// 	}
-			// }
 		}
 	}
 	return Class;

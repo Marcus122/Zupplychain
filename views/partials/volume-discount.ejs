@@ -21,6 +21,9 @@
 					</div>
 					
 					<form method="post" id="discount-form" class="volume-discount-form loom-form" novalidate data-loom-no-submit="true">
+						<div class="input-field">
+							<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
+						</div>
 						<div class="input-field no-discount no-success-validation-style">
 							<label for="no-disc">No discount on orders with up to</label>
 							<input required type="number" name="noDiscount" min="0" data-bind-value="noDiscount" data-bind-max="palletSpaces" value="<%= warehouse.noDiscount || ''; %>" max="<%=warehouse.totalPalletSpaces%>"/>

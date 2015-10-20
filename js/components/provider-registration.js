@@ -16,10 +16,30 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			step3();
             postcodeAnywhereInit();
 			initInitialRegistration();
+			setTimer(50*5);//Five Minutes
 			
 			$(document).on("click",".popup-window .close",function(){
 				$(this).closest('.popup-window').remove();
 			});
+			
+			$('#reg-help-bubble .close').click(function(e){
+				$('#reg-help-bubble').hide();
+				e.stopPropagation()
+			})
+			
+			$('button[data-action="view-reg-example"], #reg-help-bubble').click(function(){
+				var $this = $(this);
+				var template = templates.getTemplate('video-popup');
+				var $popup = template.bind({});
+				$('body').append($popup);
+				centerPopup($popup);
+				$($popup).show();
+				$("html,body").animate({scrollTop: 0}, 800);
+				$popup.find('iframe').attr('src','http://localhost:8081/videos/VIDEO0011.mp4');
+				if($this.attr('id') === 'reg-help-bubble' ){
+					$this.hide();
+				}
+			})
 			
 		}
 		function initInitialRegistration(){
@@ -27,7 +47,14 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				if(result.redirectUrl){
 					window.location.href = result.redirectUrl;
 				}
-			})
+			});
+		}
+		function setTimer(time){
+			setInterval(function(){
+				if($('.popup-window.video-popup').length === 0){
+					$('#reg-help-bubble').show();
+				}
+			},5000);
 		}
 		function toPrice(num){
 			return Number(num).toFixed(2);
@@ -458,6 +485,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 						var s={};
 						bindFormToObject($(this),s);
 						for(var i in s){
+							//storage["_csrf"] = $defineSpace.find('input[name="_csrf"]').val();
 							if(s[i]){
 								storage.push(s);
 								return true;
@@ -468,7 +496,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					warehouse.id = $defineSpace.find('input[name="warehouse_id"]').val();
 					Warehouse.updateStorageBatch(warehouse,storage,function(response){
 						if(cb) cb(response);
-					});
+					},$defineSpace.find('input[name="_csrf"]').val());
 				}
 			}
 			function removeButtons(){

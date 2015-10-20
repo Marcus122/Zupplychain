@@ -17,12 +17,34 @@ var fields = {
 	phoneNumber: {type:String},
 	company: { type: Schema.ObjectId, ref: 'company' },
 	dashboardAccess: {type:String},
-	registerStatus: {type:Number}
+	registerStatus: {type:Number},
+	dashboardAccessLvl: {type:Number}
+	//loginAttempts:{ type: Number, required: true, default: 0},
+	//lockUntil: {type:Number}
 };
 
 var userSchema = new Schema(fields);
 userSchema.index({ email:1 , type:-1 });
 
+userSchema.virtual('isLocked').get(function(){
+	//check for a future lockUntil timestamp
+	return !!(this.lockUntil && this.lockUntil > Date.now());
+});
+userSchema.methods.incrLoginAttempts = function(cb){
+	if(this.lockUntil && this.lockUntil < Date.now()){
+		return this.update({
+			$set:{loginAttemps: 1},
+			$unset:{lockUntil:1}
+		},cb);
+	}
+	
+	var updates = {$inc: {loginAttempts:1}};
+	if (this.loginAttempts +1 >= 3 && !this.isLocked){
+		updates.$set = {lockUntil: Date.now() + 2*60*60*1000}
+	}
+	
+	return this.update(updates,cb);
+}
 userSchema.methods.addWarehouse = function(data,cb){
 	warehouse_controller.create_warehouse(this,data,cb);
 }

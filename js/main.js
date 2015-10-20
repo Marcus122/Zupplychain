@@ -47,18 +47,6 @@ require(["jquery"], function($) {
             });
         }
         
-        $(document).on('click','input[type="date"]',function (){
-            $(this).datepicker().show();
-        });
-        
-        $(document).on('click', '.toggle-view-edit',function(){
-            var $this = $(this);
-            if (!$this.hasClass('down')){
-                $this.toggleClass("down");
-                $this.siblings('.toggle-view-edit').removeClass("down");
-            }
-        });
-        
 	}
 	
 });

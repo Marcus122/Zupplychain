@@ -45,7 +45,7 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
                     } else {
                         quotationRequestSuccess(response);
                     }
-                })
+                });
             }
             
             if ($("#provider-offer-form").length > 0) {
