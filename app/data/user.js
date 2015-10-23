@@ -62,6 +62,9 @@ function updateUsersName(name,id,cb){
 userSchema.statics = {
 	loadByEmail: function(email,cb){
 		this.find({'email':email}).populate('company').exec(cb);
+	},
+	remove: function(id,cb){
+		this.findOne({_id:id}).remove().exec(cb);
 	}
 }
 module.exports = mongoose.model('users', userSchema);

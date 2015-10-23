@@ -34,7 +34,6 @@ var handler = function(app) {
                 }
             }else{
                 req.data.query = results;
-                console.log(results);
             }
             res.render("search",req.data);
         })

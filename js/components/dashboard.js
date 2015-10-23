@@ -20,7 +20,8 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 		initAccountTab();
 		initWarehouseTab();
 		initContactsTab();
-		initPaging($("#warehouses-table"));
+		initDelete();
+		initPaging($('table[data-type="warehouses-table"]'));
 		
 		loom.addOnSuccessCallback("login-form", function(response){
 			if (response.data === LOGIN_FAILED_MESSAGE){
@@ -38,6 +39,82 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 		$(document).on('click','a[data-go-to-link="view-tab"]',function(){
 			goToLinkViewTab($(this).attr('href'));
 		});
+		
+		function initDelete(){
+			
+			function hideDeleteShowSave($btnContanier){
+				$btnContanier.find('button').show();
+				$btnContanier.find('a').show();
+				$btnContanier.find('label').show();
+				$btnContanier.find('button[name="delete"]').hide();
+			}
+			
+			function showDeleteHideSave($btnContanier){
+				$btnContanier.find('button').hide();
+				$btnContanier.find('a').hide();
+				$btnContanier.find('label').hide();
+				$btnContanier.find('button[name="delete"]').show();
+			}
+			
+			$(document).on('change','input[name="delete"]',function(){
+				var $this = $(this);
+				var $table = $this.closest('table');
+				var $btnContanier = $table.next('.button-container');
+				if($table.find('td[data-field="delete"]').find('input:checked').length > 0){
+					showDeleteHideSave($btnContanier);
+				}else{
+					hideDeleteShowSave($btnContanier);
+				}
+			});
+			
+			$(document).on('click','button[name="delete"]',function(){
+				var $this = $(this);
+				var $table = $this.parent().prev('.dashboard-table');
+				var $rows = $table.find('tbody').find('tr');
+				var data = {};
+				var ids = [];
+				var deletedRows = [];
+				data.type = $table.parent().data('data') ||
+							$table.parent().data('contact-type');
+				data.type = data.type.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); })
+				data.subType = $table.parent().data('content').replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });//Specific contact type (e.g. Availability Controller)
+				data.company = $table.parent().data('company-id');
+				if(data.company !== undefined){
+					data.company = data.company.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
+				}
+				data.warehouseContactId = $('.warehouse-specific-contacts').data('warehouse-contacts');
+				if(data.warehouseContactId !== undefined){
+					data.warehouseContactId = data.warehouseContactId.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); })
+				}
+				for (var i = 0; i<$rows.length; i++){
+					if ($($rows[i]).find('td[data-field="delete"]').find('input').is(':checked')){
+						ids.push($($rows[i]).data('id'));
+						deletedRows.push($rows[i]);
+					}
+				}
+				data.ids = ids;
+				DBCntr.deleteItems(data,function(response){
+					if (response.err){
+						Alerts.showPersistentErrorMessage('Error: One or more of the selected items were not deleted');
+					}else{
+						Alerts.showSuccessMessage('Items deleted');
+					}
+					for (var j= 0; j<deletedRows.length; j++){
+						deletedRows[j].remove();
+					}
+					if($this.parent().prev('.dashboard-table').find('tbody').find('tr').length === 0){
+						addWarehouseContactRow($table.find('tbody'));
+					}
+					hideDeleteShowSave($table.next('.button-container'));
+				});
+			});
+			
+			function addWarehouseContactRow($ele){
+				var template = templates.getTemplate('warehouse-specific-contacts-row');
+				var $row = template.bind({});
+				$ele.append($row);
+			}
+		}
 		
 		function initAccountTab(){
 			loom.addOnSuccessCallback("save-account-details-form", function(response){
@@ -77,6 +154,9 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			if ($tab.find('a[data-mode="view"]').hasClass('down')){
 				$tab.find('a[data-mode="view"]').removeClass('down');
 			}
+			$tab.find('input[data-clear-on-edit-mode="true"]').each(function(){
+				$(this).val("")
+			});
 		}
 		
 		function changeToDisplayMode($tab){
@@ -91,11 +171,14 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			if (!$tab.find('a[data-mode="view"]').hasClass('down')){
 				$tab.find('a[data-mode="view"]').addClass('down');
 			}
+			$tab.find('input[data-populate-on-display-mode]').each(function(){
+				$(this).val($(this).data('populate-on-display-mode'));
+			});
 		}
 		
 		function initWarehouseTab(){
 			
-			$(document).on('click','#warehouses-table tbody tr td .button',function(e){
+			$(document).on('click','table[data-type="warehouses-table"] tbody tr td .button',function(e){
 				e.preventDefault();
 				var $this = $(this);
 				var $warehouseContainer = $('#view-edit-warehouse');
@@ -187,7 +270,9 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			$(document).on('click','#registration .save',function(e){
 				rebuildWarehouseList();
 				rebuildWarehouseDropdownList();
-				changeToDisplayMode($('div[data-view="warehouses"]'));
+				if($(this).closest('form').find('.error').length === 0){
+					changeToDisplayMode($('div[data-view="warehouses"]'));
+				}
 			});
 			
 			$(document).on('click','#save-and-finish',function(e){
@@ -212,7 +297,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 		
 		function rebuildWarehouseList(){
 			DBCntr.rebuildWarehouseList(function(response){
-				var $warehouseTable = $('div[data-view="warehouses"] #warehouses-table');
+				var $warehouseTable = $('div[data-view="warehouses"] table[data-type="warehouses-table"]');
 				var $addNewWarehouseContainer = $('.add-new-warehouse-container');
 				$warehouseTable.parent().append(response);
 				$warehouseTable.parent().append($addNewWarehouseContainer.wrap('<p/>').parent().html());
@@ -247,7 +332,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 		}
 		
 		function goToTab(href){
-			$('.tab-content ' + href).show().siblings().hide();
+			$('.tab-content ' + href + ',div[data-content="' + href.replace('#','') + '"]').show().siblings().hide();
 		}
 		
 		function prepareWarehouseView($this){
@@ -303,15 +388,23 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 		}
 		
 		function initTabs(){
-			$('.tabs ul.tabs a').on('click',function(e){
+			$(document).on('click','.tabs ul.tabs a',function(e){
 				var $this = $(this);
 				goToTab($this.attr('href'));
 				$this.find('li').addClass('active').parent().siblings().find('li').removeClass('active');
 				e.preventDefault();
+			});
+			
+			$(document).on('click,div[data-view="contacts"] .tabs ul.tabs a',function(){//contacts specific stuff
+				var $this = $(this);
 				if($this.attr('href') === '#warehouse-contacts' && $('div[data-one-warehouse="true"]').length > 0){
 					$('div[data-one-warehouse="true"]').show();
 				}else{
 					$('div[data-one-warehouse="true"]').hide();
+				}
+				
+				if($this.attr('href') === '#master-contact'){
+					$('.warehouse-specific-contacts').remove();
 				}
 			});
 		}
@@ -339,7 +432,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 					$rows = $this.closest('.button-container').siblings('table').find('tbody').find('tr'),
 					mandatoryRows = 2;
 					
-					if($this.closest('.tab.active.main').attr('id') === 'master-contacts'){
+					if($this.closest('.tab.active.main').data('content') === 'master-contact'){
 						maxRows = 3;
 					}
 					
@@ -363,7 +456,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 				data.role = contactType;
 				data.email = $this.parent('td').siblings('td[data-field="email"]').html();
 				
-				DBCntr.resendRegisterEmail($this.parent('td').parent('tr').data('user-id'),data,function(result){
+				DBCntr.resendRegisterEmail($this.parent('td').parent('tr').data('id'),data,function(result){
 					if(result.err === true){
 						Alerts.showPersistentErrorMessage('Error: Email not sent');
 					}else{
@@ -376,11 +469,12 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			
 			$(document).on('click','button[name="save-new-contacts"]',function(){
 				var $this = $(this),
-					contactType = $this.parent('div').parent('div').attr('id').replace(/-([a-z])/g, function (g) { return ' ' + g[1].toUpperCase(); }),
+					contactType = $this.parent('div').parent('div').data('content').replace(/-([a-z])/g, function (g) { return ' ' + g[1].toUpperCase(); }),
 					data = {},
 					rows = [],
 					cbDone = 0,
-					error = false;
+					error = false,
+					$currentRow;
 					
 					contactType = contactType.charAt(0).toUpperCase() + contactType.substring(1);
 					
@@ -394,13 +488,15 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 						data.name = $(rows[i]).find('td[data-field="name"]').find('input').val();
 						data.phoneNumber = $(rows[i]).find('td[data-field="phone-number"]').find('input').val();
 						data.dashboardAccess = $(rows[i]).find('tr[data-status="new"]').find('td[data-field="dashboard-access"]').find('input').val();
+						$currentRow = $(rows[i]);
 						DBCntr.createContact(data,function(response){
 							cbDone ++;
 							if(response.error === true){
 								error = true;
-							}else if(response.data !== undefined){
-								var contactsId = response.data._id.toString();
+							}else if(response.data.contactId !== undefined){
+								var contactsId = response.data.contactId;
 							}
+							$currentRow.attr('data-id',response.data.userId);
 							if (cbDone === rows.length){
 								if(error === true){
 									Alerts.showPersistentErrorMessage('Not all contacts have been added');

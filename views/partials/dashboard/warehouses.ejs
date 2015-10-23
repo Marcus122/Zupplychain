@@ -3,11 +3,16 @@
 		<div class="header">
 			<h3>Warehouses</h3>
 		</div>
-		<div class="main">
+		<div class="main" data-data="warehouses">
 			<% include warehouse-list%>
-			<div class="add-new-warehouse-container">
-				<label for="add-new-warehouse">Add new warehouse</label>
-				<a href="/add-new-warehouse" class="button add-button primary" data-action="add-new-warehouse"></a>
+			<div class="columns twelve button-container">
+				<button type="button" name="delete" class="button action" style="display:none;">Delete</button>
+				<%if (authorisations.warehouse.createWarehouse === true){%>
+					<div class="add-new-warehouse-container">
+						<label for="add-new-warehouse">Add new warehouse</label>
+						<a href="/add-new-warehouse" class="button add-button primary" data-action="add-new-warehouse"></a>
+					</div>
+				<%}%>
 			</div>
 		</div>
 	</div>

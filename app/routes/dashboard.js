@@ -10,6 +10,10 @@ var emailer = require("../controllers/emailer.js")
 var handler = function(app) {
 	app.param('warehouse_id', warehouses.load);
 	
+	app.get('/contacts-setup',function(req,res){
+		res.render('contact-setup-walkthrough',req.data);
+	});
+	
 	app.get('/dashboard', checkForLogon, function(req,res){
 		dashboard.getWarehousesByUser(req.data.user,function(err,data){
 			if (err){
@@ -24,6 +28,7 @@ var handler = function(app) {
 				req.data.specifications = data.specifications;
 				req.data.registerStatus = data.registerStatus;
 				req.data.authorisations = data.authorisations;
+				req.data.completedTasks = getTasksThatHaveBeenCompleted(data);
 				res.render("dashboard",req.data);
 			}
 		});
@@ -98,19 +103,16 @@ var handler = function(app) {
 	});
 	
 	app.get('/view-edit-warehouse/:warehouse_id',function(req,res){
-		var auth;
 		req.data.warehouse = req.warehouse;
 		req.data.services = local.config.services;
 		req.data.specifications = local.config.specifications;
 		req.data.palletTypes = local.config.palletTypes;
 		req.data.temperatures = local.config.temperatures;
-        auth = local.config.authorisationsByAccessLvl[req.data.user.dashboardAccessLvl]
-		req.data.authorisations = local.config.authorisations[auth];
+        req.data.authorisations = dashboard.getAuthorisations(req.data.user.dashboardAccessLvl)
 		res.render('partials/dashboard/view-edit-warehouse',req.data);
 	});
 	
 	app.get('/add-new-warehouse',function(req,res){
-		var auth;
 		warehouses.warehouse_by_user(req.data.user,function(err,warehouses){
 			if(err){
 				setErrorResponse("Warehouse not found",res);
@@ -124,12 +126,21 @@ var handler = function(app) {
 				req.data.warehouse.photos = [];
 				req.data.warehouse.documents = [];
 				req.data.warehouse.storage = [];
-				auth = local.config.authorisationsByAccessLvl[req.data.user.dashboardAccessLvl]
-				req.data.authorisations = local.config.authorisations[auth];
+				req.data.authorisations = dashboard.getAuthorisations(req.data.user.dashboardAccessLvl)
 				res.render('partials/dashboard/view-edit-warehouse',req.data);
 			}
 		});
 	});
+	
+	app.post('/delete-items',function(req,res){
+		deleteItems(req,res,function(err,results){
+			if(err){
+				setResponseWithErr('Error: Items not deleted',res);
+			}else{
+				setResponse(results,res);
+			}
+		});
+	})
 	
 	app.post('/create-contact',function(req,res){
 		createContact(req,res,function(err,results){
@@ -142,11 +153,9 @@ var handler = function(app) {
 	});
 	
 	app.get('/rebuild-pricing-and-availability/:warehouse_id',function(req,res){
-		var auth;
 		req.data.warehouse = req.warehouse;
 		req.data.palletTypes = local.config.palletTypes;
-		auth = local.config.authorisationsByAccessLvl[req.data.user.dashboardAccessLvl]
-		req.data.authorisations = local.config.authorisations[auth];
+		req.data.authorisations = dashboard.getAuthorisations(req.data.user.dashboardAccessLvl)
 		res.render('partials/dashboard/registration-3',req.data);
 	});
 	
@@ -156,6 +165,7 @@ var handler = function(app) {
 				setErrorResponse("Warehouse not found",res);
 			}else{
 				req.data.warehouses = warehouses;
+				req.data.authorisations = dashboard.getAuthorisations(req.data.user.dashboardAccessLvl)
 				res.render('partials/dashboard/warehouse-dropdown-list',req.data);
 			}
 		})
@@ -168,12 +178,17 @@ var handler = function(app) {
 			}else{
 				req.data.warehouses = warehouses;
 				req.data.warehouse = warehouses[0];
+				req.data.authorisations = dashboard.getAuthorisations(req.data.user.dashboardAccessLvl)
 				res.render('partials/dashboard/warehouse-list',req.data);
 			}
 		})
 	});
 	
 };
+
+function getTasksThatHaveBeenCompleted(data){
+	return dashboard.getTasksThatHaveBeenCompleted(data);
+}
 
 function resendRegisterEmail(req,res,cb){
 	users.user_by_id(req.params.userId,function(err,user){
@@ -260,6 +275,16 @@ function saveAccountDetails(req,cb){
 	})
 }
 
+function deleteItems(req,res,cb){
+	dashboard.deleteItems(req,function(err,result){
+		if(err){
+			cb(err);
+		}else{
+			cb(false,result);
+		}
+	})
+}
+
 function createContact(req,res,cb){
 	var data = {},
 		tableId = "",
@@ -282,10 +307,11 @@ function createContact(req,res,cb){
 			if (user.constructor === Array){
 				user = user[0];//An email can only exist once so the first item will always be the one we want
 			}
-			if (req.body.role == 'Master Contacts'){
+			if (req.body.role == 'Master Contact'){
 				tableId = req.data.user.company._id;
 				cntr = companyCtrl;
 				contactsType = "Master Contacts";
+				req.body.role = "Master Contacts";
 			}else{
 				tableId = req.body.warehouseContacts;
 				cntr = warehouseContacts;
@@ -302,6 +328,7 @@ function createContact(req,res,cb){
 					emailContactData.link = req.protocol + '://' + req.headers.host + '/initial-registration/' + user._id.toString();
 					emailContactData.warehouse = "";
 					emailContactData.config = local.config;
+					emailContactData.host = req.protocol + '://' + req.headers.host;
 					if (userExisted === false){
 						res.render('emails/create-contact',emailContactData,function(err,template){
 							if(err){
@@ -309,13 +336,23 @@ function createContact(req,res,cb){
 								//Delete the created user
 							}else{
 								emailer.sendMail(req,res,template,req.body.email,'info@zupplychain.com','Complete Registration',function(err){
-									cb(null);
+									cb(false,{userId: user._id.toString()});
 								});
 							}
 						});
 					}else{
-						cb(null);
-					}
+						res.render('emails/user-contact-exists',emailContactData,function(err,template){
+							if(err){
+								cb(err);
+								console.log(err);
+								//Delete the created user
+							}else{
+								emailer.sendMail(req,res,template,req.body.email,'info@zupplychain.com','Complete Registration',function(err){
+									cb(false,{userId: user._id.toString()});
+								});
+							}
+						});
+				}
 				});
 			}else{
 				contacts.warehouse = req.body.warehouseId;
@@ -335,6 +372,7 @@ function createContact(req,res,cb){
 						emailContactData.link = req.protocol + '://' + req.headers.host + '/initial-registration/' + user._id.toString();
 						emailContactData.warehouse = "";
 						emailContactData.config = local.config;
+						emailContactData.host = req.protocol + '://' + req.headers.host;
 						if (userExisted === false){
 							res.render('emails/create-contact',emailContactData,function(err,template){
 								if(err){
@@ -342,12 +380,21 @@ function createContact(req,res,cb){
 									//Delete the created user
 								}else{
 									emailer.sendMail(req,res,template,req.body.email,'info@zupplychain.com','Complete Registration',function(err){
-										cb(null,result.toObject());
+										cb(false,{userId: user._id.toString(),contactId: result.toObject()._id.toString()});
 									});
 								}
 							});
 						}else{
-							cb(null);
+							res.render('emails/user-contact-exists',emailContactData,function(err,template){
+								if(err){
+									cb(err);
+									//Delete the created user
+								}else{
+									emailer.sendMail(req,res,template,req.body.email,'info@zupplychain.com','Complete Registration',function(err){
+										cb(false,{userId: user._id.toString(),contactId: result.toObject()._id.toString()});
+									});
+								}
+							});
 						}
 					}
 				});

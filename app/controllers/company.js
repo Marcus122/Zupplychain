@@ -1,5 +1,6 @@
 var Company = require("../data/company.js");
 var warehouse = require("../controllers/warehouses.js");
+var warehouseContacts = require("../controllers/warehouse-contacts.js")
 var User = require("../controllers/users.js");
 
 exports.version = "0.1.0";
@@ -58,19 +59,77 @@ exports.warehouseByCompany = function(company,callback){
 	var warehouses = [];
 	var cbCompleted = 0;
 	Company.load(company,function(err,result){
-		var resultObj = result.toObject();
-		for (var i = 0; i < resultObj.warehouses.length; i++){
-			warehouse.getById(resultObj.warehouses[i],function(err,warehouse){
-				if(err){
-					//Do nothing, the warehouse will not be in the results
-				}else{
-					cbCompleted ++;
-					warehouses.push(warehouse.toObject())
-					if(resultObj.warehouses.length === cbCompleted){
-						callback(null,warehouses);
+		if(err){
+			callback(err);
+		}else{
+			var resultObj = result.toObject();
+			for (var i = 0; i < resultObj.warehouses.length; i++){
+				warehouse.getById(resultObj.warehouses[i],function(err,warehouse){
+					if(err){
+						//Do nothing, the warehouse will not be in the results
+					}else{
+						cbCompleted ++;
+						warehouses.push(warehouse)
+						if(resultObj.warehouses.length === cbCompleted){
+							callback(null,warehouses);
+						}
 					}
+				});
+			}
+		}
+	});
+};
+
+exports.checkUserIsMaterContact = function(userId,cb){
+	Company.loadByUser(userId,function(err,result){
+		if(err){
+			cb(err);
+		}else{
+			if(result.length > 0){
+				cb(false,true);
+			}else if(result.length === 0){
+				cb(false,false);
+			}
+		}
+	});
+}
+
+exports.deleteMasterContact = function(company,userId,cb){
+	User.user_by_id(userId,function(err,result){
+		if(err){
+			cb(err);
+		}else{
+			Company.removeMasterContact(company,result._id,function(err,result){
+				if(err){
+					cb(err);
+				}else{
+					warehouseContacts.checkWarehouseContactsExist(userId,function(err,exists){
+						if(err){
+						//See if there is a rollback function
+							cb(err);
+						}else if(!exists){
+							exports.checkUserIsMaterContact(userId,function(err,exists){
+								if(err){
+									cb(err);
+								}else if(!exists){
+									User.deleteUser(userId,function(err,result){
+										if(err){
+											cb(err);
+											//See if there is a rollback function
+										}else{
+											cb(false,result);
+										}
+									});
+								}else{
+									cb(false);
+								}
+							});
+						}else{
+							cb(false);
+						}
+					});
 				}
 			});
 		}
 	});
-};
+}

@@ -25,6 +25,13 @@ warehouseContactsSchema.statics = {
 	loadWarehousesContactsByACOrEC: function(userId,cb){
     	this.find({$or:[{availabilityController:{$in:[userId]}},{enquiresController:{$in:[userId]}}]}).exec(cb);
   	},
+	removeByWarehouse: function(warehouse,cb){
+		this.find({warehouse: warehouse}).remove().exec(cb);
+	},
+	loadByUser: function(userId,cb){
+		this.find({$or:[{availabilityController:{$in:[userId]}},{enquiresController:{$in:[userId]}},{creditController:{$in:[userId]}},{invoiceController:{$in:[userId]}},{pickingDispatch:{$in:[userId]}},{goodsIn:{$in:[userId]}},{transportCoordinator:{$in:[userId]}}]})
+		.exec(cb);
+	}
 }
 
 module.exports = mongoose.model('warehouseContacts',warehouseContactsSchema);

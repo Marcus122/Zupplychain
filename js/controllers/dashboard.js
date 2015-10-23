@@ -144,6 +144,23 @@ define(["jquery"], function ($) {
 			})
 		}
 		
+		function deleteItems(data,cb){
+			var url = '/delete-items';
+			$.ajax({
+				url:url,
+				type:'POST',
+				data:data,
+				headers: {'csrf-token':csrf},
+				success:function(response){
+					cb(response);
+				},
+				error:function(jqXHR,textStatus,errThrown){
+					err = JSON.parse(jqXHR.responseText);
+					cb(err);
+				}
+			});
+		}
+		
 		return{
 			loadWarehouse:loadWarehouse,
 			rebuildPricingAndAvailability:rebuildPricingAndAvailability,
@@ -152,7 +169,8 @@ define(["jquery"], function ($) {
 			createContact:createContact,
 			resendRegisterEmail:resendRegisterEmail,
 			rebuildContactsView:rebuildContactsView,
-			rebuildWarehouseDropdownList:rebuildWarehouseDropdownList
+			rebuildWarehouseDropdownList:rebuildWarehouseDropdownList,
+			deleteItems:deleteItems
 		}
 	}
 	return c;

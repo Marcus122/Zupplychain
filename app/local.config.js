@@ -62,8 +62,7 @@ exports.config = {
     
     finalPayment : [
         "To Agreed Terms",
-        "Unknown",
-        "In Full"
+        "In Full Before Final Dispatch"
     ],
     
      paymentTypes : [
@@ -158,26 +157,40 @@ exports.config = {
     
     authorisations:{
         all:{
+            tasks:true,
             warehouse:
             {
                 warehouseDetails:true,
                 storage:true,
                 pricing:true,
-                availability:true
+                availability:true,
+                deleteWarehouse:true,
+                createWarehouse:true
             },
-            contacts:true,
+            contacts:
+            {
+                masterContacts:true,
+                warehouseContacts:true
+            }
         },
         noPricing:{
+            tasks:false,
             warehouse:
             {
                 warehouseDetails:true,
                 storage:true,
                 pricing:false,
-                availability:true
+                availability:true,
+                deleteWarehouse:false,
+                createWarehouse:false
             },
-            contacts:false,
+            contacts:{
+                masterContacts:false,
+                warehouseContacts:true
+            }
         },
         accountOnly:{
+            tasks:false,
             warehouse:false,
             contacts:false,
         }

@@ -118,3 +118,36 @@ module.exports.calculateQuickestRoadDistanceBetweenPoints = function(origin,dest
     )
 }
 
+module.exports.convertHyphenArrayDataToCC = function(data){
+    var newData = [];
+    for (var i = 0; i<data.length; i++){
+        if (typeof data[i] == 'object' && data[i].constructor !== Array){
+            newData[i] = exports.convertHyphenJSONDataToCC(data[i]);
+        }else if(data[i].constructor === Array){
+            newData[i] = exports.convertHyphenArrayDataToCC(data[i]);
+        }else if(typeof data[i] === 'string' && data[i] !== ''){
+            newData[i] = data[i].replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
+        }else{
+            newData[i] = data[i];
+        }
+    }
+    return newData;
+}
+
+module.exports.convertHyphenJSONDataToCC = function(data){
+    var newData = {}
+    for (var i in data){
+        if(data.hasOwnProperty(i)){
+            if (typeof data[i] == 'object' && data[i].constructor !== Array){
+               newData[i] = exports.convertHyphenJSONDataToCC(data[i]);
+            }else if(data[i].constructor === Array){
+                newData[i] = exports.convertHyphenArrayDataToCC(data[i]);
+            }else if(typeof data[i] === 'string' && data[i] !== ''){
+                newData[i.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); })] = data[i];
+            }else{
+                newData[i] = data[i];
+            }
+        }
+    }
+    return newData;
+}

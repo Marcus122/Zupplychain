@@ -73,12 +73,21 @@ label[for="photos"]{
 	 label{
 		margin-right:5%;
 	}
+	[for="maximum-insurance-level"]{
+		width:29%;
+	}
+	[for="all-prod-insurance"]{
+		width:86%;
+	}
 	 .small-input label{
 		width: auto;
   		display: inline-block;
 	}
 	 .small-input input{
 		width:30%;
+	}
+	input[name="maximum-insurance-level"]{
+		max-width:376px;
 	}
 }
 .warehouse-details textarea,
@@ -374,6 +383,18 @@ label[for="photos"]{
 	}
 	.edit-data:before{
 		content:'ADD ';
+	}
+}
+
+.banner{
+	.container{
+		text-align:center;
+		p{
+			display:inline-block;
+		}
+		button{
+			margin-left:10px;
+		}
 	}
 }
 .progress {
@@ -806,6 +827,7 @@ input.currency{
 		font-family: Arial, Helvetica, sans-serif;
 		font-size: 13px;
 		top: 51px;
+		max-width: 149px;
 	}
 	#view-an-example{
 		margin: 0px;
@@ -830,7 +852,7 @@ input.currency{
 		left: 12px;
 		font-family: Arial, Helvetica, sans-serif;
 		font-size: 12px;
-		top: 75px;
+		top: 90px;
 		max-width: 149px;
 	}
 	#icon{
@@ -852,7 +874,7 @@ input.currency{
 		word-spacing: normal;
 		position: absolute;
 		z-index: 600;
-		left: 163px;
-		top: 12px;
+		left: 183px;
+		top: 31px;
 	}
 }

@@ -24,9 +24,6 @@
 									<p>Please fill in your details and we will contact you as soon as possible</p>
 									<div class="columns six">
 										<div class="input-field">
-											<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
-										</div>
-										<div class="input-field">
 											<label for="name">Name</label>
 											<input type="text" name="name" required/>
 										</div>
@@ -65,6 +62,9 @@
 									</div>
 									<div class="columns twelve button-container">
 										<button type="submit" class="action">Send</button>
+									</div>
+									<div class="input-field">
+										<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
 									</div>
 									<div class="columns twelve contact-details">
 										<p class="contact">Zupplychain, <%=config.companyDetails.addressLine1%>, <%=config.companyDetails.addressLine2%>, <%=config.companyDetails.city%>, <%=config.companyDetails.postcode%> <span class="contacting-details"><span class="telephone"><span>T:</span> <%=config.companyDetails.telephone%></span> | <span class="email"><span>E:</span> <%=config.companyDetails.email%></p></span></span>

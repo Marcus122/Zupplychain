@@ -34,10 +34,10 @@ var fields = {
 	created: { type: Date , default: Date.now },
 	storage: [{ type: Schema.ObjectId, ref: 'storage' }],
   insurance: {
-    allProdInsurance: {type:String,default:""},
-    minimumInsuranceLevel: {type:String,default:""},
-    additionalInsurance: {type:String,default:""},
-    additionalInsuranceDescription: {type:String,default:""}
+    allProdInsurance: {type:String},
+    maximumInsuranceLevel: {type:String},
+    additionalInsurance: {type:String},
+    additionalInsuranceDescription: {type:String}
   },
 	geo: {
 		lat: { type: Number },
@@ -102,12 +102,8 @@ warehouseSchema.statics = {
   loadByWarehousesContacts: function(id,cb){
     this.find({contacts:id}).exec(cb);
   },
-  remove: function(id){
-      this.find({_id: id}).remove().exec(function(err){
-          if (err){
-              console.log(err);
-          }
-      });
+  remove: function(id,cb){
+      this.find({_id: id}).remove().exec(cb);
   },
   
   //TODO: this should no longer be used anywhere.. check and delete.

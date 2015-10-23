@@ -1,4 +1,5 @@
 var Storage = require("../data/storage.js"),
+	Warehouse = require("../controllers/warehouses.js"),
 	mongoose = require('mongoose'),
 	Schema = mongoose.Schema,
 	ObjectId = Schema.ObjectId;
@@ -29,6 +30,30 @@ exports.updateWithData = function(_data,cb){
 			});
 		}else{
 			return cb(err);
+		}
+	});
+}
+exports.deleteStorageByWarehouse = function(warehouse,cb){
+	var cbComplete = 0;
+	var errOccurred = false;
+	var results = [];
+	Warehouse.getById(warehouse,function(err,result){
+		if(err){
+			cb(err);
+		}else{
+			for (var i = 0; i<warehouse.storage.length; i++){
+				warehouse.storage.remove(function(err,result){
+					cbComplete ++;
+					if(err){
+						errOccurred = true;
+					}else{
+						results.push(result);
+					}
+					if (cbComplete === warehouse.storage.length){
+						cb(errOccurred,results);
+					}
+				});
+			}
 		}
 	});
 }

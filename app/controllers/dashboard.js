@@ -2,6 +2,7 @@ var user = require("../controllers/users.js");
 var companyCtrl = require("../controllers/company.js");
 var local = require("../local.config.js");
 var warehouse = require("../controllers/warehouses.js");
+var warehouseContacts = require("../controllers/warehouse-contacts.js")
 exports.version = "0.1.0";
 
 exports.saveBasicAccountDetails = function(name,email,company,phoneNumber,user,warehouse,cb){
@@ -85,4 +86,99 @@ exports.getWarehousesByUser = function(user,cb){
 			});
 		}
 	});
+}
+
+function getEarliestCreatedWarehouse(warehouses){
+	var earlistWarehouse = warehouses[0];//Start of with the first one in the list
+	for (var i = 0; i<warehouses.length; i++){
+		if (warehouses[i].created < earlistWarehouse.created){
+			earlistWarehouse = warehouses[i];
+		}
+	}
+	return earlistWarehouse;
+}
+
+exports.getTasksThatHaveBeenCompleted = function(data){
+	var completedTasks = {};
+	var numCompleted = 0;
+	var numberOfArrays = 1; //Start at one because of master contacts
+	var warehouseContacts = getEarliestCreatedWarehouse(data.warehouses).contacts;
+	warehouseContacts = warehouseContacts.toObject();
+	if(data.masterContacts.length >= 2){
+		completedTasks.masterContact = true;
+		numCompleted ++;
+	}else{
+		completedTasks.masterContact = false;
+	}
+	for(var i in warehouseContacts){
+		if (warehouseContacts[i].constructor === Array){
+			numberOfArrays ++;
+			if(warehouseContacts[i].length === 2){
+				completedTasks[i] = true;
+				numCompleted ++;
+			}else{
+				completedTasks[i] = false;
+			}
+		}
+	}
+	if(numberOfArrays === numCompleted){
+		completedTasks.contactSetupComplete = true;
+	}else{
+		completedTasks.contactSetupComplete = false;
+	}
+	return completedTasks;
+}
+
+exports.deleteItems = function(req,cb){
+    var cbCompleted = 0;
+	var errOccured = false;
+	var results = [];
+	if (req.body.type === 'warehouse' || req.body.type === 'warehouses'){
+		for(var i = 0; i<req.body.ids.length; i++){
+			warehouse.deleteWarehouseById(req.body.ids[i],function(err,result){
+				cbCompleted ++;
+				if(err){
+					errOccured = true;
+				}else{
+					results.push(result);
+				}
+				if (cbCompleted === req.body.ids.length){
+					cb(errOccured,results);
+				}
+			});
+		}
+	}else if(req.body.type === 'warehouseSpecificContacts' || req.body.type === 'warehouseSpecificContact'){
+		for(var i = 0; i<req.body.ids.length; i++){
+			warehouseContacts.deleteContact(req.body.ids[i],req.body.subType,req.body.warehouseContactId,function(err,result){
+				cbCompleted ++;
+				if(err){
+					errOccured = true;
+				}else{
+					results.push(result);
+				}
+				if (cbCompleted === req.body.ids.length){
+					cb(errOccured,results);
+				}
+			});
+		}
+	}else if(req.body.type === 'masterContacts' || req.body.type === 'masterContact'){
+		for(var i = 0; i<req.body.ids.length; i++){
+			companyCtrl.deleteMasterContact(req.body.company,req.body.ids[i],function(err,result){
+				cbCompleted ++;
+				if(err){
+					errOccured = true;
+				}else{
+					results.push(result);
+				}
+				if (cbCompleted === req.body.ids.length){
+					cb(errOccured,results);
+				}
+			});
+		}
+	}
+}
+
+exports.getAuthorisations = function(dashboardAccessLvl){
+	var auth = local.config.authorisationsByAccessLvl[dashboardAccessLvl]
+	return local.config.authorisations[auth];
 }

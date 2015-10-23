@@ -13,7 +13,7 @@
 			<fieldset class="main">
 				<div class="columns six">
 					<div class="input-field">
-						<label for="company">Company Name*</label><input type="text" name="company" id="company" required value="<%=warehouse.company%>"/>
+						<label for="company">Company Name*</label><input data-do-not-enable="true" readonly disabled type="text" name="company" id="company" required value="<%=warehouse.company%>"/>
 					</div>
 					<div class="input-field">
 						<label for="warehouseName">Warehouse Name*</label><input type="text" name="name" id="warehouseName" required value="<%=warehouse.name%>"/>
@@ -123,53 +123,51 @@
 				<%if(warehouse.insurance){%>
 					<div class="input-field">
 						<%if( warehouse.insurance.allProdInsurance && warehouse.insurance.allProdInsurance.indexOf('Insured for Storing All Products') != -1 ){%>
-							<input data-json="insurance" type="checkbox" name="allProdInsurance" value="Insured for Storing All Products" checked>
+							<input data-json="insurance" type="checkbox" name="all-prod-insurance" value="Insured for Storing All Products" checked required>
 						<%}else{%>
-							<input data-json="insurance" type="checkbox" name="allProdInsurance" value="">
+							<input data-json="insurance" type="checkbox" name="all-prod-insurance" value="" required>
 						<%}%>
-						<label for="allProdInsurance">Please confirm you are insured for storing all products (except those in exceptions below)</label>
+						<label for="all-prod-insurance">Please confirm you are insured for storing all products (except those in exceptions below)</label>
 					</div>
 					<div class="row">
-						<div class="input-field columns six">
-							<label for="minimumInsuranceLevel">Minimun insurance level per customer pallet</label>
-							<input data-json="insurance" type="text" name="minimumInsuranceLevel" value="<%=warehouse.insurance.minimumInsuranceLevel%>">
+						<div class="input-field columns twelve">
+							<label for="maximum-insuranceLevel">Maximum insurance level per customer pallet</label>
+							<input data-json="insurance" type="text" name="maximum-insurance-level" value="<%=warehouse.insurance.maximumInsuranceLevel%>">
 						</div>
 						<div class="input-field columns six">
-							<%if( warehouse.insurance.additionalInsurance && warehouse.insurance.additionalInsurance.indexOf('Additional Insurance') != -1  ){%>
-								<input data-json="insurance" type="checkbox" name="additionalInsurance" value="Additional Insurance" checked>
+							<!--<%if( warehouse.insurance.additionalInsurance && warehouse.insurance.additionalInsurance.indexOf('Additional Insurance') != -1  ){%>
+								<input data-json="insurance" type="checkbox" name="additional-insurance" value="Additional Insurance" checked>
 							<%}else{%>
-								<input data-json="insurance" type="checkbox" name="additionalInsurance" value="">
+								<input data-json="insurance" type="checkbox" name="additional-insurance" value="">
 							<%}%>
-							<label for="additionalInsurance">Aditional insurance available?</label>
-							<div class="tool-tip hint--top" data-hint="Are you able to offer full insurance for a customer’s product in your warehouse?">?</div>
+							<label for="additional-insurance">Aditional insurance available?</label>
+							<div class="tool-tip hint--top" data-hint="Are you able to offer full insurance for a customer’s product in your warehouse?">?</div>-->
 						</div>
 					</div>
 					<div class="input-field">
-						<label for="additionalInsuranceDescription">Additional Insurance Description</label>
 						<div class="hint--top description-container">
-							<textarea data-json="insurance" id="additional-insruance-description" name="additionalInsuranceDescription" placeholder="A short description of any adiontional insurance" data-loom-validators="complexTelephoneNumberNotInInput"><%=warehouse.insurance.additionalInsuranceDescription%></textarea>
+							<textarea data-json="insurance" id="additional-insruance-description" name="additional-insurance-description" placeholder="Please detail any exceptions" data-loom-validators="complexTelephoneNumberNotInInput"><%=warehouse.insurance.additionalInsuranceDescription%></textarea>
 						</div>
 					</div>
 				<%}else{%>
 					<div class="input-field">
-						<input data-json="insurance" type="checkbox" name="allProdInsurance" value="">
-						<label for="allProdInsurance">Please confirm you are insured for storing all products (except those in exceptions below)</label>
+						<input data-json="insurance" type="checkbox" name="all-prod-insurance" value="" required>
+						<label for="all-prod-insurance">Please confirm you are insured for storing all products (except those in exceptions below)</label>
 					</div>
 					<div class="row">
-						<div class="input-field columns six">
-							<label for="minimumInsuranceLevel">Minimun insurance level per customer pallet</label>
-							<input data-json="insurance" type="text" name="minimumInsuranceLevel">
+						<div class="input-field columns twelve">
+							<label for="maximum-insurance-level">Maximun insurance level per customer pallet</label>
+							<input data-json="insurance" type="text" name="maximum-insurance-level">
 						</div>
 						<div class="input-field columns six">
-							<input data-json="insurance" type="checkbox" name="additionalInsurance" value="">
-							<label for="additionalInsurance">Aditional insurance available?</label>
-							<div class="tool-tip hint--top" data-hint="Are you able to offer full insurance for a customer’s product in your warehouse?">?</div>
+							<!--<input data-json="insurance" type="checkbox" name="additional-insurance" value="">
+							<label for="additional-insurance">Aditional insurance available?</label>
+							<div class="tool-tip hint--top" data-hint="Are you able to offer full insurance for a customer’s product in your warehouse?">?</div>-->
 						</div>
 					</div>
 					<div class="input-field">
-						<label for="additionalInsuranceDescription">Additional Insurance Description</label>
 						<div class="hint--top description-container">
-							<textarea data-json="insurance" id="additional-insruance-description" name="additionalInsuranceDescription" placeholder="A short description of any adiontional insurance" data-loom-validators="complexTelephoneNumberNotInInput"></textarea>
+							<textarea data-json="insurance" id="additional-insruance-description" name="additional-insurance-description" placeholder="Please detail any exceptions" data-loom-validators="complexTelephoneNumberNotInInput"></textarea>
 						</div>
 					</div>
 				<%}%>
@@ -240,7 +238,7 @@
 				</div>
 			</fieldset>
 		</div>
-		<p>*Required Fields</p>
+		<p class="reg-required-fields">*Required Fields</p>
 	</div>
 	<fieldset class="form-footer">
 		<%if( warehouse._id ){%>

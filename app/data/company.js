@@ -18,8 +18,11 @@ companySchema.statics = {
 		.exec(cb)
 	},
 	loadByUser: function(user,cb){
-		this.find({}).lean()
+		this.find({masterContacts:{$in:[user]}})
 		.exec(cb)
+	},
+	removeMasterContact: function(id,user,cb){
+		this.update({_id:id},{$pull:{masterContacts:{$in:[user]}}}).exec(cb);
 	}
 }
 

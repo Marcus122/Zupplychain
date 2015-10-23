@@ -128,6 +128,9 @@
 		padding: 0;
 		white-space: normal;
 		width:100%;
+		.content-box .row{
+			min-height:116px;
+		}
 	}
 	.dashboard-back{
 		float:left;
@@ -213,21 +216,23 @@
 				color:@invalid-dark;
 			}
 		}
-		ul.two-tabs li{
-			&:first-of-type{
-				width:44%;
-				max-width:initial;
-			}
-			&:nth-child(2){
-				width:45.7%;
-				margin-right:0;
-				max-width:initial;
+		ul.two-tabs{
+			a{
+				li{
+					width:44.9%;
+					max-width:initial;
+				}
+				&:nth-child(2) li{
+					margin:0;
+				}
 			}
 		}
-		ul.five-tabs li{
-			height:64px;
-			&:last-of-type{
-				margin-right:0;	
+		ul.five-tabs a{ 
+			li{
+				height:43px;
+			}
+			&:last-of-type li{
+				margin:0;	
 			}
 		}
 	}
@@ -289,6 +294,12 @@
 			padding-left: 0;
 			padding-right: 0;
 			border-radius: 0;
+			border:0;
+			border-bottom-left-radius: 7px;
+    		border-bottom-right-radius: 7px;
+			.form-footer{
+				min-height:44px;
+			}
 			.content-box{
 		    	margin-bottom: 20px;
     			margin-bottom: 2rem;
@@ -317,6 +328,13 @@
 		}
 		div.tab{
 			background-color:@tertiary;
+			height: 100%;
+			#registration{
+				margin-bottom:0;
+				.main p.reg-required-fields{
+					margin-left:20px;
+				}
+			}
 			.content-box.primary{
 				margin-left:20px;
 				margin-right:20px;

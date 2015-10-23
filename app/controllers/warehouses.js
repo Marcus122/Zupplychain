@@ -1,5 +1,6 @@
 var Warehouse = require("../data/warehouse.js"),
-	warehouseContacts = require("../data/warehouse-contacts.js"),
+	warehouseContacts = require("../controllers/warehouse-contacts.js"),
+	storage = require("../controllers/storage.js"),
 	mongoose = require('mongoose'),
 	utils = require("../utils"),
 	Schema = mongoose.Schema,
@@ -76,25 +77,11 @@ exports.warehouse_by_user = function (user,callback) {
 	});
 };
 exports.warehouseByACOrECUser = function(userId,cb){
-	var userWarehouses = [],
-		cbCompleted = 0;
-	warehouseContacts.loadWarehousesContactsByACOrEC(userId,function(err,results){
+	warehouseContacts.loadWarehousesContactsByACOrEC(userId,function(err,result){
 		if(err){
 			cb(err);
 		}else{
-			for (var i = 0; i<results.length; i++){
-				Warehouse.load(results[i].warehouse,function(err,warehouse){
-					if(err){
-						//This warehouse won't appear in the list
-					}else{
-						userWarehouses.push(warehouse)
-					}
-					cbCompleted ++;
-					if(cbCompleted === results.length){
-						cb(false,userWarehouses)
-					}
-				});
-			}
+			cb(false,result);
 		}
 	});
 };
@@ -106,7 +93,27 @@ exports.updateVolumeDiscount = function(warehouse, data, cb) {
     warehouse.discounts = data.discounts;
     warehouse.save(cb);
 }
-
+exports.deleteWarehouseById = function(id,cb){
+	Warehouse.remove(id,function(err,result){
+		if(err){
+			cb(err);
+		}else{
+			warehouseContacts.deleteByWarehouse(id,function(err,result){
+				if(err){
+					cb(err);
+				}else{
+					storage.deleteStorageByWarehouse(id,function(err,result){
+						if(err){
+							cb(err);
+						}else{
+							cb(false,result);
+						}
+					});
+				}
+			})
+		}
+	})
+}
 exports.warehouse_by_query = function(query,cb) {
     // do the actual search and return the warehouse data.
     Warehouse.search_by_query(query, function(err,result){

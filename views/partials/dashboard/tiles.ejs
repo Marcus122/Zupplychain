@@ -1,70 +1,72 @@
 <div data-view="main" class="dashboard-container columns nine">
-	<div class="columns twelve">
-		<div class="content-box welcome-box">
-			<div class="header">
-				<h3>Welcome to Zupplychain</h3>
-			</div>
-			<div class="main row">
-				<p>To manage and operate your Zupplychain account, you need to set up some contacts below.</p>
-			</div>
-		</div>
-	</div>
-	<div class="columns twelve">
-		<div class="content-box tasks-box">
-			<div class="header">
-				<h3>Tasks and Notifications</h3>
-			</div>
-			<div class="main row">
-				<table id="tasks">
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Completed</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td data-field="task"><a href="docs/contacts-set-up.pdf" target="_blank">Introduction to contacts setup</a></td>
-							<td><input type="checkbox" name="task-completed" checked></td>
-						</tr>
-						<tr>
-							<td data-field="task"><a data-go-to-link="view-tab" href="#contacts#master-contacts">Add master contacts</a></td>
-							<td><input type="checkbox" name="task-completed"></td>
-						</tr>
-						<tr>
-
-							<td data-field="task"><a data-go-to-link="view-tab" href="#contacts#availability-controller">Add availability controllers</a></td>
-							<td><input type="checkbox" name="task-completed"></td>
-						</tr>
-						<tr>
-							<td data-field="task">Add enquires controllers</td>
-							<td><input type="checkbox" name="task-completed"></td>
-						</tr>
-						<tr>
-							<td data-field="task">Add transport controllers</td>
-							<td><input type="checkbox" name="task-completed"></td>
-						</tr>
-						<tr>
-							<td data-field="task">Add goods-in contacts</td>
-							<td><input type="checkbox" name="task-completed"></td>
-						</tr>
-						<tr>
-							<td data-field="task">Add picking and dispatch contacts</td>
-							<td><input type="checkbox" name="task-completed"></td>
-						</tr>
-						<tr>
-							<td data-field="task">Add invoice contacts</td>
-							<td><input type="checkbox" name="task-completed"></td>
-						</tr>
-						<tr>
-							<td data-field="task">Add credit controller contacts</td>
-							<td><input type="checkbox" name="task-completed"></td>
-						</tr>
-					</tbody>
-				</table>
+	<%if(completedTasks.contactSetupComplete === false && authorisations.tasks === true){%>
+		<div class="columns twelve">
+			<div class="content-box welcome-box">
+				<div class="header">
+					<h3>Welcome to Zupplychain</h3>
+				</div>
+				<div class="main row">
+					<p>To manage and operate your Zupplychain account, you need to set up some contacts below.</p>
+				</div>
 			</div>
 		</div>
-	</div>
+		<div class="columns twelve">
+			<div class="content-box tasks-box">
+				<div class="header">
+					<h3>Tasks and Notifications</h3>
+				</div>
+				<div class="main row">
+					<table id="tasks">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Completed</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td data-field="task"><a href="contacts-setup" target="_blank">Introduction to contacts setup</a></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td data-field="task"><a data-go-to-link="view-tab" href="#contacts#master-contacts">Add master contacts</a></td>
+								<td><input disabled type="checkbox" name="task-completed" <%if(completedTasks.masterContact === true){%>checked<%}%>></td>
+							</tr>
+							<tr>
+								<td data-field="task"><a data-go-to-link="view-tab" href="#contacts#availability-controller">Add availability controllers</a></td>
+								<td><input disabled type="checkbox" name="task-completed" <%if(completedTasks.availabilityController === true){%>checked<%}%>></td>
+							</tr>
+							<tr>
+								<td data-field="task">Add enquires controllers</td>
+								<td><input disabled type="checkbox" name="task-completed" <%if(completedTasks.enquiresController === true){%>checked<%}%>></td>
+							</tr>
+							<tr>
+								<td data-field="task">Add transport controllers</td>
+								<td><input disabled type="checkbox" name="task-completed" <%if(completedTasks.transportCoordinator === true){%>checked<%}%>></td>
+							</tr>
+							<tr>
+								<%console.log(completedTasks.goodsIn);%>
+								<td data-field="task">Add goods-in contacts</td>
+								<td><input disabled type="checkbox" name="task-completed" <%if(completedTasks.goodsIn === true){%>checked<%}%>></td>
+							</tr>
+							<tr>
+								<td data-field="task">Add picking and dispatch contacts</td>
+								<td><input disabled type="checkbox" name="task-completed" <%if(completedTasks.pickingDispatch === true){%>checked<%}%>></td>
+							</tr>
+							<tr>
+								<td data-field="task">Add invoice contacts</td>
+								<td><input disabled type="checkbox" name="task-completed" <%if(completedTasks.invoiceController === true){%>checked<%}%>></td>
+							</tr>
+							<tr>
+								<td data-field="task">Add credit controller contacts</td>
+								<td><input disabled type="checkbox" name="task-completed" <%if(completedTasks.creditController === true){%>checked<%}%>></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	<%}%>
 	<div class="row types">
 		<div class="columns six">
 			<a href="#admin" class="button tile-button">

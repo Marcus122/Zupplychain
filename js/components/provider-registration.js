@@ -16,7 +16,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			step3();
             postcodeAnywhereInit();
 			initInitialRegistration();
-			setTimer(50*5);//Five Minutes
+			setTimer(60000*5);//Five Minutes
 			
 			$(document).on("click",".popup-window .close",function(){
 				$(this).closest('.popup-window').remove();
@@ -34,8 +34,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				$('body').append($popup);
 				centerPopup($popup);
 				$($popup).show();
-				$("html,body").animate({scrollTop: 0}, 800);
-				$popup.find('iframe').attr('src','http://localhost:8081/videos/VIDEO0011.mp4');
+				$popup.find('iframe').attr('src', $this.data('url'));
 				if($this.attr('id') === 'reg-help-bubble' ){
 					$this.hide();
 				}
@@ -54,7 +53,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				if($('.popup-window.video-popup').length === 0){
 					$('#reg-help-bubble').show();
 				}
-			},5000);
+			},time);
 		}
 		function toPrice(num){
 			return Number(num).toFixed(2);
@@ -388,7 +387,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                 $(this).closest(".document").addClass("isDefault");
             });
 			
-			$('input[name="allProdInsurance"]').change(function(){
+			$('input[name="all-prod-insurance"]').change(function(){
 				if ($(this).is(":checked")){
 					$(this).val('Insured for Storing All Products');
 				}else{

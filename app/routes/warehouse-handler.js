@@ -357,24 +357,22 @@ function createWarehouse(req,res,cb){
 		}else if (!err){
 			req.body.geo = latlng;
 			req.body.loc = { 'type' : 'Point', 'coordinates' : [latlng.lng, latlng.lat] };
-			warehouse.create(req.data.user,req.body,function(err,Warehouse){
+			var whData = Utils.convertHyphenJSONDataToCC(req.body);
+			warehouse.create(req.data.user,whData,function(err,Warehouse){
 				if(err){
-					//setErrorResponse(err,res);
-					cb(err);
+					cb('Data Error');
 				}else{
-					//req.warehouse = Warehouse;
-					//setResponse(req,res);
 					contactsData.warehouse = Warehouse._id;
 					contacts.createWarehouseContacts(contactsData,function(err,contactsRes){
 						if(err){
-							cb(err);
+							cb('Data Error');
 							//Maybe delete some stuff
 						}else{
 							updateWarehouse = Warehouse.toObject();
 							updateWarehouse.contacts = contactsRes._id;
 							warehouse.update(Warehouse,updateWarehouse,function(err){
 								if(err){
-									cb(err);
+									cb('Data Error');
 									//Maybe delete some stuff
 								}else{
 									cb(false,Warehouse);
@@ -485,7 +483,7 @@ function updateWarehouse(req,res){
 					}else{
 						req.body.geo=latlng;
 						req.body.loc = { 'type' : 'Point', 'coordinates' : [latlng.lng, latlng.lat] };
-						callback(error);
+						//callback(error);
 					}
 				});
 			}else{
@@ -495,7 +493,8 @@ function updateWarehouse(req,res){
 
 	],function (err, result) {
 		if (!err || err === '' || err === null || err === "" || err === undefined){
-			warehouse.update(req.warehouse,req.body,function(err){
+			var whData = Utils.convertHyphenJSONDataToCC(req.body);
+			warehouse.update(req.warehouse,whData,function(err){
 				if(err){
 					setErrorResponse(err,res);
 				}else{

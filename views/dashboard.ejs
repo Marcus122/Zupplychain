@@ -12,7 +12,7 @@
 					<%if(authorisations.warehouse !== false){%>
 						<li data-view="warehouses"><a href="#warehouses">Warehouses</a></li>
 					<%}%>
-					<%if(authorisations.contacts === true){%>
+					<%if(authorisations.contacts !== false){%>
 						<li data-view="contacts"><a href="#contacts">Contacts</a></li>
 					<%}%>
 					<li data-view="users"><a href="#messages">Messages</a></li>
@@ -23,7 +23,7 @@
 			<%if(authorisations.warehouse !== false){%>  
 				<% include ./partials/dashboard/warehouses %>
 			<%}%>
-			<%if(authorisations.contacts === true){%>
+			<%if(authorisations.contacts !== false){%>
 				<% include ./partials/dashboard/contacts %>
 			<%}%>
 			<% include ./partials/dashboard/messages %>

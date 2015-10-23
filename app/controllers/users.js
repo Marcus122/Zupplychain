@@ -10,13 +10,12 @@ exports.version = "0.1.0";
  */
 exports.create = function (req,res,data,cb,cookieSet) {
 	var user = new User(data);
-	cookieSet = cookieSet || true;//Set a cookie by default
 	user.save(function(err){
 		if (!err) {
 			if (cookieSet === undefined || cookieSet === true){
 				setCookie(user,req,res);
+				req.data.user=user;
 			}
-			req.data.user=user;
 			return cb(null, user.toObject());
 		}else{
 			 return cb(err);
@@ -128,3 +127,13 @@ exports.checkOldPassword = function(password,oldPassword,cb){
 		cb(true);
 	}
 };
+
+exports.deleteUser = function(userId,cb){
+	User.remove(userId,function(err,result){
+		if(err){
+			cb(err);
+		}else{
+			cb(false,result);
+		}
+	});
+}
