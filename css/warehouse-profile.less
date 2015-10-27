@@ -128,6 +128,42 @@
                     float:right;
                 }  
             }
+            .description-container{
+                width:100%;
+                textarea[name="further-comments"]{
+                    display: block;
+                    .border-radius(10px,10px,10px,10px);
+                    .unit-margin-top(2);
+                    width:100%;
+                    height:@unit-px*14;
+                }
+            }
+        }
+        #provider-confirm-contract{
+            .content-box{
+                .header{
+                    margin-bottom:20px;
+                }
+                .main.row{
+                    margin-bottom:0;
+                    padding-top:0;
+                    .transport{
+                        padding-top:0;
+                    }
+                    .input-field{
+                        .unit-margin-bottom(1);
+                    }
+                    p{
+                        margin-bottom:0;
+                    }
+                }
+            }
+        }
+        #provider-offer-reply-form{
+            .content-box .main.row:nth-child(4){
+                margin-bottom:0;
+                padding-bottom:0;
+            }
         }
         #provider-offer-form,
         #provider-offer-reply-form,
@@ -138,8 +174,8 @@
             }
             .accept-status-box{
                 p{
-                    margin-top: 1rem;
-                    margin-bottom: 10px;
+                    .unit-margin-top(1);
+                    .unit-margin-bottom(1) !important;
                 }
                 &.accepted-by-customer{
                     border: 1px solid @primary;
@@ -156,11 +192,18 @@
                 margin-bottom: 0;
             }
         }
-        #provider-offer-form{
-           .content-box .main.row.transport{
+        #provider-offer-form,
+        #provider-offer-reply-form,
+        #quotation-request-form{
+           .content-box .main.row.transport,
+           .content-box .main.row.comments,
+           .content-box .main.row.quotation{
                margin-bottom:0;
-                .six.columns:nth-child(2){
-                    margin-left:0;
+               padding-bottom:0;
+                .columns:last-of-type{
+                    .input-field{
+                        margin-bottom:0;
+                    }
                 }
             }
         }
@@ -184,6 +227,9 @@
                 }
             }
         }
+        .insurance-reminder{
+            .unit-margin-bottom(2);
+        }
         input[type='checkbox'] {
             margin-left:5px;
         }
@@ -192,9 +238,14 @@
         }
         .submit-request-container{
             text-align:right;
-            button{
+            button,
+            a{
                 margin: 0 10px;
             }
+        }
+        #provider-offer-reply-form .insurance-reminder{
+            .unit-margin-top(2);
+            margin-bottom:0;
         }
     }
 
@@ -210,6 +261,7 @@
         text-align:right;
         font-size:18px;
         float:right;
+        .unit-margin-bottom(1);
         .price {
             width:156px;
             display:inline-block;
@@ -529,17 +581,32 @@
         min-height: 255px;
         max-height: 1000px;
         .row{
-            width:72%;
+            width:69%;
         }
         .main{
             min-height: 255px;
             max-height: 1000px;
-            .search-result-info-box .inner-box{
-                .distance{
-                    float:right;
+            padding:0;
+            .search-result-info-box{
+                float:right;
+                left:initial;
+                right:initial;
+                top:initial;
+                position:relative;
+                .inner-box{
+                    .distance{
+                        float:right;
+                    }
+                    span.selected{
+                        display:none;
+                    }
                 }
-                span.selected{
-                    display:none;
+            }
+            .row{
+                float: left;
+                margin-left: 20px; 
+                &:nth-child(2){
+                    margin-top: 20px;
                 }
             }
         }

@@ -51,7 +51,7 @@ function login(req,res,next){
 		if (!err){
         	next();
 		}else{
-			setResponse("The email address or password was incorrect",res);
+			setResponse({err:err.error},res);
 		}
     });
 }

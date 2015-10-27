@@ -11,6 +11,12 @@ exports.updateTransportData = function(quoteId,transport,cb){
     Quote.update({"_id" : quoteId}, { $set: { "transport": transport }}, {},cb);
 }
 
+exports.updateComments = function(quoteId,comment,commentType,cb){
+    var $set = {$set:{}};
+    $set.$set['comments.' + commentType] = comment;
+    Quote.update({"_id" : quoteId}, $set, {},cb);
+}
+
 exports.createQuote = function(formData,user,warehouseId,storageProfile,search,cb) {
     console.log(arguments);
     var quote = {};
@@ -30,6 +36,9 @@ exports.createQuote = function(formData,user,warehouseId,storageProfile,search,c
     quote.userData.mobile = formData.mobile;
     quote.userData.website = formData.website;
     quote.userData.transport = formData.transport;
+    
+    quote.comments = {};
+    quote.comments.quotationRequest = formData["further-comments"];
     
     quote.transport = {};
     quote.transport.type = formData.transport;

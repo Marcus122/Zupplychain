@@ -27,9 +27,9 @@
 								<%for(var i = 0; i<warehouse.contacts.availabilityController.length; i++){%>
 									<tr data-id="<%=warehouse.contacts.availabilityController[i]._id.toString()%>">
 										<td><%=i+1%>*</td>
-										<td data-field="name"><%=warehouse.contacts.availabilityController[i].name%></td>
+										<td data-field="name"><%=warehouse.contacts.availabilityController[i].name || 'N/A'%></td>
 										<td data-field="email"><%=warehouse.contacts.availabilityController[i].email%></td>
-										<td data-field="phone-number"><%=warehouse.contacts.availabilityController[i].phoneNumber%></td>
+										<td data-field="phone-number"><%=warehouse.contacts.availabilityController[i].phoneNumber || 'N/A'%></td>
 										<td data-field="register-status">
 											<%switch(true){
 												case (warehouse.contacts.availabilityController[i].expiry >= Date.now() && warehouse.contacts.availabilityController[i].expiry !== null):%>
@@ -83,9 +83,9 @@
 								<%for(var i = 0; i<warehouse.contacts.enquiresController.length; i++){%>
 									<tr data-id="<%=warehouse.contacts.enquiresController[i]._id.toString()%>">
 										<td><%=i+1%>*</td>
-										<td data-field="name"><%=warehouse.contacts.enquiresController[i].name%></td>
+										<td data-field="name"><%=warehouse.contacts.enquiresController[i].name || 'N/A'%></td>
 										<td data-field="email"><%=warehouse.contacts.enquiresController[i].email%></td>
-										<td data-field="phone-number"><%=warehouse.contacts.enquiresController[i].phoneNumber%></td>
+										<td data-field="phone-number"><%=warehouse.contacts.enquiresController[i].phoneNumber || 'N/A'%></td>
 										<td data-field="register-status">
 											<%switch(true){
 												case (warehouse.contacts.enquiresController[i].expiry >= Date.now() && warehouse.contacts.enquiresController[i].expiry !== null):%>
@@ -150,9 +150,9 @@
 								<%for(var i = 0; i<warehouse.contacts.transportCoordinator.length; i++){%>
 									<tr data-id="<%=warehouse.contacts.transportCoordinator[i]._id.toString()%>">
 										<td><%=i+1%>*</td>
-										<td data-field="name"><%=warehouse.contacts.transportCoordinator[i].name%></td>
+										<td data-field="name"><%=warehouse.contacts.transportCoordinator[i].name || 'N/A'%></td>
 										<td data-field="email"><%=warehouse.contacts.transportCoordinator[i].email%></td>
-										<td data-field="phone-number"><%=warehouse.contacts.transportCoordinator[i].phoneNumber%></td>
+										<td data-field="phone-number"><%=warehouse.contacts.transportCoordinator[i].phoneNumber || 'N/A'%></td>
 										<td data-field="register-status">
 											<%switch(true){
 												case (warehouse.contacts.transportCoordinator[i].expiry >= Date.now() && warehouse.contacts.transportCoordinator[i].expiry !== null):%>
@@ -206,9 +206,9 @@
 								<%for(var i = 0; i<warehouse.contacts.goodsIn.length; i++){%>
 									<tr data-id="<%=warehouse.contacts.goodsIn[i]._id.toString()%>">
 										<td><%=i+1%>*</td>
-										<td data-field="name"><%=warehouse.contacts.goodsIn[i].name%></td>
+										<td data-field="name"><%=warehouse.contacts.goodsIn[i].name || 'N/A'%></td>
 										<td data-field="email"><%=warehouse.contacts.goodsIn[i].email%></td>
-										<td data-field="phone-number"><%=warehouse.contacts.goodsIn[i].phoneNumber%></td>
+										<td data-field="phone-number"><%=warehouse.contacts.goodsIn[i].phoneNumber || 'N/A'%></td>
 										<td data-field="register-status">
 											<%switch(true){
 												case (warehouse.contacts.goodsIn[i].expiry >= Date.now() && warehouse.contacts.goodsIn[i].expiry !== null):%>
@@ -262,9 +262,9 @@
 								<%for(var i = 0; i<warehouse.contacts.pickingDispatch.length; i++){%>
 									<tr data-id="<%=warehouse.contacts.pickingDispatch[i]._id.toString()%>">
 										<td><%=i+1%>*</td>
-										<td data-field="name"><%=warehouse.contacts.pickingDispatch[i].name%></td>
+										<td data-field="name"><%=warehouse.contacts.pickingDispatch[i].name || 'N/A'%></td>
 										<td data-field="email"><%=warehouse.contacts.pickingDispatch[i].email%></td>
-										<td data-field="phone-number"><%=warehouse.contacts.pickingDispatch[i].phoneNumber%></td>
+										<td data-field="phone-number"><%=warehouse.contacts.pickingDispatch[i].phoneNumber || 'N/A'%></td>
 										<td data-field="register-status">
 											<%switch(true){
 												case (warehouse.contacts.pickingDispatch[i].expiry >= Date.now() && warehouse.contacts.pickingDispatch[i].expiry !== null):%>
@@ -318,9 +318,9 @@
 								<%for(var i = 0; i<warehouse.contacts.invoiceController.length; i++){%>
 									<tr data-id="<%=warehouse.contacts.invoiceController[i]._id.toString()%>">
 										<td><%=i+1%>*</td>
-										<td data-field="name"><%=warehouse.contacts.invoiceController[i].name%></td>
+										<td data-field="name"><%=warehouse.contacts.invoiceController[i].name || 'N/A'%></td>
 										<td data-field="email"><%=warehouse.contacts.invoiceController[i].email%></td>
-										<td data-field="phone-number"><%=warehouse.contacts.invoiceController[i].phoneNumber%></td>
+										<td data-field="phone-number"><%=warehouse.contacts.invoiceController[i].phoneNumber || 'N/A'%></td>
 										<td data-field="register-status">
 											<%switch(true){
 												case (warehouse.contacts.invoiceController[i].expiry >= Date.now() && warehouse.contacts.invoiceController[i].expiry !== null):%>
@@ -374,9 +374,9 @@
 								<%for(var i = 0; i<warehouse.contacts.creditController.length; i++){%>
 									<tr data-id="<%=warehouse.contacts.creditController[i]._id.toString()%>">
 										<td><%=i+1%>*</td>
-										<td data-field="name"><%=warehouse.contacts.creditController[i].name%></td>
+										<td data-field="name"><%=warehouse.contacts.creditController[i].name || 'N/A'%></td>
 										<td data-field="email"><%=warehouse.contacts.creditController[i].email%></td>
-										<td data-field="phone-number"><%=warehouse.contacts.creditController[i].phoneNumber%></td>
+										<td data-field="phone-number"><%=warehouse.contacts.creditController[i].phoneNumber || 'N/A'%></td>
 										<td data-field="register-status">
 											<%switch(true){
 												case (warehouse.contacts.creditController[i].expiry >= Date.now() && warehouse.contacts.creditController[i].expiry !== null):%>

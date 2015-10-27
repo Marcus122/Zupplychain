@@ -2,7 +2,6 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 	
     function Class() {
 		var templates = new Templates();
-		var LOGIN_FAILED_MESSAGE = "The email address or password was incorrect";
 		var ACTION_ADD_NEW_WAREHOUSE = "add-new-warehouse";
 		var ACTION_VIEW_EDIT_WAREHOUSE = "view-edit-warehouse";
 		var loom = new Loom(),
@@ -24,8 +23,8 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 		initPaging($('table[data-type="warehouses-table"]'));
 		
 		loom.addOnSuccessCallback("login-form", function(response){
-			if (response.data === LOGIN_FAILED_MESSAGE){
-				Alerts.showErrorMessage(LOGIN_FAILED_MESSAGE);
+			if (response.data.err){
+				Alerts.showPersistentErrorMessage(response.data.err);
 			}else{
 				window.location.href = '/dashboard';
 			}

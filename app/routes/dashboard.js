@@ -29,6 +29,7 @@ var handler = function(app) {
 				req.data.registerStatus = data.registerStatus;
 				req.data.authorisations = data.authorisations;
 				req.data.completedTasks = getTasksThatHaveBeenCompleted(data);
+				req.data.dashboardAccessLvl = data.dashboardAccessLvl;
 				res.render("dashboard",req.data);
 			}
 		});

@@ -121,7 +121,7 @@
 			</div>
 			<fieldset class="main insurance-details">
 				<%if(warehouse.insurance){%>
-					<div class="input-field">
+					<div class="input-field checkbox">
 						<%if( warehouse.insurance.allProdInsurance && warehouse.insurance.allProdInsurance.indexOf('Insured for Storing All Products') != -1 ){%>
 							<input data-json="insurance" type="checkbox" name="all-prod-insurance" value="Insured for Storing All Products" checked required>
 						<%}else{%>
@@ -150,7 +150,7 @@
 						</div>
 					</div>
 				<%}else{%>
-					<div class="input-field">
+					<div class="input-field checkbox">
 						<input data-json="insurance" type="checkbox" name="all-prod-insurance" value="" required>
 						<label for="all-prod-insurance">Please confirm you are insured for storing all products (except those in exceptions below)</label>
 					</div>

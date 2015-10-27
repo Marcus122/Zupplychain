@@ -19,6 +19,11 @@ var fields = {
     storageProfile  : Schema.Types.Mixed,
     offerData       : Schema.Types.Mixed,
     transport       : Schema.Types.Mixed,
+    comments        : {
+        quotationRequest:{type:String},
+        providerOffer:{type:String},
+        providerOfferReply:{type:String}
+    }
 };
 
 var quoteSchema = new Schema(fields);

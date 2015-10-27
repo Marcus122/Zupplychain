@@ -66,8 +66,15 @@ function updateQuoteReply(req,res) {
                 transport.providerDeclined = req.body["decline-transport-request"];
                 quote.updateTransportData(quoteId,transport,function(err,transport){
                     if (!err){
-                        res.writeHead(200, {"Content-Type": "application/json"});
-                        res.end(JSON.stringify({"error" : false, "redirectURL" : "/provider-offer-reply-confirm"}));  
+                        quote.updateComments(quoteId,req.body['further-comments'],'providerOfferReply',function(err,result){
+                            if(!err){
+                                res.writeHead(200, {"Content-Type": "application/json"});
+                                res.end(JSON.stringify({"error" : false, "redirectURL" : "/provider-offer-reply-confirm"})); 
+                            }else{
+                                console.log("error updating comments");
+                                setErrorResponse(err,res);
+                            }
+                        });
                     }else{
                         console.log("error updating transport");
                         setErrorResponse(err,res);
@@ -133,8 +140,15 @@ function updateQuote(req,res) {
                 transport.providerDeclined = req.body["decline-transport-request"];
                 quote.updateTransportData(quoteId,transport,function(err,transport){
                     if (!err){
-                        res.writeHead(200, {"Content-Type": "application/json"});
-                        res.end(JSON.stringify({"error" : false, "redirectURL" : "/provider-offer-confirm/" + quoteId }) + "\n"); 
+                        quote.updateComments(quoteId,req.body['further-comments'],'providerOffer',function(err,result){
+                            if(!err){
+                                res.writeHead(200, {"Content-Type": "application/json"});
+                                res.end(JSON.stringify({"error" : false, "redirectURL" : "/provider-offer-confirm/" + quoteId }) + "\n"); 
+                            }else{
+                                console.log("error updating comments");
+                                setErrorResponse(err,res);
+                            }
+                        });
                     }else{
                         console.log("error updating transport");
                         setErrorResponse(err,res);

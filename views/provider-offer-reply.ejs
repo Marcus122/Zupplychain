@@ -86,9 +86,6 @@
 			            </div>
 
                         <form class="loom-form row" action="/provider-offer-reply" id="provider-offer-reply-form">
-                            <div class="input-field">
-                                <input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
-                            </div>
                             <div class="input-field" style="display:none">
 				                <input type="hidden" name="quoteId" value="<%= quote._id %>" />
 				            </div>
@@ -106,7 +103,7 @@
                                             <p>Payment accepted by <%= config.paymentTypes[quote.offerData.paymentType]%></p>
                                             <input type="hidden" name="paymentType" value="<%= quote.offerData.paymentType%>"/>
                                        </div>
-                                            <div class="input-field">
+                                       <div class="input-field">
                                             <h3>Payment Terms</h3>
                                             <%if(quote.offerData.paymentTerms === '3'){%>
                                                 <p>Payment to be made within <%= quote.offerData.manualPaymentTerms%> of invoice date</p>
@@ -176,13 +173,41 @@
                                                 <label for="transportTermsAccepted">I accept<input type="checkbox" name="transport-terms-accepted" id="terms"/> or decline<input type="checkbox" name="transport-terms-declined" id="terms"/> the above transport quote</label>
                                             </div>-->
                                             <label for="transportTermsAccepted">I accept<div class="input-field check checkbox"><input type="checkbox" name="transport-terms-accepted" id="terms"/></div> or decline<div class="input-field check checkbox"><input type="checkbox" name="transport-terms-declined" id="terms"/></div> transport quote</label>
+                                            <div class="insurance-reminder">
+                                                <label for="terms">*Please ensure you arrange sufficient insurance for your product before delivering to the storage provider.</label>
+                                            </div>
                                         </div>
                                     </div>
                                 <%}%>
+                                <div class="main row comments">
+                                   <div class="columns twelve">
+                                        <%if(quote.comments.providerOffer && quote.comments.providerOffer !== ""){%>
+                                            <h3>Provider Comments</h3>
+                                            <p><%=quote.comments.providerOffer%></p>
+                                            <button name="view-conversation" class="button action mini">View Conversation</button>
+                                        <%}%>
+                                    </div>
+                                    <div class="columns twelve">
+                                        <div class="input-field">
+                                            <div class="hint--top description-container">
+                                                <textarea name="further-comments" placeholder="Any further comments?" data-loom-validators="complexTelephoneNumberNotInInput"></textarea>
+                                            </div>
+                                        </div>
+                                        <!--<div class="input-field check checkbox">
+                                            <label for="terms">I have read and accept the ZupplyChain Terms and Conditions<input type="checkbox" name="terms" id="terms" required="required"/></label>
+                                        </div>-->
+                                        <div class="input-field">
+                                            <input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="content-box action row">
                                 <div class="eight columns">
-                                    <p>Press the ACCEPT button to accept the supplier's quotation. You will be notified by email with the supplier's order acknowledgement.</p> 
+                                    <!--<p>Press the ACCEPT button to accept the supplier's quotation. You will be notified by email with the supplier's order acknowledgement.</p>--> 
+                                    <div class="input-field check checkbox">
+                                        <label for="terms">I have read and accept the ZupplyChain Terms and Conditions<input type="checkbox" name="terms" id="terms" required="required"/></label>
+                                    </div>
                                 </div>
                                 <div class="four columns submit-request-container">
                                     <button name="accept" type="submit" class="button action">ACCEPT</button>
@@ -197,4 +222,5 @@
 		</section>
 	</main>
  <% include ./partials/bottom%>
+ <% include ./partials/provider-user-conversion%>
  

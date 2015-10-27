@@ -43,6 +43,17 @@
                                     <%=quote.userData.website%></div>
                                     <div class="columns three"><span>Transport</span>
                                     <%=config.transport[quote.transport.type]%></div>
+                                    <%if(quote.comments.quotationRequest && quote.comments.quotationRequest !== ""){%>
+                                        <div class="columns three" data-content="comment"><span>Comments</span>
+                                        <%=quote.comments.quotationRequest.substring(0,30)%><%if(quote.comments.quotationRequest.length > 30){%>...<a href="#">View More</a><%}%></div>
+                                        <div class="columns three" data-content="comment" style="display:none"><span>Comments</span>
+                                        <%=quote.comments.quotationRequest%><%if(quote.comments.quotationRequest.length > 30){%><a href="#">View Less</a><%}%></div>
+                                    <%}%>
+                                    <%if(quote.comments.quotationRequest || quote.comments.providerOffer || quote.comments.providerOfferReply){%>
+                                        <div class="columns three">
+                                            <button name="view-conversation" class="button action mini">View Conversation</button>
+                                        </div>
+                                    <%}%>
                                 </div>
                             </div>
                         </div>
@@ -110,9 +121,6 @@
 			             </div>
 
                         <form class="loom-form row" action="/provider-offer" id="provider-offer-form">
-                            <div class="input-field">
-                                <input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
-                            </div>
                             <div class="input-field" style="display:none">
 				                <input type="hidden" name="quoteId" value="<%= quote._id %>" />
 				            </div>
@@ -178,6 +186,10 @@
                                                 <p><%= quote.warehouse.postcode %></p>
                                                 <input type="hidden" name="dispatchLocation" value='<%= quote.transport.dispatchLocation.split(" ")[0] %>'/>
                                             </div>
+                                            <div class="input-field">
+                                                <label for="transportQuote">Quote £</label>
+                                                <input name="transportQuote" type="number" min="0" value="00"/>
+                                            </div>
                                         </div>
                                         <div class="six columns">
                                             <div class="input-field">
@@ -192,15 +204,21 @@
                                                 ><%= distance %></p>
                                                 <input type="hidden" name="distance" value="<%= distance %>"/>
                                             </div>
-                                            <div class="input-field">
-                                                <label for="transportQuote">Quote £</label>
-                                                <input name="transportQuote" type="number" min="0" value="00"/>
-                                            </div>
                                             <div class="input-field check">
                                                 <label for="decline-transport-request">Or Decline Transport Request<input type="checkbox" name="decline-transport-request" id="decline-transport-request"/></label>
                                             </div>
-                                            <div class="input-field check checkbox">
+                                        </div>
+                                        <div class="columns twelve">
+                                            <div class="input-field">
+                                                <div class="hint--top description-container">
+                                                    <textarea name="further-comments" placeholder="Any further comments?" data-loom-validators="complexTelephoneNumberNotInInput"></textarea>
+                                                </div>
+                                            </div>
+                                            <!--<div class="input-field check checkbox">
                                                 <label for="terms">I have read and accept the ZupplyChain Terms and Conditions<input type="checkbox" name="terms" id="terms" required="required"/></label>
+                                            </div>-->
+                                            <div class="input-field">
+                                                <input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
                                             </div>
                                         </div>
                                     </div>
@@ -208,7 +226,10 @@
                             </div>
                             <div class="content-box action row">
                                 <div class="eight columns">
-                                    <p>Press the SUBMIT button to reply to the customer's storage request with your payment terms. You will be notified by email when the customer accepts or rejects your offer.</p> 
+                                    <!--<p>Press the SUBMIT button to reply to the customer's storage request with your payment terms. You will be notified by email when the customer accepts or rejects your offer.</p>-->
+                                    <div class="input-field check checkbox">
+                                        <label for="terms">I have read and accept the ZupplyChain Terms and Conditions<input type="checkbox" name="terms" id="terms" required="required"/></label>
+                                    </div>
                                 </div>
                                 <div class="four columns submit-request-container">
                                     <button type="submit" class="button action">SUBMIT OFFER</button>
@@ -223,4 +244,5 @@
 		</section>
 	</main>
  <% include ./partials/bottom%>
+ <% include ./partials/provider-user-conversion%>
  

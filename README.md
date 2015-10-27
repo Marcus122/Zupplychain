@@ -91,6 +91,8 @@ Check that node and mongod processes are running.
 If something goes wrong run
 cat /var/node.log to view the output of the node server.
 cat /var/mongo.log to view the output of the mongo server
+echo> /var/node.log - clear log file
+
 
 Server
 

@@ -43,6 +43,12 @@
                                     <%=quote.userData.website%></div>
                                     <div class="columns three"><span>Transport</span>
                                     <%=config.transport[quote.userData.transport]%></div>
+                                    <%if(quote.comments.providerOfferReply && quote.comments.providerOfferReply !== ""){%>
+                                        <div class="columns three" data-content="comment"><span>Comments</span>
+                                        <%=quote.comments.providerOfferReply.substring(0,30)%><%if(quote.comments.providerOfferReply.length > 30){%>...<a href="#">View More</a><%}%></div>
+                                        <div class="columns three" data-content="comment" style="display:none"><span>Comments</span>
+                                        <%=quote.comments.providerOfferReply%><%if(quote.comments.providerOfferReply.length > 30){%><a href="#">View Less</a><%}%></div>
+                                    <%}%>
                                 </div>
                             </div>
                         </div>
@@ -110,9 +116,6 @@
 			             </div>
 
                         <form class="loom-form row" action="/provider-confirm-contract" id="provider-confirm-contract">
-                            <div class="input-field">
-                                <input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
-                            </div>
                             <div class="input-field" style="display:none">
 				                <input type="hidden" name="quoteId" value="<%= quote._id %>" />
 				            </div>

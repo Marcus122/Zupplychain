@@ -23,19 +23,37 @@ exports.create = function (req,res,data,cb,cookieSet) {
 	});
 }
 exports.login = function(req,res,cb){
-	var loginFailed={error:"login failed"};
-	User.findOne({email:req.body.email,active:true},function(err,user){
-		if(err || !user){
-			return cb(loginFailed);
-		}else{
-			if( passwordHash.verify(req.body.password,user.password ) ){
-				setCookie(user,req,res);
-				cb(null,user);
-			}else{
-				cb(loginFailed);
-			}
+	var passwordIncorrect={error:"The user name or password is incorrect"};
+	var locked={error:"Your account has been locked, if this persists contact us or try again later"};
+	// User.findOne({email:req.body.email,active:true},function(err,user){
+	// 	if(err || !user){
+	// 		return cb(loginFailed);
+	// 	}else{
+	// 		if( passwordHash.verify(req.body.password,user.password ) ){
+	// 			setCookie(user,req,res);
+	// 			cb(null,user);
+	// 		}else{
+	// 			cb(loginFailed);
+	// 		}
+	// 	}
+	// }).populate('company');
+	User.authenticateLoginandLogin(req.body.email,req.body.password,function(err,result,reason){
+		if(result){
+			setCookie(result,req,res);
+			cb(null,result);
 		}
-	}).populate('company');
+		
+		var reasons = User.failedLoginReason;
+		switch(reason){
+			case reasons.NOT_FOUND:
+			case reasons.PASSWORD_INCORRECT:
+				cb(passwordIncorrect);
+				break;
+			case reasons.MAX_ATTEMPTS:
+				cb(locked);
+				break;
+		}
+	});
 }
 exports.checkUserExists = function(email){
 	User.findOne({email:email})

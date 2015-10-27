@@ -1,0 +1,23 @@
+<%var positions = ['left','right','left'],
+      index = 0,
+	  commentFrom = { quotationRequest:'User',
+	  				  providerOffer:'Provider',
+					  providerOfferReply:'User'};%>
+<div class="popup-window provider-user-conversation" style="display:none">
+	<div class="conversation small">
+		<div class="popup-main content-box secondary">
+			<div class="header">
+				<h2>Conversion</h2>
+			</div>
+			<button class="close no-resize"><span>close</span></button>
+			<div class="main">
+				<%for (var i in quote.comments){%>
+					<div class="row columns twelve">
+						<p class="bubble <%=positions[index]%>"><span class="from">From: <%=commentFrom[i]%></span><br/><%=quote.comments[i]%></p>
+					</div>
+					<%index ++;
+				}%>
+			</div>
+		</div>
+	</div>
+</div>

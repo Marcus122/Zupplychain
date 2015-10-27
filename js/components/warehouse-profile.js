@@ -22,6 +22,10 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
                 console.log(indexOfInputThatWasFocused);
             });
             
+            $(document).on("click",".popup-window .close",function(){
+				$(this).closest('.popup-window').hide();
+			});
+            
             $("#choose-this-warehouse").click(function(e){
                 //e.preventDefault();
                 //var $popup = $("#choose-this-warehouse-popup");
@@ -87,6 +91,7 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
             initWarehouseProfileRowChanger();
             initTransport();
             initPaymentTerms();
+            initComments();
             
 		}
         
@@ -103,6 +108,33 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
                     });
                 }
             }
+        }
+        
+        function initComments(){
+            $('div[data-content="comment"] a').click(function(e){
+                e.preventDefault();
+                var $this = $(this);
+                $this.parent().hide().siblings().show();
+            });
+            
+            $('button[name="view-conversation"]').click(function(){
+               $('.popup-window.provider-user-conversation').show(); 
+               centerPopup($('.popup-window.provider-user-conversation'));
+            });
+            
+            function centerPopup($element){
+                var top;
+                var $window = $(window);
+                var diff = $window.height() - $element.height();
+                var top = diff < 0 ? $window.scrollTop() + 25 : $window.scrollTop() + diff/2;
+                //var top = (screen.height/2) - (window.screen.availHeight/2);
+                if(top > 100){
+                    top-=50;
+                }					
+                $element.css({
+                    top:top
+                });
+		    }
         }
         
         function initWarehouseProfileRowChanger(){
@@ -447,6 +479,21 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
         
         
 		initialize();
+        
+        $('.quote-request').find('textarea[data-loom-validators="complexTelephoneNumberNotInInput"]').blur(function(){
+			if($(this).closest('.input-field').hasClass('error-complexTelephoneNumberNotInInput')){
+				$(this).parent().attr('data-hint','This field cannot contain phone numbers');
+			}else if(!$(this).closest('input-field').hasClass('error-complexTelephoneNumberNotInInput')){
+				$(this).parent().removeAttr('data-hint');
+			}
+			
+		});
+		$('.quote-request').find('textarea[data-loom-validators="complexTelephoneNumberNotInInput"]').keyup(function(){
+			if(!$(this).closest('input-field').hasClass('error-complexTelephoneNumberNotInInput')){
+				$(this).parent().removeAttr('data-hint');
+			}
+			
+		});
     }
     return Class;
 });

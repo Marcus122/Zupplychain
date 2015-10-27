@@ -50,7 +50,8 @@ var dbInstance = db.init();
 app.use(session({secret: crypto.createHash('sha256').update(random).digest("hex"),
 				 resave: true,
 				 saveUninitialized: true,
-                 store: new mongostore({ mongooseConnection: dbInstance })
+                 store: new mongostore({ mongooseConnection: dbInstance }),
+				 httpOnly:true
 				 }));
                  
 // parse application/json 

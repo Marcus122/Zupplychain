@@ -34,10 +34,10 @@ var fields = {
 	created: { type: Date , default: Date.now },
 	storage: [{ type: Schema.ObjectId, ref: 'storage' }],
   insurance: {
-    allProdInsurance: {type:String},
+    allProductInsurance: {type:String},
     maximumInsuranceLevel: {type:String},
     additionalInsurance: {type:String},
-    additionalInsuranceDescription: {type:String}
+    productExceptions: {type:String}
   },
 	geo: {
 		lat: { type: Number },

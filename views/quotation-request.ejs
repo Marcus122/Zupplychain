@@ -9,11 +9,12 @@
                 <div class="search-header">
                     <div class="row">
                         <div class="columns three back-to-search">
-                            &nbsp;
+                            <a href="/search" class="back button action">Back to search results</a>
                         </div>
                         <div class="search-criteria columns three">
                             <span class="button-text">MY SEARCH CRITERIA</span>
                             <button class="view primary tiny"></button>
+                            <%console.log(query.startDate.toISOString());%>
                             <div class="my-search-criteria">
                                 <div class="critera-popup">
                                     <ul>
@@ -43,7 +44,7 @@
                                         </li>
                                         <li>
                                             <span class="title">Start date</span>
-                                            <span class="search-value"><%=query.startDate.toString().substring(8,10)%>/<%=query.startDate.toString().substring(5,7)%>/<%=query.startDate.toString().substring(0,4)%></span> 
+                                            <span class="search-value"><%=query.startDate.toISOString().substring(8,10)%>/<%=query.startDate.toISOString().substring(5,7)%>/<%=query.startDate.toISOString().substring(0,4)%></span> 
                                         </li>
                                         <li>
                                             <span class="title">Min Duration</span>
@@ -82,6 +83,7 @@
                                 <h2>Search Criteria</h2>
                             </div>
                             <div class="main">
+                                <% include ./partials/multi-used/mini-warehouse-profile %>
                                 <div class="row">
                                     <div class="columns two">
 										<span>Target Postcode/City</span>
@@ -109,7 +111,7 @@
                                     </div>
                                     <div class="columns two">
 										<span>Start Date</span>
-										<em class="search-value"><%=query.startDate.toString().substring(8,10)%>/<%=query.startDate.toString().substring(5,7)%>/<%=query.startDate.toString().substring(0,4)%></em> 
+										<em class="search-value"><%=query.startDate.toISOString().substring(8,10)%>/<%=query.startDate.toISOString().substring(5,7)%>/<%=query.startDate.toISOString().substring(0,4)%></em> 
                                     </div>
                                 </div>
                                 <div class="row">
@@ -130,7 +132,6 @@
                                         <em class="search-value"><%=temperatures[query.temp]%></em> 
 									</div>
                                 </div>
-								<% include ./partials/multi-used/mini-warehouse-profile %>
                             </div>
                         </div>
 			<div class="warehouse-pricing">
@@ -140,10 +141,7 @@
                         <p class="terms" id="vat-message">*All prices excluding VAT charged at the applicable rate</p>
 			</div>
 
-                        <form class="loom-form row" action="/quotation-request" id="quotation-request-form">
-                         <div class="input-field">
-                            <input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
-                        </div>       
+                        <form class="loom-form row" action="/quotation-request" id="quotation-request-form">       
                                 <div class="input-field" style="display:none">
 				      <input type="hidden" name="warehouseId" value="<%= warehouse._id %>" />
 				  </div>
@@ -151,7 +149,7 @@
                             <div class="header">
                                 <h2>Contact Information</h2>
                             </div>
-                            <div class="main row">
+                            <div class="main row quotation">
                                    <div class="six columns">
                                         <div class="input-field">
                                             <label for = "Name">Contact Name*</label><input type="text" name="name" required="required" />
@@ -176,6 +174,9 @@
                                             <label for="dispatch-location">Dispatch<div class="tool-tip hint--top" data-hint="Town or postcode">?</div> Location*</label>
                                             <input type="text" name="dispatchLocation"/>
                                         </div>
+                                        <div class="input-field">
+                                            <input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
+                                        </div>
                                     </div>
                                     <div class="six columns">
                                         <div class="input-field">
@@ -190,21 +191,35 @@
                                         <div class="input-field">
                                             <label for = "website">Company Website</label><input type="text" name="website" />
                                         </div>
-                                        <div class="input-field check checkbox">
-                                            <label for="terms">I have read and accept the ZupplyChain Terms and Conditions<input type="checkbox" name="terms" id="terms" required="required"/></label>
+                                        <div class="insurance-reminder">
+                                            <label for="terms">*Please ensure you arrange sufficient insurance for your product before delivering to the storage provider.</label>
                                         </div>
+                                    </div>
+                                    <div class="columns twelve">
+                                        <div class="input-field">
+                                            <div class="hint--top description-container">
+                                                <textarea name="further-comments" placeholder="Any further comments (e.g. request for additional services)?" data-loom-validators="complexTelephoneNumberNotInInput"></textarea>
+                                            </div>
+                                        </div>
+                                        <!--<div class="input-field check checkbox">
+                                            <label for="terms">I have read and accept the ZupplyChain Terms and Conditions<input type="checkbox" name="terms" id="terms" required="required"/></label>
+                                        </div>-->
                                     </div>
                             </div>
                             
                        
                         </div>
                         <div class="content-box action row">
-                            <div class="eight columns">
-                                <p>In order to confirm a quotation from your chosen warehouse please<br/> press the SUBMIT REQUEST button. You will receive a response within two working days.</p> 
+                            <div class="six columns">
+                                <!--<p>In order to confirm a quotation from your chosen warehouse please<br/> press the SUBMIT REQUEST button. You will receive a response within two working days.</p>-->
+                                <div class="input-field check checkbox">
+                                    <label for="terms">I have read and accept the ZupplyChain Terms and Conditions<input type="checkbox" name="terms" id="terms" required="required"/></label>
+                                </div>
                             </div>
-                            <div class="four columns submit-request-container">
-                                <button type="submit" class="button action large">SUBMIT REQUEST
-                                </button>
+                            <div class="columns six submit-request-container">
+                                <button type="submit" class="button action">SUBMIT REQUEST</button>
+                                <span>OR</span>
+                                <a href="/search" class="back button action">Back to search results</a>
                             </div>
                           
                         </div>

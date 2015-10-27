@@ -82,6 +82,7 @@ exports.getWarehousesByUser = function(user,cb){
 				data.registerStatus = local.config.registerStatus;
 				auth = local.config.authorisationsByAccessLvl[user.dashboardAccessLvl]
 				data.authorisations = local.config.authorisations[auth];
+				data.dashboardAccessLvl = user.dashboardAccessLvl;
 				cb(false,data);
 			});
 		}

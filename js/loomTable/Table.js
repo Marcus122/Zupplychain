@@ -12,6 +12,11 @@ define(["jquery","./Datasource", "./Pager"],function($,Datasource,Pager){
     var pager;
 		
     var NUM_PER_PAGE_ATTRIBUTE = "data-loom-num-per-page";
+	
+	var REMEMBER_SORT = "data-loom-remember-sort";
+	
+	var DEFAULT_SORT_TYPE = "data-loom-default-sort-type";
+	var DEFAULT_SORT_FIELD = "data-loom-default-sort-field"
         
 	var DESCENDING_CLASS =  config.descendingClass ? config.descendingClass : 'descending';
 	var ASCENDING_CLASS =  config.ascendingClass ? config.ascendingClass : 'ascending';
@@ -22,11 +27,19 @@ define(["jquery","./Datasource", "./Pager"],function($,Datasource,Pager){
 	populateDatasource();
 	setEvents();
     setUpPaging();
-    sortIfSavedSortOrder();
+    sortIfDefaultOrSavedSortOrder();
         
-        function sortIfSavedSortOrder() {
+        function sortIfDefaultOrSavedSortOrder() {
             var savedSortOrder = loadLastSortFromLocalStorage();
-            if (!savedSortOrder) {
+			var rememberSort = $tableElement.attr(REMEMBER_SORT) == "true";
+			var defaultSortType;
+			var defaultSortField;
+            if (!savedSortOrder || !rememberSort) {
+				defaultSortType = $tableElement.attr(DEFAULT_SORT_TYPE);
+				defaultSortField = $tableElement.attr(DEFAULT_SORT_FIELD);
+				if(defaultSortType && defaultSortField){
+					doDefaultSortAndUpdateHeading(defaultSortField, defaultSortType)//If we don't want a saved sort sort by the deafult type if there is one
+				}
                 return;
             }
             var savedAsObj = JSON.parse(savedSortOrder);
@@ -47,6 +60,16 @@ define(["jquery","./Datasource", "./Pager"],function($,Datasource,Pager){
             numPerPage = isNaN(numPerPage) ? 0 : numPerPage;
             return numPerPage;
         }
+		
+	function doDefaultSortAndUpdateHeading(field,sortBy){
+		if(sortBy === ASCENDING_CLASS){
+			sortBy = _ascending;
+		}
+		if(sortBy === DESCENDING_CLASS){
+			sortBy = _descending;
+		};
+		sortAndUpdateHeadings(field, sortBy)
+	}
         
 	function populateDatasource(){
 		datasource = new Datasource($table.attr('id'),config);

@@ -67,7 +67,7 @@ exports.config = {
     
      paymentTypes : [
         "Invoice",
-        "credit card",
+        "Credit card",
         "BACS transfer"
     ],
 	

@@ -19,6 +19,7 @@
 		var milePluralOrSingle = warehouse.distanceFromSearch == "1" || warehouse.distanceFromSearch == 1 ? " mile" : " miles" ;
 		miles = "<span class='miles'>" + warehouse.distanceFromSearch + "</span>" + milePluralOrSingle + " from search";
 		rating = warehouse.rating;
+		var insurance = warehouse.insurance;
 	}
 %>
 <div class="search-result-info-box fixed" id="search-results-info" style="display:none">
@@ -56,6 +57,13 @@
 		</div>
 		<p>Size: <span class="js-size"><%= size %></span>m<sup>2</sup><br/>
 		Height: <span class="js-height"><%= height %></span>m</p>
+		<%if(typeof insurance != 'undefined' && page !== undefined && page !== 'search'){
+			if(insurance.allProductInsurance !== ""){%>
+				<p>Insurance:&nbsp;<span>Yes</span>
+				<br/>Maximum Insurance Level:&nbsp;<span><%= insurance.maximumInsuranceLevel || 'N/A'%></span>
+				<br/>Exceptions:<br/><span><%=insurance.productExceptions || 'N/A'%></span></p>
+			<%}
+		}%>
 		<div class="controls">
 			<button class="simple prev mini" id="map-prev-result">PREV</button>
 			<button class="simple next mini" id="map-next-result">NEXT</button>

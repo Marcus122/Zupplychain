@@ -11,24 +11,23 @@
     </div>
     <div class="inner">
         <div class="row">
-            <div class="columns four">&nbsp;</div>
-            <div class="copy-controls controls columns eight">
-            <div class="tool-tip hint--top" data-hint="Copy dates and prices from another storage to this one. You can then edit these.">?</div>
-                <label for="copy-from">Copy from another storage?</label>
-                <select name="copy-from">
-                    <%for( var i=0; i<warehouse.storage.length;i++ ){ 
-                        if (storage._id == warehouse.storage[i]._id) {
-                            continue;
+            <div class="copy-controls controls columns twelve">
+                <div class="tool-tip hint--top" data-hint="Copy dates and prices from another storage to this one. You can then edit these.">?</div>
+                    <label for="copy-from">Copy from another storage?</label>
+                    <select name="copy-from">
+                        <%for( var i=0; i<warehouse.storage.length;i++ ){ 
+                            if (storage._id == warehouse.storage[i]._id) {
+                                continue;
+                            }
+                        %>
+                            <option value="<%=warehouse.storage[i]._id%>" >Copy from: <%=warehouse.storage[i].name %></option>
+                        <%
                         }
-                    %>
-                        <option value="<%=warehouse.storage[i]._id%>" >Copy from: <%=warehouse.storage[i].name %></option>
-                    <%
-                    }
-                    %>
-                </select>
-                <button type="button" class="primary copy-button">COPY</button>
+                        %>
+                    </select>
+                    <button type="button" class="primary copy-button">COPY</button>
+                </div>
             </div>
-        </div>
     <table class="js-date-specific-inputs-container show-title responsive-table date-pricing-table" data-title="Pricing" id="">
         <thead>
             <tr>
