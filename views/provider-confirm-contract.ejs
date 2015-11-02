@@ -104,6 +104,11 @@
 				                        <span>Type</span>
                                         <em class="search-value"><%=temperatures[quote.search.temp]%></em> 
 				                    </div>
+                                    <%if(quote.comments.quotationRequest || quote.comments.providerOffer || quote.comments.providerOfferReply){%>
+                                        <div class="columns three">
+                                            <button name="view-conversation" class="button action mini">View Conversation</button>
+                                        </div>
+                                    <%}%>
                                 </div>
                             </div>
                         </div>
@@ -112,7 +117,7 @@
                             <% var quoteView = true; %>
                             <%= include ./partials/warehouse-pricing %>
                             <br/><br/>
-                            <p class="term" id="vat-message">*All prices excluding VAT charged at the applicable rate</p>
+                            <p class="term" id="vat-message">*All prices excluding VAT charged at the applicable rate. A part week is charged as a full week.</p>
 			             </div>
 
                         <form class="loom-form row" action="/provider-confirm-contract" id="provider-confirm-contract">
@@ -213,4 +218,5 @@
 		</section>
 	</main>
  <% include ./partials/bottom%>
+ <% include ./partials/provider-user-conversion%>
  

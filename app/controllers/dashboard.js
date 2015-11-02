@@ -64,7 +64,7 @@ exports.getWarehousesByUser = function(user,cb){
 		importParam = user.toObject().company;
 	}else{
 		cntr = warehouse;
-		method = 'warehouseByACOrECUser'
+		method = 'warehousesByUser';
 		importParam = user._id;
 	}
 	cntr[method](importParam,function(err,warehouses){
@@ -89,43 +89,62 @@ exports.getWarehousesByUser = function(user,cb){
 	});
 }
 
-function getEarliestCreatedWarehouse(warehouses){
-	var earlistWarehouse = warehouses[0];//Start of with the first one in the list
-	for (var i = 0; i<warehouses.length; i++){
-		if (warehouses[i].created < earlistWarehouse.created){
-			earlistWarehouse = warehouses[i];
-		}
-	}
-	return earlistWarehouse;
-}
-
 exports.getTasksThatHaveBeenCompleted = function(data){
-	var completedTasks = {};
+	var completedTasks = [];
 	var numCompleted = 0;
-	var numberOfArrays = 1; //Start at one because of master contacts
-	var warehouseContacts = getEarliestCreatedWarehouse(data.warehouses).contacts;
-	warehouseContacts = warehouseContacts.toObject();
+	var tasks = {}
+	var numberOfArrays = 0;
+	var completedWarehouses = 0;
+	completedTasks.masterContact = {};
 	if(data.masterContacts.length >= 2){
-		completedTasks.masterContact = true;
-		numCompleted ++;
+		completedTasks.masterContact.allRequestsSent = true;
+		if(data.masterContacts[0].expiry === null && data.masterContacts[1].expiry === null){
+			completedTasks.masterContact.allRequestsResponded = true;
+		}else{
+			completedTasks.masterContact.allRequestsResponded = false;
+		}
 	}else{
-		completedTasks.masterContact = false;
+		completedTasks.masterContact.allRequestsSent = false;
+		completedTasks.masterContact.allRequestsResponded = false;
 	}
-	for(var i in warehouseContacts){
-		if (warehouseContacts[i].constructor === Array){
-			numberOfArrays ++;
-			if(warehouseContacts[i].length === 2){
-				completedTasks[i] = true;
-				numCompleted ++;
-			}else{
-				completedTasks[i] = false;
+	for(var j = 0; j<data.warehouses.length; j++){
+		numCompleted = 0;
+		numberOfArrays = 0;
+		var warehouseId = data.warehouses[j].id;
+		tasks[warehouseId] = {};
+		var contacts  = data.warehouses[j].toObject().contacts
+		for(var i in contacts){
+			tasks[warehouseId][i] = {};
+			if (contacts[i].constructor === Array){
+				numberOfArrays ++;
+				if(contacts[i].length === 2){
+					tasks[warehouseId][i].allRequestsSent = true;
+					if(contacts[i][0].expiry === null && contacts[i][1].expiry === null){
+						tasks[warehouseId][i].allRequestsResponded = true;
+						numCompleted ++;
+					}else{
+						tasks[warehouseId][i].allRequestsResponded = false;
+					}
+				}else{
+					tasks[warehouseId][i].allRequestsSent = false;
+					tasks[warehouseId][i].allRequestsResponded = false;
+				}
 			}
 		}
-	}
-	if(numberOfArrays === numCompleted){
-		completedTasks.contactSetupComplete = true;
-	}else{
-		completedTasks.contactSetupComplete = false;
+		if(numberOfArrays === numCompleted){
+			tasks[warehouseId].contactSetupComplete = true;
+			completedWarehouses ++;
+		}else{
+			tasks[warehouseId].contactSetupComplete = false;
+		}
+		
+		if(completedWarehouses === data.warehouses.length){
+			completedTasks.allWarehousesCompleted = true;
+		}else{
+			completedTasks.allWarehousesCompleted = false;
+		}
+		completedTasks.numWarehousesCompleted = completedWarehouses;
+		completedTasks.push(tasks);
 	}
 	return completedTasks;
 }

@@ -1,6 +1,8 @@
 var User = require("../data/user.js"),
 	local = require("../local.config.js"),
-	passwordHash = require('password-hash');
+	passwordHash = require('password-hash'),
+	company = require('../controllers/company'),
+	warehouseContacts = require('../controllers/warehouse-contacts.js');
 
 exports.version = "0.1.0";
 
@@ -8,6 +10,52 @@ exports.version = "0.1.0";
 /**
  * User class.
  */
+
+exports.updateDashboardAccessLevel = function(user,accessLevel,cb){
+	User.update({_id:user},{$push:{dashboardAccessLvl:accessLevel}}).exec(cb);	
+}
+
+exports.checkCorrectDashboardAccessLevelAndUpdate = function(user,cb){
+	company.checkUserIsMaterContact(user,function(err,exists){
+		if(err){
+			cb(err);
+		}else if(exists){
+			exports.updateDashboardAccessLevel(user,local.config.dashboardAccessLevel.masterContact,function(err,result){
+				if(err){
+					cb(err);
+				}else{
+					cb(false);
+				}
+			});
+		}else{
+			warehouseContacts.getHighestDashboardAccessLevelByUser(user,function(err,dashboardAccessLevel){
+				if(err){
+					cb(err);
+				}else{
+					exports.user_by_id(user,function(err,result){
+						if(err){
+							cb(err);
+						}else{
+							if (result.dashboardAccessLvl !== dashboardAccessLevel){
+								result.dashboardAccessLvl = dashboardAccessLevel;
+								result.save(function(err,result){
+									if(err){
+										cb(err);
+									}else{
+										cb(false);
+									}
+								})
+							}else{
+								cb(false);
+							}
+						}
+					});
+				}
+			})
+		}
+	});
+}
+
 exports.create = function (req,res,data,cb,cookieSet) {
 	var user = new User(data);
 	user.save(function(err){

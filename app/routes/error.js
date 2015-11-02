@@ -13,7 +13,10 @@ var handler = function(app) {
 		console.error(err.stack);
 		// error page
 		if(err.code == 'EBADCSRFTOKEN'){
-			res.status(403).render('403', req.data);
+			var User = require('../controllers/users.js');
+			User.logout(req,res,function(err,result){
+				res.status(403).render('403', req.data);
+			});
 		}else{
 			res.status(500).render('500', req.data);
 		}

@@ -833,6 +833,126 @@ span.highlight-bright{
 	}
 }
 
+.open-tray-link{
+    border-bottom:1px solid #ccc;
+    .unit-padding(2);
+    display:block;
+    color:@dark-text !important;
+    font-size:20px;
+    font-size:2rem;
+    cursor:pointer;
+    position:relative;
+    background-color: #FFD;
+    &.open{
+        &:after{
+            content: "\f126";
+            }
+            
+    }
+    &:after{
+        &:extend(.ion);
+        content: "\f123";
+        position:absolute;
+        right:20px;
+        font-size:24px;
+        font-size:2.4rem;
+    }
+}
+
+.trays{
+    padding:0px;
+    display:none;
+    &.open{
+        display:table-row;
+    }
+    .tray-holder{
+        display:none;
+        &.open {
+            display:initial;
+        }
+    }
+    .aside{
+        font-style:italic;
+    }
+    form{
+        margin-bottom:0px;
+    }
+    .tray {
+        background-color:#eee;
+        .unit-padding(2);
+        border-bottom:1px solid #ccc;
+        box-shadow:inset 0px 3px 10px rgba(0,0,0,0.3);
+        display:none;
+        &.open{
+            display:block;
+        }
+        .inner {
+            background-color:#fff;
+            .unit-padding(2);
+            border:1px solid #ccc;
+            border-radius:5px;
+            .unit-margin-bottom(2);
+            table{
+                width:100%;
+                box-shadow:0px 2px 4px rgba(0,0,0,0.3);
+            }
+        }
+        .copy-controls select{
+            width:42%;
+            margin-right:5%;
+        }
+    }
+    td {
+        padding:0px;
+        td {
+            .unit-padding(1);
+        }
+    }
+
+    .availability-table{
+        width:100%;
+        input{
+            width:100%;
+        }
+        
+    }
+    
+    .date-pricing-table,
+    .availability-table{
+        .unit-margin-top(2);
+        tr.only-one {
+            .trash-button {
+                //visibility:hidden;
+            }
+        }
+        td {
+            text-align:center;
+            input,.input-span {
+                width:100%;
+            }
+        }
+    }
+    .add{
+        display:inline;
+        cursor:pointer;
+        button{
+            .unit-margin-left(1);
+        }
+    }
+    .row.controls {
+        text-align:right;
+    }
+    .controls{
+        text-align:right;
+    }
+
+}
+td.success{
+    background-repeat:no-repeat;
+    background-position: 95% 50%;
+    background-color: #dff2bf;
+}
+
 /*! jQuery UI - v1.11.4 - 2015-07-06
 * http://jqueryui.com
 * Includes: core.css, autocomplete.css, datepicker.css, menu.css, selectmenu.css, theme.css

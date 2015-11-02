@@ -5,30 +5,22 @@ exports.version = "0.1.0";
 
 //At the moment this is just testing sending a html emails with node
 exports.buildTransporter = function(req,res,cb){
-	
-	fh.readFile('./secret.json',function(err,data){
-		if (err){
-			cb(err)
-		}else{
-			var json = JSON.parse(data);
-			var transporter = nodemailer.createTransport("SMTP",{
-				service: "Hotmail",
-				auth: {
-					user: "matt_alton13@hotmail.co.uk",
-					pass: json.hotmailPassword
-				}
-			});
-			
-			cb(transporter);
+	var transporter = nodemailer.createTransport(process.env.NODEMAILER_TRANSPORT_PROTOCOL,{
+		service: process.env.NODEMAILER_SERVICE,
+		auth: {
+			user: process.env.NODEMAILER_EMAIL_ADDRESS,
+			pass: process.env.NODEMAILER_PASSWORD
 		}
-	});	
+	});
+	
+	cb(transporter);
 }
 
 exports.sendMail = function(req,res,emailTemplate,receiver,from,subject,cb){
 		
 	var html = emailTemplate;
 	var mailOptions = {
-		from:    'Bob Jim <bob@jim.com>',
+		from:    'Zupplychain <info@zupplychain.com>',
 		to:      receiver,
 		subject: subject,
 		html:    html,

@@ -11,6 +11,8 @@ var config = require('./app/local.config');
 var compression = require('compression');
 var helmet = require('helmet');
 var csurf = require('csurf');
+var ejs = require('ejs');
+var minify = require('html-minifier').minify;
 var data={};
 var random = Math.random()*100;
 random = random.toString();
@@ -26,6 +28,17 @@ process.argv.forEach(function (val, index, array) {
         port = live_port;
         bind_address = live_bind_address;
 		console.log('live - JS and CSS using built versions, binding server to external IP');
+		
+		app.engine('ejs',function(filePath,options,callback){
+			ejs.__express(filePath,options,function(err,html){
+				if(err) return callback(err)
+				callback(null,minify(html,{
+					removeComments:true,
+					collapseWhitespace:true
+				}))
+			});
+		});
+	
 	} else if (val.toLowerCase() ==='qa') {
         data.live=true;// live versions of JS and CSS
         //but bind addresses etc stay the same.
@@ -42,6 +55,12 @@ app.use(compression());//
 app.use(cookieParser());
 
 app.use(helmet());
+app.use(helmet.xssFilter({ setOnOldIE: true })); //XSS Protection
+app.use(helmet.frameguard('sameorigin')); //Only allow this site to be framed from the same origin
+app.use(helmet.hidePoweredBy());//Hide the powered by Express in the header
+app.use(helmet.ieNoOpen());//Stop IE from downloading unsecure HTML from the site
+app.use(helmet.noSniff());//Stop browsers from sniffing mime types
+app.use(helmet.noCache({ noEtag: true }));//Stops caching of JS etc. So users can't exploit buggy code.
 
 var dbInstance = db.init();
 //Set the session object and set the secret value to a sha256 message digest

@@ -127,11 +127,11 @@
 						<%}else{%>
 							<input data-json="insurance" type="checkbox" name="all-prod-insurance" value="" required>
 						<%}%>
-						<label for="all-prod-insurance">Please confirm you are insured for storing all products (except those in exceptions below)</label>
+						<label for="all-prod-insurance">Please confirm your premises are insured for storing all products (except those in exceptions below)</label>
 					</div>
 					<div class="row">
 						<div class="input-field columns twelve">
-							<label for="maximum-insuranceLevel">Maximum insurance level per customer pallet</label>
+							<label for="maximum-insurance-level">Maximum insurance level per customer pallet</label>
 							<input data-json="insurance" type="text" name="maximum-insurance-level" value="<%=warehouse.insurance.maximumInsuranceLevel%>">
 						</div>
 						<div class="input-field columns six">
@@ -146,13 +146,13 @@
 					</div>
 					<div class="input-field">
 						<div class="hint--top description-container">
-							<textarea data-json="insurance" id="additional-insruance-description" name="additional-insurance-description" placeholder="Please detail any exceptions" data-loom-validators="complexTelephoneNumberNotInInput"><%=warehouse.insurance.additionalInsuranceDescription%></textarea>
+							<textarea data-json="insurance" id="additional-insruance-description" name="product-exceptions" placeholder="Please detail any exceptions" data-loom-validators="complexTelephoneNumberNotInInput"><%=warehouse.insurance.productExceptions%></textarea>
 						</div>
 					</div>
 				<%}else{%>
 					<div class="input-field checkbox">
 						<input data-json="insurance" type="checkbox" name="all-prod-insurance" value="" required>
-						<label for="all-prod-insurance">Please confirm you are insured for storing all products (except those in exceptions below)</label>
+						<label for="all-prod-insurance">Please confirm your premises are insured for storing all products (except those in exceptions below)</label>
 					</div>
 					<div class="row">
 						<div class="input-field columns twelve">
@@ -167,7 +167,7 @@
 					</div>
 					<div class="input-field">
 						<div class="hint--top description-container">
-							<textarea data-json="insurance" id="additional-insruance-description" name="additional-insurance-description" placeholder="Please detail any exceptions" data-loom-validators="complexTelephoneNumberNotInInput"></textarea>
+							<textarea data-json="insurance" id="additional-insruance-description" name="product-exceptions" placeholder="Please detail any exceptions" data-loom-validators="complexTelephoneNumberNotInInput"></textarea>
 						</div>
 					</div>
 				<%}%>

@@ -74,20 +74,26 @@
 			float:right;
 		}
 	}
-	table#tasks{
+	table{
 		td[data-field="task"]{
 			text-align:left;
 		}
+		.input-field input{
+			width:100%;
+		}
 	}
 	.dashboard-access-level-2{
-		width: 48%;
+		width: 100%;
 		display: inline-block;
 		margin-bottom: 0 !important;
+		&:nth-child(2){
+			margin-left:27%;
+		}
 		&:first-of-type{
 			.unit-margin-right(2);
 		}
 		.columns.tile-main{
-			width:100%;
+			width:48%;
 		}
 	}
 	.welcome-box,
@@ -100,9 +106,45 @@
     		border-bottom-left-radius: 7px;
 			table{
 				width:100%;
+				thead tr th:nth-child(n+2){
+					max-width:27px;
+				}
 			}
 			p span{
 				font-weight:bold;
+			}
+			p.warehouse-name{
+				font-weight:bold;
+				float:left;
+			}
+			.trays{
+				.open{
+					background-color: #dff2bf;
+				}
+				display:block;
+				.open-tray-link{
+					background-color:#fff;
+					border-bottom:none;
+					border: 1px solid #ccc;
+				}
+				a{
+					text-align:left;
+				}
+				td{
+					padding-left: 10px;
+					padding-left: 1rem;
+					padding-right: 10px;
+					padding-right: 1rem;
+					padding-top: 10px;
+					padding-top: 1rem;
+					padding-bottom: 10px;
+					padding-bottom: 1rem;
+					border: 1px solid #d7d7d7;
+					background-color:#fff;
+				}
+				&:nth-child(n+3) a{
+					border-top:none;
+				}
 			}
 		}
 	}
@@ -150,6 +192,9 @@
 		float:right;
 	}
 	#vertical-nav{
+		&.minimise{
+			width:4%;
+		}
 		margin:0;
 		background: #6a6666;
 		width: 13.5em;
@@ -181,6 +226,28 @@
 			}
 			&:hover{
 				background-color:@primary;
+			}
+			&.minimise-dashboard-nav{
+				&:before{
+					content:@ionicon-var-ios-arrow-left;
+					position: absolute;
+					font-size: 24px;
+					font-size: 2.4rem;
+					margin-top: 10px;
+					margin-left: 10px;
+					&:extend(.ion);
+				}
+			}
+			&.maximise-dashboard-nav{
+				&:before{
+					content:@ionicon-var-ios-arrow-right;
+					position: absolute;
+					font-size: 24px;
+					font-size: 2.4rem;
+					margin-top: 10px;
+					margin-left: 10px;
+					&:extend(.ion);
+				}
 			}
 		}
 	}
@@ -333,14 +400,20 @@
 		}
 		ul.tabs{
 			border:none;
-			li span{
-				color:#fff;
+			a{
+				li{
+					font-size:1.3em;
+					span{
+						color:#fff;
+					}
+				}
 			}
 		}
 		div.tab{
 			background-color:@tertiary;
 			height: 100%;
-			#registration{
+			#registration,
+			#define-space{
 				margin-bottom:0;
 				.main p.reg-required-fields{
 					margin-left:20px;

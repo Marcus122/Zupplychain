@@ -8,6 +8,7 @@ echo 'starting mongod'
 mongod --dbpath="/root/data" --smallfiles  >> /var/mongo.log 2>&1 &
 echo 'done'
 echo 'forever is starting server.js'
+cd /var/www
 forever server.js live >> /var/node.log 2>&1 &
 echo 'done'
 echo 'Started Node (server.js) and Mongo DB, startup logfiles are /var/node.log and /var/mongo.log respectively'

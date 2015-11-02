@@ -31,7 +31,11 @@ var handler = function(app) {
   
   
 	app.get('/login',function(req,res){
-		res.render("login",req.data);
+		if(Object.keys(req.data.user).length > 0){
+			res.redirect('/dashboard');
+		}else{
+			res.render("login",req.data);
+		}
 	});
 	app.post('/login-user',login,function(req,res){
 		setResponse('Login Success',res);
@@ -47,13 +51,13 @@ function logout(req,res,next) {
     });
 }
 function login(req,res,next){
-    User.login(req, res, function(err, cb){
+	User.login(req, res, function(err, cb){
 		if (!err){
-        	next();
+			next();
 		}else{
 			setResponse({err:err.error},res);
 		}
-    });
+	});
 }
 
 function createUser(req,res,cb){

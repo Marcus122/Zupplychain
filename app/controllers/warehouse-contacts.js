@@ -1,7 +1,8 @@
 var WarehouseContacts = require("../data/warehouse-contacts.js");
 var User = require ("../controllers/users.js");
 var Warehouse = require("../data/warehouse.js");
-var company = require("../controllers/company.js")
+var company = require("../controllers/company.js");
+var local = require("../local.config.js");
 exports.version = "0.1.0";
 
 exports.updateAvailabilityController = function(warehouseContact,user,cb){
@@ -120,15 +121,51 @@ exports.deleteContact = function(userId,contactType,warehouseContactId,cb){
 										}
 									});
 								}else{
-									cb(false);
+									User.updateDashboardAccessLevel(userId,local.config.dashboardAccessLevel.masterContact,function(err,result){
+										if(err){
+											cb(err);
+										}else{
+											cb(false);
+										}
+									});
 								}
 							});
 						}else{
-							cb(false);
+							User.checkCorrectDashboardAccessLevelAndUpdate(userId,function(err,result){
+								if(err){
+									cb(err);
+								}else{
+									cb(false);
+								}
+							});
 						}
 					})
 				}
 			});
+		}
+	});
+}
+
+exports.loadWarehousesByUser = function(userId,cb){
+	var userWarehouses = [],
+	cbCompleted = 0;
+	WarehouseContacts.loadByUser(userId,function(err,results){
+		if(err){
+			cb(err);
+		}else{
+			for (var i = 0; i<results.length; i++){
+				Warehouse.load(results[i].warehouse,function(err,warehouse){
+					if(err){
+						//This warehouse won't appear in the list
+					}else{
+						userWarehouses.push(warehouse);
+					}
+					cbCompleted ++;
+					if(cbCompleted === results.length){
+						cb(false,userWarehouses)
+					}
+				});
+			}
 		}
 	});
 }
@@ -143,4 +180,28 @@ exports.checkWarehouseContactsExist = function(userId,cb){
 			cb(false,false);
 		}
 	});
+}
+
+exports.getHighestDashboardAccessLevelByUser = function(user,cb){
+	var dashboardAccessLevel = 2;
+	var object;
+	WarehouseContacts.loadByUser(user,function(err,results){
+		if(err){
+			cb(err)
+		}else{
+			for(var i = 0; i<results.length; i++){
+				object = results[i].toObject();
+				for (var j in object){
+					if (object[j].constructor === Array){
+						for (var k = 0; k<object[j].length; k++){
+							if(object[j][k] === user && dashboardAccessLevel > local.config.dashboardAccessLevel[j]){
+								dashboardAccessLevel = local.config.dashboardAccessLevel[j];
+							}
+						}
+					}
+				}
+			}
+			cb(false,dashboardAccessLevel);
+		}
+	})
 }

@@ -1,5 +1,4 @@
 var googleDistance = require('google-distance');
-var http = require('http');
 function addDaysToDate(date, days) {
     date.setDate(date.getDate() + days);
     return date;

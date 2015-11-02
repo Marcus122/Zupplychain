@@ -162,12 +162,12 @@
 										<%}else{%>
 											<input data-json="insurance" type="checkbox" name="all-prod-insurance" value="" required>
 										<%}%>
-										<label for="all-prod-insurance">Please confirm you are insured for storing all products (except those in exceptions below)</label>
+										<label for="all-prod-insurance">Please confirm your premises are insured for storing all products (except those in exceptions below)</label>
 									</div>
 									<div class="row">
 										<div class="input-field columns twelve">
-											<label for="minimum-insuranceLevel">Maximum insurance level per customer pallet:</label>
-											<input data-json="insurance" type="text" name="minimum-insuranceLevel" value="<%=warehouse.insurance.minimumInsuranceLevel%>" spellcheck="true">
+											<label for="maximum-insurance-level">Maximum insurance level per customer pallet:</label>
+											<input data-json="insurance" type="text" name="maximum-insurance-level" value="<%=warehouse.insurance.maximumInsuranceLevel%>" spellcheck="true">
 										</div>
 										<div class="input-field columns six">
 											<!--<%if( warehouse.insurance.additionalInsurance && warehouse.insurance.additionalInsurance.indexOf('Additional Insurance') != -1  ){%>
@@ -187,7 +187,7 @@
 								<%}else{%>
 									<div class="input-field checkbox">
 										<input data-json="insurance" type="checkbox" name="all-prod-insurance" value="" required>
-										<label for="all-prod-insurance">Please confirm you are insured for storing all products (except those in exceptions below)</label>
+										<label for="all-prod-insurance">Please confirm your premises are insured for storing all products (except those in exceptions below)</label>
 									</div>
 									<div class="row">
 										<div class="input-field columns twelve">

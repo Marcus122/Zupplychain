@@ -1,4 +1,4 @@
-<div class="availability-tray">
+<div class="availability-tray" data-contains-copy-function="true">
     <a class="open-tray-link">Available Pallet Spaces</a>
     <div class="tray">
 	<div class="input-field">
@@ -8,6 +8,24 @@
 				<p>Specify your pallet availability for up to the end of the next calendar year.<br/>
 						
 							<div class="inner">
+								<div class="row">
+									<div class="copy-controls controls columns twelve">
+										<div class="tool-tip hint--top" data-hint="Copy availability and dates from another storage to this one. You can then edit these.">?</div>
+											<label for="copy-from">Copy from another storage?</label>
+											<select name="copy-from">
+												<%for( var i=0; i<warehouse.storage.length;i++ ){ 
+													if (storage._id == warehouse.storage[i]._id) {
+														continue;
+													}
+												%>
+													<option value="<%=warehouse.storage[i]._id%>" >Copy from: <%=warehouse.storage[i].name %></option>
+												<%
+												}
+												%>
+											</select>
+											<button type="button" class="primary copy-button" data-copy-from-tray="availability">COPY</button>
+										</div>
+									</div>
 								<table class="show-title responsive-table availability-table js-availability-inputs-container" data-title="Available Pallets" data-total-pallets="<%= storage.palletSpaces %>">
 									<thead>
 										<tr>
@@ -72,13 +90,13 @@
 											<input readonly data-loom-limit-day-of-week="0" required="required" data-bind-value="to" type="date" name="to" class="datepicker" data-loom-add-controls="true" value="" data-bind-min="from" min="" max="<%=utils.formatDate(endOfNextYear)%>"/>
 										</td>
 										<td data-th="Total Pallets" class="input-field no-success-validation-style">
-											<input disabled required="required" data-bind-value="total" name="total" type="number" value="<%= storage.palletSpaces %>"/>
+											<input data-do-not-enable="true" disabled required="required" data-bind-value="total" name="total" type="number" value="<%= storage.palletSpaces %>"/>
 										</td>
 										<td data-th="Estimated in Use" class="input-field no-success-validation-style">
 											<input data-loom-type="integer" required="required" data-bind-value="inUse" data-bind-max="total" name="inUse" type="number" data-loom-validators="integer" max="<%= storage.palletSpaces %>" min="0" value=""/>
 										</td>
 										<td data-th="Estimated Free" class="input-field no-success-validation-style">
-											<input disabled required="required" data-bind-value="free" name="free" type="number"  value=""/>
+											<input data-do-not-enable="true" disabled required="required" data-bind-value="free" name="free" type="number"  value=""/>
 										</td>
 										<td data-th="Remove" class="remove-col">
 											<button type="button" class="trash-button">

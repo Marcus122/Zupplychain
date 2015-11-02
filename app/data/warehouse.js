@@ -34,7 +34,7 @@ var fields = {
 	created: { type: Date , default: Date.now },
 	storage: [{ type: Schema.ObjectId, ref: 'storage' }],
   insurance: {
-    allProductInsurance: {type:String},
+    allProdInsurance: {type:String},
     maximumInsuranceLevel: {type:String},
     additionalInsurance: {type:String},
     productExceptions: {type:String}

@@ -7,7 +7,7 @@
 			<div class="header">
 				<h3>Your Details</h3>
 			</div>
-			<fieldset class="main">
+			<fieldset class="main" data-view-edit-capture-zone="true">
 				<div class="view-edit-buttons">
 					<a class="toggle-view-edit down" data-mode="view">View</a>
 					<a class="toggle-view-edit" data-mode="edit">Edit</a>
@@ -23,7 +23,7 @@
 					</div>
 					<div class="input-field">
 						<label for="comapny-name">Company Name</label>
-						<input required type="text" name="company-name" value="<%=user.company.name%>" disabled/>
+						<input required type="text" name="company-name" value="<%=user.company.name%>" disabled <%if(authorisations.editCompany === false){%>data-do-not-enable="true"<%}%>/>
 					</div>
 					<div class="input-field">
 						<label for="phone-number">Phone Number (Optional)</label>
@@ -44,7 +44,7 @@
 			<div class="header">
 				<h3>Change Your Password</h3>
 			</div>
-			<fieldset class="main">
+			<fieldset class="main" data-view-edit-capture-zone="true">
 				<div class="view-edit-buttons">
 					<a class="toggle-view-edit down" data-mode="view">View</a>
 					<a class="toggle-view-edit" data-mode="edit">Edit</a>

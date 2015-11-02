@@ -76,7 +76,7 @@
 
 							</div>
 							<div class="availability-trays tray-holder">
-								<form  data-storage-id="<%=storage._id%>" id="availability-<%=storage._id %>"  class="loom-form provider-form availability-form" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" >
+								<form  data-storage-id="<%=storage._id%>" id="availability-<%=storage._id %>"  class="loom-form provider-form availability-form" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" data-storage_id="<%=storage._id%>">
 									<% include ../availability-tray %>
 								</form>
 							</div>
@@ -100,6 +100,10 @@
 			<%if(authorisations.warehouse.pricing === true){%>
 				<button href="#" class="add primary mini add-volume-discount">Add volume discount (optional)</button>
 			<%}%>
+			<div class="view-edit-buttons bottom">
+				<a class="toggle-view-edit down" data-mode="view">View</a>
+				<a class="toggle-view-edit" data-mode="edit">Edit</a>
+			</div>
 		</div>
 	</div>
 	<!--<div class="content-box primary">

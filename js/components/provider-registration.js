@@ -1,4 +1,4 @@
-define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom/loomAlerts"], function ($,Warehouse,Loom,Templates,Alerts) {
+define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom/loomAlerts","components/global"], function ($,Warehouse,Loom,Templates,Alerts,Global) {
 	/*SINGLETON*/
 	
     function Class(data) {
@@ -9,6 +9,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 		var lm = new Loom();
 		var data={};
 		var DASHBOARD_PAGE = 'dashboard';
+		var global = new Global();
 		
 		function initialize() {
 			step1();
@@ -32,7 +33,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				var template = templates.getTemplate('video-popup');
 				var $popup = template.bind({});
 				$('body').append($popup);
-				centerPopup($popup);
+				global.centerPopup($popup);
 				$($popup).show();
 				$popup.find('iframe').attr('src', $this.data('url'));
 				if($this.attr('id') === 'reg-help-bubble' ){
@@ -57,19 +58,6 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 		}
 		function toPrice(num){
 			return Number(num).toFixed(2);
-		}
-		function centerPopup($element){
-			var top;
-			var $window = $(window);
-			var diff = $window.height() - $element.height();
-			var top = diff < 0 ? $window.scrollTop() + 25 : $window.scrollTop() + diff/2;
-			//var top = (screen.height/2) - (window.screen.availHeight/2);
-			if(top > 100){
-				top-=50;
-			}					
-			$element.css({
-				top:top
-			});
 		}
 		function closePopup(){
 			$('.popup-window').not("#volume-discount-popup").remove();
@@ -111,7 +99,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			var saveTemplate = templates.getTemplate("save-registration");
 			var $popup = saveTemplate.bind(data);
 			$('body').append($popup);
-			centerPopup($popup);
+			global.centerPopup($popup);
 			var $form = $popup.find('form');
 			if($form.length > 0){
 				lm.rebind($form);
@@ -131,7 +119,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			if(!completeTemplate) return;
 			var $popup = completeTemplate.getElement();
 			$('body').append($popup);
-			centerPopup($popup);
+			global.centerPopup($popup);
 			var $form = $popup.find('form');
 			lm.rebind($form);
 			var form = lm.getForm($form.attr('id'));
@@ -593,13 +581,19 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			data: data,
 			cache: false,
 			dataType: 'json',
+			headers: {'csrf-token':$('meta[name="csrf-token"]').attr("content")},
 			processData: false, // Don't process the files
 			contentType: false, // Set content type to false as jQuery will tell the server its a query string request
 			success: function(data){
 				cb(data);
 			},
-			error: function(){
-				cb();
+			error:function(jqXHR, textStatus, errThrown){
+				if(jqXHR.status === 403){
+					handle403Error();
+				}else{
+					err = JSON.parse(jqXHR.responseText);
+					cb(err);
+				}
 			}
 		})
 	}

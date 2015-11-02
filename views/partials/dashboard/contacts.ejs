@@ -17,54 +17,56 @@
 			<div class="tab-content">
 				<%if(authorisations.contacts.masterContacts === true){%>
 					<div data-company-id="<%=user.company.id%>" data-contact-type="master-contact" data-content="master-contact" class="tab main active">
-						<table class="simple dashboard-table">
-							<thead>
-								<tr>
-									<th>No.</th>
-									<th>Name</th>
-									<th>Email</th>
-									<th>Phone Number</th>
-									<th>Registered?</th>
-									<th><img src="/images/delete.png"></th>
-									<th></th>
-								</tr>
-							</thead>
-							<tbody>
-								<%for(var i = 0; i<masterContacts.length; i++){%>
-									<tr data-id="<%=masterContacts[i]._id.toString()%>">
-										<td><%=i+1%><%if(i<2){%>*<%}%></td>
-										<td data-field="name"><%=masterContacts[i].name || 'N/A'%></td>
-										<td data-field="email"><%=masterContacts[i].email%></td>
-										<td data-field="phone-number"><%=masterContacts[i].phoneNumber || 'N/A'%></td>
-										<td data-field="register-status">
-											<%switch(true){
-												case (masterContacts[i].expiry >= Date.now() && masterContacts[i].expiry !== null):%>
-													<p class="registered-status pending"><%=registerStatus[0]%></p>
-													<%break;
-												case (masterContacts[i].expiry < Date.now() && masterContacts[i].expiry !== null):%>
-													<p class="registered-status expired"><%=registerStatus[2]%></p>
-													<%break;
-												case null:%>
-													<p class="registered-status complete"><%=registerStatus[1]%></p>
-													<%break;
-												default:%>
-													<p class="registered-status complete"><%=registerStatus[1]%></p>
-											<%}%>
-										</td>
-										<td data-field="delete"><%if(masterContacts.length > 1 && masterContacts[i]._id != user.id){%><input type="checkbox" name="delete"/><%}%></td>
-										<td data-field="resend-email"><%if(masterContacts[i].expiry < Date.now() && masterContacts[i].expiry !== null){%> <button name="resend-email" class="button action mini">Resend</button><%}%></td>
+						<form id="company-contacts" autocomplete="off" data-form-type="contacts-form" class="loom-form data-loom-no-submit="true" novalidate="novalidate">
+							<table class="simple dashboard-table" data-max-rows="3">
+								<thead>
+									<tr>
+										<th>No.</th>
+										<th>Name</th>
+										<th>Email</th>
+										<th>Phone Number</th>
+										<th>Status</th>
+										<th><img src="/images/delete.png"></th>
+										<th></th>
 									</tr>
-								<%}%>
-							</tbody>
-						</table>
-							<div class="columns twelve button-container">
-								<button type="button" name="save-new-contacts" class="button action">Save</button>
-								<button type="button" name="delete" class="button action" style="display:none;">Delete</button>
-								<div id="add-new-contact-container">
-									<label for="add-new-contacts">Add new contact</label>
-									<button type="button" name="add-new-contact" class="add-button"></button>
+								</thead>
+								<tbody>
+									<%for(var i = 0; i<masterContacts.length; i++){%>
+										<tr data-id="<%=masterContacts[i]._id.toString()%>">
+											<td><%=i+1%><%if(i<2){%>*<%}%></td>
+											<td data-field="name"><%=masterContacts[i].name || 'N/A'%></td>
+											<td data-field="email"><%=masterContacts[i].email%></td>
+											<td data-field="phone-number"><%=masterContacts[i].phoneNumber || 'N/A'%></td>
+											<td data-field="register-status">
+												<%switch(true){
+													case (masterContacts[i].expiry >= Date.now() && masterContacts[i].expiry !== null):%>
+														<p class="registered-status pending"><%=registerStatus[1]%></p>
+														<%break;
+													case (masterContacts[i].expiry < Date.now() && masterContacts[i].expiry !== null):%>
+														<p class="registered-status expired"><%=registerStatus[2]%></p>
+														<%break;
+													case null:%>
+														<p class="registered-status complete"><%=registerStatus[0]%></p>
+														<%break;
+													default:%>
+														<p class="registered-status complete"><%=registerStatus[0]%></p>
+												<%}%>
+											</td>
+											<td data-field="delete"><%if(masterContacts.length > 1 && masterContacts[i]._id != user.id){%><input type="checkbox" name="delete"/><%}%></td>
+											<td data-field="resend-email"><%if(masterContacts[i].expiry < Date.now() && masterContacts[i].expiry !== null){%> <button name="resend-email" class="button action mini">Resend</button><%}%></td>
+										</tr>
+									<%}%>
+								</tbody>
+							</table>
+								<div class="columns twelve button-container">
+									<button type="button" name="save-new-contacts" class="button action">Save</button>
+									<button type="button" name="delete" class="button action" style="display:none;">Delete</button>
+									<div id="add-new-contact-container">
+										<label for="add-new-contacts">Add new contact</label>
+										<button type="button" name="add-new-contact" class="add-button"></button>
+									</div>
 								</div>
-							</div>
+						</form>
 					</div>
 				<%}%>
 				<% include ../../partials/dashboard/warehouse-dropdown-list%>
@@ -72,7 +74,7 @@
 		</div>
 	</div>
 	<%if(warehouses.length === 1){%>
-		<div data-one-warehouse="true">
+		<div data-one-warehouse="true" style="display:none;">
 			<% include ../../partials/dashboard/warehouse-specific-contacts%>
 		</div>
 	<%}%>
@@ -80,11 +82,11 @@
 <script type="text/template" id="master-contact-row">
 	<tr data-status="new">
 		<td></td>
-		<td data-field="name"><input type="text" name="name"/></td>
-		<td data-field="email"><input type="email" name="email"/></td>
-		<td data-field="phone-number"><input type="tel" name="phone-number"/></td>
-		<td data-field="register-status"><p class="registered-status pending"><%=registerStatus[0]%></p></td>
-		<td data-field="delete"><input type="checkbox" name="delete"/></td>
+		<td data-field="name" class="input-field no-success-validation-style"><input required type="text" name="name"/></td>
+		<td data-field="email" class="input-field no-success-validation-style"><input required type="email" name="email"/></td>
+		<td data-field="phone-number" class="input-field no-success-validation-style"><input type="tel" name="phone-number"/></td>
+		<td data-field="register-status" ></td>
+		<td data-field="delete" class="input-field no-success-validation-style checkbox"></td>
 		<td data-field="resend-email"></td>
 	</tr>
 </script>

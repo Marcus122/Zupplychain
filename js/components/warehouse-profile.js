@@ -1,8 +1,9 @@
 "use strict";
-define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!https://maps.googleapis.com/maps/api/js'], function ($,Loom,Templates,Alerts,GM) {
+define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!https://maps.googleapis.com/maps/api/js','components/global'], function ($,Loom,Templates,Alerts,GM,Global) {
 	
     function Class() {
 		var templates = new Templates();
+        var global = new Global();
 		var lm = new Loom();
         var indexOfInputThatWasFocused;
 		
@@ -27,10 +28,10 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
 			});
             
             $("#choose-this-warehouse").click(function(e){
-                //e.preventDefault();
-                //var $popup = $("#choose-this-warehouse-popup");
-                //$popup.css({position:"absolute", top:$('#estimated-total-cost').offset().top-400 });
-                //$popup.show();
+                // e.preventDefault();
+                // var $popup = $("#choose-this-warehouse-popup");
+                // $popup.css({position:"absolute", top:$('#estimated-total-cost').offset().top-400 });
+                // $popup.show();
             });
             
             $("#choose-this-warehouse-popup .close").click(function(){
@@ -119,22 +120,8 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
             
             $('button[name="view-conversation"]').click(function(){
                $('.popup-window.provider-user-conversation').show(); 
-               centerPopup($('.popup-window.provider-user-conversation'));
+               global.centerPopup($('.popup-window.provider-user-conversation'));
             });
-            
-            function centerPopup($element){
-                var top;
-                var $window = $(window);
-                var diff = $window.height() - $element.height();
-                var top = diff < 0 ? $window.scrollTop() + 25 : $window.scrollTop() + diff/2;
-                //var top = (screen.height/2) - (window.screen.availHeight/2);
-                if(top > 100){
-                    top-=50;
-                }					
-                $element.css({
-                    top:top
-                });
-		    }
         }
         
         function initWarehouseProfileRowChanger(){

@@ -1,6 +1,7 @@
-define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom/loomAlerts"], function ($,Warehouse,Loom,Templates,Alerts) {    
+define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom/loomAlerts","components/global"], function ($,Warehouse,Loom,Templates,Alerts,Global) {    
     
     var lm = new Loom();
+    var global = new Global();
     var warehouse = {};
     var templates = new Templates();
     var lastMonday = getClosestPreviousMonday(new Date());
@@ -17,19 +18,6 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         }
         return retDate;
     }
-    
-    function centerPopup($element){
-			var top;
-			var $window = $(window);
-			var diff = $window.height() - $element.height();
-			var top = diff < 0 ? $window.scrollTop() + 25 : $window.scrollTop() + diff/2;
-			if(top > 100){
-				top-=50;
-			}					
-			$element.css({
-				top:top
-			});
-		}
     
     function getEndOfNextYear(date) {
         date.setYear(date.getFullYear() + 1);
@@ -145,19 +133,6 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         $(document).on('click',".close-me",function(){
             $(this).closest(".popup-window").hide();
         });
-        
-        function centerPopup($element){
-            var top;
-            var $window = $(window);
-            var diff = $window.height() - $element.height();
-            var top = diff < 0 ? $window.scrollTop() + 25 : $window.scrollTop() + diff/2;
-            if(top > 100){
-                top-=50;
-            }					
-            $element.css({
-                top:top
-            });
-        }
     }
         
     function initVolumeDiscount() {
@@ -174,7 +149,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
           if (!volumeDiscount) return;
           var $popup = volumeDiscount.getElement();
           $('body').append($popup);
-          centerPopup($popup);
+          global.centerPopup($popup);
         }    
     }
     
@@ -208,11 +183,14 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         $(document).on("click", ".copy-button",  copyButtonOnClick);
         
         function copyButtonOnClick(evt) {
-            var $select = $(this).closest(".copy-controls").find("select");
+            var $this = $(this);
+            var $select = $this.closest(".copy-controls").find("select");
             var storageToCopyId = $select.val();
-            var thisStorageId = $(this).closest("form").data("storage_id");
-            var fromTable = $("form[data-storage_id=" + storageToCopyId +"]");
-            var toTable = $(this).closest(".date-range-pricing-tray");
+            var thisStorageId = $this.closest("form").data("storage_id");
+            //var fromTable = $("form[data-storage_id=" + storageToCopyId +"]");
+            var fromTable = $('.' + $this.data('copy-from-tray') + '-trays').find('form[data-storage_id="'+ storageToCopyId +'"]');
+            //var toTable = $(this).closest(".date-range-pricing-tray");
+            var toTable = $this.closest('div[data-contains-copy-function="true"]');
             copyStorage(fromTable, toTable);
         }
         
@@ -352,7 +330,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			if(!completeTemplate) return;
 			var $popup = completeTemplate.getElement();
 			$('body').append($popup);
-			centerPopup($popup);
+			global.centerPopup($popup);
 			var $form = $popup.find('form');
 			lm.rebind($form);
 			var form = lm.getForm($form.attr('id'));
@@ -528,7 +506,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
             var saveTemplate = templates.getTemplate("save-registration");
             var $popup = saveTemplate.bind({});
             $('body').append($popup);
-            centerPopup($popup);
+            global.centerPopup($popup);
         }
         
         $(document).on('click','button[name="acepted-p-and-a-terms"]',function(ev) {
@@ -566,7 +544,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
             var completeTemplate = templates.getTemplate("p-and-a-warning");
             var $popup = completeTemplate.getElement();
             $('body').append($popup);
-            centerPopup($popup);
+            global.centerPopup($popup);
         }
         
         function redirectToURL(url){

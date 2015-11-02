@@ -2,6 +2,7 @@ var Company = require("../data/company.js");
 var warehouse = require("../controllers/warehouses.js");
 var warehouseContacts = require("../controllers/warehouse-contacts.js")
 var User = require("../controllers/users.js");
+var local = require("../local.config.js");
 
 exports.version = "0.1.0";
 
@@ -121,11 +122,23 @@ exports.deleteMasterContact = function(company,userId,cb){
 										}
 									});
 								}else{
-									cb(false);
+									User.updateDashboardAccessLevel(userId,local.config.dashboardAccessLevel.masterContact,function(err,result){
+										if(err){
+											cb(err);
+										}else{
+											cb(false);
+										}
+									});
 								}
 							});
 						}else{
-							cb(false);
+							User.checkCorrectDashboardAccessLevelAndUpdate(userId,function(err,result){
+								if(err){
+									cb(err);
+								}else{
+									cb(false);
+								}
+							});
 						}
 					});
 				}

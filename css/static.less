@@ -85,14 +85,19 @@
 			max-width: 100%;
 		}
 	}
-	.available-soon,
-	.register-now{
-		display: inline-block;
-		padding: 10px;
+	// .available-soon,
+	// .register-now{
+	// 	display: inline-block;
+	// 	padding: 10px;
+	// 	position: relative;
+	// 	border-radius:7px;
+	// 	border: 1px solid @highlight;
+	// 	color: @highlight;
+	//}
+	a.register-now,
+	a.available-soon{
 		position: relative;
-		border-radius:7px;
-		border: 1px solid @highlight;
-		color: @highlight;
+		top: -3px;
 	}
 	.customers-header,
 	.providers-header{
@@ -159,6 +164,7 @@
 	}
 	.banner{
 		margin-bottom:0;
+		margin-top:0;
 	}
 	label{
 		display: block;

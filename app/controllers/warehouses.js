@@ -85,6 +85,15 @@ exports.warehouseByACOrECUser = function(userId,cb){
 		}
 	});
 };
+exports.warehousesByUser = function(userId,cb){
+	warehouseContacts.loadWarehousesByUser(userId,function(err,result){
+		if(err){
+			cb(err);
+		}else{
+			cb(false,result);
+		}
+	})
+}
 exports.removeWarehouse = function(id){
 	Warehouse.remove(id);
 }

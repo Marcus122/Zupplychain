@@ -7,7 +7,7 @@
 			<button class="close no-resize"><span>close</span></button>
 			<div class="main">
 				<%if(!user.email){%>
-					<form data-display-condition="!registered" class="loom-form" action="/save-registration" novalidate id="save-registration-form">
+					<form data-display-condition="!registered" class="loom-form" action="/save-registration" novalidate id="save-registration-form" autocomplete="off">
 						<div class="input-field">
 							<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
 						</div>

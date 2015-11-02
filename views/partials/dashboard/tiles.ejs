@@ -1,5 +1,5 @@
 <div data-view="main" class="dashboard-container columns nine">
-	<%if(completedTasks.contactSetupComplete === false && authorisations.tasks === true){%>
+	<%if(completedTasks.allWarehousesCompleted === false && authorisations.tasks === true){%>
 		<div class="columns twelve">
 			<div class="content-box welcome-box">
 				<div class="header">
@@ -16,74 +16,104 @@
 					<h3>Tasks and Notifications</h3>
 				</div>
 				<div class="main row">
-					<table id="tasks">
+					<table id="company-tasks">
 						<thead>
 							<tr>
 								<th>Name</th>
-								<th>Completed</th>
+								<th>Requests Sent</th>
+								<th>Response Received</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td data-field="task"><a href="contacts-setup" target="_blank">Introduction to contacts setup</a></td>
+								<td data-field="task"><a href="/contacts-setup" target="_blank">Introduction to contacts setup</a></td>
+								<td></td>
 								<td></td>
 							</tr>
 							<tr>
 								<td data-field="task"><a data-go-to-link="view-tab" href="#contacts#master-contacts">Add master contacts</a></td>
-								<td><input disabled type="checkbox" name="task-completed" <%if(completedTasks.masterContact === true){%>checked<%}%>></td>
-							</tr>
-							<tr>
-								<td data-field="task"><a data-go-to-link="view-tab" href="#contacts#availability-controller">Add availability controllers</a></td>
-								<td><input disabled type="checkbox" name="task-completed" <%if(completedTasks.availabilityController === true){%>checked<%}%>></td>
-							</tr>
-							<tr>
-								<td data-field="task">Add enquires controllers</td>
-								<td><input disabled type="checkbox" name="task-completed" <%if(completedTasks.enquiresController === true){%>checked<%}%>></td>
-							</tr>
-							<tr>
-								<td data-field="task">Add transport controllers</td>
-								<td><input disabled type="checkbox" name="task-completed" <%if(completedTasks.transportCoordinator === true){%>checked<%}%>></td>
-							</tr>
-							<tr>
-								<%console.log(completedTasks.goodsIn);%>
-								<td data-field="task">Add goods-in contacts</td>
-								<td><input disabled type="checkbox" name="task-completed" <%if(completedTasks.goodsIn === true){%>checked<%}%>></td>
-							</tr>
-							<tr>
-								<td data-field="task">Add picking and dispatch contacts</td>
-								<td><input disabled type="checkbox" name="task-completed" <%if(completedTasks.pickingDispatch === true){%>checked<%}%>></td>
-							</tr>
-							<tr>
-								<td data-field="task">Add invoice contacts</td>
-								<td><input disabled type="checkbox" name="task-completed" <%if(completedTasks.invoiceController === true){%>checked<%}%>></td>
-							</tr>
-							<tr>
-								<td data-field="task">Add credit controller contacts</td>
-								<td><input disabled type="checkbox" name="task-completed" <%if(completedTasks.creditController === true){%>checked<%}%>></td>
+								<td><input disabled type="checkbox" name="task-completed" <%if(completedTasks.masterContact.allRequestsSent === true){%>checked<%}%>></td>
+								<td><input disabled type="checkbox" name="response-sent" <%if(completedTasks.masterContact.allRequestsResponded === true){%>checked<%}%>></td>
 							</tr>
 						</tbody>
 					</table>
+					<%for(var i = 0; i<warehouses.length; i++){
+						if(completedTasks[i][warehouses[i].id].contactSetupComplete === false){%>
+							<div class="warehouse-tasks-tray trays open">
+								<a class="warehouse-name open-tray-link <%if(warehouses.length === 1 || parseInt(warehouses.length) - parseInt(completedTasks.numWarehousesCompleted) === 1){%>open<%}%>"><%=warehouses[i].name%></a>
+								<div class="tray <%if(warehouses.length === 1 || parseInt(warehouses.length) - parseInt(completedTasks.numWarehousesCompleted) === 1){%>open<%}%>">
+									<table id="tasks" data-warehouse-id="<%=warehouses[i].id%>">
+										<thead>
+											<tr>
+												<th>Name</th>
+												<th>Request Sent</th>
+												<th>Response Received</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td data-field="task"><a data-go-to-link="view-tab-contacts" href="#contacts#warehouse-contacts#availability-controller">Add availability controllers</a></td>
+												<td><input disabled type="checkbox" name="task-completed" <%if(completedTasks[i][warehouses[i].id].availabilityController.allRequestsSent === true){%>checked<%}%>></td>
+												<td><input disabled type="checkbox" name="response-sent" <%if(completedTasks[i][warehouses[i].id].availabilityController.allRequestsResponded === true){%>checked<%}%>></td>
+											</tr>
+											<tr>
+												<td data-field="task"><a data-go-to-link="view-tab-contacts" href="#contacts#warehouse-contacts#enquires-controller">Add enquires controllers</a></td>
+												<td><input disabled type="checkbox" name="task-completed" <%if(completedTasks[i][warehouses[i].id].enquiresController.allRequestsSent === true){%>checked<%}%>></td>
+												<td><input disabled type="checkbox" name="response-sent" <%if(completedTasks[i][warehouses[i].id].enquiresController.allRequestsResponded === true){%>checked<%}%>></td>
+											</tr>
+											<tr>
+												<td data-field="task"><a data-go-to-link="view-tab-contacts" href="#contacts#warehouse-contacts#transport-coordinator">Add transport coordinator</a></td>
+												<td><input disabled type="checkbox" name="task-completed" <%if(completedTasks[i][warehouses[i].id].transportCoordinator.allRequestsSent === true){%>checked<%}%>></td>
+												<td><input disabled type="checkbox" name="response-sent" <%if(completedTasks[i][warehouses[i].id].transportCoordinator.allRequestsResponded === true){%>checked<%}%>></td>
+											</tr>
+											<tr>
+												<%console.log(completedTasks.goodsIn);%>
+												<td data-field="task"><a data-go-to-link="view-tab-contacts" href="#contacts#warehouse-contacts#goods-in">Add goods-in contacts</a></td>
+												<td><input disabled type="checkbox" name="task-completed" <%if(completedTasks[i][warehouses[i].id].goodsIn.allRequestsSent === true){%>checked<%}%>></td>
+												<td><input disabled type="checkbox" name="response-sent" <%if(completedTasks[i][warehouses[i].id].goodsIn.allRequestsResponded === true){%>checked<%}%>></td>
+											</tr>
+											<tr>
+												<td data-field="task"><a data-go-to-link="view-tab-contacts" href="#contacts#warehouse-contacts#picking-dispatch">Add picking and dispatch contacts</a></td>
+												<td><input disabled type="checkbox" name="task-completed" <%if(completedTasks[i][warehouses[i].id].pickingDispatch.allRequestsSent === true){%>checked<%}%>></td>
+												<td><input disabled type="checkbox" name="response-sent" <%if(completedTasks[i][warehouses[i].id].pickingDispatch.allRequestsResponded === true){%>checked<%}%>></td>
+											</tr>
+											<tr>
+												<td data-field="task"><a data-go-to-link="view-tab-contacts" href="#contacts#warehouse-contacts#invoice-controller">Add invoice contacts</a></td>
+												<td><input disabled type="checkbox" name="task-completed" <%if(completedTasks[i][warehouses[i].id].invoiceController.allRequestsSent === true){%>checked<%}%>></td>
+												<td><input disabled type="checkbox" name="response-sent" <%if(completedTasks[i][warehouses[i].id].invoiceController.allRequestsResponded === true){%>checked<%}%>></td>
+											</tr>
+											<tr>
+												<td data-field="task"><a data-go-to-link="view-tab-contacts" href="#contacts#warehouse-contacts#credit-controller">Add credit controller contacts</a></td>
+												<td><input disabled type="checkbox" name="task-completed" <%if(completedTasks[i][warehouses[i].id].creditController.allRequestsSent === true){%>checked<%}%>></td>
+												<td><input disabled type="checkbox" name="response-sent" <%if(completedTasks[i][warehouses[i].id].creditController.allRequestsResponded === true){%>checked<%}%>></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						<%}
+					}%>
 				</div>
 			</div>
 		</div>
 	<%}%>
-	<div class="row types dashboard-access-level-<%=dashboardAccessLvl%>">
-		<div class="columns six tile-main">
-			<a href="#admin" class="button tile-button">
-				<div class="secondary content-box">
-					<div class="header">
-						<h3>Account</h3>
-					</div>
-					<div class="main row">
-						<div class="columns six">
-							<img src="/images/admin-icon-dashboard.png" alt="Admin"/>
+	<%if (dashboardAccessLvl === 0 || dashboardAccessLvl === 1){%>
+		<div class="row types">
+			<div class="columns six tile-main">
+				<a href="#admin" class="button tile-button">
+					<div class="secondary content-box">
+						<div class="header">
+							<h3>Account</h3>
 						</div>
-						<p class="columns six">View and edit your account details</p>
+						<div class="main row">
+							<div class="columns six">
+								<img src="/images/admin-icon-dashboard.png" alt="Admin"/>
+							</div>
+							<p class="columns six">View and edit your account details</p>
+						</div>
 					</div>
-				</div>
-			</a>
-		</div>
-		<%if(authorisations.contacts !== false){%>
+				</a>
+			</div>
 			<div class="columns six tile-main">
 				<a href="#contacts" class="button tile-button">
 					<div class="secondary content-box">
@@ -99,10 +129,8 @@
 					</div>
 				</a>
 			</div>
-		<%}%>
-	</div>
-	<div class="row types dashboard-access-level-<%=dashboardAccessLvl%>">
-		<%if(authorisations.warehouse !== false){%>
+		</div>
+		<div class="row types dashboard-access-level-<%=dashboardAccessLvl%>">
 			<div class="columns six tile-main">
 				<a href="#warehouses" class="button tile-button">
 					<div class="secondary content-box">
@@ -119,21 +147,71 @@
 					</div>
 				</a>
 			</div>
-		<%}%>
-		<div class="columns six tile-main">
-			<a href="#messages" class="button tile-button">
-				<div class="secondary content-box">
-					<div class="header">
-						<h3>Messages</h3>
-					</div>
-					<div class="main row">
-						<div class="columns six">
-							<img src="/images/user-icon-dashboard.png" alt="Users"/>
+			<div class="columns six tile-main">
+				<a href="#messages" class="button tile-button">
+					<div class="secondary content-box">
+						<div class="header">
+							<h3>Messages</h3>
 						</div>
-						<p class="columns six">View your messages</p>
+						<div class="main row">
+							<div class="columns six">
+								<img src="/images/user-icon-dashboard.png" alt="Users"/>
+							</div>
+							<p class="columns six">View your messages</p>
+						</div>
 					</div>
-				</div>
-			</a>
+				</a>
+			</div>
 		</div>
-	</div>
+	<%}else{%>
+		<div class="row types dashboard-access-level-2">
+			<div class="columns six tile-main">
+				<a href="#admin" class="button tile-button">
+					<div class="secondary content-box">
+						<div class="header">
+							<h3>Account</h3>
+						</div>
+						<div class="main row">
+							<div class="columns six">
+								<img src="/images/admin-icon-dashboard.png" alt="Admin"/>
+							</div>
+							<p class="columns six">View and edit your account details</p>
+						</div>
+					</div>
+				</a>
+			</div>
+			<div class="columns six tile-main">
+				<a href="#messages" class="button tile-button">
+					<div class="secondary content-box">
+						<div class="header">
+							<h3>Messages</h3>
+						</div>
+						<div class="main row">
+							<div class="columns six">
+								<img src="/images/user-icon-dashboard.png" alt="Users"/>
+							</div>
+							<p class="columns six">View your messages</p>
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+		<div class="row types dashboard-access-level-2">
+			<div class="columns six tile-main">
+				<a href="#contacts" class="button tile-button">
+					<div class="secondary content-box">
+						<div class="header">
+							<h3>Contacts</h3>
+						</div>
+						<div class="main row">
+							<div class="columns six">
+								<img src="/images/contacts-icon-dashboard.png" alt="Contacts"/>
+							</div>
+							<p class="columns six">View and edit your warehouse contacts</p>
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+	<%}%>
 </div>

@@ -97,12 +97,6 @@ exports.config = {
     //     6 : "Other" 
     // },
     
-    registerStatus: [
-        "Pending",
-        "Yes",
-        "Not Responded"
-    ],
-    
     palletTypes : {
         0 : "0.8",
         1 : "1.0",
@@ -158,6 +152,7 @@ exports.config = {
     authorisations:{
         all:{
             tasks:true,
+            editCompany:true,
             warehouse:
             {
                 warehouseDetails:true,
@@ -170,11 +165,15 @@ exports.config = {
             contacts:
             {
                 masterContacts:true,
-                warehouseContacts:true
+                warehouseContacts:{
+                    view:true,
+                    edit:true
+                }
             }
         },
         noPricing:{
             tasks:false,
+            editCompany:false,
             warehouse:
             {
                 warehouseDetails:true,
@@ -186,13 +185,24 @@ exports.config = {
             },
             contacts:{
                 masterContacts:false,
-                warehouseContacts:true
+                warehouseContacts:{
+                    view:true,
+                    edit:true,
+                }
             }
         },
         accountOnly:{
             tasks:false,
+            editCompany:false,
             warehouse:false,
-            contacts:false,
+            contacts:
+            {
+                masterContacts:false,
+                warehouseContacts:{
+                    view:true,
+                    edit:false
+                }
+            },
         }
     },
     
@@ -211,5 +221,11 @@ exports.config = {
         'pickingAndDispatch':2,
         'invoiceController':2,
         'creditController':2   
-    }
+    },
+    
+    registerStatus:[
+        'Registered',
+        'Pending',
+        'Expired'   
+    ]
 };

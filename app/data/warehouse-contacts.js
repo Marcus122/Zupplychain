@@ -6,13 +6,13 @@ var mongoose = require('mongoose'),
 	
 var fields = {
 	warehouse: { type: Schema.ObjectId, ref: 'warehouse' },
-	availabilityController: [{ type: Schema.ObjectId, ref: 'users' }],
-	enquiresController: [{ type: Schema.ObjectId, ref: 'users' }],
-	transportCoordinator: [{ type: Schema.ObjectId, ref: 'users' }],
-	goodsIn: [{ type: Schema.ObjectId, ref: 'users' }],
-	pickingDispatch: [{ type: Schema.ObjectId, ref: 'users' }],
-	invoiceController: [{ type: Schema.ObjectId, ref: 'users' }],
-	creditController: [{ type: Schema.ObjectId, ref: 'users' }]
+	availabilityController: [{ type: Schema.ObjectId, ref: 'users', index: { unique: true } }],
+	enquiresController: [{ type: Schema.ObjectId, ref: 'users', index: { unique: true } }],
+	transportCoordinator: [{ type: Schema.ObjectId, ref: 'users', index: { unique: true } }],
+	goodsIn: [{ type: Schema.ObjectId, ref: 'users', index: { unique: true } }],
+	pickingDispatch: [{ type: Schema.ObjectId, ref: 'users', index: { unique: true } }],
+	invoiceController: [{ type: Schema.ObjectId, ref: 'users', index: { unique: true } }],
+	creditController: [{ type: Schema.ObjectId, ref: 'users', index: { unique: true } }]
 };
 
 var warehouseContactsSchema = new Schema(fields,{ collection: 'warehouseContacts' });

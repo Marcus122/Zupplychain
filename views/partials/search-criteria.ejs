@@ -13,7 +13,7 @@
 			<input type="hidden" name="search-id" value="<%= searchId %>"/>
 		<%}%>
 		<div class="main">
-			<form class="storage-search loom-form" action="/search" id="search-form" novalidate>
+			<form class="storage-search loom-form" action="/search" id="search-form" novalidate autocomplete="off">
 			<div class="input-field">
 					<label for="postcode">Target Postcode/City</label>
 					<!--<input type="text" name="postcode" required="required" minlength="3" value="<%= session.whSC ? session.whSC.sc[0].postcode : " "%>"/>-->
@@ -54,6 +54,12 @@
 					<label for="description">What are you storing?</label>
 					<!--<input type="text" name="description" minlength="0" maxlength="100" placeholder="" required="required" value="<%= session.whSC ? session.whSC.sc[0].description : "" %>"/>-->
 					<input type="text" name="description" minlength="0" maxlength="100" placeholder="" required="required" disabled value="<%= session.search ? query.description :  'Shoes'%>"/>
+				</div>
+				<div class="input-field has-search" style="display:none;">
+					<input type="hidden" name="hasSearch" value="true"/>
+			    </div>
+				<div class="input-field" style="display:none;">
+					<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
 				</div><br/>
 				<%
 					var minDate = new Date();
@@ -117,12 +123,6 @@
                     </div>
 					<button type="submit" class="action forward">Search</button>
 					<p style="display:none;" class="invalid-postcode-message"></p>
-				</div>
-				<div class="input-field has-search">
-					<input type="hidden" name="hasSearch" value="true"/>
-			    </div>
-				<div class="input-field">
-					<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
 				</div>
 			</form>
 		</div>

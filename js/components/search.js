@@ -66,20 +66,20 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
     });
     
     $(document).on("click", ".register-before-click", function(evt){
-        evt.preventDefault();
-        var requestedUrl = $(evt.target).prop("href");
-        var $popup = $("#register-email-popup");
-        //bind up an onsuccess for the popup form that redirects to requested url once they've registered.
-        loom.addOnSuccessCallback("#register-email-form", function(response){
-            window.location.href = requestedUrl;
-        });
-        loom.addOnErrorCallback("#register-email-form", function(response){
-            Alerts.showErrorMessage("There was an error storing your details");
-            window.location.href = requestedUrl;
-        });
-        //show the popup.
-        $popup.show();
-        $popup.find("input[name='email']").focus(); //focus the first input.
+        // evt.preventDefault();
+        // var requestedUrl = $(evt.target).prop("href");
+        // var $popup = $("#register-email-popup");
+        // //bind up an onsuccess for the popup form that redirects to requested url once they've registered.
+        // loom.addOnSuccessCallback("#register-email-form", function(response){
+        //     window.location.href = requestedUrl;
+        // });
+        // loom.addOnErrorCallback("#register-email-form", function(response){
+        //     Alerts.showErrorMessage("There was an error storing your details");
+        //     window.location.href = requestedUrl;
+        // });
+        // //show the popup.
+        // $popup.show();
+        // $popup.find("input[name='email']").focus(); //focus the first input.
     });
     
     $('#search-results-table').on("loomSort",function(){

@@ -1,7 +1,7 @@
 
 //Main entry point for the website code.
 
-require(["jquery"], function($) {
+require(["jquery","components/global"], function($,Global) {
     
     init();
     
@@ -18,8 +18,15 @@ require(["jquery"], function($) {
 		});
         //fire up the loom form library.
         require(["loom/loom"], function(Loom){
-            var loom = new Loom();
+            var loom = new Loom({
+                onError:handleError
+            });
         });
+        
+        function handleError(){
+            var global = new Global();
+            global.show403Popup();
+        }
         
         if (onPage("search")){
             require(["components/search"], function(Search) {

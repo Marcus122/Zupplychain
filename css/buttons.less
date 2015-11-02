@@ -312,6 +312,12 @@ button.input-button{
     float: right;
     margin-bottom: 20px;
     width:91px;
+    &.bottom{
+        margin-bottom:0;
+        &.below-button{
+            .unit-margin-top(2);
+        }
+    }
     .toggle-view-edit.down{
         background:@primary;
         border: 1px solid @primary;

@@ -3,7 +3,7 @@ define(["jquery", "./form"],function($, Form){
     //singleton.
     var instance;
     
-	return function Class() {
+	return function Class(_config) {
         if (instance) {
             return instance;
         }
@@ -17,7 +17,7 @@ define(["jquery", "./form"],function($, Form){
             throw("Error : Could not require loom/loomConfig.. this version of loom requires a config file.");
             
         });
-        
+        var _config = _config;
         
 		var forms={};	
 		
@@ -36,6 +36,9 @@ define(["jquery", "./form"],function($, Form){
                 if (!id) {
                     id = count++; //if there is no id we fall back to an integer index.
                     console.log("loom.js WARNING: forms without ID's can cause issues with internal indexing in loom, consider adding ID's to all your forms.")
+                }
+                if(_config.onError){
+                    form.addOnErrorCallback(_config.onError);
                 }
                 forms[id] = form;
                 this.loomForm = form; //store the loomForm alongside the dom instance.

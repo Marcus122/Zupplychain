@@ -6,7 +6,7 @@
 			</div>
 			<section class="user-fields">
 				<div class="main">
-					<form class="loom-form" id="contacts-registration" method="post" action="/register-contact/<%=user.id%>">
+					<form class="loom-form" id="contacts-registration" method="post" action="/register-contact/<%=user.id%>" autocomplete="off">
 						<div class="input-field">
 							<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
 						</div>

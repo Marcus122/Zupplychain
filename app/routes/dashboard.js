@@ -5,7 +5,8 @@ var users = require("../controllers/users.js");
 var dashboard = require("../controllers/dashboard.js");
 var local = require("../local.config.js");
 var path = require('path');
-var emailer = require("../controllers/emailer.js")
+var emailer = require("../controllers/emailer.js");
+var utils  = require("../utils.js");
 
 var handler = function(app) {
 	app.param('warehouse_id', warehouses.load);
@@ -15,24 +16,28 @@ var handler = function(app) {
 	});
 	
 	app.get('/dashboard', checkForLogon, function(req,res){
-		dashboard.getWarehousesByUser(req.data.user,function(err,data){
-			if (err){
-				setErrorResponse("Warehouse not found",res);
-			}else{
-				req.data.warehouses = data.warehouses;
-				req.data.warehouse = data.warehouses[0];
-				req.data.masterContacts = data.masterContacts;
-				req.data.temperatures = data.temperatures;
-				req.data.services = data.services;
-				req.data.palletTypes = data.palletTypes;
-				req.data.specifications = data.specifications;
-				req.data.registerStatus = data.registerStatus;
-				req.data.authorisations = data.authorisations;
-				req.data.completedTasks = getTasksThatHaveBeenCompleted(data);
-				req.data.dashboardAccessLvl = data.dashboardAccessLvl;
-				res.render("dashboard",req.data);
-			}
-		});
+		if(req.data.user.type === 1){
+			dashboard.getWarehousesByUser(req.data.user,function(err,data){
+				if (err){
+					setErrorResponse("Warehouse not found",res);
+				}else{
+					req.data.warehouses = data.warehouses;
+					req.data.warehouse = data.warehouses[0];
+					req.data.masterContacts = data.masterContacts;
+					req.data.temperatures = data.temperatures;
+					req.data.services = data.services;
+					req.data.palletTypes = data.palletTypes;
+					req.data.specifications = data.specifications;
+					req.data.registerStatus = data.registerStatus;
+					req.data.authorisations = data.authorisations;
+					req.data.completedTasks = getTasksThatHaveBeenCompleted(data);
+					req.data.dashboardAccessLvl = data.dashboardAccessLvl;
+					res.render("dashboard",req.data);
+				}
+			});
+		}else{
+			res.render('/',req.data);
+		}
 	});
 	
 	app.post('/update-contacts', function(req,res){
@@ -54,11 +59,13 @@ var handler = function(app) {
 	app.get('/get-warehouse-contacts/:warehouse_id',function(req,res){
 		req.data.warehouse = req.warehouse;
 		req.data.registerStatus = local.config.registerStatus;
+		req.data.authorisations = dashboard.getAuthorisations(req.data.user.dashboardAccessLvl)
 		res.render('partials/dashboard/warehouse-specific-contacts',req.data);
 	});
 	
 	app.post('/save-account-details',function(req,res){
 		saveAccountDetails(req,function(err){
+			req.data.authorisations = dashboard.getAuthorisations(req.data.user.dashboardAccessLvl)
 			if(err){
 				setResponseWithErr('An error occurred while attempting to change your details',res);
 			}else{
@@ -337,7 +344,7 @@ function createContact(req,res,cb){
 								//Delete the created user
 							}else{
 								emailer.sendMail(req,res,template,req.body.email,'info@zupplychain.com','Complete Registration',function(err){
-									cb(false,{userId: user._id.toString()});
+									cb(false,{userId: user._id.toString(),expiry:user.expiry});
 								});
 							}
 						});
@@ -345,11 +352,10 @@ function createContact(req,res,cb){
 						res.render('emails/user-contact-exists',emailContactData,function(err,template){
 							if(err){
 								cb(err);
-								console.log(err);
 								//Delete the created user
 							}else{
 								emailer.sendMail(req,res,template,req.body.email,'info@zupplychain.com','Complete Registration',function(err){
-									cb(false,{userId: user._id.toString()});
+									cb(false,{userId: user._id.toString(),expiry:user.expiry});
 								});
 							}
 						});
@@ -381,7 +387,7 @@ function createContact(req,res,cb){
 									//Delete the created user
 								}else{
 									emailer.sendMail(req,res,template,req.body.email,'info@zupplychain.com','Complete Registration',function(err){
-										cb(false,{userId: user._id.toString(),contactId: result.toObject()._id.toString()});
+										cb(false,{userId: user._id.toString(),contactId: result.toObject()._id.toString(),expiry:user.expiry});
 									});
 								}
 							});
@@ -392,7 +398,7 @@ function createContact(req,res,cb){
 									//Delete the created user
 								}else{
 									emailer.sendMail(req,res,template,req.body.email,'info@zupplychain.com','Complete Registration',function(err){
-										cb(false,{userId: user._id.toString(),contactId: result.toObject()._id.toString()});
+										cb(false,{userId: user._id.toString(),contactId: result.toObject()._id.toString(),expiry:user.expiry});
 									});
 								}
 							});

@@ -72,12 +72,9 @@ label[for="photos"]{
 .provider-form{
 	 label{
 		margin-right:5%;
-	}
-	[for="maximum-insurance-level"]{
-		width:29%;
-	}
-	[for="all-prod-insurance"]{
-		width:86%;
+		&[for="description"]{
+			width:100%;
+		}
 	}
 	 .small-input label{
 		width: auto;
@@ -102,20 +99,16 @@ label[for="photos"]{
 	width:100%;
 }
 .insurance-details{
-	label[for="minimumInsuranceLevel"]{
-		width:82%;
-		margin-bottom:2rem;
-		margin-bottom:20px;
-	}
-	label[for="additionalInsurance"]{
+	label[for="additional-insurance"]{
 		width:39%;
 		margin-right:0;
 	}
-	label[for="allProdInsurance"]{
-		width:80%;
+	label[for="all-prod-insurance"]{
+		width:91%;
+		margin-right:0;
 	}
-	label[for="additionalInsuranceDescription"]{
-		width:100%;
+	label[for="maximum-insurance-level"]{
+		width:41%;
 	}
 	.row .input-field{
 		margin-bottom:0;
@@ -217,11 +210,11 @@ label[for="photos"]{
         label{
             width:auto;
             font-weight:bold;
-			max-width:63%;
+			max-width:65%;
 			float:left;
 			}
         input,.input-span{
-            width:30%;
+            width:30% !important;
         }
         .input-field{
 			text-align:right;
@@ -229,118 +222,6 @@ label[for="photos"]{
         }
     }
 
-    .open-tray-link{
-        border-bottom:1px solid #ccc;
-        .unit-padding(2);
-        display:block;
-        color:@dark-text;
-        font-size:20px;
-        font-size:2rem;
-        cursor:pointer;
-        position:relative;
-		background-color: #FFD;
-        &.open{
-            &:after{
-             content: "\f126";
-             }
-             
-        }
-        &:after{
-            &:extend(.ion);
-            content: "\f123";
-            position:absolute;
-            right:20px;
-            font-size:24px;
-            font-size:2.4rem;
-        }
-    }
-    .trays{
-        padding:0px;
-        display:none;
-        &.open{
-            display:table-row;
-        }
-        .tray-holder{
-            display:none;
-            &.open {
-                display:initial;
-            }
-        }
-        .aside{
-            font-style:italic;
-        }
-		form{
-			margin-bottom:0px;
-		}
-        .tray {
-            background-color:#eee;
-            .unit-padding(2);
-            border-bottom:1px solid #ccc;
-            box-shadow:inset 0px 3px 10px rgba(0,0,0,0.3);
-            display:none;
-            &.open{
-                display:block;
-            }
-            .inner {
-                background-color:#fff;
-                .unit-padding(2);
-                border:1px solid #ccc;
-                border-radius:5px;
-				.unit-margin-bottom(2);
-				table{
-					width:100%;
-					box-shadow:0px 2px 4px rgba(0,0,0,0.3);
-				}
-            }
-            .copy-controls select{
-                width:42%;
-				margin-right:5%;
-            }
-        }
-        td {
-            padding:0px;
-            td {
-                .unit-padding(1);
-            }
-        }
-
-		.availability-table{
-			width:100%;
-			input{
-				width:100%;
-			}
-			
-		}
-		
-        .date-pricing-table{
-            .unit-margin-top(2);
-            tr.only-one {
-                .trash-button {
-                    //visibility:hidden;
-                }
-            }
-            td {
-                text-align:center;
-                input,.input-span {
-                    width:100%;
-                }
-            }
-        }
-        .add{
-            display:inline;
-            cursor:pointer;
-            button{
-                .unit-margin-left(1);
-            }
-        }
-        .row.controls {
-            text-align:right;
-        }
-        .controls{
-            text-align:right;
-        }
-
-    }
 	.input-field.error input{
 		background-image:none !important;
 	}
@@ -371,9 +252,6 @@ label[for="photos"]{
 	}
 	td.success{
 		//background-image: url('/css/loom/images/icon-success.png');
-		background-repeat:no-repeat;
-		background-position: 95% 50%;
-		background-color: #dff2bf;
 		button.popup:after{
 			content:@ionicon-var-android-create;
 		}
@@ -528,7 +406,7 @@ label[for="photos"]{
 		}
 		.saved:before{
 			&:extend(.ion);
-			content:@ionicon-var-android-done;
+			content:@ionicon-var-checkmark-round;
 			font-size: 10rem;
 		  	color: green;
 		}

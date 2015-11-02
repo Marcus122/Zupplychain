@@ -1,11 +1,12 @@
-define(["jquery"], function ($) {
+define(["jquery","components/global"], function ($,Global) {
 	var c;
 	if(!c){
 		c= new Class();
 	}
 	function Class(){
 		var err,
-			csrf = $('meta[name="csrf-token"]').attr("content");
+			csrf = $('meta[name="csrf-token"]').attr("content"),
+			global = new Global();
 		
 		function loadWarehouse(url,cb){
 			$.ajax({
@@ -18,8 +19,12 @@ define(["jquery"], function ($) {
 					cb(response);
 				},
 				error:function(jqXHR, textStatus, errThrown){
-					err = JSON.parse(jqXHR.responseText);
-					cb(err);
+					if(jqXHR.status === 403){
+						handle403Error();
+					}else{
+						err = JSON.parse(jqXHR.responseText);
+						cb(err);
+					}
 				}
 			});
 		}
@@ -35,8 +40,12 @@ define(["jquery"], function ($) {
 					cb(response)
 				},
 				error:function(jqXHR, textStatus, errThrown){
-					err = JSON.parse(jqXHR.responseText);
-					cb(err);
+					if(jqXHR.status === 403){
+						handle403Error();
+					}else{
+						err = JSON.parse(jqXHR.responseText);
+						cb(err);
+					}
 				}
 			});
 		}
@@ -52,8 +61,12 @@ define(["jquery"], function ($) {
 					cb(response)
 				},
 				error:function(jqXHR, textStatus, errThrown){
-					err = JSON.parse(jqXHR.responseText);
-					cb(err);
+					if(jqXHR.status === 403){
+						handle403Error();
+					}else{
+						err = JSON.parse(jqXHR.responseText);
+						cb(err);
+					}
 				}
 			});
 		}
@@ -69,8 +82,12 @@ define(["jquery"], function ($) {
 					cb(response)
 				},
 				error:function(jqXHR, textStatus, errThrown){
-					err = JSON.parse(jqXHR.responseText);
-					cb(err);
+					if(jqXHR.status === 403){
+						handle403Error();
+					}else{
+						err = JSON.parse(jqXHR.responseText);
+						cb(err);
+					}
 				}
 			});
 		}
@@ -86,8 +103,12 @@ define(["jquery"], function ($) {
 					cb(false,response)
 				},
 				error:function(jqXHR, textStatus, errThrown){
-					err = JSON.parse(jqXHR.responseText);
-					cb(err);
+					if(jqXHR.status === 403){
+						handle403Error();
+					}else{
+						err = JSON.parse(jqXHR.responseText);
+						cb(err);
+					}
 				}
 			});
 		}
@@ -103,8 +124,12 @@ define(["jquery"], function ($) {
 					cb(response);
 				},
 				error:function(jqXHR,textStatus,errThrown){
-					err = JSON.parse(jqXHR.responseText);
-					cb(err);
+					if(jqXHR.status === 403){
+						handle403Error();
+					}else{
+						err = JSON.parse(jqXHR.responseText);
+						cb(err);
+					}
 				}
 			})
 		}
@@ -121,8 +146,12 @@ define(["jquery"], function ($) {
 					cb(response);
 				},
 				error:function(jqXHR,textStatus,errThrown){
-					err = JSON.parse(jqXHR.responseText);
-					cb(err);
+					if(jqXHR.status === 403){
+						handle403Error();
+					}else{
+						err = JSON.parse(jqXHR.responseText);
+						cb(err);
+					}
 				}
 			})
 		}
@@ -138,8 +167,12 @@ define(["jquery"], function ($) {
 					cb(response);
 				},
 				error:function(jqXHR,textStatus,errThrown){
-					err = JSON.parse(jqXHR.responseText);
-					cb(err);
+					if(jqXHR.status === 403){
+						handle403Error();
+					}else{
+						err = JSON.parse(jqXHR.responseText);
+						cb(err);
+					}
 				}
 			})
 		}
@@ -155,10 +188,18 @@ define(["jquery"], function ($) {
 					cb(response);
 				},
 				error:function(jqXHR,textStatus,errThrown){
-					err = JSON.parse(jqXHR.responseText);
-					cb(err);
+					if(jqXHR.status === 403){
+						handle403Error();
+					}else{
+						err = JSON.parse(jqXHR.responseText);
+						cb(err);
+					}
 				}
 			});
+		}
+		
+		function handle403Error(){
+			global.show403Popup();
 		}
 		
 		return{
