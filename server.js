@@ -13,6 +13,7 @@ var helmet = require('helmet');
 var csurf = require('csurf');
 var ejs = require('ejs');
 var minify = require('html-minifier').minify;
+var Utils = require('./app/utils.js');
 var data={};
 var random = Math.random()*100;
 random = random.toString();
@@ -83,11 +84,18 @@ app.use(load(data));
 
 app.use(csurf());
 
+//Utils.startProviderContactListReminderCronJob(app);
+
 app.use(function(req, res, next){
 	res.locals.session = req.session;
 	res.locals.url = req.protocol + '://' + req.get('host') + req.originalUrl;
 	res.locals.csrfTokenFunction = req.csrfToken;
-	next()
+	if(req.url == '/favicon.ico'){
+		res.writeHead(200, {'Content-Type': 'image/x-icon'} );
+		res.end();
+	}else{
+		next()
+	}
 });
 
 app.get('/demo', function (req,res) {

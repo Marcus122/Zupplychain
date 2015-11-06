@@ -7,7 +7,7 @@
 			<section class="user-fields">
 				<div class="main">
 					<form class="loom-form" id="contacts-registration" method="post" action="/register-contact/<%=user.id%>" autocomplete="off">
-						<div class="input-field">
+						<div class="input-field hidden">
 							<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
 						</div>
 						<div class="content-box">
@@ -26,7 +26,7 @@
 									</div>
 									<div class="input-field">
 										<label for="phone-number">Phone Number</label>
-										<input required name="phone-number" type="tel" value="<%=user.phoneNumber%>"/>
+										<input name="phone-number" type="tel" value="<%=user.phoneNumber%>"/>
 									</div>
 									<div class="input-field">
 										<label for="password">Password</label>
@@ -44,6 +44,11 @@
 							</div>
 						</div>
 					</form>
+				</div>
+				<div class=" footer form-footer">
+					<div class="container">
+						<a class="button simple tandc" href="#">VIEW TERMS AND CONDITIONS</a>
+					</div>
 				</div>
 			</section>
 		</main>

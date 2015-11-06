@@ -10,7 +10,7 @@ Utils = require("../utils.js"),
 fh = require("../controllers/file-handler.js"),
 multiparty = require('multiparty'),
 company = require('../controllers/company'),
-contacts = require('../controllers/warehouse-contacts.js')
+contacts = require('../controllers/warehouse-contacts.js');
 
 var handler = function(app) {
 	app.param('warehouse_id', warehouse.load);
@@ -33,7 +33,9 @@ var handler = function(app) {
 							setErrorResponse(err,res);
 							//Maybe delete the user, warehouse and the company
 						}else{
-							setResponse(req,res);
+							company.updateContactsReminderSent(req.data.user.company.toObject()._id,false,function(err){
+								setResponse(req,res);
+							});
 						}
 					});
 				}
@@ -66,7 +68,6 @@ function uploadImage(req,res){
 	var form = new multiparty.Form();
 	var numSuccessfullCb = 0;
 	var photos = []
-	console.log(req.warehouse);
 	if (req.warehouse.photos !== undefined){
 		photos = req.warehouse.photos;
 	}
@@ -279,8 +280,10 @@ function warehouseProfile (req,res){
         req.data.minDurationOptions = local.config.minDurationOptions;
         req.data.temperatures = local.config.temperatures;
 		req.data.page = 'warehouse-profile';
-        var query = search.getFromSession(req, function(err, query){
+		req.data.palletWidths = local.config.palletTypes;
+        search.getFromSession(req, function(err, query){
             if (!err) {
+				req.data.query = query;
                 req.data.warehouse.generateStorageProfile(query);
             }
             res.render("warehouse-profile",req.data);

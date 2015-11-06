@@ -68,7 +68,7 @@
 													
 													<td class="button-cell pricing <%= pricingComplete ?  'success' : '' %>" data-th="Pricing">
 														<span class="edit-data">DATA</span>
-														<button data-type="pricing" type="button" class="popup mini"/>
+														<button data-form="price-and-availability-user-data" data-type="pricing" type="button" class="popup mini"/>
 													</td>
 													<!--<td class="button-cell discounts" data-th="Volume Discount">
 														<button data-template="volume"  type="button" class="secondary popup mini">click here</button>
@@ -76,7 +76,7 @@
 													
 													<td class="button-cell pallets <%= palletsComplete ? 'success' : ''%>" data-th="Available Pallets">
 														<span class="edit-data">DATA</span>
-														<button data-type="availability" type="button" class="popup mini"/>
+														<button data-form="availability-user-data" data-type="availability" type="button" class="popup mini"/>
 													</td>
 												
 													<!--<td data-th="Progress">
@@ -98,7 +98,7 @@
 
                                                        </div>
                                                        <div class="availability-trays tray-holder">
-                                                            <form  data-storage-id="<%=storage._id%>" id="availability-<%=storage._id %>"  class="loom-form provider-form availability-form" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" data-storage_id="<%=storage._id%>" >
+                                                            <form  data-storage-id="<%=storage._id%>" id="availability-<%=storage._id %>"  class="loom-form provider-form availability-form" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" data-storage_id="<%=storage._id%>" data-id="availability-user-data">
 																<% include ./partials/availability-tray %>
                                                             </form>
                                                        </div>

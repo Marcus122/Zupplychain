@@ -142,7 +142,7 @@
 			</div>
 
                         <form class="loom-form row" action="/quotation-request" id="quotation-request-form">       
-                                <div class="input-field" style="display:none">
+                                <div class="input-field hidden">
 				      <input type="hidden" name="warehouseId" value="<%= warehouse._id %>" />
 				  </div>
                         <div class="content-box contact-information">
@@ -170,7 +170,7 @@
                                                 <option value="1">Get Quote From Provider</option>
                                             </select>
                                         </div>
-                                        <div class="input-field" data-field="dispatch-location" style="display:none;">
+                                        <div class="input-field hidden" data-field="dispatch-location">
                                             <label for="dispatch-location">Dispatch<div class="tool-tip hint--top" data-hint="Town or postcode">?</div> Location*</label>
                                             <input type="text" name="dispatchLocation"/>
                                         </div>

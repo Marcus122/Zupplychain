@@ -1,7 +1,7 @@
 
 //Main entry point for the website code.
 
-require(["jquery","components/global"], function($,Global) {
+require(["jquery","components/global","jqueryPlugins/jquery.scrollTo.min","loom/loomAlerts"], function($,Global,Scroll,Alert) {
     
     init();
     
@@ -23,9 +23,14 @@ require(["jquery","components/global"], function($,Global) {
             });
         });
         
-        function handleError(){
-            var global = new Global();
-            global.show403Popup();
+        function handleError(response){
+            if(response.xhr && response.xhr.status === 403){
+                var global = new Global();
+                global.show403Popup();
+            }else{
+                var message = response.data.message || response.data;
+                Alert.showPersistentErrorMessage(message);
+            }
         }
         
         if (onPage("search")){
@@ -55,6 +60,10 @@ require(["jquery","components/global"], function($,Global) {
         }
         
 	}
+    
+    function handleLoomValidationError($element){
+        $.scrollTo($element); 
+    }
 	
 });
 

@@ -39,7 +39,7 @@
                             <th>Storage Name</th>
                         <%}
                     }%>
-                    <th>Estimated Requirements</th>
+                    <th>Estimated Requirements <%if(page === "warehouse-profile"){%><div class="tool-tip hint--top" data-hint="You can amend quantities for each week to refine space availability and estimated cost">?</div><%}%></th>
                     <th>Price per Pallet per Week (&pound;)</th>
                     <th>In and Out Price per Pallet (&pound;)</th>
                     <th>Weekly Total (&pound;)</th>
@@ -53,7 +53,7 @@
                     <%}
                 }%>
 		  <dl>
-		    <dt class="primary"></dt><dd>Available Space</dd><dt class="highlight"></dt><dd>Your Required Space</dd>
+		    <dt class="primary"></dt><dd>Available Space</dd><dt class="highlight"></dt><dd>Estimated Requirements</dd>
 		  </dl>
 		</td>
                 </tr>

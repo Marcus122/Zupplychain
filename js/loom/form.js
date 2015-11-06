@@ -161,6 +161,10 @@ define(["jquery", "./formField", "./loomConfig"],function($, FormField, Config){
                 }
 			}
         }
+        
+        function focusOnInvalidField(){
+            $(this.formElement).find('.input-field.error input').first().focus();
+        }
 		
         function reset() {
             clearStateMessages();
@@ -572,7 +576,8 @@ define(["jquery", "./formField", "./loomConfig"],function($, FormField, Config){
             enable:enable,
             reset:reset,
             onSubmit:onSubmit,
-            disableIfDisableOnLoadSet:disableIfDisableOnLoadSet
+            disableIfDisableOnLoadSet:disableIfDisableOnLoadSet,
+            focusOnInvalidField:focusOnInvalidField
 		};
         if (Config.USE_LOOM_RESPONSE_HANDLER_BY_DEFAULT) { //TODO add a per form attribute to activate / deactivate this too.
             require(["loom/loomResponseHandler"], function(ResponseHandler){

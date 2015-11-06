@@ -842,12 +842,17 @@ span.highlight-bright{
     font-size:2rem;
     cursor:pointer;
     position:relative;
-    background-color: #FFD;
+    &.not-completed{
+        background-color: #FFD;
+    }
     &.open{
         &:after{
             content: "\f126";
             }
             
+    }
+    &.success{
+        background-color: #dff2bf;
     }
     &:after{
         &:extend(.ion);
@@ -951,6 +956,10 @@ td.success{
     background-repeat:no-repeat;
     background-position: 95% 50%;
     background-color: #dff2bf;
+}
+
+.hidden{
+    display:none;
 }
 
 /*! jQuery UI - v1.11.4 - 2015-07-06

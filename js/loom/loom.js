@@ -158,6 +158,14 @@ define(["jquery", "./form"],function($, Form){
             thisForm.onSubmit();
         }
         
+        function focusOnInvalidField(formOrId){
+            var thisForm = getForm(formOrId);
+            if (!thisForm) {
+                return false;
+            }
+            thisForm.focusOnInvalidField();
+        }
+        
         
 		instance = {
 			init:init,
@@ -170,7 +178,8 @@ define(["jquery", "./form"],function($, Form){
             getForm:getForm,
             trySubmitForm:trySubmitForm,
             reset:reset,
-            clearValidationStylesOnAllForms:clearValidationStylesOnAllForms
+            clearValidationStylesOnAllForms:clearValidationStylesOnAllForms,
+            focusOnInvalidField:focusOnInvalidField
 		}
         return instance;
 	}

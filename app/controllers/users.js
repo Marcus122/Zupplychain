@@ -73,18 +73,6 @@ exports.create = function (req,res,data,cb,cookieSet) {
 exports.login = function(req,res,cb){
 	var passwordIncorrect={error:"The user name or password is incorrect"};
 	var locked={error:"Your account has been locked, if this persists contact us or try again later"};
-	// User.findOne({email:req.body.email,active:true},function(err,user){
-	// 	if(err || !user){
-	// 		return cb(loginFailed);
-	// 	}else{
-	// 		if( passwordHash.verify(req.body.password,user.password ) ){
-	// 			setCookie(user,req,res);
-	// 			cb(null,user);
-	// 		}else{
-	// 			cb(loginFailed);
-	// 		}
-	// 	}
-	// }).populate('company');
 	User.authenticateLoginandLogin(req.body.email,req.body.password,function(err,result,reason){
 		if(result){
 			setCookie(result,req,res);
@@ -145,6 +133,9 @@ exports.update = function(user,cb,dontCheckEmailAddress){
 			return cb({message:"Email Address Already Exists"});
 		}else{
 			user.active=true;
+			if(results.expiry !== undefined){
+				user.expiry = results.expiry;
+			}
 			user.save(function(err){
 				if(!err){
 					cb(null,user);

@@ -16,7 +16,7 @@ var handler = function(app) {
 	});
 	
 	app.get('/dashboard', checkForLogon, function(req,res){
-		if(req.data.user.type === 1){
+		if(req.data.user.type === 1 && req.data.user.expiry === null){
 			dashboard.getWarehousesByUser(req.data.user,function(err,data){
 				if (err){
 					setErrorResponse("Warehouse not found",res);
@@ -59,17 +59,16 @@ var handler = function(app) {
 	app.get('/get-warehouse-contacts/:warehouse_id',function(req,res){
 		req.data.warehouse = req.warehouse;
 		req.data.registerStatus = local.config.registerStatus;
-		req.data.authorisations = dashboard.getAuthorisations(req.data.user.dashboardAccessLvl)
+		req.data.authorisations = dashboard.getAuthorisations(req.data.user.dashboardAccessLvl);
 		res.render('partials/dashboard/warehouse-specific-contacts',req.data);
 	});
 	
 	app.post('/save-account-details',function(req,res){
 		saveAccountDetails(req,function(err){
-			req.data.authorisations = dashboard.getAuthorisations(req.data.user.dashboardAccessLvl)
 			if(err){
 				setResponseWithErr('An error occurred while attempting to change your details',res);
 			}else{
-				setResponse({message:'Details changed successfully',email:req.body.email},res);
+				setResponse({message:'Details changed successfully',email:req.body.email,authorisations:dashboard.getAuthorisations(req.data.user.dashboardAccessLvl)},res);
 			}
 		});
 	});
@@ -104,6 +103,7 @@ var handler = function(app) {
 					req.data.warehouse = warehouses[0];//If they only have one warehouse just return the first one
 					req.data.masterContacts = masterContacts;
 					req.data.registerStatus = local.config.registerStatus;
+					req.data.authorisations = dashboard.getAuthorisations(req.data.user.dashboardAccessLvl);
 					res.render("partials/dashboard/contacts",req.data);
 				});
 			}
@@ -153,7 +153,7 @@ var handler = function(app) {
 	app.post('/create-contact',function(req,res){
 		createContact(req,res,function(err,results){
 			if(err){
-				setResponseWithErr('Error: Contact not created',res);
+				setResponseWithErr('An error occurred while creating contacts',res);
 			}else{
 				setResponse(results,res);
 			}
@@ -284,7 +284,7 @@ function saveAccountDetails(req,cb){
 }
 
 function deleteItems(req,res,cb){
-	dashboard.deleteItems(req,function(err,result){
+	dashboard.deleteItems(req,res,function(err,result){
 		if(err){
 			cb(err);
 		}else{
@@ -328,23 +328,21 @@ function createContact(req,res,cb){
 			if(tableId !== ""){
 				cntr['update' + req.body.role.replace(/\s/g, '')](tableId,user._id,function(err,result){
 					var emailContactData = {};
-					emailContactData.title = 'Complete Registration';
-					emailContactData.subtitle = 'Complete Registration';
 					emailContactData.referer = req.data.user.name;
 					emailContactData.role = req.body.role;
 					emailContactData.company = req.data.user.company.name;
 					emailContactData.link = req.protocol + '://' + req.headers.host + '/initial-registration/' + user._id.toString();
-					emailContactData.warehouse = "";
+					emailContactData.warehouse = req.body.warehouseName || "";
 					emailContactData.config = local.config;
 					emailContactData.host = req.protocol + '://' + req.headers.host;
-					if (userExisted === false){
+					if (userExisted === false || user.expiry !== null){
 						res.render('emails/create-contact',emailContactData,function(err,template){
 							if(err){
 								cb(err);
 								//Delete the created user
 							}else{
 								emailer.sendMail(req,res,template,req.body.email,'info@zupplychain.com','Complete Registration',function(err){
-									cb(false,{userId: user._id.toString(),expiry:user.expiry});
+									cb(false,{userId: user._id.toString(),expiry:user.expiry,contactId:tableId});
 								});
 							}
 						});
@@ -355,7 +353,7 @@ function createContact(req,res,cb){
 								//Delete the created user
 							}else{
 								emailer.sendMail(req,res,template,req.body.email,'info@zupplychain.com','Complete Registration',function(err){
-									cb(false,{userId: user._id.toString(),expiry:user.expiry});
+									cb(false,{userId: user._id.toString(),expiry:user.expiry,contactId:tableId});
 								});
 							}
 						});
@@ -371,16 +369,14 @@ function createContact(req,res,cb){
 						//Delete the created user
 					}else{
 						var emailContactData = {};
-						emailContactData.title = 'Complete Registration';
-						emailContactData.subtitle = 'Complete Registration';
 						emailContactData.referer = req.data.user.name;
 						emailContactData.role = req.body.role;
 						emailContactData.company = req.data.user.company.name;
 						emailContactData.link = req.protocol + '://' + req.headers.host + '/initial-registration/' + user._id.toString();
-						emailContactData.warehouse = "";
+						emailContactData.warehouse = req.body.warehouseName || "";
 						emailContactData.config = local.config;
 						emailContactData.host = req.protocol + '://' + req.headers.host;
-						if (userExisted === false){
+						if (userExisted === false || user.expiry !== null){
 							res.render('emails/create-contact',emailContactData,function(err,template){
 								if(err){
 									cb(err);

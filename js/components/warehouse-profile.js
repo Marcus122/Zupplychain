@@ -24,18 +24,18 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
             });
             
             $(document).on("click",".popup-window .close",function(){
-				$(this).closest('.popup-window').hide();
+				$(this).closest('.popup-window').addClass('hidden');
 			});
             
             $("#choose-this-warehouse").click(function(e){
                 // e.preventDefault();
                 // var $popup = $("#choose-this-warehouse-popup");
                 // $popup.css({position:"absolute", top:$('#estimated-total-cost').offset().top-400 });
-                // $popup.show();
+                // $popup.removeClass('hidden);
             });
             
             $("#choose-this-warehouse-popup .close").click(function(){
-                $("#choose-this-warehouse-popup").hide();
+                $("#choose-this-warehouse-popup").addClass('hidden');
             });
             
             //world's simplest image gallery :)
@@ -75,8 +75,8 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
 			
 			if ($(".search-result-info-box").length > 0){
 				var $searchResInfoBox = $(".search-result-info-box");
-				$searchResInfoBox.fadeIn();
-				$searchResInfoBox.find('.controls').hide();
+                $searchResInfoBox.fadeIn().removeClass('hidden');
+				$searchResInfoBox.find('.controls').addClass('hidden');
 			}
             
             if ($("#provider-offer-reply-form").length > 0) {
@@ -115,31 +115,31 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
             $('div[data-content="comment"] a').click(function(e){
                 e.preventDefault();
                 var $this = $(this);
-                $this.parent().hide().siblings().show();
+                $this.parent().addClass('hidden').siblings().removeClass('hidden');
             });
             
             $('button[name="view-conversation"]').click(function(){
-               $('.popup-window.provider-user-conversation').show(); 
+               $('.popup-window.provider-user-conversation').removeClass('hidden'); 
                global.centerPopup($('.popup-window.provider-user-conversation'));
             });
         }
         
         function initWarehouseProfileRowChanger(){
-            $('.change-warehouse-profile-row-number .view-less').hide();
-            $('.change-warehouse-profile-row-number .view-more').hide();
+            $('.change-warehouse-profile-row-number .view-less').addClass('hidden');
+            $('.change-warehouse-profile-row-number .view-more').addClass('hidden');
             if ($('.pricing-container form table > tbody > tr').length > 12){
-                $('.change-warehouse-profile-row-number .view-more').show();
-                $('.pricing-container form table > tbody > tr').hide().slice(0,12).show();
-                $('.change-warehouse-profile-row-number .view-less').hide();
+                $('.change-warehouse-profile-row-number .view-more').removeClass('hidden');
+                $('.pricing-container form table > tbody > tr').addClass('hidden').slice(0,12).removeClass('hidden');
+                $('.change-warehouse-profile-row-number .view-less').addClass('hidden');
                 $('.change-warehouse-profile-row-number .view-more').click(function (){
-                    $(".pricing-container form table > tbody > tr").show();
-                    $('.change-warehouse-profile-row-number .view-less').show();
-                    $('.change-warehouse-profile-row-number .view-more').hide();
+                    $(".pricing-container form table > tbody > tr").removeClass('hidden');
+                    $('.change-warehouse-profile-row-number .view-less').removeClass('hidden');
+                    $('.change-warehouse-profile-row-number .view-more').addClass('hidden');
                 });
                 $('.change-warehouse-profile-row-number .view-less').click(function (){
-                    $('.pricing-container form table > tbody > tr').hide().slice(0,12).show();
-                    $('.change-warehouse-profile-row-number .view-more').show();
-                    $('.change-warehouse-profile-row-number .view-less').hide();
+                    $('.pricing-container form table > tbody > tr').addClass('hidden').slice(0,12).removeClass('hidden');
+                    $('.change-warehouse-profile-row-number .view-more').removeClass('hidden');
+                    $('.change-warehouse-profile-row-number .view-less').addClass('hidden');
                 });
             }
         }
@@ -147,25 +147,25 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
         function initTransport(){
             
             if ($('select[name="transport"]').val() === "1"){
-                $('.input-field[data-field="dispatch-location"]').show();
+                $('.input-field[data-field="dispatch-location"]').removeClass('hidden');
                 $('input[name="dispatchLocation"]').attr("required","required")
             }
             
             $('button[name="open-transport-fields"]').click(function(){
-                $(this).parent('.main.row.transport').find('.six.columns').show();
-                $(this).hide();
+                $(this).parent('.main.row.transport').find('.six.columns').removeClass('hidden');
+                $(this).addClass('hidden');
             });
             $('button[name="close-transport-fields"]').click(function(){
-                $(this).parent('.six.columns').hide();
-                $(this).parent('.six.columns').next('.six.columns').hide();
-                $('button[name="open-transport-fields"]').show();
+                $(this).parent('.six.columns').addClass('hidden');
+                $(this).parent('.six.columns').next('.six.columns').addClass('hidden');
+                $('button[name="open-transport-fields"]').removeClass('hidden');
             });
             $('select[name="transport"]').change(function(){
                 if($(this).val() === "1"){
-                    $('.input-field[data-field="dispatch-location"]').show();
+                    $('.input-field[data-field="dispatch-location"]').removeClass('hidden');
                     $('input[name="dispatchLocation"]').attr("required","required")
                 }else{
-                    $('.input-field[data-field="dispatch-location"]').hide();
+                    $('.input-field[data-field="dispatch-location"]').addClass('hidden');
                     $('input[name="dispatchLocation"]').removeAttr("required")
                     $('input[name="dispatchLocation"]').val("");
                 }
@@ -173,11 +173,11 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
             
             // $('input[name="paymentTermsAccepted"], input[name="transportTermsAccepted"]').change(function(){
             //     if($(this).is(":checked")){
-            //         $('button[name="accept"]').show();
-            //         $('button[name="decline"]').hide();
+            //         $('button[name="accept"]').removeClass('hidden');
+            //         $('button[name="decline"]').addClass('hidden');
             //     }else if (!$('input[name="paymentTermsAccepted"]').is(":checked") && !$('input[name="transportTermsAccepted"]').is(":checked")){
-            //         $('button[name="accept"]').hide();
-            //         $('button[name="decline"]').show();
+            //         $('button[name="accept"]').addClass('hidden');
+            //         $('button[name="decline"]').removeClass('hidden');
             //     }
             // });
             
@@ -211,11 +211,11 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
         function initPaymentTerms(){
             $('select[name="paymentTerms"]').change(function(){
                 if ($(this).val() === '3'){
-                    $(this).parent().next('.input-field').show();
+                    $(this).parent().next('.input-field').removeClass('hidden');
                     $(this).parent().next('.input-field').find('input').prop("required",true);
                     rebindFormByJqueryObj($(this).closest('form'),true);
                 }else{
-                    $(this).parent().next('.input-field').hide();
+                    $(this).parent().next('.input-field').addClass('hidden');
                     $(this).parent().next('.input-field').find('input').val("");
                     $(this).parent().next('.input-field').find('input').removeAttr("required");
                     rebindFormByJqueryObj($(this).closest('form'),true);

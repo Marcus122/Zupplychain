@@ -82,6 +82,7 @@ exports.warehouseByCompany = function(company,callback){
 };
 
 exports.checkUserIsMaterContact = function(userId,cb){
+	console.log(userId.toString());
 	Company.loadByUser(userId,function(err,result){
 		if(err){
 			cb(err);
@@ -143,6 +144,36 @@ exports.deleteMasterContact = function(company,userId,cb){
 					});
 				}
 			});
+		}
+	});
+}
+
+exports.load = function(id,cb){
+	Company.load(id,function(err,result){
+		if(err){
+			cb(err);
+		}else{
+			cb(false,result);
+		}
+	});
+}
+
+exports.updateContactsReminderSent = function(id,contactsReminderSent,cb){
+	Company.updateContactsReminderSent(id,contactsReminderSent,function(err,result){
+		if(err){
+			cb(err);
+		}else{
+			cb(false,result)
+		}
+	})
+}
+
+exports.loadAllCompanies = function(cb){
+	Company.loadAllCompanies(function(err,results){
+		if(err){
+			cb(err);
+		}else{
+			cb(false,results);
 		}
 	});
 }

@@ -1,4 +1,4 @@
-<div data-view="contacts" class="dashboard-container columns nine" style="display:none">
+<div data-view="contacts" class="dashboard-container columns nine hidden">
 	<div class="secondary content-box">
 		<div class="header">
 			<h3>contacts</h3>
@@ -7,10 +7,10 @@
 			<section class="tabs">
 				<ul class="tab-links tabs two-tabs">
 					<%if(authorisations.contacts.masterContacts === true){%>
-						<a href="#master-contact"><li class="active">Company Master Contacts</li></a>
-						<a href="#warehouse-contacts"><li>Warehouse Contacts</li></a>
+						<li class="active"><a href="#master-contact">Company Master Contacts</a></li>
+						<li><a href="#warehouse-contacts">Warehouse Contacts</a></li>
 					<%}else{%>
-						<a href="#warehouse-contacts"><li class="active">Warehouse Contacts</li></a>
+						<li class="active"><a href="#warehouse-contacts">Warehouse Contacts</a></li>
 					<%}%>
 				</ul>
 			</section>
@@ -60,7 +60,7 @@
 							</table>
 								<div class="columns twelve button-container">
 									<button type="button" name="save-new-contacts" class="button action">Save</button>
-									<button type="button" name="delete" class="button action" style="display:none;">Delete</button>
+									<button type="button" name="delete" class="button action hidden">Delete</button>
 									<div id="add-new-contact-container">
 										<label for="add-new-contacts">Add new contact</label>
 										<button type="button" name="add-new-contact" class="add-button"></button>
@@ -74,19 +74,11 @@
 		</div>
 	</div>
 	<%if(warehouses.length === 1){%>
-		<div data-one-warehouse="true" style="display:none;">
+		<div data-one-warehouse="true" class="hidden">
 			<% include ../../partials/dashboard/warehouse-specific-contacts%>
 		</div>
 	<%}%>
 </div>
 <script type="text/template" id="master-contact-row">
-	<tr data-status="new">
-		<td></td>
-		<td data-field="name" class="input-field no-success-validation-style"><input required type="text" name="name"/></td>
-		<td data-field="email" class="input-field no-success-validation-style"><input required type="email" name="email"/></td>
-		<td data-field="phone-number" class="input-field no-success-validation-style"><input type="tel" name="phone-number"/></td>
-		<td data-field="register-status" ></td>
-		<td data-field="delete" class="input-field no-success-validation-style checkbox"></td>
-		<td data-field="resend-email"></td>
-	</tr>
+	<% include ../../partials/dashboard/master-contact-row%>
 </script>

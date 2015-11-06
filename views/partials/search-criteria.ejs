@@ -55,10 +55,10 @@
 					<!--<input type="text" name="description" minlength="0" maxlength="100" placeholder="" required="required" value="<%= session.whSC ? session.whSC.sc[0].description : "" %>"/>-->
 					<input type="text" name="description" minlength="0" maxlength="100" placeholder="" required="required" disabled value="<%= session.search ? query.description :  'Shoes'%>"/>
 				</div>
-				<div class="input-field has-search" style="display:none;">
+				<div class="input-field has-search hidden">
 					<input type="hidden" name="hasSearch" value="true"/>
 			    </div>
-				<div class="input-field" style="display:none;">
+				<div class="input-field hidden">
 					<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
 				</div><br/>
 				<%
@@ -68,8 +68,7 @@
 				%>
 				<div class="input-field">
 					<label for="start-date">Start Date</label>
-					<!--<input type="date" name="start-date" data-loom-add-controls="true" readonly required="required" min="<%=minDate.toISOString().substring(0, 10)%>" max="<%=maxDate.toISOString().substring(0, 10)%>" value="<%= session.whSC ? session.whSC.sc[0].startDate : today.toISOString().substring(0, 10)%>"/>-->
-					<input type="date" name="start-date" data-loom-add-controls="true" readonly required="required" min="<%=minDate.toISOString().substring(0, 10)%>" max="<%=maxDate.toISOString().substring(0, 10)%>" disabled value="<%= session.search ? query.startDate.toISOString().substring(0,10) : today.toISOString().substring(0, 10)%>"/>
+					<input type="date" name="start-date" data-loom-add-controls="true" readonly required="required" min="<%=minDate.toISOString().substring(0, 10)%>" max="<%=maxDate.toISOString().substring(0, 10)%>" value="<%= session.whSC ? session.whSC.sc[0].startDate : today.toISOString().substring(0, 10)%>"/>
 				</div>
 				<div class="input-field">
 					<label for="minDuration">Estimated Period</label>
@@ -122,7 +121,7 @@
                         Your search criteria have changed, click below to search
                     </div>
 					<button type="submit" class="action forward">Search</button>
-					<p style="display:none;" class="invalid-postcode-message"></p>
+					<p class="hidden invalid-postcode-message"></p>
 				</div>
 			</form>
 		</div>

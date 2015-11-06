@@ -20,7 +20,7 @@
                                 continue;
                             }
                         %>
-                            <option value="<%=warehouse.storage[i]._id%>" >Copy from: <%=warehouse.storage[i].name %></option>
+                            <option value="<%=warehouse.storage[i]._id%>" >Copy from: <%=warehouse.storage[i].name %> <%=palletTypes[warehouse.storage[i].palletType]%>m width</option>
                         <%
                         }
                         %>
@@ -70,7 +70,7 @@ for (var i = 0; i < storage.pricing.length; i++) {
 	<td data-th="Handling charge per pallet (In and Out)" class="input-field no-success-validation-style">
 		<input data-loom-type="decimal" data-loom-decimal-places="2" data-bind-value="charge" name="charge" type="number" class="currency" required="required" value="<%=thisDateRange.charge %>"/>
 	</td>
-	<!--<div class="input-field no-success-validation-style" style="display:none">
+	<!--<div class="input-field no-success-validation-style hidden">
 		<input type="hidden" data-loom-type="decimal" data-loom-decimal-places="2" name="reserve" class="currency" value="0" />
 	</div>-->
 	<td data-th="Remove" class="input-field no-success-validation-style remove-col">
@@ -97,7 +97,7 @@ for (var i = 0; i < storage.pricing.length; i++) {
 	<td data-th="Handling charge per pallet (In and Out)" class="input-field no-success-validation-style">
 		<input data-loom-type="decimal" data-loom-decimal-places="2" data-bind-value="charge" name="charge" type="number" class="currency" required="required" value=""/>
 	</td>
-	<!--<div class="input-field no-success-validation-style" style="display:none">
+	<!--<div class="input-field no-success-validation-style hidden">
 		<input type="hidden" data-loom-type="decimal" data-loom-decimal-places="2" name="reserve" class="currency" value="0" />
 	</div>-->
 	<td data-th="Remove" class="input-field no-success-validation-style remove-col">

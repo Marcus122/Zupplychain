@@ -131,7 +131,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
     
     function initPopup() {
         $(document).on('click',".close-me",function(){
-            $(this).closest(".popup-window").hide();
+            $(this).closest(".popup-window").addClass('hidden');
         });
     }
         
@@ -197,9 +197,24 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         function copyStorage($fromTable,$toTable){ //clone all the tr's from the copy from table to the copy to.
             $fromTable;
             $toTable;
-            $form = $toTable.closest("form");
+            var $toRows = $toTable.find('tbody tr');
+            var $form = $toTable.closest("form");
             var $copyFromRows=$fromTable.find("tbody tr");
             var $newRows = $copyFromRows.clone(false);
+            var newRowCounter = 0;
+            
+            for (var i = 0; i<$toRows.find('td').length; i++){
+                if($($toRows.find('td')[i]).data('retain-value')){
+                    $($newRows[newRowCounter]).find('td[data-th="' + $($toRows.find('td')[i]).data('th') + '"] input').val($($toRows.find('td')[i]).find('input').val())
+                    newRowCounter ++;
+                }
+            }
+            
+           for (var i = 0; i<$newRows.find('td').length; i++){
+                if($($newRows.find('td')[i]).data('do-not-copy') && !$($newRows.find('td')[i]).data('retain-value')){
+                    $($newRows.find('td')[i]).find('input').val("");
+                }
+            }
             
             clearPricing($toTable);
             $toTable.find("tbody").append($newRows);
@@ -210,7 +225,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                 $(this).unbind();
             });
             lm.rebind($form);
-            Alerts.showSuccessMessage("Pricing data copied");
+            Alerts.showSuccessMessage("Data copied");
         }
         
         function clearPricing($elem) {
@@ -231,7 +246,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                 $(this).toggleClass("replaced-with-span");
                 
                 if(! $(this).is(".replaced-with-span")) {
-                    $(this).show();
+                    $(this).removeClass('hidden');
                     $(this).parent().find(".input-span").remove();
                     return;
                 }
@@ -244,7 +259,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                     valueToDisplay = (num * commissionMultiplier).toFixed(2);
                 }
                 // 'Turn it into' a span.
-                $(this).hide();
+                $(this).addClass('hidden');
                 $span = $(this).after("<span class='input-span'>" + valueToDisplay + "</span>");
                 
             }); 
@@ -310,6 +325,8 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                 }
                 $table.find("tr.only-one").removeClass("only-one");
                 lm.rebind($form);
+            }else{
+                lm.focusOnInvalidField($form.attr('id'));
             }
         });
         
@@ -386,29 +403,18 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                 $linkThatWasClicked.parent().find(".add-button").trigger("click");
             }
             //TODO:
+            
         }
         
         $(document).on('click','.popup',function(evt){ 
                 var $this = $(this);
                 editButtonClick($this);
         });
-        
-        function checkSectionCompleted(inputs){
-            var completed = true; //Assume everything is ok
-            for (var i = 0; i < inputs.length; i++){
-                if(inputs[i][0].value !== "" && inputs[i][0].value !== undefined){
-                    completed = true;
-                }else{
-                    completed = false;
-                    break; //It is incomplete 
-                }
-            }
-            return completed;
-        }
 
         function editButtonClick($buttonThatWasClicked) {
             var pricingOrAvailability = $buttonThatWasClicked.data("type");
             var storageId = $buttonThatWasClicked.closest("tr").data("id"),
+                forms = [],
                 $price = $buttonThatWasClicked.closest("tr").next().find('input[name="standard-pricing-price"]'),
                 $handlingCharge = $buttonThatWasClicked.closest("tr").next().find('input[name="standard-pricing-handling-charge"]'),
                 $inUse = $buttonThatWasClicked.closest("tr").next().find('input[name="inUse"]'),
@@ -418,14 +424,18 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
             //hide all the .trays tr's
             var $traysToOpen = $buttonThatWasClicked.closest("tr").next();
             var $trayHolderToOpen = $traysToOpen.find('.tray-holder.' + pricingOrAvailability + '-trays');
-            
+            var $buttonCell = $buttonThatWasClicked.closest(".button-cell");
             //show/hide the next tr
             var wasOpen = ($traysToOpen.hasClass("open") && $trayHolderToOpen.hasClass('open'));
             $(".trays").removeClass('open');
             $(".button-cell").removeClass('open');
             if (!wasOpen) {
                 $traysToOpen.addClass("open");
-                $buttonThatWasClicked.closest(".button-cell").addClass("open");
+                if(!$buttonCell.hasClass('success')){
+                    $buttonCell.addClass("open");
+                }else{
+                    $traysToOpen.addClass("success");
+                }
                 if ($buttonThatWasClicked.data('type') === 'pricing'){
                     if (checkSectionCompleted([$inUse,$to,$from])){
                         $buttonThatWasClicked.closest(".button-cell").next('.button-cell').addClass("success");
@@ -445,14 +455,19 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                         $buttonThatWasClicked.closest(".button-cell").addClass("success");
                     }else{
                         $buttonThatWasClicked.closest(".button-cell").removeClass("success");
-                    }  
+                    }
+                    forms = $buttonThatWasClicked.closest("tr").next('tr').find('.pricing-trays').find('form');
                 }else if($buttonThatWasClicked.data('type') === 'availability'){
                    if(checkSectionCompleted([$inUse,$to,$from])){
                         $buttonThatWasClicked.closest(".button-cell").addClass("success");
                     }else{
                         $buttonThatWasClicked.closest(".button-cell").removeClass("success");
-                    }    
+                    } 
+                    forms = $buttonThatWasClicked.closest("tr").next('tr').find('.availability-trays').find('form');   
                 }
+                for (var i = 0; i<forms.length; i++){
+                    $(forms[i]).trigger('submit');
+                }  
             }
             
             //within the tr show either the price div or availability div depending on which one we clicked.
@@ -462,15 +477,52 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
             $trayHolderToOpen.find(".tray").removeClass("open");
             $trayHolderToOpen.find(".open-tray-link").removeClass("open");
             $trayHolderToOpen.find("div").first().find(".tray").addClass('open');
-            $trayHolderToOpen.find("div").first().find(".open-tray-link").addClass("open");
+            if(!$buttonCell.hasClass('success')){
+                $trayHolderToOpen.find("div").first().find(".open-tray-link").addClass("not-completed");
+                $trayHolderToOpen.find("div").first().find(".open-tray-link").removeClass("success");
+            }else{
+                $trayHolderToOpen.find("div").first().find(".open-tray-link").addClass("success");
+                $trayHolderToOpen.find("div").first().find(".open-tray-link").removeClass("not-completed");
+            }
+            require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) {
+                $.scrollTo('body');
+            });
             
             if ($trayHolderToOpen.find("form:nth-child(2)").find('div').first()){ //If it has two inner trays
                 $trayHolderToOpen.find("form:nth-child(2)").find('div').first().find('.tray').addClass('open');
-                $trayHolderToOpen.find("form:nth-child(2)").find('div').first().find(".open-tray-link").addClass('open');
+                if(checkSectionCompleted($trayHolderToOpen.find("form:nth-child(2)").find('input')) === true){
+                    $trayHolderToOpen.find("form:nth-child(2)").find('div').first().find(".open-tray-link").addClass('success');
+                    $trayHolderToOpen.find("form:nth-child(2)").find('div').first().find(".open-tray-link").removeClass('not-completed');
+                }else{
+                    $trayHolderToOpen.find("form:nth-child(2)").find('div').first().find(".open-tray-link").addClass('not-completed');
+                    $trayHolderToOpen.find("form:nth-child(2)").find('div').first().find(".open-tray-link").removeClass('success');
+                }
             }
             
         }
         
+    }
+    
+    function checkSectionCompleted(inputs){
+        var completed = true; //Assume everything is ok
+        for (var i = 0; i < inputs.length; i++){
+            if(inputs[i][0]){
+                if(inputs[i][0].value !== "" && inputs[i][0].value !== undefined){
+                    completed = true;
+                }else{
+                    completed = false;
+                    break; //It is incomplete 
+                }
+            }else{
+                if($(inputs[i]).val() !== "" && $(inputs[i]).val() !== undefined){
+                    completed = true;
+                }else{
+                    completed = false;
+                    break; //It is incomplete 
+                }
+            }
+        }
+        return completed;
     }
     
     //posting up the storages to the server.
@@ -480,12 +532,28 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
             $(".skipThisRow").removeClass("skipThisRow");
         }
         
-        $priceForms.on("submit", function(ev) {
+        $(document).on('submit',".provider-form","submit", function(ev) {
             clearSkipMarkerRows();
             ev.preventDefault();
             var thisStorageId = $(this).data("storage-id");
+            var  $openCloseCellArea = $(this).parent().parent().parent().prev().find('button[data-form="' + $(this).data('id') + '"]').parent();
+            var $openTrayLink = $(this).find('.open-tray-link');
             if(lm.isFormValid($(this).attr('id')) ){ //check this form at least is valid before we try and save.
                 saveSingleStorage(thisStorageId);
+                if($openCloseCellArea.parent().next().hasClass('open')){
+                    $openCloseCellArea.addClass('success')
+                    $openCloseCellArea.removeClass('open')
+                    $openTrayLink.removeClass('open');
+                    $openTrayLink.addClass('success');
+                }
+            }else{
+                if($openCloseCellArea.parent().next().hasClass('open')){
+                    $openCloseCellArea.removeClass('success')
+                    $openCloseCellArea.addClass('open')
+                    $openTrayLink.addClass('open');
+                    $openTrayLink.removeClass('success');
+                }
+                lm.focusOnInvalidField($(this).attr('id'));
             }
         });
         
@@ -510,7 +578,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         }
         
         $(document).on('click','button[name="acepted-p-and-a-terms"]',function(ev) {
-             $(this).closest('.popup-window').hide();
+             $(this).closest('.popup-window').addClass('hidden');
              if ($(location).attr("pathname").indexOf('dashboard') != -1){
                    saveEverything(openSavedPopup);
              }else{
@@ -844,7 +912,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                 warehouse.id=$('input[name="warehouse"]').val();
                 Warehouse.updateVolumeDiscount(warehouse,discountData, function(){
                     Alerts.showSuccessMessage("data saved");
-                    $popup.hide();
+                    $popup.addClass('hidden');
                 });
             } else {
                 unmarkAllTheseRows($rows);

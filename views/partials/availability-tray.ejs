@@ -10,7 +10,7 @@
 							<div class="inner">
 								<div class="row">
 									<div class="copy-controls controls columns twelve">
-										<div class="tool-tip hint--top" data-hint="Copy availability and dates from another storage to this one. You can then edit these.">?</div>
+										<div class="tool-tip hint--top" data-hint="Copy date ranges from another storage to this one. You can then edit these.">?</div>
 											<label for="copy-from">Copy from another storage?</label>
 											<select name="copy-from">
 												<%for( var i=0; i<warehouse.storage.length;i++ ){ 
@@ -18,7 +18,7 @@
 														continue;
 													}
 												%>
-													<option value="<%=warehouse.storage[i]._id%>" >Copy from: <%=warehouse.storage[i].name %></option>
+													<option value="<%=warehouse.storage[i]._id%>" >Copy from: <%=warehouse.storage[i].name %> <%=palletTypes[warehouse.storage[i].palletType]%>m width</option>
 												<%
 												}
 												%>
@@ -62,13 +62,13 @@
 												<input readonly data-loom-limit-day-of-week="0" required="required" data-bind-value="to" type="date" name="to" class="datepicker" data-loom-add-controls="true" value="" data-bind-min="from" min="" max="<%=utils.formatDate(endOfNextYear)%>"/>
 											</td>
 										<%}%>
-										<td data-th="Total Pallets" class="input-field no-success-validation-style">
+										<td data-retain-value="true" data-do-not-copy="true" data-th="Total Pallets" class="input-field no-success-validation-style">
 											<input data-do-not-enable="true" disabled required="required" data-bind-value="total" name="total" type="number" value="<%= storage.palletSpaces %>"/>
 										</td>
-										<td data-th="Estimated in Use" class="input-field no-success-validation-style">
+										<td data-do-not-copy="true" data-th="Estimated in Use" class="input-field no-success-validation-style">
 											<input data-loom-type="integer" required="required" data-bind-value="inUse" data-bind-max="total" name="inUse" type="number" data-loom-validators="integer" max="<%= storage.palletSpaces %>" min="0" value="<%=thisPallets.inUse%>"/>
 										</td>
-										<td data-th="Estimated Free" class="input-field no-success-validation-style">
+										<td data-do-not-copy="true" data-th="Estimated Free" class="input-field no-success-validation-style">
 											<input data-do-not-enable="true" disabled required="required" data-bind-value="free" name="free" type="number"  value="<%= thisPallets.free %>"/>
 										</td>
 										<td data-th="Remove" class="remove-col">
@@ -89,13 +89,13 @@
 										<td data-th="To" class="input-field no-success-validation-style">
 											<input readonly data-loom-limit-day-of-week="0" required="required" data-bind-value="to" type="date" name="to" class="datepicker" data-loom-add-controls="true" value="" data-bind-min="from" min="" max="<%=utils.formatDate(endOfNextYear)%>"/>
 										</td>
-										<td data-th="Total Pallets" class="input-field no-success-validation-style">
+										<td data-retain-value="true" data-do-not-copy="true" data-th="Total Pallets" class="input-field no-success-validation-style">
 											<input data-do-not-enable="true" disabled required="required" data-bind-value="total" name="total" type="number" value="<%= storage.palletSpaces %>"/>
 										</td>
-										<td data-th="Estimated in Use" class="input-field no-success-validation-style">
+										<td data-do-not-copy="true" data-th="Estimated in Use" class="input-field no-success-validation-style">
 											<input data-loom-type="integer" required="required" data-bind-value="inUse" data-bind-max="total" name="inUse" type="number" data-loom-validators="integer" max="<%= storage.palletSpaces %>" min="0" value=""/>
 										</td>
-										<td data-th="Estimated Free" class="input-field no-success-validation-style">
+										<td data-do-not-copy="true"data-th="Estimated Free" class="input-field no-success-validation-style">
 											<input data-do-not-enable="true" disabled required="required" data-bind-value="free" name="free" type="number"  value=""/>
 										</td>
 										<td data-th="Remove" class="remove-col">

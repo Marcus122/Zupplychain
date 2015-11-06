@@ -46,7 +46,7 @@
                                     <%if(quote.comments.quotationRequest && quote.comments.quotationRequest !== ""){%>
                                         <div class="columns three" data-content="comment"><span>Comments</span>
                                         <%=quote.comments.quotationRequest.substring(0,30)%><%if(quote.comments.quotationRequest.length > 30){%>...<a href="#">View More</a><%}%></div>
-                                        <div class="columns three" data-content="comment" style="display:none"><span>Comments</span>
+                                        <div class="columns three hidden" data-content="comment"><span>Comments</span>
                                         <%=quote.comments.quotationRequest%><%if(quote.comments.quotationRequest.length > 30){%><a href="#">View Less</a><%}%></div>
                                     <%}%>
                                 </div>
@@ -67,12 +67,8 @@
                                         <em class="search-value"><%=quote.search.maxDistance%></em> 
                                     </div>
                                     <div class="columns two">
-                                        <span>  Pallet Type</span>
-					                    <% if(quote.search.palletType){%>
-                                           <em class="search-value"><%=quote.search.palletType%></em>
-                                       <%}else{%>
-                                           <em class="search-value">Any</em>
-                                      <%}%>
+                                        <span>Pallet Width</span>
+                                        <em class="search-value"><%=config.palletTypes[quote.search.palletType]%></em>
                                     </div>
 				                    <div class="columns two">
 				                        <span>Qty</span>
@@ -121,7 +117,7 @@
 			             </div>
 
                         <form class="loom-form row" action="/provider-offer" id="provider-offer-form">
-                            <div class="input-field" style="display:none">
+                            <div class="input-field hidden">
 				                <input type="hidden" name="quoteId" value="<%= quote._id %>" />
 				            </div>
                             <div class="content-box">
@@ -129,7 +125,7 @@
                                     <input type="hidden" name="transportType" value='<%= quote.transport.type %>'/>
                                 </div>
                                 <div class="header">
-                                    <h2>Your Payment Terms</h2>
+                                    <h2>Your Payment Terms<%if(quote.transport.type === "1"){%> and Inbound Transport<%}%></h2>
                                 </div>
                                 <div class="main row">
                                     <div class="six columns">
@@ -150,7 +146,7 @@
                                                 <option value="3">Other</option>
                                             </select>
                                         </div>
-                                        <div class="input-field" style="display:none;">
+                                        <div class="input-field hidden">
                                             <label for = "other-payment-terms">Please Specify (Days)</label>
                                             <input name="other-payment-terms" type="text" placeholder="Please Specify (Days)"/>
                                         </div>

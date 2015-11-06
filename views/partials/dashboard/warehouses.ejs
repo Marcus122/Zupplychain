@@ -1,4 +1,4 @@
-<div data-view="warehouses" class="dashboard-container columns nine" style="display:none">
+<div data-view="warehouses" class="dashboard-container columns nine hidden">
 	<div class="secondary content-box" data-content="warehouses">
 		<div class="header">
 			<h3>Warehouses</h3>
@@ -6,7 +6,7 @@
 		<div class="main" data-data="warehouses">
 			<% include warehouse-list%>
 			<div class="columns twelve button-container">
-				<button type="button" name="delete" class="button action" style="display:none;">Delete</button>
+				<button type="button" name="delete" class="button action hidden">Delete</button>
 				<%if (authorisations.warehouse.createWarehouse === true){%>
 					<div class="add-new-warehouse-container">
 						<label for="add-new-warehouse">Add new warehouse</label>
@@ -16,8 +16,8 @@
 			</div>
 		</div>
 	</div>
-	<div id="view-edit-warehouse" style="display:none;">
+	<div id="view-edit-warehouse" class="hidden">
 	</div>
-	<div id="add-new-warehouse" style="display:none;">
+	<div id="add-new-warehouse" class="hidden">
 	</div>
 </div>

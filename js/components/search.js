@@ -13,7 +13,7 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
     var cameHereViaBackButton = (hasSearch && !(window.location.hash == "#search-area"));
     if (cameHereViaBackButton) { 
        require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) {
-                    $(".search-results").show();
+                    $(".search-results").fadeIn().removeClass('hidden');
                     $.scrollTo(".search-results", {duration : 100, offset : -0 });
                     $("#search-description-popup").css({position:"absolute", top:$('.search-results').offset().top-500 });
                 });  
@@ -48,11 +48,11 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
     });
     
     $("#register-email-popup .close").click(function() {
-        $("#register-email-popup").hide();
+        $("#register-email-popup").addClass('hidden');
     });
     
     $("#search-description-popup .close").click(function() {
-        $("#search-description-popup").hide();
+        $("#search-description-popup").addClass('hidden');
     });
     
     $(".change-map-lock-status").click(function(){
@@ -78,7 +78,7 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
         //     window.location.href = requestedUrl;
         // });
         // //show the popup.
-        // $popup.show();
+        // $popup.removeClass('hidden');
         // $popup.find("input[name='email']").focus(); //focus the first input.
     });
     
@@ -98,7 +98,7 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
     
     function openSearchPopup(){
         var $popup = $("#search-description-popup");
-        $popup.show();
+        $popup.removeClass('hidden');
     }
 	
 	function triggerSearch(){
@@ -114,15 +114,15 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
 		var $searchResInfoBox = $(".search-result-info-box");
         var res = resultsMap.load(response.results);
         if (res) {
-            $searchResInfoBox.fadeIn();
-            $(".continue-links").fadeIn();
-            $(".search-results").fadeIn();
+            $searchResInfoBox.fadeIn().removeClass('hidden');
+            $(".continue-links").fadeIn().removeClass('hidden');
+            $(".search-results").fadeIn().removeClass('hidden');;
             $(".info-boxes").fadeOut();
             $(".testimonials").fadeOut();
             if (response.results.length === 1){
-				$searchResInfoBox.find('.controls').hide();
+				$searchResInfoBox.find('.controls').addClass('hidden');
 			} else {
-                $searchResInfoBox.find('.controls').show()
+                $searchResInfoBox.find('.controls').removeClass('hidden');
             }
             if (window.location.hash == "#search-area" || hasSearch) { //if they came back via an edit search link, don't scroll down.
                 (window.location.hash = "");
@@ -174,7 +174,7 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
                         for (var k = 0; k < response.userWarehouse.length; k++){
                             if (response.results[i]._id === response.userWarehouse[k].warehouse ){
                                 row.attr('data-selected',true);
-                                row.find('td:last-child a').hide();
+                                row.find('td:last-child a').addClass('hidden');
                                 row.find('td:last-child').append('<p>You have already selected this warehouse</p>')
                                 userWarehousesFound;
                                 break;

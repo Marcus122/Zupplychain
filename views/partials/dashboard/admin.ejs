@@ -1,4 +1,4 @@
-<div data-view="admin" class="dashboard-container columns nine" style="display:none">
+<div data-view="admin" class="dashboard-container columns nine hidden">
 	<form method="post" action="/save-account-details" id="save-account-details-form" novalidate="novalidate" class="loom-form">
 		<div class="input-field">
 			<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
@@ -30,7 +30,7 @@
 						<input type="tel" name="phone-number" value="<%=user.phoneNumber%>" disabled/>
 					</div>
 				</div>
-				<div data-function="save-buttons" style="display:none;">
+				<div data-function="save-buttons" class="hidden">
 					<button class="action button save" type="submit">Save</button>
 				</div>
 			</fieldset>
@@ -66,7 +66,7 @@
 						</ul>
 					</div>
 				</div>
-				<div data-function="save-buttons" style="display:none;">
+				<div data-function="save-buttons" class="hidden">
 					<button class="action button save" type="submit">Save</button>
 				</div>
 			</fieldset>

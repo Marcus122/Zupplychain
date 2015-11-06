@@ -1,5 +1,4 @@
-<%console.log(authorisations);%>
-<div id="warehouse-contacts" class="tab main <%if(authorisations.contacts.masterContacts == false){%>active<%}%>">
+<div id="warehouse-contacts" class="hidden tab main <%if(authorisations.contacts.masterContacts == false){%>active<%}%>">
 	<p>Please select your warehouse</p>
 	<select name="warehouses" class="columns four">
 		<%for(i = 0; i<warehouses.length; i++){%>

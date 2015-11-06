@@ -192,8 +192,26 @@
 		float:right;
 	}
 	#vertical-nav{
-		&.minimise{
+		&.minimised{
 			width:4%;
+			li[data-view="home"]{
+				background: url("/images/small-home-dashboard.png") no-repeat 50% 50%;
+			}
+			li[data-view="admin"]{
+				background: url("/images/small-admin-dashboard.png") no-repeat 50% 50%;
+			}
+			li[data-view="warehouses"]{
+				background: url("/images/small-warehouses-dashboard.png") no-repeat 50% 50%;
+			}
+			li[data-view="contacts"]{
+				background: url("/images/small-contacts-dashboard.png") no-repeat 50% 50%;
+			}
+			li[data-view="messages"]{
+				background: url("/images/small-messages-dashboard.png") no-repeat 50% 50%;
+			}
+			a{
+				color:transparent;
+			}
 		}
 		margin:0;
 		background: #6a6666;
@@ -214,7 +232,7 @@
 			height:100%;
 			height:44px;
 			&.active{
-				background:@primary;
+				background-color:@primary !important;
 			}
 			a{
 				display: block;
@@ -225,7 +243,7 @@
 				border-bottom-right-radius: 7px;
 			}
 			&:hover{
-				background-color:@primary;
+				background-color:@primary !important;
 			}
 			&.minimise-dashboard-nav{
 				&:before{
@@ -268,8 +286,7 @@
 		text-align: center;
 		background-color: #6a6666;
 	}
-	div[data-view="contacts"],
-	div[data-view="users"]{
+	div[data-view="contacts"]{
 		.button-container{
 			#add-new-contact-container{
 				display:inline-block;
@@ -294,23 +311,49 @@
 				color:@invalid-dark;
 			}
 		}
-		ul.two-tabs{
-			a{
-				li{
-					width:44.9%;
-					max-width:initial;
+		ul{
+			li{ 
+				padding:0;
+				a{
+					height: 100%;
+					.unit-margin-top(1);
+					.unit-margin-left(2);
 				}
-				&:nth-child(2) li{
-					margin:0;
+			}
+			&.two-tabs{
+				li{
+					width:49.7%;
+					text-align:left;
+					height:44px;
+						@media @mobile{
+							width:90%;
+						}
+					&:nth-child(2){
+						margin-right:0;
+					}
+				}
+			}
+			&.five-tabs{ 
+				li{
+					height:63px;
+					width:19.5%;
+					margin-right:5px;
+					&:last-of-type{
+						margin-right:0;	
+					}
 				}
 			}
 		}
-		ul.five-tabs a{ 
-			li{
-				height:43px;
+		&.eleven{
+			ul.two-tabs{
+				li{
+					width:49.76%;
+				}
 			}
-			&:last-of-type li{
-				margin:0;	
+			ul.five-tabs{ 
+				li{
+					width: 19.614%;
+				}
 			}
 		}
 	}
@@ -330,22 +373,24 @@
 	}
 	.tab-links{
 		margin-bottom:0;
-		a{
-			li{
-				margin:0 5px;
-				float:left;
-				list-style:none;
-				padding-bottom:10px;
-				width:122.5px;
-				margin-left:0;
-				font-size: 1.5rem;
+		li{
+			margin:0 5px;
+			float:left;
+			list-style:none;
+			padding-bottom:10px;
+			width:122.5px;
+			margin-left:0;
+			font-size: 1.5rem;
+			&.active{
+				background:@primary;
+			}
+			&:after{
+				content:"";
+			}
+			a{
+				height:100%;
 				color:#fff;
-				&.active{
-					background:@primary;
-				}
-				&:after{
-					content:"";
-				}
+				display:block;
 			}
 		}
 		&:after{
@@ -387,7 +432,6 @@
 			margin:0;
 		}
 		.tab{
-			display:none;
 			&.active{
 				display:block;
 			}
@@ -400,13 +444,10 @@
 		}
 		ul.tabs{
 			border:none;
-			a{
-				li{
-					font-size:1.3em;
-					span{
-						color:#fff;
-					}
-				}
+			li a{
+				font-size:2.1rem;
+				font-size:21px;
+				color:#fff;
 			}
 		}
 		div.tab{

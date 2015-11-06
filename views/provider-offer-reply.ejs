@@ -38,12 +38,8 @@
                                         <em class="search-value"><%=quote.search.maxDistance%></em> 
                                     </div>
                                     <div class="columns two">
-                                        <span>  Pallet Type</span>
-                                        <% if(quote.search.palletType){%>
-                                           <em class="search-value"><%=quote.search.palletType%></em>
-                                        <%}else{%>
-                                           <em class="search-value">Any</em>
-                                        <%}%>
+                                        <span>Pallet Width</span>
+                                        <em class="search-value"><%=config.palletTypes[quote.search.palletType]%></em>
                                     </div>
                                     <div class="columns two">
                                         <span>Qty</span>
@@ -86,7 +82,7 @@
 			            </div>
 
                         <form class="loom-form row" action="/provider-offer-reply" id="provider-offer-reply-form">
-                            <div class="input-field" style="display:none">
+                            <div class="input-field hidden">
 				                <input type="hidden" name="quoteId" value="<%= quote._id %>" />
 				            </div>
                             <div class="content-box">

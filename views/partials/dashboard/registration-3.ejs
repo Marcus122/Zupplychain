@@ -66,7 +66,7 @@
 
 					<tr class="trays" id="pricing-container-<%=storage._id %>">
 						<td colspan="5" class="js-storage" data-storage-id="<%=storage._id%>">
-							<div class="pricing-trays tray-holder" <%if(authorisations.warehouse.pricing === false){%>style="display:none;"<%}%>>
+							<div class="pricing-trays tray-holder <%if(authorisations.warehouse.pricing === false){%>hidden<%}%>">
 								<form  data-storage-id="<%=storage._id%>" id="standard-pricing-<%=storage._id %>" data-id="price-and-availability-user-data" class="loom-form provider-form standard-pricing-form" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" action="/complete-registration" novalidate>
 									<% include ../standard-pricing-tray %>
 								</form>
@@ -144,6 +144,9 @@
 		<button data-redirect="/registration-complete" id="save-and-finish" class="action next">Save</button>
 	</div>
 </fieldset>
+<script type="text/template" id="pallet-row">
+	<% include ../pallet-row%> 
+</script>
 <script type="text/template" id="volume-discount">
 	<% include ../volume-discount%>
 </script>
@@ -152,4 +155,10 @@
 </script>
 <script type="text/template" id="p-and-a-warning">
 	<% include ../pricing-and-availability-warning%> 
+</script>
+<script type="text/template" id="basic-pricing-row">
+	<%  include ../basic-pricing-row    %> 
+</script>
+<script type="text/template" id="pricing-row">
+	<% include ../pricing-row%> 
 </script>

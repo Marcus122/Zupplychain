@@ -5,8 +5,8 @@
 	<div class="main">
 		<section class="tabs">
 			<ul class="tab-links tabs two-tabs">
-				<a href="#availability-controller"><li class="active">Availability Controller</li></a>
-				<a href="#enquires-controller"><li>Enquires Controller</li></a>
+				<li class="active"><a href="#availability-controller">Availability Controller</a></li>
+				<li><a href="#enquires-controller">Enquires Controller</a></li>
 			</ul>
 		</section>
 		<div class="tab-content">
@@ -19,8 +19,8 @@
 							<th>Email</th>
 							<th>Phone Number</th>
 							<th>Status</th>
-							<th><img src="/images/delete.png"></th>
-							<th></th>
+							<%if(authorisations.contacts.warehouseContacts.edit===true){%><th><img src="/images/delete.png"></th><%}%>
+							<%if(authorisations.contacts.warehouseContacts.edit===true){%><th></th><%}%>
 						</thead>
 						<tbody>
 							<%if(warehouse.contacts){%>
@@ -46,22 +46,20 @@
 														<p class="registered-status complete"><%=registerStatus[0]%></p>
 												<%}%>
 											</td>
-											<td data-field="delete"><%if(warehouse.contacts.availabilityController[i]._id != user.id && authorisations.contacts.warehouseContacts.edit===true){%><input type="checkbox" name="delete"/><%}%></td>
-											<td data-field="resend-email"><%if(warehouse.contacts.availabilityController[i].expiry < Date.now() && warehouse.contacts.availabilityController[i].expiry !== null){%> <button name="resend-email" class="button action mini">Resend</button><%}%></td>
+											<%if(authorisations.contacts.warehouseContacts.edit===true){%><td data-field="delete"><%if(warehouse.contacts.availabilityController[i]._id != user.id && authorisations.contacts.warehouseContacts.edit===true){%><input type="checkbox" name="delete"/><%}%></td><%}%>
+											<%if(authorisations.contacts.warehouseContacts.edit===true){%><td data-field="resend-email"><%if(warehouse.contacts.availabilityController[i].expiry < Date.now() && warehouse.contacts.availabilityController[i].expiry !== null){%> <button name="resend-email" class="button action mini">Resend</button><%}%></td><%}%>
 										</tr>
 									<%}%>
 								<%}else{%>
-									<% include warehouse-specific-contacts-row%>
+									<% include empty-warehouse-contacts-rows%>
 								<%}%>
-							<%}else{%>
-								<% include warehouse-specific-contacts-row%>
 							<%}%>
 						</tbody>
 					</table>
 					<%if(authorisations.contacts.warehouseContacts.edit===true){%>
-						<div class="columns twelve button-container" <%if(warehouse.contacts.availabilityController.length === 2){%>style="display:none;"<%}%>>
+						<div class="columns twelve button-container <%if(warehouse.contacts.availabilityController.length === 2){%>hidden<%}%>">
 							<button type="button" name="save-new-contacts" class="button action">Save</button>
-							<button type="button" name="delete" class="button action" style="display:none;">Delete</button>
+							<button type="button" name="delete" class="button action hidden">Delete</button>
 							<div id="add-new-contact-container">
 								<label for="add-new-contacts">Add new contact</label>
 								<button type="button" name="add-new-contact" class="add-button"></button>
@@ -70,7 +68,7 @@
 					<%}%>
 				</form>
 			</div>
-			<div id="warehouse-contacts"data-contact-type="warehouse-specific-contacts" data-content="enquires-controller" class="tab main">
+			<div data-contact-type="warehouse-specific-contacts" data-content="enquires-controller" class="hidden tab main">
 				<form id="enquires-controller" autocomplete="off" data-form-type="contacts-form" class="loom-form data-loom-no-submit="true" novalidate="novalidate">
 					<table class="simple dashboard-table" data-max-rows="2">
 						<thead>
@@ -79,8 +77,8 @@
 							<th>Email</th>
 							<th>Phone Number</th>
 							<th>Status</th>
-							<th><img src="/images/delete.png"></th>
-							<th></th>
+							<%if(authorisations.contacts.warehouseContacts.edit===true){%><th><img src="/images/delete.png"></th><%}%>
+							<%if(authorisations.contacts.warehouseContacts.edit===true){%><th></th><%}%>
 						</thead>
 						<tbody>
 							<%if(warehouse.contacts){%>
@@ -106,37 +104,39 @@
 														<p class="registered-status complete"><%=registerStatus[0]%></p>
 												<%}%>
 											</td>
-											<td data-field="delete"><%if(warehouse.contacts.enquiresController[i]._id != user.id){%><input type="checkbox" name="delete"/><%}%></td>
-											<td data-field="resend-email"><%if(warehouse.contacts.enquiresController[i].expiry < Date.now() && warehouse.contacts.enquiresController[i].expiry !== null){%> <button name="resend-email" class="button action mini">Resend</button><%}%></td>
+											<%if(authorisations.contacts.warehouseContacts.edit===true){%><td data-field="delete"><%if(warehouse.contacts.enquiresController[i]._id != user.id && authorisations.contacts.warehouseContacts.edit===true){%><input type="checkbox" name="delete"/><%}%></td><%}%>
+											<%if(authorisations.contacts.warehouseContacts.edit===true){%><td data-field="resend-email"><%if(warehouse.contacts.enquiresController[i].expiry < Date.now() && warehouse.contacts.availabilityController[i].expiry !== null){%> <button name="resend-email" class="button action mini">Resend</button><%}%></td><%}%>
 										</tr>
 									<%}%>
 								<%}else{%>
-									<% include warehouse-specific-contacts-row%>
+									<% include empty-warehouse-contacts-rows%>
 								<%}%>
-							<%}else{%>
-								<% include warehouse-specific-contacts-row%>
 							<%}%>
 						</tbody>
 					</table>
-					<div class="columns twelve button-container" <%if(warehouse.contacts.enquiresController.length === 2){%>style="display:none;"<%}%>>
-						<button type="button" name="save-new-contacts" class="button action">Save</button>
-						<button type="button" name="delete" class="button action" style="display:none;">Delete</button>
-						<div id="add-new-contact-container">
-							<label for="add-new-contacts">Add new contact</label>
-							<button type="button" name="add-new-contact" class="add-button"></button>
+					<%if(authorisations.contacts.warehouseContacts.edit===true){%>
+						<div class="columns twelve button-container <%if(warehouse.contacts.enquiresController.length === 2){%>style=hidden<%}%>">
+							<button type="button" name="save-new-contacts" class="button action">Save</button>
+							<button type="button" name="delete" class="button action hidden">Delete</button>
+							<div id="add-new-contact-container">
+								<label for="add-new-contacts">Add new contact</label>
+								<button type="button" name="add-new-contact" class="add-button"></button>
+							</div>
 						</div>
-					</div>
+					<%}%>
 				</form>
 			</div>
 		</div>
 		<section class="tabs">
-			<ul class="tab-links tabs five-tabs">
-				<a href="#transport-coordinator"><li class="active">Transport Co-ordinator</li></a>
-				<a href="#goods-in"><li>Goods-In</li></a>
-				<a href="#picking-dispatch"><li>Picking Dispatch</li></a>
-				<a href="#invoice-controller"><li>Invoice Controller</li></a>
-				<a href="#credit-controller"><li>Credit Controller</li></a>
-			</ul>
+			<nav>
+				<ul class="tab-links tabs five-tabs">
+					<li class="active"><a href="#transport-coordinator">Transport Co-ordinator</a></li>
+					<li><a href="#goods-in">Goods-In</a></li>
+					<li><a href="#picking-dispatch">Picking Dispatch</a></li>
+					<li><a href="#invoice-controller">Invoice Controller</a></li>
+					<li><a href="#credit-controller">Credit Controller</a></li>
+				</ul>
+			</nav>
 		</section>
 		<div class="tab-content">
 			<div data-contact-type="warehouse-specific-contacts" data-content="transport-coordinator" class="tab main active">
@@ -148,8 +148,8 @@
 							<th>Email</th>
 							<th>Phone Number</th>
 							<th>Status</th>
-							<th><img src="/images/delete.png"></th>
-							<th></th>
+							<%if(authorisations.contacts.warehouseContacts.edit===true){%><th><img src="/images/delete.png"></th><%}%>
+							<%if(authorisations.contacts.warehouseContacts.edit===true){%><th></th><%}%>
 						</thead>
 						<tbody>
 							<%if(warehouse.contacts){%>
@@ -175,22 +175,20 @@
 														<p class="registered-status complete"><%=registerStatus[0]%></p>
 												<%}%>
 											</td>
-											<td data-field="delete"><%if(warehouse.contacts.transportCoordinator[i]._id != user.id){%><input type="checkbox" name="delete"/><%}%></td>
-											<td data-field="resend-email"><%if(warehouse.contacts.transportCoordinator[i].expiry < Date.now() && warehouse.contacts.transportCoordinator[i].expiry !== null){%> <button name="resend-email" class="button action mini">Resend</button><%}%></td>
+											<%if(authorisations.contacts.warehouseContacts.edit===true){%><td data-field="delete"><%if(warehouse.contacts.transportCoordinator[i]._id != user.id && authorisations.contacts.warehouseContacts.edit===true){%><input type="checkbox" name="delete"/><%}%></td><%}%>
+											<%if(authorisations.contacts.warehouseContacts.edit===true){%><td data-field="resend-email"><%if(warehouse.contacts.transportCoordinator[i].expiry < Date.now() && warehouse.contacts.availabilityController[i].expiry !== null){%> <button name="resend-email" class="button action mini">Resend</button><%}%></td><%}%>
 										</tr>
 									<%}%>
 								<%}else{%>
-									<% include warehouse-specific-contacts-row%>
+									<% include empty-warehouse-contacts-rows%>
 								<%}%>
-							<%}else{%>
-								<% include warehouse-specific-contacts-row%>
 							<%}%>
 						</tbody>
 					</table>
 					<%if(authorisations.contacts.warehouseContacts.edit===true){%>
-						<div class="columns twelve button-container" <%if(warehouse.contacts.transportCoordinator.length === 2){%>style="display:none;"<%}%>>
+						<div class="columns twelve button-container <%if(warehouse.contacts.transportCoordinator.length === 2){%>hidden<%}%>">
 							<button type="button" name="save-new-contacts" class="button action">Save</button>
-							<button type="button" name="delete" class="button action" style="display:none;">Delete</button>
+							<button type="button" name="delete" class="button action hidden">Delete</button>
 							<div id="add-new-contact-container">
 								<label for="add-new-contacts">Add new contact</label>
 								<button type="button" name="add-new-contact" class="add-button"></button>
@@ -199,7 +197,7 @@
 					<%}%>
 				</form>
 			</div>
-			<div data-contact-type="warehouse-specific-contacts" data-content="goods-in" class="tab main">
+			<div data-contact-type="warehouse-specific-contacts" data-content="goods-in" class="hidden tab main">
 				<form id="goods-in" autocomplete="off" data-form-type="contacts-form" class="loom-form data-loom-no-submit="true" novalidate="novalidate">
 					<table class="simple dashboard-table" data-max-rows="2">
 						<thead>
@@ -208,8 +206,8 @@
 							<th>Email</th>
 							<th>Phone Number</th>
 							<th>Status</th>
-							<th><img src="/images/delete.png"></th>
-							<th></th>
+							<%if(authorisations.contacts.warehouseContacts.edit===true){%><th><img src="/images/delete.png"></th><%}%>
+							<%if(authorisations.contacts.warehouseContacts.edit===true){%><th></th><%}%>
 						</thead>
 						<tbody>
 							<%if(warehouse.contacts){%>
@@ -235,22 +233,20 @@
 														<p class="registered-status complete"><%=registerStatus[0]%></p>
 												<%}%>
 											</td>
-											<td data-field="delete"><%if(warehouse.contacts.goodsIn[i]._id != user.id){%><input type="checkbox" name="delete"/><%}%></td>
-											<td data-field="resend-email"><%if(warehouse.contacts.goodsIn[i].expiry < Date.now() && warehouse.contacts.goodsIn[i].expiry !== null){%> <button name="resend-email" class="button action mini">Resend</button><%}%></td>
+											<%if(authorisations.contacts.warehouseContacts.edit===true){%><td data-field="delete"><%if(warehouse.contacts.goodsIn[i]._id != user.id && authorisations.contacts.warehouseContacts.edit===true){%><input type="checkbox" name="delete"/><%}%></td><%}%>
+											<%if(authorisations.contacts.warehouseContacts.edit===true){%><td data-field="resend-email"><%if(warehouse.contacts.goodsIn[i].expiry < Date.now() && warehouse.contacts.availabilityController[i].expiry !== null){%> <button name="resend-email" class="button action mini">Resend</button><%}%></td><%}%>
 										</tr>
 									<%}%>
 								<%}else{%>
-									<% include warehouse-specific-contacts-row%>
+									<% include empty-warehouse-contacts-rows%>
 								<%}%>
-							<%}else{%>
-								<% include warehouse-specific-contacts-row%>
 							<%}%>
 						</tbody>
 					</table>
 					<%if(authorisations.contacts.warehouseContacts.edit===true){%>
-						<div class="columns twelve button-container" <%if(warehouse.contacts.goodsIn.length === 2){%>style="display:none;"<%}%>>
+						<div class="columns twelve button-container <%if(warehouse.contacts.goodsIn.length === 2){%>hidden<%}%>">
 							<button type="button" name="save-new-contacts" class="button action">Save</button>
-							<button type="button" name="delete" class="button action" style="display:none;">Delete</button>
+							<button type="button" name="delete" class="button action hidden">Delete</button>
 							<div id="add-new-contact-container">
 								<label for="add-new-contacts">Add new contact</label>
 								<button type="button" name="add-new-contact" class="add-button"></button>
@@ -259,7 +255,7 @@
 					<%}%>
 				</form>
 			</div>
-			<div data-contact-type="warehouse-specific-contacts" data-content="picking-dispatch" class="tab main">
+			<div data-contact-type="warehouse-specific-contacts" data-content="picking-dispatch" class="hidden tab main">
 				<form id="picking-dispatch" autocomplete="off" data-form-type="contacts-form" class="loom-form data-loom-no-submit="true" novalidate="novalidate">
 					<table class="simple dashboard-table" data-max-rows="2">
 						<thead>
@@ -268,8 +264,8 @@
 							<th>Email</th>
 							<th>Phone Number</th>
 							<th>Status</th>
-							<th><img src="/images/delete.png"></th>
-							<th></th>
+							<%if(authorisations.contacts.warehouseContacts.edit===true){%><th><img src="/images/delete.png"></th><%}%>
+							<%if(authorisations.contacts.warehouseContacts.edit===true){%><th></th><%}%>
 						</thead>
 						<tbody>
 							<%if(warehouse.contacts){%>
@@ -295,22 +291,20 @@
 														<p class="registered-status complete"><%=registerStatus[0]%></p>
 												<%}%>
 											</td>
-											<td data-field="delete"><%if(warehouse.contacts.pickingDispatch[i]._id != user.id){%><input type="checkbox" name="delete"/><%}%></td>
-											<td data-field="resend-email"><%if(warehouse.contacts.pickingDispatch[i].expiry < Date.now() && warehouse.contacts.pickingDispatch[i].expiry !== null){%> <button name="resend-email" class="button action mini">Resend</button><%}%></td>
+											<%if(authorisations.contacts.warehouseContacts.edit===true){%><td data-field="delete"><%if(warehouse.contacts.pickingDispatch[i]._id != user.id && authorisations.contacts.warehouseContacts.edit===true){%><input type="checkbox" name="delete"/><%}%></td><%}%>
+											<%if(authorisations.contacts.warehouseContacts.edit===true){%><td data-field="resend-email"><%if(warehouse.contacts.pickingDispatch[i].expiry < Date.now() && warehouse.contacts.pickingDispatch[i].expiry !== null){%> <button name="resend-email" class="button action mini">Resend</button><%}%></td><%}%>
 										</tr>
 									<%}%>
 								<%}else{%>
-									<% include warehouse-specific-contacts-row%>
+									<% include empty-warehouse-contacts-rows%>
 								<%}%>
-							<%}else{%>
-								<% include warehouse-specific-contacts-row%>
 							<%}%>
 						</tbody>
 					</table>
 					<%if(authorisations.contacts.warehouseContacts.edit===true){%>
-						<div class="columns twelve button-container" <%if(warehouse.contacts.pickingDispatch.length === 2){%>style="display:none;"<%}%>>
+						<div class="columns twelve button-container <%if(warehouse.contacts.pickingDispatch.length === 2){%>hidden<%}%>">
 							<button type="button" name="save-new-contacts" class="button action">Save</button>
-							<button type="button" name="delete" class="button action" style="display:none;">Delete</button>
+							<button type="button" name="delete" class="button action hidden">Delete</button>
 							<div id="add-new-contact-container">
 								<label for="add-new-contacts">Add new contact</label>
 								<button type="button" name="add-new-contact" class="add-button"></button>
@@ -319,7 +313,7 @@
 					<%}%>
 				</form>
 			</div>
-			<div data-contact-type="warehouse-specific-contacts" data-content="invoice-controller" class="tab main">
+			<div data-contact-type="warehouse-specific-contacts" data-content="invoice-controller" class="hidden tab main">
 				<form id="invoice-controller" autocomplete="off" data-form-type="contacts-form" class="loom-form data-loom-no-submit="true" novalidate="novalidate">
 					<table class="simple dashboard-table" data-max-rows="2">
 						<thead>
@@ -328,8 +322,8 @@
 							<th>Email</th>
 							<th>Phone Number</th>
 							<th>Status</th>
-							<th><img src="/images/delete.png"></th>
-							<th></th>
+							<%if(authorisations.contacts.warehouseContacts.edit===true){%><th><img src="/images/delete.png"></th><%}%>
+							<%if(authorisations.contacts.warehouseContacts.edit===true){%><th></th><%}%>
 						</thead>
 						<tbody>
 							<%if(warehouse.contacts){%>
@@ -355,22 +349,20 @@
 														<p class="registered-status complete"><%=registerStatus[0]%></p>
 												<%}%>
 											</td>
-											<td data-field="delete"><%if(warehouse.contacts.invoiceController[i]._id != user.id){%><input type="checkbox" name="delete"/><%}%></td>
-											<td data-field="resend-email"><%if(warehouse.contacts.invoiceController[i].expiry < Date.now() && warehouse.contacts.invoiceController[i].expiry !== null){%> <button name="resend-email" class="button action mini">Resend</button><%}%></td>
+											<%if(authorisations.contacts.warehouseContacts.edit===true){%><td data-field="delete"><%if(warehouse.contacts.invoiceController[i]._id != user.id && authorisations.contacts.warehouseContacts.edit===true){%><input type="checkbox" name="delete"/><%}%></td><%}%>
+											<%if(authorisations.contacts.warehouseContacts.edit===true){%><td data-field="resend-email"><%if(warehouse.contacts.invoiceController[i].expiry < Date.now() && warehouse.contacts.availabilityController[i].expiry !== null){%> <button name="resend-email" class="button action mini">Resend</button><%}%></td><%}%>
 										</tr>
 									<%}%>
 								<%}else{%>
-									<% include warehouse-specific-contacts-row%>
+									<%include empty-warehouse-contacts-rows%>
 								<%}%>
-							<%}else{%>
-								<% include warehouse-specific-contacts-row%>
 							<%}%>
 						</tbody>
 					</table>
 					<%if(authorisations.contacts.warehouseContacts.edit===true){%>
-						<div class="columns twelve button-container" <%if(warehouse.contacts.invoiceController.length === 2){%>style="display:none;"<%}%>>
+						<div class="columns twelve button-container <%if(warehouse.contacts.invoiceController.length === 2){%>hidden<%}%>">
 							<button type="button" name="save-new-contacts" class="button action">Save</button>
-							<button type="button" name="delete" class="button action" style="display:none;">Delete</button>
+							<button type="button" name="delete" class="button action hidden">Delete</button>
 							<div id="add-new-contact-container">
 								<label for="add-new-contacts">Add new contact</label>
 								<button type="button" name="add-new-contact" class="add-button"></button>
@@ -379,7 +371,7 @@
 					<%}%>
 				</form>
 			</div>
-			<div data-contact-type="warehouse-specific-contacts" data-content="credit-controller" class="tab main">
+			<div data-contact-type="warehouse-specific-contacts" data-content="credit-controller" class="hidden tab main">
 					<form id="credit-controller" autocomplete="off" data-form-type="contacts-form" class="loom-form data-loom-no-submit="true" novalidate="novalidate">
 						<table class="simple dashboard-table" data-max-rows="2">
 						<thead>
@@ -388,8 +380,8 @@
 							<th>Email</th>
 							<th>Phone Number</th>
 							<th>Status</th>
-							<th><img src="/images/delete.png"></th>
-							<th></th>
+							<%if(authorisations.contacts.warehouseContacts.edit===true){%><th><img src="/images/delete.png"></th><%}%>
+							<%if(authorisations.contacts.warehouseContacts.edit===true){%><th></th><%}%>
 						</thead>
 						<tbody>
 							<%if(warehouse.contacts){%>
@@ -415,22 +407,20 @@
 														<p class="registered-status complete"><%=registerStatus[0]%></p>
 												<%}%>
 											</td>
-											<td data-field="delete"><%if(warehouse.contacts.creditController[i]._id != user.id){%><input type="checkbox" name="delete"/><%}%></td>
-											<td data-field="resend-email"><%if(warehouse.contacts.creditController[i].expiry < Date.now() && warehouse.contacts.creditController[i].expiry !== null){%> <button name="resend-email" class="button action mini">Resend</button><%}%></td>
+											<%if(authorisations.contacts.warehouseContacts.edit===true){%><td data-field="delete"><%if(warehouse.contacts.creditController[i]._id != user.id && authorisations.contacts.warehouseContacts.edit===true){%><input type="checkbox" name="delete"/><%}%></td><%}%>
+											<%if(authorisations.contacts.warehouseContacts.edit===true){%><td data-field="resend-email"><%if(warehouse.contacts.creditController[i].expiry < Date.now() && warehouse.contacts.availabilityController[i].expiry !== null){%> <button name="resend-email" class="button action mini">Resend</button><%}%></td><%}%>
 										</tr>
 									<%}%>
 								<%}else{%>
-									<% include warehouse-specific-contacts-row%>
+									<% include empty-warehouse-contacts-rows%>
 								<%}%>
-							<%}else{%>
-								<% include warehouse-specific-contacts-row%>
 							<%}%>
 						</tbody>
 					</table>
 					<%if(authorisations.contacts.warehouseContacts.edit===true){%>
-						<div class="columns twelve button-container" <%if(warehouse.contacts.creditController.length === 2){%>style="display:none;"<%}%>>
+						<div class="columns twelve button-container <%if(warehouse.contacts.creditController.length === 2){%>hidden<%}%>">
 							<button type="button" name="save-new-contacts" class="button action">Save</button>
-							<button type="button" name="delete" class="button action" style="display:none;">Delete</button>
+							<button type="button" name="delete" class="button action hidden">Delete</button>
 							<div id="add-new-contact-container">
 								<label for="add-new-contacts">Add new contact</label>
 								<button type="button" name="add-new-contact" class="add-button"></button>

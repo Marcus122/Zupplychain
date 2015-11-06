@@ -12,7 +12,8 @@ var fields = {
 	goodsIn: [{ type: Schema.ObjectId, ref: 'users', index: { unique: true } }],
 	pickingDispatch: [{ type: Schema.ObjectId, ref: 'users', index: { unique: true } }],
 	invoiceController: [{ type: Schema.ObjectId, ref: 'users', index: { unique: true } }],
-	creditController: [{ type: Schema.ObjectId, ref: 'users', index: { unique: true } }]
+	creditController: [{ type: Schema.ObjectId, ref: 'users', index: { unique: true } }],
+	contactsDeletedAt: {type: Date},
 };
 
 var warehouseContactsSchema = new Schema(fields,{ collection: 'warehouseContacts' });
@@ -31,6 +32,28 @@ warehouseContactsSchema.statics = {
 	loadByUser: function(userId,cb){
 		this.find({$or:[{availabilityController:{$in:[userId]}},{enquiresController:{$in:[userId]}},{creditController:{$in:[userId]}},{invoiceController:{$in:[userId]}},{pickingDispatch:{$in:[userId]}},{goodsIn:{$in:[userId]}},{transportCoordinator:{$in:[userId]}}]})
 		.exec(cb);
+	},
+	deleteWhContact: function(id,user,contactType,cb){
+		// var object = {};
+		// object[contactType] = user;
+		// this.update({_id:id},{$pull:object}).exec(cb);
+		this.findOne({_id:id},function(err,result){
+			if(err){
+				cb(err);
+			}else{
+				result[contactType].pull(user);
+				if (result.contactsDeletedAt === undefined || (Date.now() - Date.parse(result.contactsDeletedAt)) > 7){
+					result.contactsDeletedAt = Date.now();
+				}
+				result.save(function(err,result){
+					cb(err,result);
+				});
+			}
+		})
+		
+	},
+	updateContactsdeletedAt: function(id,cb){
+		this.update({_id:id},{contactsDeletedAt:Date.now()}).exec(cb);
 	}
 }
 

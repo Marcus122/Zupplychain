@@ -17,14 +17,14 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			step3();
             postcodeAnywhereInit();
 			initInitialRegistration();
-			setTimer(60000*5);//Five Minutes
+			setTimer(60000*8);//Eight Minutes
 			
 			$(document).on("click",".popup-window .close",function(){
 				$(this).closest('.popup-window').remove();
 			});
 			
 			$('#reg-help-bubble .close').click(function(e){
-				$('#reg-help-bubble').hide();
+				$('#reg-help-bubble').addClass('hidden');
 				e.stopPropagation()
 			})
 			
@@ -34,10 +34,10 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				var $popup = template.bind({});
 				$('body').append($popup);
 				global.centerPopup($popup);
-				$($popup).show();
+				$($popup).removeClass('hidden');
 				$popup.find('iframe').attr('src', $this.data('url'));
 				if($this.attr('id') === 'reg-help-bubble' ){
-					$this.hide();
+					$this.addClass('hidden');
 				}
 			})
 			
@@ -50,9 +50,19 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			});
 		}
 		function setTimer(time){
-			setInterval(function(){
+			var timer;
+			timer = setInterval(function(){
 				if($('.popup-window.video-popup').length === 0){
-					$('#reg-help-bubble').show();
+					var $regHelpBubble = $('#reg-help-bubble');
+					if($regHelpBubble.hasClass('hidden')){
+						$regHelpBubble.removeClass('hidden');
+						clearTimeout(timer);
+						setTimer(30000)//30 seconds
+					}else{
+						$regHelpBubble.addClass('hidden');
+						clearTimeout(timer);
+						setTimer(60000*8)//Eight Minutes
+					}
 				}
 			},time);
 		}
@@ -246,6 +256,8 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					Warehouse.update(warehouse,function(result){
 						if(cb) cb(result);
 					});
+				}else{
+					lm.focusOnInvalidField($registration.attr('id'));
 				}
 			}
 			function deleteFiles(warehouseId,cb){
@@ -447,6 +459,9 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 						}
 					});
 					saveRegistration();
+				}else{
+					ev.stopPropagation();
+					lm.focusOnInvalidField($defineSpace.attr('id'));
 				}
 			});
 			function updateForm(){
@@ -484,6 +499,8 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					Warehouse.updateStorageBatch(warehouse,storage,function(response){
 						if(cb) cb(response);
 					},$defineSpace.find('input[name="_csrf"]').val());
+				}else{
+					lm.focusOnInvalidField($defineSpace.attr('id'));
 				}
 			}
 			function removeButtons(){

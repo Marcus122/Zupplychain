@@ -2,7 +2,8 @@ var user = require("../controllers/users.js");
 var companyCtrl = require("../controllers/company.js");
 var local = require("../local.config.js");
 var warehouse = require("../controllers/warehouses.js");
-var warehouseContacts = require("../controllers/warehouse-contacts.js")
+var warehouseContacts = require("../controllers/warehouse-contacts.js");
+var Utils = require("../utils.js");
 exports.version = "0.1.0";
 
 exports.saveBasicAccountDetails = function(name,email,company,phoneNumber,user,warehouse,cb){
@@ -72,8 +73,8 @@ exports.getWarehousesByUser = function(user,cb){
 			cb(err);
 		}else{
 			companyCtrl.getMasterContactsUserData(user.toObject().company,function(err,masterContacts){
-				data.warehouses = warehouses;
-				data.warehouse = warehouses[0];
+				data.warehouses = warehouses.sort(function(x,y){return new Date(x.created).getTime() - new Date(y.created).getTime()});
+				data.warehouse = data.warehouses[0];
 				data.masterContacts = masterContacts;
 				data.temperatures = local.config.temperatures;
 				data.services = local.config.services;
@@ -149,13 +150,14 @@ exports.getTasksThatHaveBeenCompleted = function(data){
 	return completedTasks;
 }
 
-exports.deleteItems = function(req,cb){
+exports.deleteItems = function(req,res,cb){
     var cbCompleted = 0;
 	var errOccured = false;
 	var results = [];
+	console.log(req.url);
 	if (req.body.type === 'warehouse' || req.body.type === 'warehouses'){
-		for(var i = 0; i<req.body.ids.length; i++){
-			warehouse.deleteWarehouseById(req.body.ids[i],function(err,result){
+		//for(var i = 0; i<req.body.ids.length; i++){
+			warehouse.deleteWarehouseById(req.body.id,function(err,result){
 				cbCompleted ++;
 				if(err){
 					errOccured = true;
@@ -166,35 +168,35 @@ exports.deleteItems = function(req,cb){
 					cb(errOccured,results);
 				}
 			});
-		}
+		//}
 	}else if(req.body.type === 'warehouseSpecificContacts' || req.body.type === 'warehouseSpecificContact'){
-		for(var i = 0; i<req.body.ids.length; i++){
-			warehouseContacts.deleteContact(req.body.ids[i],req.body.subType,req.body.warehouseContactId,function(err,result){
-				cbCompleted ++;
-				if(err){
-					errOccured = true;
-				}else{
-					results.push(result);
-				}
-				if (cbCompleted === req.body.ids.length){
-					cb(errOccured,results);
-				}
+		warehouseContacts.deleteContact(req.body.id,req.body.subType,req.body.warehouseContactId,function(err,result){
+			//cbCompleted ++;
+			if(err){
+				errOccured = true;
+			}else{
+				results.push(result);
+			}
+			companyCtrl.updateContactsReminderSent(req.body.company,false,function(err){
+				cb(errOccured,results);
 			});
-		}
+		});
 	}else if(req.body.type === 'masterContacts' || req.body.type === 'masterContact'){
-		for(var i = 0; i<req.body.ids.length; i++){
-			companyCtrl.deleteMasterContact(req.body.company,req.body.ids[i],function(err,result){
-				cbCompleted ++;
+		//for(var i = 0; i<req.body.ids.length; i++){
+			companyCtrl.deleteMasterContact(req.body.company,req.body.id,function(err,result){
+				//cbCompleted ++;
 				if(err){
 					errOccured = true;
 				}else{
 					results.push(result);
 				}
-				if (cbCompleted === req.body.ids.length){
-					cb(errOccured,results);
-				}
+				//if (cbCompleted === req.body.ids.length){
+					companyCtrl.updateContactsReminderSent(req.body.company,false,function(err){
+						cb(errOccured,results);
+					});
+				//}
 			});
-		}
+		//}
 	}
 }
 

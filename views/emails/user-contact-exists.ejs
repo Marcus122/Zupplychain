@@ -1,5 +1,9 @@
+<% 
+title = "Contact Assignment";
+subtitle = "Please review the details below"; 
+%>
 <% include ./partials/header %> 
-	<p><%=referer%> has assigned you to the role of <%=role%> for company <%=company%> <%if(warehouse != ""){%> and warehouse <%=warehouse%><%}%></p>
-	<p>You are already registered as a Zupplychain user and as such no further action will be required.</p>
-	<p>However, if you were not expecting this email please go to go to Zupplychain's <a href="<%=host%>/contact-us">contact us</a> page to ask about this email</p> 
+	<p><%=referer%> has assigned you to the role of <%=role%> for company <%=company%><%if(warehouse != ""){%>, within the warehouse <%=warehouse%><%}%>.</p>
+	<p>You have already registered as a Zupplychain user and as such no further action will be required.</p>
+	<p>However, if you were not expecting this email please go to go to Zupplychain's <a href="<%=host%>/contact-us">contact us</a> page to query us regarding this email.</p> 
 <% include ./partials/footer %> 

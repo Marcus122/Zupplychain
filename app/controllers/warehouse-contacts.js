@@ -1,6 +1,6 @@
 var WarehouseContacts = require("../data/warehouse-contacts.js");
 var User = require ("../controllers/users.js");
-var Warehouse = require("../data/warehouse.js");
+var Warehouse = require("../controllers/warehouses.js");
 var company = require("../controllers/company.js");
 var local = require("../local.config.js");
 exports.version = "0.1.0";
@@ -72,7 +72,7 @@ exports.loadWarehousesContactsByACOrEC = function(userId,cb){
 			cb(err);
 		}else{
 			for (var i = 0; i<results.length; i++){
-				Warehouse.load(results[i].warehouse,function(err,warehouse){
+				Warehouse.getById(results[i].warehouse,function(err,warehouse){
 					if(err){
 						//This warehouse won't appear in the list
 					}else{
@@ -93,53 +93,49 @@ exports.deleteContact = function(userId,contactType,warehouseContactId,cb){
 		if(err){
 			cb(err);
 		}else{
-			for (var i = 0; i<result[contactType].length; i++){
-				if(result.toObject()[contactType][i].toString() === userId){
-					result[contactType].splice(0,1);
-					break;
-				}
-			}
-			result.save(function(err,result){
+			WarehouseContacts.deleteWhContact(warehouseContactId,userId,contactType,function(err,result){
 				if(err){
 					cb(err);
 				}else{
-					exports.checkWarehouseContactsExist(userId,function(err,exists){
-						if(err){
-							//See if there is a rollback function
-							cb(err);
-						}else if(!exists){
-							company.checkUserIsMaterContact(userId,function(err,exists){
-								if(err){
-									cb(err);
-								}else if(!exists){
-									User.deleteUser(userId,function(err,result){
-										if(err){
-											cb(err);
-											//See if there is a rollback function
-										}else{
-											cb(false,result);
-										}
-									});
-								}else{
-									User.updateDashboardAccessLevel(userId,local.config.dashboardAccessLevel.masterContact,function(err,result){
-										if(err){
-											cb(err);
-										}else{
-											cb(false);
-										}
-									});
-								}
-							});
-						}else{
-							User.checkCorrectDashboardAccessLevelAndUpdate(userId,function(err,result){
-								if(err){
-									cb(err);
-								}else{
-									cb(false);
-								}
-							});
-						}
-					})
+					//for (var i = 0; i<userIds.length; i++){
+						exports.checkWarehouseContactsExist(userId,function(err,exists){
+							if(err){
+								//See if there is a rollback function
+								cb(err);
+							}else if(!exists){
+								company.checkUserIsMaterContact(userId,function(err,exists){
+									if(err){
+										cb(err);
+									}else if(!exists){
+										User.deleteUser(userId,function(err,result){
+											if(err){
+												cb(err);
+												//See if there is a rollback function
+											}else{
+												cb(false,result);
+											}
+										});
+									}else{
+										User.updateDashboardAccessLevel(userId,local.config.dashboardAccessLevel.masterContact,function(err,result){
+											if(err){
+												cb(err);
+											}else{
+												cb(false);
+											}
+										});
+									}
+								});
+							}else{
+								User.checkCorrectDashboardAccessLevelAndUpdate(userId,function(err,result){
+									if(err){
+										cb(err);
+									}else{
+										cb(false);
+									}
+								});
+							}
+						});
+					//}
 				}
 			});
 		}
@@ -154,7 +150,7 @@ exports.loadWarehousesByUser = function(userId,cb){
 			cb(err);
 		}else{
 			for (var i = 0; i<results.length; i++){
-				Warehouse.load(results[i].warehouse,function(err,warehouse){
+				Warehouse.getById(results[i].warehouse,function(err,warehouse){
 					if(err){
 						//This warehouse won't appear in the list
 					}else{
@@ -194,7 +190,7 @@ exports.getHighestDashboardAccessLevelByUser = function(user,cb){
 				for (var j in object){
 					if (object[j].constructor === Array){
 						for (var k = 0; k<object[j].length; k++){
-							if(object[j][k] === user && dashboardAccessLevel > local.config.dashboardAccessLevel[j]){
+							if(object[j][k] == user && dashboardAccessLevel > local.config.dashboardAccessLevel[j]){
 								dashboardAccessLevel = local.config.dashboardAccessLevel[j];
 							}
 						}

@@ -1,4 +1,10 @@
 var googleDistance = require('google-distance');
+var cron = require('node-schedule');
+var Company = require('./controllers/company.js');
+var Warehouse = require('./controllers/warehouses.js');
+var emailer = require("./controllers/emailer.js");
+var Users = require("./controllers/users.js");
+var local = require("./local.config.js");
 function addDaysToDate(date, days) {
     date.setDate(date.getDate() + days);
     return date;
@@ -149,4 +155,117 @@ module.exports.convertHyphenJSONDataToCC = function(data){
         }
     }
     return newData;
+}
+
+module.exports.startCronJob = function(date,func){
+    cron.scheduleJob(date,function(){
+       func();
+    });
+}
+
+module.exports.checkContactsSetupCompleteByCompanyBySevenDays = function(company,cb){
+    var masterContacts = true;
+    var warehouseContacts = true;
+    var cbCompleted = 0;
+    var ccDateDif;
+    var cdDateDif;
+    var mcDateDif = Date.now() - Date.parse(company.created);
+    mcDateDif = Math.floor(mcDateDif/(1000*60*60*24));
+    if(company.created && (mcDateDif > 7) && company.masterContacts.length <2 ){
+        masterContacts = false;
+    }
+    
+    for (var i = 0; i<company.warehouses.length; i++){
+        Warehouse.getById(company.warehouses[i],function(err,result){
+            var now = new Date();
+            if(result.contacts && result.contacts.contactsDeletedAt === undefined){
+                result.contacts.contactsDeletedAt = now.toISOString();
+            }
+            ccDateDif = Date.now() - Date.parse(result.created);
+            ccDateDif = Math.floor(ccDateDif/(1000*60*60*24));
+            if(result.contacts){
+                cdDateDif = Date.now() - Date.parse(result.contacts.contactsDeletedAt);
+                cdDateDif = Math.floor(cdDateDif/(1000*60*60*24));
+            }else{
+                cdDateDif = 1;
+            }
+            if(result.email && result.contacts && ((ccDateDif > 7) || (cdDateDif > 7))){
+                var contacts = result.toObject().contacts;
+                for (var j in contacts){
+                    if (contacts[j].constructor === Array){
+                        if (contacts[j].length < 2){
+                            warehouseContacts = false;
+                        }
+                    }
+                }
+                cbCompleted ++;
+                if (cbCompleted === company.warehouses.length){
+                    if(masterContacts === true && warehouseContacts === true){
+                        cb(false,true,company);
+                    }else{
+                        cb(false,false,company);
+                    }
+                }
+            }else{
+                cbCompleted ++;
+                if (cbCompleted === company.warehouses.length){
+                    if(masterContacts === true && warehouseContacts === true){
+                        cb(false,true,company);
+                    }else{
+                        cb(false,false,company);
+                    }
+                }
+            }
+        });
+    }
+}
+
+module.exports.startProviderContactListReminderCronJob = function(app){
+    var rule = {hour:18, minute:6};//Execute everyday at 8 in the morning
+    var contactsReminderSent;
+    var companyArr = []
+    var k;
+    exports.startCronJob(rule,function(){
+        Company.loadAllCompanies(function(err,results){
+            if(err){
+                console.log(new Date());
+                console.log('#####CRON JOB ERROR#####');
+                console.log(err);
+                console.log('#####CRON JOB ERROR#####');
+            }else{
+                for (var i = 0; i<results.length; i++){
+                    companyArr.push(results[i].toObject());
+                }
+                contactsReminderSent = false;
+                for (k = 0; k<companyArr.length; k++){
+                    if (companyArr[k].contactsReminderSent === undefined || companyArr[k].contactsReminderSent === false){
+                        exports.checkContactsSetupCompleteByCompanyBySevenDays(companyArr[k],function(err,result,company){
+                            if(err || !result){
+                                app.render('emails/task-reminder',local,function(err,template){
+                                    if (!err){
+                                        for (var j = 0; j<company.masterContacts.length; j++){
+                                            Users.user_by_id(company.masterContacts[j],function(err,result){
+                                                if(err){
+                                                    //Try again tomorrow
+                                                }else{
+                                                    emailer.sendMail({},{},template,result.email,'info@zupplychain.com','Task Reminder',function(err){
+                                                        if(!err && !contactsReminderSent && !company.contactsReminderSent){
+                                                            contactsReminderSent = true;
+                                                            Company.updateContactsReminderSent(company._id,true,function(err,result){
+                                                                //Do Nothing
+                                                            });
+                                                        }
+                                                    });
+                                                }
+                                            })
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    });
 }

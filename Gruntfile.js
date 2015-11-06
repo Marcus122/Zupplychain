@@ -85,8 +85,15 @@ module.exports = function(grunt) {
             files: "./**/*.js",
             tasks: ["requirejs"]
           }
-      }
-      
+      },
+      copy:{
+		  build:{
+			  cwd: './css',
+			  src: ['images'],
+			  dest: './css/_dist/images',
+			  expand: true
+		  }
+	  }
   });
   
   grunt.loadNpmTasks('grunt-ssh');
@@ -94,6 +101,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-copy');
   
   grunt.registerTask('build', ['requirejs', 'less']);
   grunt.registerTask('development', ['watch']);

@@ -20,7 +20,6 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 		initAccountTab();
 		initWarehouseTab();
 		initContactsTab();
-		initDelete();
 		initPaging($('table[data-type="warehouses-table"]'));
 		initTrayBehaviour();
 		
@@ -43,97 +42,6 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 		
 		function scrollToPos(eleString){
 			$.scrollTo(eleString); 
-		}
-		
-		function initDelete(){
-			
-			function hideDeleteShowSave($btnContanier){
-				$btnContanier.show();
-				$btnContanier.find('button').show();
-				$btnContanier.find('a').show();
-				$btnContanier.find('label').show();
-				$btnContanier.find('button[name="delete"]').hide();
-			}
-			
-			function showDeleteHideSave($btnContanier){
-				$btnContanier.show();
-				$btnContanier.find('button').hide();
-				$btnContanier.find('a').hide();
-				$btnContanier.find('label').hide();
-				$btnContanier.find('button[name="delete"]').show();
-			}
-			
-			$(document).on('change','input[name="delete"]',function(){
-				var $this = $(this);
-				var $table = $this.closest('table');
-				var $btnContanier = $table.next('.button-container');
-				var maxRows = $table.data('max-rows');
-				if($table.find('td[data-field="delete"]').find('input:checked').length > 0){
-					showDeleteHideSave($btnContanier);
-				}else{
-					if(maxRows > $table.find('tbody').find('tr').length){
-						hideDeleteShowSave($btnContanier);
-					}else{
-						$btnContanier.hide();
-					}
-				}
-			});
-			
-			$(document).on('click','button[name="delete"]',function(){
-				var $this = $(this);
-				var $table = $this.parent().prev('.dashboard-table');
-				var $rows = $table.find('tbody').find('tr');
-				var data = {};
-				var ids = [];
-				var deletedRows = [];
-				var rowNum = 0;
-				data.type = $table.parent('form').parent('div').data('data') ||
-							$table.parent('form').parent('div').data('contact-type');
-				data.type = data.type.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); })
-				data.subType = $table.parent('form').parent('div').data('content').replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });//Specific contact type (e.g. Availability Controller)
-				data.company = $table.parent('form').parent('div').data('company-id');
-				if(data.company !== undefined){
-					data.company = data.company.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
-				}
-				data.warehouseContactId = $('.warehouse-specific-contacts').data('warehouse-contacts');
-				if(data.warehouseContactId !== undefined){
-					data.warehouseContactId = data.warehouseContactId.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); })
-				}
-				for (var i = 0; i<$rows.length; i++){
-					if ($($rows[i]).find('td[data-field="delete"]').find('input').is(':checked')){
-						ids.push($($rows[i]).data('id'));
-						deletedRows.push($rows[i]);
-					}
-				}
-				data.ids = ids;
-				DBCntr.deleteItems(data,function(response){
-					if (response.err){
-						Alerts.showPersistentErrorMessage('Error: One or more of the selected items were not deleted');
-					}else{
-						Alerts.showSuccessMessage('Items deleted');
-					}
-					for (var j= 0; j<deletedRows.length; j++){
-						deletedRows[j].remove();
-					}
-					if($this.parent().prev('.dashboard-table').find('tbody').find('tr').length === 0){
-						addWarehouseContactRow($table.find('tbody'));
-					}
-					$rows = $table.find('tbody').find('tr');
-					for(var k = 0; k<$rows.length; k++){
-						if(parseInt($($($rows[k]).find('td')[0]).html().replace('*','')) !== k){
-							rowNum = k+1;
-							$($($rows[k]).find('td')[0]).html(rowNum+'*');
-						}
-					}
-					hideDeleteShowSave($table.next('.button-container'));
-				});
-			});
-			
-			function addWarehouseContactRow($ele){
-				var template = templates.getTemplate('warehouse-specific-contacts-row');
-				var $row = template.bind({});
-				$ele.append($row);
-			}
 		}
 		
 		function initAccountTab(){
@@ -167,7 +75,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			$tab.find('button').prop('disabled',false);
 			$tab.find('textarea').prop('disabled',false);
 			$tab.find('select').prop('disabled',false);
-			$tab.find('div[data-function="save-buttons"]').show();
+			$tab.find('div[data-function="save-buttons"]').removeClass('hidden');
 			if(!$tab.find('a[data-mode="edit"]').hasClass('down')){
 				$tab.find('a[data-mode="edit"]').addClass('down');
 			}
@@ -184,7 +92,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			$tab.find('button').prop('disabled',true);
 			$tab.find('textarea').prop('disabled',true);
 			$tab.find('select').prop('disabled',true);
-			$tab.find('div[data-function="save-buttons"]').hide();
+			$tab.find('div[data-function="save-buttons"]').addClass('hidden');
 			if($tab.find('a[data-mode="edit"]').hasClass('down')){
 				$tab.find('a[data-mode="edit"]').removeClass('down');
 			}
@@ -206,14 +114,14 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 					var $warehouse = $(response);
 					$warehouseContainer.empty();
 					$warehouseContainer.append($warehouse);
-					$warehouseContainer.show();
+					$warehouseContainer.removeClass('hidden');
 					initTabs();
 					prepareWarehouseView($this);
 					$warehouseContainer.find('input').prop('disabled',true);
 					$warehouseContainer.find('button').prop('disabled',true);
 					$warehouseContainer.find('textarea').prop('disabled',true);
 					$warehouseContainer.find('select').prop('disabled',true);
-					$warehouseContainer.find('.form-footer div[data-function="save-buttons"]').hide();
+					$warehouseContainer.find('.form-footer div[data-function="save-buttons"]').addClass('hidden');
 					
 					require(["components/provider-registration"], function(Registration) {
 						Registration();
@@ -241,7 +149,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 				DBCntr.loadWarehouse($this.attr('href'),function(response){
 					var $warehouse = $(response);
 					$addNewWarehouse.append($($warehouse));
-					$addNewWarehouse.show();
+					$addNewWarehouse.removeClass('hidden');
 					prepareWarehouseView($this);
 					$addNewWarehouse.find('section.tabs').removeClass('tabs').find('li').removeClass('checked');
 					initTabs();
@@ -255,11 +163,11 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			
 			$(document).on('submit','#registration',function(e){
 				if( loom.isFormValid($(this).attr('id')) ){
-					var $tab = $('ul.tabs a:nth-child(2) li.four.columns');
-					var clickedTab = $tab.parent('a').attr('href');
-					$('.tab-content ' + clickedTab).show().siblings().hide();
-					$tab.addClass('active').parent().siblings('a').find('li').removeClass('active');
-					$('#add-new-warehouse ul a li:first-child').addClass('checked');
+					var $tab = $('ul.tabs li:nth-child(2).four.columns')
+					var clickedTab = $tab.find('a').attr('href');
+					$('.tab-content ' + clickedTab).removeClass('hidden').siblings().addClass('hidden');
+					$tab.addClass('active').siblings('li').removeClass('active');
+					$('#add-new-warehouse ul li:first-child').addClass('checked');
 					rebuildWarehouseList();
 					rebuildWarehouseDropdownList();
 					e.preventDefault();
@@ -267,11 +175,11 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			});
 			
 			$(document).on('submit','#define-space',function(e){
-				var $tab = $('ul.tabs a:nth-child(3) li.four.columns')
-				var clickedTab = $tab.parent('a').attr('href');
-				$('.tab-content ' + clickedTab).show().siblings().hide();
-				$tab.addClass('active').parent().siblings('a').find('li').removeClass('active');
-				$('#add-new-warehouse ul a li:nth-child(2)').addClass('checked');
+				var $tab = $('ul.tabs li:nth-child(3).four.columns')
+				var clickedTab = $tab.find('a').attr('href');
+				$('.tab-content ' + clickedTab).removeClass('hidden').siblings().addClass('hidden');
+				$tab.addClass('active').siblings('li').removeClass('active');
+				$('#add-new-warehouse ul li:nth-child(2)').addClass('checked');
 				e.preventDefault();
 				rebuilPricingAndAvailability();
 			});
@@ -280,7 +188,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 				var $currTab = $('ul.tabs a li.four.columns.active')
 				var $goToTab = $currTab.parent().prev('a');
 				var goToTabHref = $goToTab.attr('href');
-				$('.tab-content ' + goToTabHref).show().siblings().hide();
+				$('.tab-content ' + goToTabHref).removeClass('hidden').siblings().addClass('hidden');
 				$goToTab.find('li').addClass('active').parent().siblings('a').find('li').removeClass('active');
 			});
 			
@@ -302,11 +210,11 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			});
 			
 			$(document).on('click','a[href="#warehouse-contacts"]',function(){
-				$('div[data-one-warehouse="true"]').show();
+				$('div[data-one-warehouse="true"]').removeClass('hidden');
 			});
 			
 			$(document).on('click','a[href="#master-contact"]',function(){
-				$('div[data-one-warehouse="true"]').hide();
+				$('div[data-one-warehouse="true"]').addClass('hidden');
 			});
 			
 		}
@@ -369,36 +277,36 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 		}
 		
 		function goToView(href){
-			$('div[data-view="warehouses"]').find('.content-box[data-content="warehouses"]').show();
+			$('div[data-view="warehouses"]').find('.content-box[data-content="warehouses"]').removeClass('hidden');
 			$('#view-edit-warehouse').find('.row').remove();
 			$('#add-new-warehouse').find('.row').remove();
 			currentView = href;
 			if (currentView !== "" && !determineIfViewInBackLinks(currentView)) backLinks.push(currentView);
 			var $corrView = $('div[data-view="' + href.replace('#','') +'"]');
-			$corrView.show().siblings('.dashboard-container').hide();
+			$corrView.removeClass('hidden').siblings('.dashboard-container').addClass('hidden');
 		}
 		
 		function goToTab(href){
-			$('.tab-content ' + href + ',div[data-content="' + href.replace('#','') + '"]').show().siblings().hide();
+			$('.tab-content ' + href + ',div[data-content="' + href.replace('#','') + '"]').removeClass('hidden').siblings().addClass('hidden');
 		}
 		
 		function prepareWarehouseView($this){
 			var $viewEditButtons = $('.view-edit-buttons');
-			$this.closest('div[data-view="warehouses"]').find('.content-box[data-content="warehouses"]').hide();
+			$this.closest('div[data-view="warehouses"]').find('.content-box[data-content="warehouses"]').addClass('hidden');
 			$this.closest('.dashboard-container').parent('.main').css('background-color','initial');
-			//$this.closest('div[data-view="warehouses"]').find('input[type="date"]').datepicker().show();
+			//$this.closest('div[data-view="warehouses"]').find('input[type="date"]').datepicker().removeClass('hidden');
 			loom = new Loom();
 			if($this.data('action') === ACTION_ADD_NEW_WAREHOUSE){
-				$viewEditButtons.hide();
+				$viewEditButtons.addClass('hidden').addClass('hidden');
 			}else if($this.data('action') === ACTION_VIEW_EDIT_WAREHOUSE){
-				$viewEditButtons.show();
+				$viewEditButtons.removeClass('hidden');
 			}
 		}
 		
 		function initNavEvents(){
 			$(document).on('click','li.minimise-dashboard-nav',function(){
 				var $this = $(this);
-				$this.closest('#vertical-nav').addClass('minimise');
+				$this.closest('#vertical-nav').addClass('minimised');
 				$this.removeClass('minimise-dashboard-nav');
 				$this.addClass('maximise-dashboard-nav');
 				$('.dashboard-container').removeClass('nine');
@@ -406,7 +314,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			});
 			$(document).on('click','li.maximise-dashboard-nav',function(){
 				var $this = $(this);
-				$this.closest('#vertical-nav').removeClass('minimise');
+				$this.closest('#vertical-nav').removeClass('minimised');
 				$this.removeClass('maximise-dashboard-nav');
 				$this.addClass('minimise-dashboard-nav');
 				$('.dashboard-container').removeClass('eleven');
@@ -419,7 +327,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 				$this.parent('li').addClass('active').siblings().removeClass('active');
 				scrollToPos('body');
 				if(backLinks.length > 1){
-					$('.dashboard-back').show();
+					$('.dashboard-back').removeClass('hidden');
 				}
 			});
 			$('.dashboard-back').click(function(){
@@ -428,7 +336,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 				$($this.parent('.container').parent('.form-footer').prev('section').find('.main')[0]).css('background-color','#d7d7d7');
 				if (length > 0){
 					var $corrView = $('div[data-view="' + backLinks[length-2].replace('#','') +'"]');
-					$corrView.show().siblings('.dashboard-container').hide();
+					$corrView.removeClass('hidden').siblings('.dashboard-container').addClass('hidden');
 					if ($('#vertical-nav ul li a[href="' + backLinks[length-2] + '"]').length > 0){
 						$('#vertical-nav ul li a[href="' + backLinks[length-2] + '"]').parent('li').addClass('active').siblings().removeClass('active');
 					}else{
@@ -437,9 +345,9 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 					backLinks.splice(length-1,1);
 					if (backLinks.length === 0){
 						backLinks.push("#main");
-						$this.hide();
+						$this.addClass('hidden');
 					}else if(backLinks.length === 1){
-						$this.hide();
+						$this.addClass('hidden');
 					}
 				}else{
 					window.location.href = '/';
@@ -462,28 +370,38 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 		function initTabs(){
 			$(document).on('click','.tabs ul.tabs a',function(e){
 				var $this = $(this);
-				goToTab($this.attr('href'));
-				$this.find('li').addClass('active').parent().siblings().find('li').removeClass('active');
-				e.preventDefault();
+				if($this.parent().siblings('li.active').data('validate-form') === undefined || loom.isFormValid($this.parent('li').siblings('li.active').data('validate-form'))){
+					goToTab($this.attr('href'));
+					$this.parent('li').addClass('active').siblings().removeClass('active');
+					e.preventDefault();
+				}else{
+					loom.focusOnInvalidField($this.parent().siblings('li.active').data('validate-form'));
+				}
 			});
 			
 			$(document).on('click','div[data-view="contacts"] .tabs ul.tabs a',function(){//contacts specific stuff
 				var $this = $(this);
 				if($this.attr('href') === '#warehouse-contacts' && $('div[data-one-warehouse="true"]').length > 0){
-					$('div[data-one-warehouse="true"]').show();
-					$('.warehouse-specific-contacts').show();
-				}else{
-					$('div[data-one-warehouse="true"]').hide();
+					$('div[data-one-warehouse="true"]').removeClass('hidden');
+					$('.warehouse-specific-contacts').removeClass('hidden');
+				}else if($this.attr('href') === '#master-contact'){
+					$('div[data-one-warehouse="true"]').addClass('hidden');
 				}
 				
 				if($this.attr('href') === '#master-contact'){
-					$('.warehouse-specific-contacts').hide();
+					$('.warehouse-specific-contacts').addClass('hidden');
 				}
 			});
 		}
 		
 		function initContactsTab(){
+			var COMPULSORY_CONTACTS = 2;
+			initDelete();
 			loom.rebind($('form[data-form-type="contacts-form"]'))
+			if ($('#warehouse-contacts').hasClass('active')){
+				$('#warehouse-contacts').removeClass('hidden');
+			}
+			addEmptyRowsToTables(["master-contact"]);
 			$('button[name="view-warehouse-contacts"]').on('click',function(e,cb){
 				var $this = $(this);
 				$('.warehouse-specific-contacts').remove();
@@ -493,7 +411,8 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 					}else{
 						$this.closest('div[data-view="contacts"]').append(result);
 						initTabs();
-						loom.rebind($('form[data-form-type="contacts-form"]'))
+						loom.rebind($('form[data-form-type="contacts-form"]'));
+						addEmptyRowsToTables(["availability-controller","enquires-controller","transport-coordinator","goods-in","picking-dispatch","invoice-controller","credit-controller"]);
 						if(cb){
 							cb();
 						}
@@ -514,7 +433,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 					}
 					
 					if($rows.length < maxRows){
-						$this.parent('div').prev('button[name="save-new-contacts"]').show();
+						$this.parent('div').prev('button[name="save-new-contacts"]').removeClass('hidden');
 						if ($rows.length < mandatoryRows){
 							$(row).find('td:first-of-type').html($this.parent('div').parent('.button-container').prev('table').find('tbody tr').length + 1 + '*');
 						}else{
@@ -551,8 +470,9 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 					data = {},
 					rows = [],
 					cbDone = 0,
+					contactsToAdd = 0,
 					error = false,
-					$currentRow,
+					currentRows = [],
 					$table = $this.parent('div').siblings('table');
 					
 					if(loom.isFormValid($this.closest('form').attr('id'))){
@@ -561,55 +481,204 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 						rows = $table.find('tr[data-status="new"]');
 						data.warehouseContacts = $this.closest('.warehouse-specific-contacts').data('warehouse-contacts') || "";
 						data.role = contactType;
-						data.roleCC = $(this).closest('.tab-content').prev('.tabs').find('li.active').parent('a').attr('href').replace('#','').replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
+						data.roleCC = $(this).closest('.tab-content').prev('.tabs').find('li.active').find('a').attr('href').replace('#','').replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
 						data.warehouseId = $('select[name="warehouses"]').find(":selected").data('id');
+						data.warehouseName = $('select[name="warehouses"]').find(":selected").val();
 						for (var i = 0; i<rows.length; i++){
 							data.email = $(rows[i]).find('td[data-field="email"]').find('input').val();
 							data.name = $(rows[i]).find('td[data-field="name"]').find('input').val();
-							data.phoneNumber = $(rows[i]).find('td[data-field="phone-number"]').find('input').val();
-							data.dashboardAccess = $(rows[i]).find('tr[data-status="new"]').find('td[data-field="dashboard-access"]').find('input').val();
-							$currentRow = $(rows[i]);
-							DBCntr.createContact(data,function(response){
-								cbDone ++;
-								if(response.error === true){
-									error = true;
-								}else if(response.data.contactId !== undefined){
-									var contactsId = response.data.contactId;
-								}
-								
-								if(response.data.expiry === null){
-									$currentRow.find('td[data-field="register-status"]').append('<p class="registered-status complete">Registered</p>');
-								}else{
-									$currentRow.find('td[data-field="register-status"]').append('<p class="registered-status pending">Pending</p>');
-								}
-								
-								$currentRow.attr('data-id',response.data.userId);
-								if (cbDone === rows.length){
-									if(error === true){
-										Alerts.showPersistentErrorMessage('Not all contacts have been added');
+							if((data.email !== undefined && data.email !== "") && (data.name !== undefined && data.name !== "")){
+								contactsToAdd ++;
+								data.phoneNumber = $(rows[i]).find('td[data-field="phone-number"]').find('input').val();
+								data.dashboardAccess = $(rows[i]).find('tr[data-status="new"]').find('td[data-field="dashboard-access"]').find('input').val();
+								currentRows.push($(rows[i]));
+								DBCntr.createContact(data,function(response){
+									cbDone ++;
+									if(response.error === true){
+										error = true;
+									}else if(response.data.contactId !== undefined){
+										var contactsId = response.data.contactId;
+									}
+									
+									if(response.data.expiry === null){
+										currentRows[cbDone-1].find('td[data-field="register-status"]').append('<p class="registered-status complete">Registered</p>');
 									}else{
-										$this.parent('div').parent('div').attr('data-warehouse-contacts',contactsId);
-										Alerts.showSuccessMessage('All contacts have been successfully added');
-										rowInputsToText(rows);
-										if($table.data('max-rows') === $table.find('tbody').find('tr').length){
-											$this.parent().hide();
+										currentRows[cbDone-1].find('td[data-field="register-status"]').append('<p class="registered-status pending">Pending</p>');
+									}
+									
+									currentRows[cbDone-1].attr('data-id',response.data.userId);
+									currentRows[cbDone-1].attr('data-values-added',"true");
+									if (cbDone === contactsToAdd){
+										if(error === true){
+											Alerts.showPersistentErrorMessage('Not all contacts have been added');
+										}else{
+											$this.parent('div').parent('div').attr('data-warehouse-contacts',contactsId);
+											Alerts.showSuccessMessage('All contacts have been successfully added');
+											rowInputsToText(rows);
+											if($table.data('max-rows') === $table.find('tbody').find('tr').length){
+												$this.parent().addClass('hidden');
+											}
 										}
+									}
+								});
+							}
+						}
+					}else{
+						loom.focusOnInvalidField($this.closest('form').attr('id'));
+					}
+			});
+			
+			function initDelete(){
+				
+				function hideDeleteShowSave($btnContanier){
+					$btnContanier.removeClass('hidden');
+					$btnContanier.find('button').removeClass('hidden');
+					$btnContanier.find('a').removeClass('hidden');
+					$btnContanier.find('label').removeClass('hidden');
+					$btnContanier.find('button[name="delete"]').addClass('hidden');
+				}
+				
+				function showDeleteHideSave($btnContanier){
+					$btnContanier.removeClass('hidden');
+					$btnContanier.find('button').addClass('hidden');
+					$btnContanier.find('a').addClass('hidden');
+					$btnContanier.find('label').addClass('hidden');
+					$btnContanier.find('button[name="delete"]').removeClass('hidden');
+				}
+				
+				$(document).on('change','input[name="delete"]',function(){
+					var $this = $(this);
+					var $table = $this.closest('table');
+					var $btnContanier = $table.next('.button-container');
+					var maxRows = $table.data('max-rows');
+					if($table.find('td[data-field="delete"]').find('input:checked').length > 0){
+						showDeleteHideSave($btnContanier);
+					}else{
+						if(maxRows > $table.find('tbody').find('tr').length){
+							hideDeleteShowSave($btnContanier);
+						}else{
+							$btnContanier.addClass('hidden');
+						}
+					}
+				});
+				
+				function addWarehouseContactRow($ele){
+					var template = templates.getTemplate('warehouse-specific-contacts-row');
+					var $row = template.bind({});
+					$ele.append($row);
+				}
+				
+				$(document).on('click','button[name="delete"]',function(){
+					var $this = $(this);
+					var $table = $this.parent().prev('.dashboard-table');
+					var $rows = $table.find('tbody').find('tr');
+					var data = {};
+					var ids = [];
+					var deletedRows = [];
+					var $currentRow;
+					var cbCompleted = 0;
+					var rowNum = 0;
+					var err = false;
+					var len = 0;
+					data.type = $table.parent('form').parent('div').data('data') ||
+								$table.parent('form').parent('div').data('contact-type');
+					data.type = data.type.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); })
+					data.subType = $table.parent('form').parent('div').data('content').replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });//Specific contact type (e.g. Availability Controller)
+					data.company = $table.parent('form').parent('div').data('company-id');
+					if(data.company !== undefined){
+						data.company = data.company.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
+					}
+					data.warehouseContactId = $('.warehouse-specific-contacts').data('warehouse-contacts');
+					if(data.warehouseContactId !== undefined){
+						data.warehouseContactId = data.warehouseContactId.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); })
+					}
+					len = $rows.find('td[data-field="delete"]').find('input[type="checkbox"]:checked').length;
+					for (var i = 0; i<$rows.length; i++){
+						$currentRow = $($rows[i]);
+						if ($($rows[i]).find('td[data-field="delete"]').find('input').is(':checked')){
+							ids.push($($rows[i]).data('id'));
+							deletedRows.push($rows[i]);
+							data.id = $($rows[i]).data('id');
+							DBCntr.deleteItems(data,function(response){
+								cbCompleted ++;
+								if (response.err){
+									//Alerts.showPersistentErrorMessage('Error: One or more of the selected items were not deleted');
+									err = true;
+								}
+								//else{
+									//Alerts.showSuccessMessage('Items deleted');
+								//}
+								// for (var j= 0; j<deletedRows.length; j++){
+								// 	deletedRows[j].remove();
+								// }
+								// if($this.parent().prev('.dashboard-table').find('tbody').find('tr').length === 0){
+								// 	addWarehouseContactRow($table.find('tbody'));
+								// }
+								//$rows[i].remove();
+								if(cbCompleted === len){
+									for (var j= 0; j<deletedRows.length; j++){
+										deletedRows[j].remove();
+									}
+									$rows = $table.find('tbody').find('tr');
+									for(var k = 0; k<$rows.length; k++){
+										if(parseInt($($($rows[k]).find('td')[0]).html().replace('*','')) !== k){
+											rowNum = k+1;
+											$($($rows[k]).find('td')[0]).html(rowNum+'*');
+										}
+									}
+									addEmptyRowsToTables([$this.closest('form').parent('div').data('content')]);
+									hideDeleteShowSave($table.next('.button-container'));
+									if(err===true){
+										Alerts.showPersistentErrorMessage('Error: One or more of the selected items were not deleted');
+									}else{
+										Alerts.showSuccessMessage('Items deleted');
 									}
 								}
 							});
 						}
 					}
-			});
+				});
+			}
+			
+			function addEmptyRowsToTables(contactTypes){
+				var $table;
+				var template;
+				var $row;
+				var rowNum;
+				var numOfRows;
+				var num;
+				for (var i = 0; i<contactTypes.length; i++){
+					$table = $('div[data-content="' + contactTypes[i] + '"]').find('table');
+					numOfRows = $table.find('tbody tr').length;
+					for (var j = 0; j<parseInt($table.data('max-rows'))-numOfRows; j++){
+						template = templates.getTemplate($('div[data-content="' + contactTypes[i] + '"]').data('contact-type') + '-row');
+						rowNum = $table.find('tbody tr').last().find('td').first().html() || '0*';
+						rowNum = parseInt(rowNum.replace('*',''));
+						rowNum ++;
+						num = rowNum.toString();
+						if(rowNum<=COMPULSORY_CONTACTS){
+							num = num + '*'
+						}
+						$row = template.bind({num:num});
+						if(rowNum>COMPULSORY_CONTACTS){
+							$row.find('input').removeAttr('required')
+						}
+						$table.append($row)
+					}
+				}
+			}
 		}
 		
 		function rowInputsToText(rows){
 			for (var i = 0; i<rows.length; i++){
-				$(rows[i]).removeAttr('data-status');
-				$(rows[i]).find('td[data-field="email"]').html($(rows[i]).find('td[data-field="email"]').find('input').val() || "N/A");
-				$(rows[i]).find('td[data-field="name"]').html($(rows[i]).find('td[data-field="name"]').find('input').val() || "N/A");
-				$(rows[i]).find('td[data-field="phone-number"]').html($(rows[i]).find('td[data-field="phone-number"]').find('input').val() || "N/A");
-				$(rows[i]).find('td[data-field="delete"]').append('<input type="checkbox" name="delete"/>');
-				$(rows[i]).find('td').removeClass('success');
+				if($(rows[i]).data("values-added") === true){
+					$(rows[i]).removeAttr('data-status');
+					$(rows[i]).find('td[data-field="email"]').html($(rows[i]).find('td[data-field="email"]').find('input').val() || "N/A");
+					$(rows[i]).find('td[data-field="name"]').html($(rows[i]).find('td[data-field="name"]').find('input').val() || "N/A");
+					$(rows[i]).find('td[data-field="phone-number"]').html($(rows[i]).find('td[data-field="phone-number"]').find('input').val() || "N/A");
+					$(rows[i]).find('td[data-field="delete"]').append('<input type="checkbox" name="delete"/>');
+					$(rows[i]).find('td').removeClass('success');
+				}
 			}
 		}
 		

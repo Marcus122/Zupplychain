@@ -135,18 +135,18 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery", "loom/loomAl
         
         function disableSearch(message){
             $('#search-form .input-field.last').addClass('invalid-postcode');
-            $('#search-form .input-field.last button.action').hide();
-            $('#search-form .input-field.last .search-nag').hide();
+            $('#search-form .input-field.last button.action').addClass('hidden');
+            $('#search-form .input-field.last .search-nag').addClass('hidden');
             $('#search-form .input-field.last p.invalid-postcode-message').html(message);
-            $('#search-form .input-field.last p.invalid-postcode-message').show();
+            $('#search-form .input-field.last p.invalid-postcode-message').removeClass('hidden');
         }
         
         function enableSearch(){
             $('#search-form .input-field.last').removeClass('invalid-postcode');
-            $('#search-form .input-field.last button.action').show();
-            //$('#search-form .input-field.last .search-nag').show();
+            $('#search-form .input-field.last button.action').removeClass('hidden');
+            //$('#search-form .input-field.last .search-nag').removeClass('hidden');
             $('#search-form .input-field.last p.invalid-postcode-message').html("");
-            $('#search-form .input-field.last p.invalid-postcode-message').hide();   
+            $('#search-form .input-field.last p.invalid-postcode-message').addClass('hidden');   
         }
         
         function load(data) {
@@ -155,7 +155,7 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery", "loom/loomAl
                 return false;
             }
             factoryData = data;
-            $('#search-results-info').fadeIn();
+            $('#search-results-info').removeClass('hidden').fadeIn();
             var lim = data.length;
             for (var i =0;i<lim;i++) {
                 var position = new google.maps.LatLng(data[i].geo.lat, data[i].geo.lng);

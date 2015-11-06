@@ -41,7 +41,7 @@ var handler = function(app) {
 		setResponse('Login Success',res);
 	});
 	app.get('/logout',logout,function(req,res){
-		res.redirect("/");
+		res.redirect("/login");
 	});
 };
 
