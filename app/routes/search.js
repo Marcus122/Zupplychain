@@ -189,7 +189,6 @@ function deleteUserWarehouse(id){
 function updateUseageProfileAndLoadWarehouse(req,res, next) {
     searchController.getFromSession(req, function(err, sessionQuery) {
         console.log("loaded search from session to update, id is: ");
-        console.log(sessionQuery._id);
         if(err) {
             next();
             return;

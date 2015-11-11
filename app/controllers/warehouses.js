@@ -49,7 +49,6 @@ exports.load = function(req,res,next,id) {
 			return next(new Error('not found'));
 		}else{
 			//Check warehouse is for user
-			console.log(warehouse);
 			req.warehouse = warehouse;
 			return next();
 		}

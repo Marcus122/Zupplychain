@@ -76,8 +76,6 @@ exports.deleteFile = function(path,file,cb){
 	}else{
 		currPath = path + file;
 	}
-	console.log(currPath);
-	console.log(__dirname);
 	fs.unlink(currPath,function(err){
 		if(err){
 			cb(err);

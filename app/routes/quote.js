@@ -263,7 +263,6 @@ function createUserWarehouse(userId,warehouseId,storageProfile){
         if(err){
             console.log("Failed to create a user warehouse record");
         }else{
-            console.log(result);
         }
     });
 }

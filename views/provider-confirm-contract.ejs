@@ -1,13 +1,9 @@
  <% include ./partials/top%>   
  <%
     var session = { search: { } };
-    console.log("in template");
-    //console.log(quote);
-    console.log(typeof quote.search.startDate);
     session.search = [quote.search];
     var warehouse = quote.warehouse;
     quote.search.startDate = new Date(quote.search.startDate).toISOString();
-    console.log(warehouse);
     var minDurationOptions = config.minDurationOptions;
     var temperatures = config.temperatures;
     var palletTypes = config.palletTypes;

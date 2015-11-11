@@ -34,10 +34,12 @@
 									</div>
 									<div class="input-field">
 										<label for="confirm-password">Confirm Password</label>
-										<input required data-loom-confirm="password" name="confirm-password" type="password" data-pattern="(?=.*[A-z])(?=.*[0-9])" minlength="8"/>
-										<ul class="messages">
-											<li class="msg-info">Password must be at least 8 characters in length and contain at least one number and both passwords must match.</li>
-										</ul>
+										<div class="columns password-with-hint">
+											<input required data-loom-confirm="password" name="confirm-password" type="password" data-pattern="(?=.*[A-z])(?=.*[0-9])" minlength="8"/>
+											<ul class="messages">
+												<li class="msg-info">Password must be at least 8 characters in length and contain at least one number and both passwords must match.</li>
+											</ul>
+										</div>
 									</div>
 								</div>
 								<button type="submit" name="register" class="button action">Register</button>

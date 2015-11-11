@@ -267,13 +267,16 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			var links = $this.attr('href').split('#');
 			goToView('#' + links[1]);
 			goToTab('#' + links[2]);
-			$('a[href="#' + links[2] + '"]').find('li').addClass('active').parent().siblings().find('li').removeClass('active');
-			$('select[name="warehouses"]').val($('select[name="warehouses"]').find('option[data-id="' + $this.closest('table').data('warehouse-id') + '"]').val());
-			$('button[name="view-warehouse-contacts"]').trigger('click',function(){
-				goToTab('#' + links[3]);
-				$('a[href="#' + links[3] + '"]').find('li').addClass('active').parent().siblings().find('li').removeClass('active');
-                scrollToPos('.warehouse-specific-contacts'); 
-			});
+			$('a[href="#' + links[2] + '"]').parent('li').addClass('active').siblings('li').removeClass('active');
+			$('.warehouse-specific-contacts').addClass('hidden');
+			if(links[3]){
+				$('select[name="warehouses"]').val($('select[name="warehouses"]').find('option[data-id="' + $this.closest('table').data('warehouse-id') + '"]').val());
+				$('button[name="view-warehouse-contacts"]').trigger('click',function(){
+					goToTab('#' + links[3]);
+					$('a[href="#' + links[3] + '"]').parent('li').addClass('active').siblings('li').removeClass('active');
+					scrollToPos('.warehouse-specific-contacts'); 
+				});
+			}
 		}
 		
 		function goToView(href){
@@ -447,7 +450,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			$(document).on('click', 'button[name="resend-email"]',function(){
 				var $this = $(this),
 				data = {},
-				contactType = $this.closest('div.tab.main').attr('id').replace(/-([a-z])/g, function (g) { return ' ' + g[1].toUpperCase(); });
+				contactType = $this.closest('div.tab.main').data('content').replace(/-([a-z])/g, function (g) { return ' ' + g[1].toUpperCase(); });
 				contactType = contactType.charAt(0).toUpperCase() + contactType.substring(1);
 				
 				data.role = contactType;
@@ -457,7 +460,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 					if(result.err === true){
 						Alerts.showPersistentErrorMessage('Error: Email not sent');
 					}else{
-						$this.parent('td').siblings('td[data-field="register-status"]').find('div').removeClass('expired').addClass('pending');
+						$this.parent('td').siblings('td[data-field="register-status"]').find('p').removeClass('expired').addClass('pending').html('Pending');
 						$this.remove();
 						Alerts.showSuccessMessage('Success: Email resent');
 					}
@@ -683,15 +686,16 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 		}
 		
 		function initTrayBehaviour(){
-			$(document).on("click", ".tasks-box .open-tray-link", function(evt){
+			$(document).on("click", ".warehouse-tasks-tray .open-tray-link", function(evt){
 				openTray($(this));
 				if(evt.stopPropagation) evt.stopPropagation();
 				if(evt.cancelBubble!=null) evt.cancelBubble = true;
 			});
 			
 			function openTray($linkThatWasClicked) {
-				$linkThatWasClicked.parent().find(".tray").toggleClass("open");
+				$($linkThatWasClicked.parent().find(".tray")[0]).toggleClass("open");
 				$linkThatWasClicked.toggleClass("open");
+				$($linkThatWasClicked.parent().find(".tray")[0]).find('div').removeClass('hidden');
         	}
 		}
 	}

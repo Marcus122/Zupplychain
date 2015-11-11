@@ -217,10 +217,11 @@
 								<p>You can come back and add these later once registered if you prefer.</p>
 								<div class="row documents">
 									<label  class="columns three" for="photos">Upload Warehouse Photos</label>
-									<input class="columns seven" type="file" id="photos"/>
-									<div class="columns two upload">
+									<input class="columns seven" type="file" id="photos" name="upload-photos"/>
+									<label for="photos">Upload</label>
+									<!--<div class="columns two upload">
 										<button id="add-photo" type="button" class="attach primary mini"><span>Upload</span></button>
-									</div>
+									</div>-->
 								</div>
 								<div id="upload-photos" class="row upload-area">
 									<%if(warehouse.photos){
@@ -247,13 +248,14 @@
 											<label for="docs">Upload Documents</label>
 											<div class="tool-tip hint--top" data-hint="Upload files here such as Insurance Certificates, ISO 14001, Fire Safety/Sprinkler Documentation, Product Storage Certification">?</div>
 										</div>
-										<input class="columns three" type="file" id="docs"/>
+										<input class="columns seven" type="file" id="docs" name="upload-docs"/>
+										<label for="docs">Upload</label>
 										<div class="input-field columns four file-title">
 											<input type="text" name="file-title" placeholder="Title" spellcheck="true"/>
 										</div>
-										<div class="columns two">
+										<!--<div class="columns two">
 											<button id="add-document" type="button" class="attach primary mini"><span>Upload</span></button>
-										</div>
+										</div>-->
 									</div>
 								</div>
 								<div id="upload-documents" class="row documents-upload-area">

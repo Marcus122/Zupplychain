@@ -282,15 +282,17 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					}
 				});
 			}
-			var $addPhoto = $('#add-photo');
+			//var $addPhoto = $('#add-photo');
+			var addPhoto = document.getElementsByName('upload-photos')[0];
 			var $uploadPhoto = $('#photos');
 			var $uploadDoc = $('#docs');
 		    var $defaultPhotoInput = $("input#deafultPhoto");
 			var $photoArea = $('#upload-photos');
-			var $addDocument = $('#add-document');
+			var addDocument = document.getElementsByName('upload-docs')[0]
 			var $documentArea = $('#upload-documents');
-			$addPhoto.on("click",function(ev){
-				ev.preventDefault();
+			//$addPhoto.on("click",function(ev){
+			addPhoto.onchange = function(){
+				//ev.preventDefault();
 				var index = 0;
 				var files = $uploadPhoto.prop("files");
 				if(!files) return;
@@ -315,8 +317,17 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 						$photoArea.append($image);
 					}
 				});
-			});
-			$addDocument.click(function(){
+			}
+			$uploadDoc.click(function(evt){
+				if($(this).closest('#document-area').find('input[name="file-title"]').val() !== ""){
+						$(this).closest('#document-area').find('.input-field.file-title').removeClass('error').removeClass('error-required');
+				}else{
+					evt.stopPropagation();
+					evt.preventDefault();
+					$(this).closest('#document-area').find('.input-field.file-title').addClass('error').addClass('error-required');	
+				}
+			})
+			addDocument.onchange = function(evt){
 				if($uploadDoc.prop("files").length > 0){
 					if($(this).closest('#document-area').find('input[name="file-title"]').val() !== ""){
 						$(this).closest('#document-area').find('.input-field.file-title').removeClass('error').removeClass('error-required');
@@ -330,10 +341,11 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 						//$uploadDoc.val("");
 						$(this).closest('#document-area').find('input[name="file-title"]').val("");
 					}else{
+						evt.preventDefault();
 						$(this).closest('#document-area').find('.input-field.file-title').addClass('error').addClass('error-required');
 					}
 				}
-			});
+			}
 			$('input[name="file-title"]').blur(function(){
 				$(this).parent().removeClass('success');
 			})

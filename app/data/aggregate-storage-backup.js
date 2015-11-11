@@ -25,41 +25,9 @@ var aggregateStorage = function(theStorages, VolumeDiscounts) {
         return availableTemps;
     }
     
-    function willStorageFitThisWeek(storagesThisWeek,numPallets){
-        var willFit;
-        var spacesRunningTotal = 0;
-        storagesThisWeek.sort(function(x,y) { return x.price.price > y.price.price });
-        for (var i in storagesThisWeek) {
-            if (storagesThisWeek[i].numSpaces < numPallets){
-                willFit = false;
-            }else{
-                willFit = true;
-            }
-            spacesRunningTotal += storagesThisWeek[i].numSpaces;
-        }
-        
-        if(spacesRunningTotal < numPallets){
-            willFit = false;
-        }else{
-            willFit = true;
-        }
-        
-        return willFit;
-    }
-    
-    function getStorageProfileForWeekCommencing(wcDate, numPallets, numLastWeek, lastWeekProfile) {
-        var willFit;
-        var filledStorageProfile;
-        var storagesLastWeek;
+    function getStorageProfileForWeekCommencing(wcDate, numPallets, numLastWeek) {
         var storagesThisWeek = getStoragesAsTheyAreThisWeek(wcDate);
-        
-        willFit = willStorageFitThisWeek(storagesThisWeek,numPallets);
-        if (!willFit){
-            storagesLastWeek = lastWeekProfile.storagesThisWeek;
-        }
-        
-        filledStorageProfile = fillStoragesThisWeekMostCheaply(storagesThisWeek, numPallets, numLastWeek, lastWeekProfile, willFit,storagesLastWeek);
-        filledStorageProfile.storagesThisWeek = storagesThisWeek;
+        var filledStorageProfile = fillStoragesThisWeekMostCheaply(storagesThisWeek, numPallets, numLastWeek);
         return filledStorageProfile;
     }
     
@@ -110,7 +78,7 @@ var aggregateStorage = function(theStorages, VolumeDiscounts) {
         return firstWeekProfile.highestPriceOfAnyStorageUsed;
     }
     
-    function fillStoragesThisWeekMostCheaply(storagesThisWeek, numPallets, numLastWeek, lastWeekProfile, willFit) {
+    function fillStoragesThisWeekMostCheaply(storagesThisWeek, numPallets, numLastWeek) {
         var filledStorageProfile = {};
         var storagesUsed = [];
         var numPalletsLeft = numPallets;
@@ -151,30 +119,12 @@ var aggregateStorage = function(theStorages, VolumeDiscounts) {
         filledStorageProfile.numPalletsLeft             = numPalletsLeft;
         filledStorageProfile.numPalletsStored           = numPallets - numPalletsLeft;
         filledStorageProfile.storages                   = storagesUsed;
+        filledStorageProfile.highestPriceOfAnyStorageUsed = highestPriceOfAnyStorageUsed;
         filledStorageProfile.volumeDiscount             = getVolumeDiscount(numPallets);
+        filledStorageProfile.totalHandlingCharge        = totalHandlingCharge;
         var weeklySubTotal                              = (highestPriceOfAnyStorageUsed.price * (numPallets));//even if the storage doesn't fit, calc the price as if it did as an estimate.
         var weeklySubTotalWithDiscount                  = weeklySubTotal * (1 - (filledStorageProfile.volumeDiscount / 100));
-        if(!willFit){
-            if(!lastWeekProfile.totalHandlingCharge){
-                lastWeekProfile.totalHandlingCharge = 0;
-            }
-            if(filledStorageProfile.numPallets < lastWeekProfile.numPallets){
-                filledStorageProfile.totalPrice = (lastWeekProfile.totalPrice - lastWeekProfile.totalHandlingCharge) / (lastWeekProfile.numPallets / filledStorageProfile.numPallets);
-            }else if(filledStorageProfile.numPallets > lastWeekProfile.numPallets){
-                filledStorageProfile.totalPrice = (lastWeekProfile.totalPrice - lastWeekProfile.totalHandlingCharge) * (filledStorageProfile.numPallets / lastWeekProfile.numPallets);
-                totalHandlingCharge = increaseInPallets * lastWeekProfile.highestPriceOfAnyStorageUsed.charge
-                filledStorageProfile.totalHandlingCharge        = totalHandlingCharge;
-                filledStorageProfile.totalPrice += totalHandlingCharge;
-            }else{
-                filledStorageProfile.totalPrice = lastWeekProfile.totalPrice - lastWeekProfile.totalHandlingCharge;
-                //filledStorageProfile.totalHandlingCharge = lastWeekProfile.totalHandlingCharge;
-            }
-            filledStorageProfile.highestPriceOfAnyStorageUsed = lastWeekProfile.highestPriceOfAnyStorageUsed;
-        }else{
-            filledStorageProfile.totalPrice                 = (weeklySubTotalWithDiscount + totalHandlingCharge);
-            filledStorageProfile.totalHandlingCharge        = totalHandlingCharge;
-            filledStorageProfile.highestPriceOfAnyStorageUsed = highestPriceOfAnyStorageUsed;
-        }
+        filledStorageProfile.totalPrice                 = (weeklySubTotalWithDiscount + totalHandlingCharge);
         return filledStorageProfile;
         
         function getVolumeDiscount(numPallets) {
@@ -196,19 +146,17 @@ var aggregateStorage = function(theStorages, VolumeDiscounts) {
         var weeklyProfilesIndexedByDate = {};
         var firstTimeThrough = true;
         var palletsRequiredLastWeek = 0;
-        var lastWeekProfile ={};
         for (var i = 0; i<useageProfile.length; i++){
             for (var key in useageProfile[i]) {
                 var numPallets = useageProfile[i][key];
                 var wcDate = Date.parse(key);
-                var thisWeekProfile = getStorageProfileForWeekCommencing(wcDate, numPallets, palletsRequiredLastWeek, lastWeekProfile);
+                var thisWeekProfile = getStorageProfileForWeekCommencing(wcDate, numPallets, palletsRequiredLastWeek);
                 weeklyProfilesIndexedByDate[key] = thisWeekProfile;
                 if (firstTimeThrough) {
                     firstWeekProfile =  weeklyProfilesIndexedByDate[key]
                     firstTimeThrough = false;
                 }
                 palletsRequiredLastWeek = numPallets;
-                lastWeekProfile = thisWeekProfile;
             }
         }
         return weeklyProfilesIndexedByDate;   

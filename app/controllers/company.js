@@ -82,7 +82,6 @@ exports.warehouseByCompany = function(company,callback){
 };
 
 exports.checkUserIsMaterContact = function(userId,cb){
-	console.log(userId.toString());
 	Company.loadByUser(userId,function(err,result){
 		if(err){
 			cb(err);

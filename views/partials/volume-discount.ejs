@@ -17,7 +17,7 @@
 					%>
 					<div class="discount-header">
 						<h2>Volume Discount</h2>
-						<span>Max number of pallets: <strong><%= warehouse.totalPalletSpaces %></strong></span>
+						<!--<span>Max number of pallets: <strong><%= warehouse.totalPalletSpaces %></strong></span>-->
 					</div>
 					
 					<form method="post" id="discount-form" class="volume-discount-form loom-form" novalidate data-loom-no-submit="true">
@@ -26,7 +26,8 @@
 						</div>
 						<div class="input-field no-discount no-success-validation-style">
 							<label for="no-disc">No discount on orders with up to</label>
-							<input required type="number" name="noDiscount" min="0" data-bind-value="noDiscount" data-bind-max="palletSpaces" value="<%= warehouse.noDiscount || ''; %>" max="<%=warehouse.totalPalletSpaces%>"/>
+							<!--<input required type="number" name="noDiscount" min="0" data-bind-value="noDiscount" data-bind-max="palletSpaces" value="<%= warehouse.noDiscount || ''; %>" max="<%=warehouse.totalPalletSpaces%>"/>-->
+							<input required type="number" name="noDiscount" min="0" data-bind-value="noDiscount" value="<%= warehouse.noDiscount || ''; %>"/>
 							<span>pallets</span>
 						</div>
 						<p>If you want to specify variations to your prices for large quantities, use this table. If not, your prices will apply to any quantity.</p>
@@ -71,7 +72,8 @@
 										<span class="js-from"> <%= blankRowFrom %></span>
 									</td>
 									<td data-th="To" class="input-field no-success-validation-style discount-to">
-										<input data-bind-max="total" required data-bind-value="to" data-bind-min="from" type="number" name="to" value="" max="<%= warehouse.totalPalletSpaces %>"/>
+										<!--<input data-bind-max="total" required data-bind-value="to" data-bind-min="from" type="number" name="to" value="" max="<%= warehouse.totalPalletSpaces %>"/>-->
+										<input required data-bind-value="to" data-bind-min="from" type="number" name="to" value=""/>
 									</td>
 									<td data-th="% Discount" class="input-field no-success-validation-style discount-value">
 										<input data-loom-type="decimal" data-loom-decimal-places="2" required data-bind-value="perc" name="perc"  type="number" min="0" step="0.5" placeholder="0.00"/>

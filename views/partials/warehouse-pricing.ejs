@@ -33,13 +33,13 @@
             <thead>
                 <tr>
                     <th>Week Commencing</th>
-                    <th>Pallet Space</th>
+                    <th>Estimated Requirements <%if(page === "warehouse-profile"){%><div class="tool-tip hint--top" data-hint="You can amend quantities for each week to refine space availability and estimated cost">?</div><%}%></th>
+                    <th>Available Space</th>
                     <%if(typeof page !== undefined){
                         if(typeof page !== undefined && page !== "" && (page === "provider-offer" || page === 'provider-confirm-contract')){%>
                             <th>Storage Name</th>
                         <%}
                     }%>
-                    <th>Estimated Requirements <%if(page === "warehouse-profile"){%><div class="tool-tip hint--top" data-hint="You can amend quantities for each week to refine space availability and estimated cost">?</div><%}%></th>
                     <th>Price per Pallet per Week (&pound;)</th>
                     <th>In and Out Price per Pallet (&pound;)</th>
                     <th>Weekly Total (&pound;)</th>
@@ -68,10 +68,23 @@
                     var storageProfile = warehouse.storageProfile[wcDate]%>
                 <tr class="animated <%= storageProfile.numPalletsLeft == 0 ? "full" : "not-full" %>">
                     <td class="week-commencing" data-week-commencing="<%= wcDate %>" ><%= utils.printFormatDate(new Date(wcDate)) %></td>
+                    <td class="<%= !quoteView && "input-field" || "" %> no-success-validation-style">
+                    <% if (quoteView) { %>
+                        <!--<span><%=useageProfile[0][wcDate]%></span>-->
+                        <span><%=useageProfile[index][wcDate]%></span>
+                    <% } else { %>
+                        
+                            <input data-loom-type="number" data-start-date="<%= wcDate %>" type="text" value="<%=useageProfile[index][wcDate]%>" />
+                         
+                    <% } %>
+                    </td>
                     <td class="bar-container" >
+                        <!--<div data-pallets-required="<%=useageProfile[index][wcDate]%>" class="useage-marker"></div>
+                        <div class="bar <%= storageProfile.numPalletsLeft == 0 ? "full" : "not-full" %>" data-value="<%= storageProfile.numPalletsStored%>">
+                        <%= storageProfile.numPalletsLeft == 0 ? "OK" : storageProfile.numPalletsStored %></div>-->
                         <div data-pallets-required="<%=useageProfile[index][wcDate]%>" class="useage-marker"></div>
                         <div class="bar <%= storageProfile.numPalletsLeft == 0 ? "full" : "not-full" %>" data-value="<%= storageProfile.numPalletsStored%>">
-                        <%= storageProfile.numPalletsLeft == 0 ? "OK" : storageProfile.numPalletsStored %></div>
+                        <%= storageProfile.numPalletsStored %></div>
                     </td>
                     <%if(typeof page !== undefined){
                         if(typeof page !== undefined && page !== "" && (page === "provider-offer" || page === 'provider-confirm-contract')){%>
@@ -83,17 +96,6 @@
                             <td class="storage-name" data-storage-name="<%= storageProfile.storages[0].name%>"><%= storageNames%></td>
                         <%}
                     }%>
-                    <td class="<%= !quoteView && "input-field" || "" %> no-success-validation-style">
-                    <%console.log(quoteView);%>
-                    <% if (quoteView) { %>
-                        <!--<span><%=useageProfile[0][wcDate]%></span>-->
-                        <span><%=useageProfile[index][wcDate]%></span>
-                    <% } else { %>
-                        
-                            <input data-loom-type="number" data-start-date="<%= wcDate %>" type="text" value="<%=useageProfile[index][wcDate]%>" />
-                         
-                    <% } %>
-                    </td>
                     <td><%=storageProfile.highestPriceOfAnyStorageUsed.price  ? Number(storageProfile.highestPriceOfAnyStorageUsed.price).toFixed(2) : "N/A" %></td>
                     <td>
                     <% if (storageProfile.totalHandlingCharge) { //we only show the handling charge for weeks where it applies.%>

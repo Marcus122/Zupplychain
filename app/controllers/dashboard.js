@@ -154,7 +154,6 @@ exports.deleteItems = function(req,res,cb){
     var cbCompleted = 0;
 	var errOccured = false;
 	var results = [];
-	console.log(req.url);
 	if (req.body.type === 'warehouse' || req.body.type === 'warehouses'){
 		//for(var i = 0; i<req.body.ids.length; i++){
 			warehouse.deleteWarehouseById(req.body.id,function(err,result){

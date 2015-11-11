@@ -127,7 +127,8 @@
 html is set to 62.5% so that all the REM measurements throughout Skeleton
 are based on 10px sizing. So basically 1.5rem = 15px :) */
 html {
-  font-size: 62.5%; }
+  font-size: 62.5%;
+  min-height:940px; }
 @media screen and (max-width: 650px){
     html {font-size: 50%;} /* On smaller screen shrink the font. */
 }
@@ -166,7 +167,8 @@ a:hover {
 button,
 input[type="submit"],
 input[type="reset"],
-input[type="button"] {
+input[type="button"],
+input[type="file"] + label {
   display: inline-block;
   text-align: center;
   text-decoration: none;

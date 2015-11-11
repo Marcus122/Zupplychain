@@ -12,7 +12,18 @@ var handler = function(app) {
 	app.param('warehouse_id', warehouses.load);
 	
 	app.get('/contacts-setup',function(req,res){
-		res.render('contact-setup-walkthrough',req.data);
+		dashboard.getWarehousesByUser(req.data.user,function(err,data){
+			if(err){
+				setErrorResponse("Warehouse not found",res);
+			}else{
+				req.data.warehouses = data.warehouses;
+				req.data.masterContacts = data.masterContacts;
+				req.data.registerStatus = data.registerStatus;
+				req.data.authorisations = data.authorisations;
+				req.data.warehouse = data.warehouses[0];
+				res.render('partials/dashboard/contact-setup-walkthrough',req.data);
+			}
+		});
 	});
 	
 	app.get('/dashboard', checkForLogon, function(req,res){

@@ -1,5 +1,5 @@
-<% include ./partials/top %> 
-<main id="contacts-setup">
+<% include ../top %> 
+<main id="contacts-setup" class="dashboard"><!--Part of the dashboard-->
 	<div class="banner row">
 		<h1>Contact Setup</h1>
 	</div>
@@ -17,15 +17,73 @@
 							<p class="heading">Master Contacts</p>
 							<p>Firstly, we need two (and an optional third) Master Contacts for the business who are the sole people who can set or amend pricing. The Master Contact can also amend availability and registration details and add further contacts to the account.</p>
 							<p>All further contacts can be warehouse specific. In all cases, we will need two contacts for each role. </p>
+							<div class="warehouse-tasks-tray trays open columns twelve">
+								<a class="warehouse-name open-tray-link">Add Master Contacts</a>
+								<div class="tray">
+									<% include multi-used/master-contacts%>
+								</div>
+							</div>
 							<p class="heading">Availability and Enquires</p>
 							<p>Next, you can add two Availability Controllers. These contacts are the only ones, other than the Master Contact and the Enquiries Controller, who can add or amend registration and contact details for the specified warehouse, including availability (but not pricing).</p>
 							<p>When a potential customer chooses your warehouse, we will send a detailed enquiry to a specified contact – the Enquiries Controller. The enquiry will detail the customer’s search criteria and your storage name and pricing to which it has been matched. This contact will need to respond within 48 hours confirming availability, offering payment terms and, where requested, offering an in-bound transport price. Or this contact will decline the enquiry.</p>
 							<p>The Enquiries Controller will be able to add or amend registration details and availability (but not pricing) for the specified warehouse. Two Enquiries Controllers will be required, though they can be the same contacts as the Availability Controller.</p>
+							<div class="warehouse-tasks-tray trays open columns twelve">
+								<a class="warehouse-name open-tray-link">Add Availability and Enquires</a>
+								<div class="tray">
+									<div class="warehouse-tasks-tray trays open columns twelve">
+										<a class="warehouse-name open-tray-link">Availability Controller</a>
+										<div class="tray">
+											<% include multi-used/availability-controller%>
+										</div>
+									</div>
+									<div class="warehouse-tasks-tray trays open columns twelve">
+										<a class="warehouse-name open-tray-link <%if(warehouses.length === 1 || parseInt(warehouses.length) === 1){%>open<%}%>">Enquires Controller</a>
+										<div class="tray">
+											<% include multi-used/enquires-controller%>
+										</div>
+									</div>
+								</div>
+							</div>
 							<p class="heading">Other Contacts</p>
 							<p>If a customer has agreed an inbound transport quotation, we need a contact for transport. Once you have an agreed contract with a customer, we will start messaging both parties to confirm delivery dates, times and exact quantities. For this, you need to nominate a Goods-in contact.</p>
 							<p>For outbound movements, please specify a Picking and Dispatch contact.</p>
 							<p>Zupplychain will send you and the customer a pro forma invoice to send to the customer, based on Zupplychain’s records of the number of pallets held and your contract pricing. Please specify an invoicing contact.</p>
 							<p>Zupplychain will monitor customer payment history. Please nominate a Credit Controller we can contact.</p>
+							<div class="warehouse-tasks-tray trays open columns twelve">
+								<a class="warehouse-name open-tray-link <%if(warehouses.length === 1 || parseInt(warehouses.length) === 1){%>open<%}%>">Add Other Contacts</a>
+								<div class="tray <%if(warehouses.length === 1){%>open<%}%>">
+									<div class="warehouse-tasks-tray trays open columns twelve">
+										<a class="warehouse-name open-tray-link <%if(warehouses.length === 1 || parseInt(warehouses.length) === 1){%>open<%}%>">Transport Coordinator</a>
+										<div class="tray">
+											<% include multi-used/transport-coordinator%>
+										</div>
+									</div>
+									<div class="warehouse-tasks-tray trays open columns twelve">
+										<a class="warehouse-name open-tray-link <%if(warehouses.length === 1 || parseInt(warehouses.length) === 1){%>open<%}%>">Goods-in</a>
+										<div class="tray">
+											<% include multi-used/goods-in%>
+										</div>
+									</div>
+									<div class="warehouse-tasks-tray trays open columns twelve">
+										<a class="warehouse-name open-tray-link <%if(warehouses.length === 1 || parseInt(warehouses.length) === 1){%>open<%}%>">Picking Dispatch</a>
+										<div class="tray">
+											<% include multi-used/picking-dispatch%>
+										</div>
+									</div>
+									<div class="warehouse-tasks-tray trays open columns twelve">
+										<a class="warehouse-name open-tray-link <%if(warehouses.length === 1 || parseInt(warehouses.length) === 1){%>open<%}%>">Invoice Controller</a>
+										<div class="tray">
+											<% include multi-used/invoice-controller%>
+										</div>
+									</div>
+									<div class="warehouse-tasks-tray trays open columns twelve">
+										<a class="warehouse-name open-tray-link <%if(warehouses.length === 1 || parseInt(warehouses.length) === 1){%>open<%}%>">Credit Controller</a>
+										<div class="tray">
+											<% include multi-used/credit-controller%>
+										</div>
+									</div>
+								</div>
+							</div>
 							<p class="heading">Thank You and Welcome</p>
 							<p>Thank you. As you set up contacts on the Dashboard, we will send e-mails to those nominated informing them of and explaining their role and inviting them to set up a password.</p>
 						</div>
@@ -34,5 +92,16 @@
 			</div>
 		</div>
 	</section>
+	<div class="continue-links footer form-footer">
+		<div class="container">
+			<a href="#" class="button simple tandc">View Terms and Conditions</a>
+		</div>
+	</div>
 </main>
-<% include ./partials/bottom %>
+<% include ../bottom %>
+<script type="text/template" id="master-contact-row">
+	<% include master-contact-row%>
+</script>
+<script type="text/template" id="warehouse-specific-contacts-row">
+	<% include warehouse-specific-contacts-row%>
+</script>

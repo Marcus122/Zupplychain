@@ -1,5 +1,5 @@
 "use strict";
-define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!https://maps.googleapis.com/maps/api/js','components/global'], function ($,Loom,Templates,Alerts,GM,Global) {
+define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!https://maps.googleapis.com/maps/api/js','components/global',"jqueryPlugins/jquery.scrollTo.min"], function ($,Loom,Templates,Alerts,GM,Global,Scroll) {
 	
     function Class() {
 		var templates = new Templates();
@@ -135,11 +135,13 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
                     $(".pricing-container form table > tbody > tr").removeClass('hidden');
                     $('.change-warehouse-profile-row-number .view-less').removeClass('hidden');
                     $('.change-warehouse-profile-row-number .view-more').addClass('hidden');
+                    $.scrollTo(".content-box.primary");
                 });
                 $('.change-warehouse-profile-row-number .view-less').click(function (){
                     $('.pricing-container form table > tbody > tr').addClass('hidden').slice(0,12).removeClass('hidden');
                     $('.change-warehouse-profile-row-number .view-more').removeClass('hidden');
                     $('.change-warehouse-profile-row-number .view-less').addClass('hidden');
+                    $.scrollTo(".content-box.primary");
                 });
             }
         }
@@ -358,15 +360,19 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
                     return;
                 }
                 // we chuck up the ajax request to get the result back from the server.
-                $.post("/useage-profile",
-                        {
+                $.ajax({
+                        url:"/useage-profile",
+                        type:"POST",
+                        data:{
                             wcDate :  wcDate,
                             numPallets : numPallets,
                             "warehouse-id" : warehouseId
                         },
-                        function (result) {
+                        headers: {'csrf-token':$('meta[name="csrf-token"]').attr("content")},
+                        success:function (result) {
                             populatePricingTable(result, wcDate);
                             focusInputThatWasFocussed();
+                        }
                 });
             }
             

@@ -1,0 +1,54 @@
+<div data-contact-type="warehouse-specific-contacts" data-content="picking-dispatch" class="hidden tab main">
+	<form id="picking-dispatch" autocomplete="off" data-form-type="contacts-form" class="loom-form data-loom-no-submit="true" novalidate="novalidate">
+		<table class="simple dashboard-table" data-max-rows="2">
+			<thead>
+				<th>No.</th>
+				<th>Name</th>
+				<th>Email</th>
+				<th>Phone Number</th>
+				<th>Status</th>
+				<%if(authorisations.contacts.warehouseContacts.edit===true){%><th><img src="/images/delete.png"></th><%}%>
+				<%if(authorisations.contacts.warehouseContacts.edit===true){%><th></th><%}%>
+			</thead>
+			<tbody>
+				<%if(warehouse.contacts){%>
+					<%if(warehouse.contacts.pickingDispatch.length > 0){%>
+						<%for(var i = 0; i<warehouse.contacts.pickingDispatch.length; i++){%>
+							<tr data-id="<%=warehouse.contacts.pickingDispatch[i]._id.toString()%>">
+								<td><%=i+1%>*</td>
+								<td data-field="name"><%=warehouse.contacts.pickingDispatch[i].name || 'N/A'%></td>
+								<td data-field="email"><%=warehouse.contacts.pickingDispatch[i].email%></td>
+								<td data-field="phone-number"><%=warehouse.contacts.pickingDispatch[i].phoneNumber || 'N/A'%></td>
+								<td data-field="register-status">
+									<%switch(true){
+										case (warehouse.contacts.pickingDispatch[i].expiry >= Date.now() && warehouse.contacts.pickingDispatch[i].expiry !== null):%>
+											<p class="registered-status pending"><%=registerStatus[1]%></p>
+											<%break;
+										case (warehouse.contacts.pickingDispatch[i].expiry < Date.now() && warehouse.contacts.pickingDispatch[i].expiry !== null):%>
+											<p class="registered-status expired"><%=registerStatus[2]%></p>
+											<%break;
+										case null:%>
+											<p class="registered-status complete"><%=registerStatus[0]%></p>
+											<%break;
+										default:%>
+											<p class="registered-status complete"><%=registerStatus[0]%></p>
+									<%}%>
+								</td>
+								<%if(authorisations.contacts.warehouseContacts.edit===true){%><td data-field="delete"><%if(warehouse.contacts.pickingDispatch[i]._id != user.id && authorisations.contacts.warehouseContacts.edit===true){%><input type="checkbox" name="delete"/><%}%></td><%}%>
+								<%if(authorisations.contacts.warehouseContacts.edit===true){%><td data-field="resend-email"><%if(warehouse.contacts.pickingDispatch[i].expiry < Date.now() && warehouse.contacts.pickingDispatch[i].expiry !== null){%> <button name="resend-email" class="button action mini">Resend</button><%}%></td><%}%>
+							</tr>
+						<%}%>
+					<%}else{%>
+						<% include ../empty-warehouse-contacts-rows%>
+					<%}%>
+				<%}%>
+			</tbody>
+		</table>
+		<%if(authorisations.contacts.warehouseContacts.edit===true){%>
+			<div class="columns twelve button-container <%if(warehouse.contacts.pickingDispatch.length === 2){%>hidden<%}%>">
+				<button type="button" name="save-new-contacts" class="button action">Save</button>
+				<button type="button" name="delete" class="button action hidden">Delete</button>
+			</div>
+		<%}%>
+	</form>
+</div>

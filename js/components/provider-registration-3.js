@@ -427,6 +427,10 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
             var $buttonCell = $buttonThatWasClicked.closest(".button-cell");
             //show/hide the next tr
             var wasOpen = ($traysToOpen.hasClass("open") && $trayHolderToOpen.hasClass('open'));
+            var openTrays = $buttonThatWasClicked.parent().parent().parent().find('.trays.open').find('.tray-holder.open').find('form');
+            for (var i = 0; i<openTrays.length; i++){
+                $(openTrays[i]).trigger('submit');
+            }
             $(".trays").removeClass('open');
             $(".button-cell").removeClass('open');
             if (!wasOpen) {

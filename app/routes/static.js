@@ -18,8 +18,6 @@ var handler = function(app) {
             }
             req.data.config = local.config;
             req.data.quote = quote;
-            console.log("quote that was loaded:");
-            console.log(quote);
             res.render("emails/" + req.params.template,req.data);
         });
 	});

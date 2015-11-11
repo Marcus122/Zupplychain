@@ -290,7 +290,8 @@ select {
 button,
 html input[type="button"], /* 1 */
 input[type="reset"],
-input[type="submit"] {
+input[type="submit"],
+input[type="file"] + label {
   -webkit-appearance: button; /* 2 */
   cursor: pointer; /* 3 */
 }

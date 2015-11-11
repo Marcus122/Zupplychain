@@ -18,7 +18,6 @@ exports.updateComments = function(quoteId,comment,commentType,cb){
 }
 
 exports.createQuote = function(formData,user,warehouseId,storageProfile,search,cb) {
-    console.log(arguments);
     var quote = {};
     
     quote.user = user._id;

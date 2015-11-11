@@ -38,7 +38,7 @@ require(["jquery","components/global","jqueryPlugins/jquery.scrollTo.min","loom/
                Search();
             });   
         }
-        if (onPage("login") || onPage("dashboard")){
+        if (onPage("login") || onPage("dashboard") || onPage("contacts-setup")){
             require(["components/dashboard"], function(Dashboard) {
                Dashboard();
             });   

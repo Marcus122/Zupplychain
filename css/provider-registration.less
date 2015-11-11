@@ -53,6 +53,50 @@
     }
 }
 
+input[name="upload-photos"],
+input[name="upload-docs"]{
+	width: 0.1px !important;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+	float:right;
+}
+
+input[name="upload-photos"] + label,
+input[name="upload-docs"] + label{
+    color: #FFF;
+    background-color: #9bc11f;
+    display: inline-block;
+	cursor:pointer;
+	.unit-padding-left(1);
+	.unit-padding-right(1);
+	.unit-padding-top(0.5);
+	.unit-padding-bottom(0.5);
+	border: 0px;
+    text-transform: uppercase;
+    transition: 0.1s transform, 0.1s box-shadow, 0.1s -moz-box-shadow, 0.1s -webkit-box-shadow;
+	overflow: visible;
+	font: inherit;
+    margin: 0;
+	float:right;
+	-webkit-box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.75);
+	&:after{
+		content: "\f4ca";
+		margin-left: 10px;
+		&:extend(.ion);
+	}
+	&:active{
+		transform: scale(0.95);
+		-webkit-box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.75);
+		-moz-box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.75);
+		box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.75);
+	}
+}
+
 label[for="photos"]{
 	margin-right:0 !important;
 }
