@@ -1,10 +1,10 @@
 <% include ./partials/header %> 
-	<p>An email has been sent by <%=name%> from company <%=companyName%>. They have left left the telephone number <%=telephone%></p>
+	<p>An email has been sent by <%=name%> from company <%=companyName%>. <%if(telephone){%>They have left left the telephone number <%=telephone%><%}%></p>
 	<%if(requestCallback === 'true'){%>
 		<p>They have requested a callback</p>
 	<%}%>
 	
-	<p>The message is as follows:</p><br/>
+	<p>The message is as follows:</p>
 	<%=message%>
 	<p>To reply click <a href="mailto:<%=mailto%>?subject=RE: <%=subject%>">here</a></p>
 <% include ./partials/footer %> 

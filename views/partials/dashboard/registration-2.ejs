@@ -13,12 +13,13 @@
 					<table class="max define-space responsive-table collapse">
 						<thead>
 							<tr>
-								<th>Storage Name <div class="tool-tip hint--bottom" data-hint="Use this column to define each type of storage area in your warehouse which has different characteristics either in terms of pallet types or how you wish to price it.  You can have as many storage names as suits, allowing you to specify different weight/heights and different pricing/availability. You can specify the same space more than once, e.g., ‘Pallets, 1m high, 200 spaces’ and ‘Double Pallets, 1m high, 100 spaces’">?</div></th>
-								<th>Pallet Type </th>
+								<th>Storage Name <div class="tool-tip hint--bottom" data-hint="Use this column to define each type of storage area in your warehouse which has different characteristics either in terms of pallet types or how you wish to price it.  You can have as many storage names as suits, allowing you to specify different weight/heights and different pricing/availability. You can specify the same space more than once, e.g., 0.8 metre wide pallets, 300 quantity and 1.2 wide pallets, 200 quantity (in this case, please repeat the same storage name)">?</div></th>
+								<th>Pallet Width </th>
 								<th>Storage Type </th>
 								<th>Max Pallet Weight <br/> (kg) </th>
 								<th>Max Pallet Height <br/> (m) </th>
 								<th>Total Pallet Spaces <div class="tool-tip hint--left" data-hint="This is the total number of pallet spaces in your warehouse of the pallet name type. You can specify the number available at specific dates for Zupplychain users in Step 3">?</div></th>
+								<th>Add Additional Pallet Width</th>
 								<th><img src="../images/delete.png" alt="delete"/></th>
 							</tr>
 						</thead>
@@ -29,8 +30,21 @@
 								row.name = "A";%>
 								<% include ../define-space-row %>
 							<%}else{
+								var storageGroup = 0;
+								warehouse.storage.sort(function(x,y) { return x.name > y.name })
 								for( var i=0; i < warehouse.storage.length; i++ ){
-									row = warehouse.storage[i];%>
+									row = warehouse.storage[i];
+									if(i>0){
+										if(row.name === warehouse.storage[i-1].name){
+											row.storageGroup = storageGroup;
+										}else{
+											storageGroup ++;
+											row.storageGroup = storageGroup;
+										}
+									}else{
+										row.storageGroup = storageGroup + 1
+										storageGroup ++
+									}%>
 									<% include ../define-space-row %>
 								<%}
 							}%>
@@ -49,7 +63,6 @@
 		</div>
 	</div>
 	<fieldset class="form-footer">
-		<button class="back" type="button">Back</button>
 		<div data-function="save-buttons">
 			<button type="button" class="action save">Save</button>
 			<span>OR</span>

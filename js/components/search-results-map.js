@@ -246,6 +246,20 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery", "loom/loomAl
             resultsElem.find('.distance').html("<span class='miles'>" + data.distanceFromSearch + "</span>" + milePluralOrSingle + " from search");
             resultsElem.find('.remove-from-quote').data("id", data._id);
             resultsElem.find('.view-details').attr("href" , "/warehouse-profile/" + data._id + "?fromSearch=true");
+            if(data.size && data.size !== 'N/A'){ 
+                data.size = data.size;
+                if(resultsElem.find(".js-size").next('sup').length===0) resultsElem.find(".js-size").after('<span class="background">m<sup>2</sup><span>');
+            }else{
+                data.size = 'N/A'
+                resultsElem.find(".js-size").next('span').remove();
+            }
+            if(data.height && data.height !== 'N/A'){
+                data.height = data.height;
+                resultsElem.find(".js-height").after('<span class="background">m</span>')
+            }else{
+                data.height = 'N/A'
+                resultsElem.find(".js-height").next('span').remove();
+            }
             resultsElem.find(".js-size").html(data.size);
             resultsElem.find(".js-height").html(data.height);
             var $temps = resultsElem.find(".js-temperatures");

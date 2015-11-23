@@ -53,11 +53,15 @@ exports.config = {
         "Other"
     ],
     
+    invoiceFrequency: [
+        "Weekly",
+        "Monthly"
+    ],
+    
     prepaymentRequired : [
         "None",
         "1 Week in Advance",
         "2 Weeks in Advance",
-        "4 Weeks in Advance"
     ],
     
     finalPayment : [
@@ -68,7 +72,9 @@ exports.config = {
      paymentTypes : [
         "Invoice",
         "Credit card",
-        "BACS transfer"
+        "Direct debit",
+        "BACS transfer",
+        "PayPal"
     ],
 	
 	services: [

@@ -5,8 +5,8 @@
 	<div class="main">
 		<section class="tabs">
 			<ul class="tab-links tabs two-tabs">
-				<li class="active"><a href="#availability-controller">Availability Controller</a></li>
-				<li><a href="#enquires-controller">Enquires Controller</a></li>
+				<li class="active"><a href="#availability-controller">Availability Contact</a></li>
+				<li><a href="#enquires-controller">Enquiries Contact</a></li>
 			</ul>
 		</section>
 		<div class="tab-content">
@@ -18,9 +18,9 @@
 				<ul class="tab-links tabs five-tabs">
 					<li class="active"><a href="#transport-coordinator">Transport Co-ordinator</a></li>
 					<li><a href="#goods-in">Goods-In</a></li>
-					<li><a href="#picking-dispatch">Picking Dispatch</a></li>
-					<li><a href="#invoice-controller">Invoice Controller</a></li>
-					<li><a href="#credit-controller">Credit Controller</a></li>
+					<li><a href="#picking-dispatch">Picking and Dispatch</a></li>
+					<li><a href="#invoice-controller">Invoice Contact</a></li>
+					<li><a href="#credit-controller">Credit Contact</a></li>
 				</ul>
 			</nav>
 		</section>
@@ -35,4 +35,7 @@
 </div>
 <script type="text/template" id="warehouse-specific-contacts-row">
 	<% include warehouse-specific-contacts-row%>
+</script>
+<script type="text/template" id="contacts-suggestion">
+	<li><a data-bind-data-email="email" data-bind-data-phone-number="phoneNumber" href="#">@name@</a></li>
 </script>

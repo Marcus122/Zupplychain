@@ -70,6 +70,20 @@ define(["jquery"],function($){
             showMessage("info", message, options);
         }
         
+        function centerPopup($element){
+                var top;
+                var $window = $(window);
+                var diff = $window.height() - $element.height();
+                var top = diff < 0 ? $window.scrollTop() + 25 : $window.scrollTop() + diff/2;
+                //var top = (screen.height/2) - (window.screen.availHeight/2);
+                if(top > 100){
+                        top-=50;
+                }					
+                $element.css({
+                   top:top
+                }); 
+        }
+        
         function showMessage(messageClass, message, options) {
             cleanUpDom();
             var defaults = {
@@ -82,6 +96,9 @@ define(["jquery"],function($){
             
             var message = $("<div class='loom-alert " + messageClass + "'><p>" + message + "</p></div>");
             $(document.body).append(message);
+        //     if(options && options.centre){
+        //         centerPopup(message);
+        //     }
             if (settings.noFadeOut) {
                 settings.onComplete(message);
                 return;

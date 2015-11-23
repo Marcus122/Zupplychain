@@ -28,10 +28,10 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
 			});
             
             $("#choose-this-warehouse").click(function(e){
-                // e.preventDefault();
-                // var $popup = $("#choose-this-warehouse-popup");
-                // $popup.css({position:"absolute", top:$('#estimated-total-cost').offset().top-400 });
-                // $popup.removeClass('hidden);
+                e.preventDefault();
+                var $popup = $("#choose-this-warehouse-popup");
+                $popup.css({position:"absolute", top:$('#estimated-total-cost').offset().top-400 });
+                $popup.removeClass('hidden');
             });
             
             $("#choose-this-warehouse-popup .close").click(function(){
@@ -283,7 +283,8 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
                     var maxPossibleOffset = $(evt.target).width();
                     //convert the offset relative to the maxPallets (100% bar width);
                     var ratio = leftOffset / maxPossibleOffset;
-                    var maxPallets = $(evt.target).closest("table").data("max-pallets");
+                    //var maxPallets = $(evt.target).closest("table").data("max-pallets");
+                    var maxPallets = parseInt($(this).html());
                     var selectedValue = Math.round(ratio * maxPallets);
                     var $tr = $(evt.target).closest("tr");
                     var $useageMarker = $tr.find(".useage-marker");
@@ -311,6 +312,8 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
                 var thisBar = $(this).find(".bar");
                 var baseLeft = thisBar.offset().left - $barTds.offset().left;
                 var thisValue = parseInt(thisBar.data("value"),10);
+                maxValue = parseInt(thisBar.html());
+                if(maxValue < $(this).siblings('.input-field').find('input').val()) maxValue = $(this).siblings('.input-field').find('input').val();
                 if (!isNaN(thisValue) && thisBar.is(".not-full")){
                     thisBar.css("width", (barWidth / maxValue)  * thisValue);
                     palletsWontFit = true;
@@ -423,7 +426,7 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
                 rowObject["numPalletsStored"] = sp.numPalletsStored;
                 var fits = rowObject["palletsRequired"] <= rowObject["numPalletsStored"];
                 var extraCSSClass = fits ? "full " : "not-full ";
-                rowObject["barText"] = fits ? "OK" : rowObject["numPalletsStored"];
+                rowObject["barText"] = sp.netSpaces;
                 rowObject["cssClass"] = "bar " + extraCSSClass;
                 rowObject["price"] = sp.highestPriceOfAnyStorageUsed.price ? Number(sp.highestPriceOfAnyStorageUsed.price).toFixed(2) : "N/A";
                 if (sp.totalHandlingCharge > 0) {

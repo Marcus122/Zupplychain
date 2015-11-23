@@ -96,29 +96,34 @@
                                 <div class="main row">
                                    <div class="six columns">
                                        <div class="input-field">
-                                            <h3>Payment Type Accepted</h3>
-                                            <p>Payment accepted by <%= config.paymentTypes[quote.offerData.paymentType]%></p>
+                                            <p>Payment Type Accepted</p>
+                                            <p><b>Payment accepted by <%= config.paymentTypes[quote.offerData.paymentType]%></b></p>
                                             <input type="hidden" name="paymentType" value="<%= quote.offerData.paymentType%>"/>
                                        </div>
                                        <div class="input-field">
-                                            <h3>Payment Terms</h3>
+                                            <p>Payment Terms</p>
                                             <%if(quote.offerData.paymentTerms === '3'){%>
-                                                <p>Payment to be made within <%= quote.offerData.manualPaymentTerms%> of invoice date</p>
+                                                <p><b>Payment to be made within <%= quote.offerData.manualPaymentTerms%> of invoice date</b></p>
                                             <%}else{%>
-                                                <p>Payment to be made within <%= config.paymentTerms[quote.offerData.paymentTerms]%> of invoice date</p>
+                                                <p><b>Payment to be made within <%= config.paymentTerms[quote.offerData.paymentTerms]%> of invoice date</b></p>
                                             <%}%>
                                             <input type="hidden" name="paymentTerms" value="<%= quote.offerData.paymentTerms%>"/>
+                                        </div>
+                                       <div class="input-field">
+                                            <p>Invoice Frequency</p>
+                                            <p><b><%= config.invoiceFrequency[quote.offerData.invoiceFrequency]%></b></p>
+                                            <input type="hidden" name="invoice-frequency" value="<%= quote.offerData.invoiceFrequency%>"/>
                                         </div>
                                     </div>
                                     <div class="six columns">
                                         <div class="input-field">
-                                            <h3>Prepayment Required</h3>
-                                            <p>Prepayment Required: <%= config.prepaymentRequired[quote.offerData.prepaymentRequired]%></p>
+                                            <p>Prepayment Required</p>
+                                            <p><b>Prepayment Required: <%= config.prepaymentRequired[quote.offerData.prepaymentRequired]%></b></p>
                                             <input type="hidden" name="prepaymentRequired" value="<%= quote.offerData.prepaymentRequired%>"/> 
                                         </div>
                                         <div class="input-field">
-                                            <h3>Final Payment</h3>
-                                            <p>Final Payment: <%= config.finalPayment[quote.offerData.finalPayment]%></p>
+                                            <p>Final Payment</p>
+                                            <p><b>Final Payment: <%= config.finalPayment[quote.offerData.finalPayment]%></b></p>
                                             <input type="hidden" name="finalPayment" value="<%= quote.offerData.finalPayment%>"/>
                                         </div>
                                         <div class="input-field">
@@ -139,31 +144,31 @@
                                     <div class="main row transport">
                                         <div class="six columns">
                                             <div class="input-field">
-                                                <h3>Dispatch Location</h3>
-                                                <p><%= quote.transport.dispatchLocation.split(" ")[0] %></p>
+                                                <p>Dispatch Location</p>
+                                                <p><b><%= quote.transport.dispatchLocation.split(" ")[0] %></b></p>
                                                 <input type="hidden" name="dispatchLocation" value='<%= quote.transport.dispatchLocation.split(" ")[0] %>'/>
                                             </div>
                                             <div class="input-field">
-                                                <h3>To</h3>
-                                                <p><%= quote.warehouse.postcode %></p>
+                                                <p>To</p>
+                                                <p><b><%= quote.warehouse.postcode %></b></p>
                                             </div>
                                             <div class="input-field">
-                                                <h3>Quote £</h3>
-                                                <p><%= quote.transport.quote %></p>
+                                                <p>Quote</p>
+                                                <p><b>£<%= quote.transport.quote %></b></p>
                                                 <input type="hidden" name="transportQuote" value="<%= quote.transport.quote %>"/>
                                             </div>
                                         </div>
                                         <div class="six columns">
                                             <div class="input-field">
-                                                <h3>Number of Pallets</h3>
-                                                <p><%=quote.search.totalPallets%></p>
+                                                <p>Number of Pallets</p>
+                                                <p><b><%=quote.search.totalPallets%></b></p>
                                             </div>
                                             <div class="input-field">
-                                                <h3>Estimated Miles</h3>
+                                                <p>Estimated Miles</p>
                                                 <p <%if (quote.transport.distance === config.googleDistanceMatrixErrText ){%>
                                                     class="distance-error"
                                                 <%}%>
-                                                ><%= quote.transport.distance %></p>
+                                                ><b><%= quote.transport.distance %></b></p>
                                                 <input type="hidden" name="distance" value='<%= quote.transport.distance %>'/>
                                             </div>
                                             <!--<div class="input-field check checkbox">
@@ -179,8 +184,8 @@
                                 <div class="main row comments">
                                    <div class="columns twelve">
                                         <%if(quote.comments.providerOffer && quote.comments.providerOffer !== ""){%>
-                                            <h3>Provider Comments</h3>
-                                            <p><%=quote.comments.providerOffer%></p>
+                                            <p>Provider Comments</p>
+                                            <p><b><%=quote.comments.providerOffer%></b></p>
                                             <button name="view-conversation" class="button action mini">View Conversation</button>
                                         <%}%>
                                     </div>
@@ -200,16 +205,15 @@
                                 </div>
                             </div>
                             <div class="content-box action row">
-                                <div class="eight columns">
-                                    <!--<p>Press the ACCEPT button to accept the supplier's quotation. You will be notified by email with the supplier's order acknowledgement.</p>--> 
-                                    <div class="input-field check checkbox">
+                                <div class="one columns">
+                                    <button name="decline" type="button" class="button action">DECLINE</button>
+                                    <!--<p>Press the ACCEPT button to accept the supplier's quotation. You will be notified by email with the supplier's order acknowledgement.</p>-->
+                                </div>
+                                <div class="eleven columns submit-request-container">
+                                    <div class="input-field check checkbox columns seven">
                                         <label for="terms">I have read and accept the ZupplyChain Terms and Conditions<input type="checkbox" name="terms" id="terms" required="required"/></label>
                                     </div>
-                                </div>
-                                <div class="four columns submit-request-container">
                                     <button name="accept" type="submit" class="button action">ACCEPT</button>
-                                    <span>OR</span>
-                                    <button name="decline" type="button" class="button action">DECLINE</button>
                                 </div>
                             </div>
                         </form>

@@ -13,15 +13,17 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			$warehouseView = $('div[data-view="warehouses"]'),
 			$contactsView = $('div[data-view="contacts"]'),
 			$usersView = $('div[data-view="users"]');
-		
-		initNavEvents();
-		initTabs();
-		triggerHashClick();
-		initAccountTab();
-		initWarehouseTab();
-		initContactsTab();
-		initPaging($('table[data-type="warehouses-table"]'));
-		initTrayBehaviour();
+			
+		if(window.location.pathname === '/dashboard'){
+			initNavEvents();
+			initTabs();
+			triggerHashClick();
+			initAccountTab();
+			initWarehouseTab();
+			initPaging($('table[data-type="warehouses-table"]'));
+		}
+			initTrayBehaviour();
+			initContactsTab();
 		
 		loom.addOnSuccessCallback("login-form", function(response){
 			if (response.data.err){
@@ -40,8 +42,8 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			goToLinkViewTabContacts($(this));
 		});
 		
-		function scrollToPos(eleString){
-			$.scrollTo(eleString); 
+		function scrollToPos(eleString,options){
+			$.scrollTo(eleString,options); 
 		}
 		
 		function initAccountTab(){
@@ -54,6 +56,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 						if(!err){
 							$('div[data-view="contacts"]').remove();
 							$('.dashboard section div.main:first-of-type').append(result);
+							addEmptyRowsToTables(["master-contact","availability-controller","enquires-controller","transport-coordinator","goods-in","picking-dispatch","invoice-controller","credit-controller"]);//Attempt to add empty rows to all tables if they are there.
 						}
 					});
 				}else if(response.error){
@@ -75,6 +78,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			$tab.find('button').prop('disabled',false);
 			$tab.find('textarea').prop('disabled',false);
 			$tab.find('select').prop('disabled',false);
+			$tab.find('label').removeAttr('disabled');
 			$tab.find('div[data-function="save-buttons"]').removeClass('hidden');
 			if(!$tab.find('a[data-mode="edit"]').hasClass('down')){
 				$tab.find('a[data-mode="edit"]').addClass('down');
@@ -92,6 +96,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			$tab.find('button').prop('disabled',true);
 			$tab.find('textarea').prop('disabled',true);
 			$tab.find('select').prop('disabled',true);
+			$tab.find('label').attr('disabled','disabled');
 			$tab.find('div[data-function="save-buttons"]').addClass('hidden');
 			if($tab.find('a[data-mode="edit"]').hasClass('down')){
 				$tab.find('a[data-mode="edit"]').removeClass('down');
@@ -307,13 +312,15 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 		}
 		
 		function initNavEvents(){
-			$(document).on('click','li.minimise-dashboard-nav',function(){
-				var $this = $(this);
-				$this.closest('#vertical-nav').addClass('minimised');
-				$this.removeClass('minimise-dashboard-nav');
-				$this.addClass('maximise-dashboard-nav');
+			function minimiseDashboardNav($navThatWasClicked){
+				$navThatWasClicked.closest('#vertical-nav').addClass('minimised');
+				$navThatWasClicked.removeClass('minimise-dashboard-nav');
+				$navThatWasClicked.addClass('maximise-dashboard-nav');
 				$('.dashboard-container').removeClass('nine');
 				$('.dashboard-container').addClass('eleven');
+			}
+			$(document).on('click','li.minimise-dashboard-nav',function(){
+				minimiseDashboardNav($(this));
 			});
 			$(document).on('click','li.maximise-dashboard-nav',function(){
 				var $this = $(this);
@@ -325,10 +332,16 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			});
 			$('#vertical-nav ul li a, a.tile-button').click(function(){
 				var $this = $(this);
+				var $li;
 				goToView($this.attr('href'));
-				$this.parent('li').parent('ul').parent('#vertical-nav').parent('.main').css('background-color','#d7d7d7');
-				$this.parent('li').addClass('active').siblings().removeClass('active');
+				$li = $this.parent('li')
+				if($li.length === 0){
+					$li = $('a[href="' + $this.attr('href') + '"]').parent('li');
+				}
+				$li.parent('ul').parent('#vertical-nav').parent('.main').css('background-color','#d7d7d7');
+				$li.addClass('active').siblings().removeClass('active');
 				scrollToPos('body');
+				minimiseDashboardNav($('li.minimise-dashboard-nav'));
 				if(backLinks.length > 1){
 					$('.dashboard-back').removeClass('hidden');
 				}
@@ -399,13 +412,41 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 		
 		function initContactsTab(){
 			var COMPULSORY_CONTACTS = 2;
+			var numberSuffix = ["st","nd","rd"];
 			initDelete();
 			loom.rebind($('form[data-form-type="contacts-form"]'))
 			if ($('#warehouse-contacts').hasClass('active')){
 				$('#warehouse-contacts').removeClass('hidden');
 			}
-			addEmptyRowsToTables(["master-contact"]);
-			$('button[name="view-warehouse-contacts"]').on('click',function(e,cb){
+			addEmptyRowsToTables(["master-contact","availability-controller","enquires-controller","transport-coordinator","goods-in","picking-dispatch","invoice-controller","credit-controller"]);//Attempt to add empty rows to all tables if they are there.
+			
+			$('a[data-action="go-to-matrix"]').click(function(e){
+				e.preventDefault();
+				scrollToPos($(this).attr('href'),{offset:{top:-100},margin:true}); 
+			});
+			
+			$(document).on('keyup','form[data-form-type="contacts-form"] table tbody tr td[data-field="name"] input',function(){
+				var $this = $(this);
+				var uniqueContacts = [];
+				var results = {};
+				var emails = [];
+				if($this.val().length >=3 && $this.closest('table').closest('div').data('contact-type') !== 'master-contact'){
+					var data = {};
+					data.query = $this.val();
+					DBCntr.getWarehouseContactsSuggestions($('select[name="warehouses"]').find(":selected").data('id') || $(this).closest(".warehouse-tasks-tray").parent().closest(".warehouse-tasks-tray").data('warehouse-id'),data,function(result){
+						results.data = result;
+						$.each(results.data.data,function(index,value){
+							if($.inArray(value.email,emails)===-1){
+								uniqueContacts.push(value);
+								emails.push(value.email)
+							}
+						})
+						displayWCSuggestionsDropdown(uniqueContacts,$this);
+					});
+				}
+			});
+			
+			$(document).on('click','button[name="view-warehouse-contacts"]',function(e,cb){
 				var $this = $(this);
 				$('.warehouse-specific-contacts').remove();
 				DBCntr.getWarehouseContacts($(this).prev('select').find(':selected').data('id'),function(result){
@@ -415,7 +456,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 						$this.closest('div[data-view="contacts"]').append(result);
 						initTabs();
 						loom.rebind($('form[data-form-type="contacts-form"]'));
-						addEmptyRowsToTables(["availability-controller","enquires-controller","transport-coordinator","goods-in","picking-dispatch","invoice-controller","credit-controller"]);
+						addEmptyRowsToTables(["availability-controller","enquires-controller","transport-coordinator","goods-in","picking-dispatch","invoice-controller","credit-controller"]);//Add empty rows to any tables that have just appeared.
 						if(cb){
 							cb();
 						}
@@ -471,59 +512,77 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 				var $this = $(this),
 					contactType = $this.parent('div').parent('form').parent('div').data('content').replace(/-([a-z])/g, function (g) { return ' ' + g[1].toUpperCase(); }),
 					data = {},
-					rows = [],
 					cbDone = 0,
 					contactsToAdd = 0,
 					error = false,
 					currentRows = [],
-					$table = $this.parent('div').siblings('table');
+					$table = $this.parent('div').siblings('table'),
+					rows = $table.find('tr[data-status="new"]'),
+					shouldIgnore,
+					skippedRows = [];
 					
+					for (var i = 0; i<rows.length; i++){
+						shouldIgnore = shouldIgnoreThisRow($(rows[i]));
+						if(shouldIgnore){
+							markRowToBeSkipped($(rows[i]));
+							skippedRows.push(rows[i]);
+							loom.rebind($this.closest('form').attr('id'));
+						}
+					}
 					if(loom.isFormValid($this.closest('form').attr('id'))){
 						contactType = contactType.charAt(0).toUpperCase() + contactType.substring(1);
 						
-						rows = $table.find('tr[data-status="new"]');
-						data.warehouseContacts = $this.closest('.warehouse-specific-contacts').data('warehouse-contacts') || "";
+						
+						data.warehouseContacts = $this.closest('.warehouse-specific-contacts').data('warehouse-contacts') || $this.closest(".warehouse-tasks-tray").parent().closest(".warehouse-tasks-tray").data('warehouse-contacts') || "";
 						data.role = contactType;
-						data.roleCC = $(this).closest('.tab-content').prev('.tabs').find('li.active').find('a').attr('href').replace('#','').replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
-						data.warehouseId = $('select[name="warehouses"]').find(":selected").data('id');
-						data.warehouseName = $('select[name="warehouses"]').find(":selected").val();
+						data.roleCC = $(this).closest('.tab-content').prev('.tabs').find('li.active').find('a').attr('href') || $this.closest(".tray.open").prev('a').attr('href');
+						data.roleCC = data.roleCC.replace('#','').replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
+						data.warehouseId = $('select[name="warehouses"]').find(":selected").data('id') || $this.closest(".warehouse-tasks-tray").parent().closest(".warehouse-tasks-tray").data('warehouse-id');
+						data.warehouseName = $('select[name="warehouses"]').find(":selected").val() || $this.closest(".warehouse-tasks-tray").parent().closest(".warehouse-tasks-tray").data('warehouse-name');
 						for (var i = 0; i<rows.length; i++){
-							data.email = $(rows[i]).find('td[data-field="email"]').find('input').val();
-							data.name = $(rows[i]).find('td[data-field="name"]').find('input').val();
-							if((data.email !== undefined && data.email !== "") && (data.name !== undefined && data.name !== "")){
-								contactsToAdd ++;
-								data.phoneNumber = $(rows[i]).find('td[data-field="phone-number"]').find('input').val();
-								data.dashboardAccess = $(rows[i]).find('tr[data-status="new"]').find('td[data-field="dashboard-access"]').find('input').val();
-								currentRows.push($(rows[i]));
-								DBCntr.createContact(data,function(response){
-									cbDone ++;
-									if(response.error === true){
-										error = true;
-									}else if(response.data.contactId !== undefined){
-										var contactsId = response.data.contactId;
-									}
-									
-									if(response.data.expiry === null){
-										currentRows[cbDone-1].find('td[data-field="register-status"]').append('<p class="registered-status complete">Registered</p>');
-									}else{
-										currentRows[cbDone-1].find('td[data-field="register-status"]').append('<p class="registered-status pending">Pending</p>');
-									}
-									
-									currentRows[cbDone-1].attr('data-id',response.data.userId);
-									currentRows[cbDone-1].attr('data-values-added',"true");
-									if (cbDone === contactsToAdd){
-										if(error === true){
-											Alerts.showPersistentErrorMessage('Not all contacts have been added');
+							if($(rows[i]).find(".loom-ignore").length === 0){
+								data.email = $(rows[i]).find('td[data-field="email"]').find('input').val();
+								data.name = $(rows[i]).find('td[data-field="name"]').find('input').val();
+								if((data.email !== undefined && data.email !== "") && (data.name !== undefined && data.name !== "")){
+									contactsToAdd ++;
+									data.phoneNumber = $(rows[i]).find('td[data-field="phone-number"]').find('input').val();
+									data.dashboardAccess = $(rows[i]).find('tr[data-status="new"]').find('td[data-field="dashboard-access"]').find('input').val();
+									currentRows.push($(rows[i]));
+									DBCntr.createContact(data,function(response){
+										cbDone ++;
+										if(response.error === true){
+											error = true;
+										}else if(response.data.contactId !== undefined){
+											var contactsId = response.data.contactId;
+										}
+										
+										if(response.data.expiry === null){
+											currentRows[cbDone-1].find('td[data-field="register-status"]').append('<p class="registered-status complete">Registered</p>');
 										}else{
-											$this.parent('div').parent('div').attr('data-warehouse-contacts',contactsId);
-											Alerts.showSuccessMessage('All contacts have been successfully added');
-											rowInputsToText(rows);
-											if($table.data('max-rows') === $table.find('tbody').find('tr').length){
-												$this.parent().addClass('hidden');
+											currentRows[cbDone-1].find('td[data-field="register-status"]').append('<p class="registered-status pending">Pending</p>');
+										}
+										
+										currentRows[cbDone-1].attr('data-id',response.data.userId);
+										currentRows[cbDone-1].attr('data-values-added',"true");
+										currentRows[cbDone-1].attr('data-empty',"false");
+										if (cbDone === contactsToAdd){
+											if(error === true){
+												Alerts.showPersistentErrorMessage('Not all contacts have been added');
+											}else{
+												$this.parent('div').parent('div').attr('data-warehouse-contacts',contactsId);
+												Alerts.showSuccessMessage('All contacts have been successfully added',{centre:true});
+												rowInputsToText(rows);
+												for (var i = 0; i<skippedRows.length; i++){
+													unmarkRowsToBeSkipped($(skippedRows[i]));
+												}
+												loom.rebind($this.closest('form').attr('id'));
+												if($table.data('max-rows') === $table.find('tbody').find('tr[data-empty="false"]').length){
+													$this.parent().addClass('hidden');
+												}
 											}
 										}
-									}
-								});
+									});
+								}
 							}
 						}
 					}else{
@@ -626,7 +685,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 									for(var k = 0; k<$rows.length; k++){
 										if(parseInt($($($rows[k]).find('td')[0]).html().replace('*','')) !== k){
 											rowNum = k+1;
-											$($($rows[k]).find('td')[0]).html(rowNum+'*');
+											$($($rows[k]).find('td')[0]).html(rowNum+numberSuffix[rowNum]+'*');
 										}
 									}
 									addEmptyRowsToTables([$this.closest('form').parent('div').data('content')]);
@@ -642,32 +701,35 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 					}
 				});
 			}
-			
-			function addEmptyRowsToTables(contactTypes){
-				var $table;
-				var template;
-				var $row;
-				var rowNum;
-				var numOfRows;
-				var num;
-				for (var i = 0; i<contactTypes.length; i++){
-					$table = $('div[data-content="' + contactTypes[i] + '"]').find('table');
-					numOfRows = $table.find('tbody tr').length;
-					for (var j = 0; j<parseInt($table.data('max-rows'))-numOfRows; j++){
-						template = templates.getTemplate($('div[data-content="' + contactTypes[i] + '"]').data('contact-type') + '-row');
-						rowNum = $table.find('tbody tr').last().find('td').first().html() || '0*';
-						rowNum = parseInt(rowNum.replace('*',''));
-						rowNum ++;
-						num = rowNum.toString();
-						if(rowNum<=COMPULSORY_CONTACTS){
-							num = num + '*'
-						}
-						$row = template.bind({num:num});
-						if(rowNum>COMPULSORY_CONTACTS){
-							$row.find('input').removeAttr('required')
-						}
-						$table.append($row)
+		}
+		
+		function addEmptyRowsToTables(contactTypes){
+			var $table;
+			var template;
+			var $row;
+			var rowNum;
+			var numOfRows;
+			var num;
+			var COMPULSORY_CONTACTS = 2;
+			var numberSuffix = ["st","nd","rd"];
+			for (var i = 0; i<contactTypes.length; i++){
+				$table = $('div[data-content="' + contactTypes[i] + '"]').find('table');
+				numOfRows = $table.find('tbody tr').length;
+				for (var j = 0; j<parseInt($table.data('max-rows'))-numOfRows; j++){
+					template = templates.getTemplate($('div[data-content="' + contactTypes[i] + '"]').data('contact-type') + '-row');
+					rowNum = $table.find('tbody tr').last().find('td').first().html() || '0*';
+					rowNum = parseInt(rowNum.replace('*',''));
+					rowNum ++;
+					num = rowNum.toString();
+					num = num + numberSuffix[parseInt(num)-1];
+					if(rowNum<=COMPULSORY_CONTACTS){
+						num = num + '*'
 					}
+					$row = template.bind({num:num});
+					if(rowNum>COMPULSORY_CONTACTS){
+						$row.find('input').removeAttr('required')
+					}
+					$table.append($row)
 				}
 			}
 		}
@@ -679,7 +741,9 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 					$(rows[i]).find('td[data-field="email"]').html($(rows[i]).find('td[data-field="email"]').find('input').val() || "N/A");
 					$(rows[i]).find('td[data-field="name"]').html($(rows[i]).find('td[data-field="name"]').find('input').val() || "N/A");
 					$(rows[i]).find('td[data-field="phone-number"]').html($(rows[i]).find('td[data-field="phone-number"]').find('input').val() || "N/A");
-					$(rows[i]).find('td[data-field="delete"]').append('<input type="checkbox" name="delete"/>');
+					if($(rows[i]).find('td[data-field="email"]').html() !== $('.user-links').find('a').html()){
+						$(rows[i]).find('td[data-field="delete"]').append('<input type="checkbox" name="delete"/>');
+					}
 					$(rows[i]).find('td').removeClass('success');
 				}
 			}
@@ -690,14 +754,68 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 				openTray($(this));
 				if(evt.stopPropagation) evt.stopPropagation();
 				if(evt.cancelBubble!=null) evt.cancelBubble = true;
+				evt.preventDefault();
 			});
 			
 			function openTray($linkThatWasClicked) {
 				$($linkThatWasClicked.parent().find(".tray")[0]).toggleClass("open");
 				$linkThatWasClicked.toggleClass("open");
-				$($linkThatWasClicked.parent().find(".tray")[0]).find('div').removeClass('hidden');
+				$($linkThatWasClicked.parent().find(".tray")[0]).find('div.main').removeClass('hidden');
+				//scrollToPos('.trays');
         	}
 		}
+		
+		function displayWCSuggestionsDropdown(data,$this){
+			var $dropdown = $this.next('ul');
+			$dropdown.find('li').remove();
+			$dropdown.width($this.outerWidth()-2);
+			var template = templates.getTemplate("contacts-suggestion");
+			for (var i = 0; i<data.length; i++){
+				var $listItem = template.bind(data[i]);
+				$dropdown.append($listItem);
+			}
+			$dropdown.removeClass('hidden');
+			//$dropdown.slideToggle(200);
+		}
+		
+		$(document).on('click','ul[data-action="suggestions-dropdown"] a',function(e){
+			e.preventDefault();
+			var $this = $(this);
+			$this.closest('td').siblings('td[data-field="email"]').find('input').val($this.data('email'));
+			$this.parent().parent().siblings('input[name="name"]').val($this.html());
+			$this.closest('td').siblings('td[data-field="phone-number"]').find('input').val($this.data('phone-number'));
+			$this.closest('ul').empty();
+			$this.closest('ul').addClass('hidden');
+		});
+		
+		$(document).click(function(){
+			var $this = $('ul[data-action="suggestions-dropdown"]');
+			if($this.is(":visible")){
+				$this.closest('ul').empty();
+				//$this.slideUp();
+				$this.closest('ul').addClass('hidden');
+			}
+		});
+	}
+	
+	function shouldIgnoreThisRow($tr){
+		var inputs = $($tr).find("input");
+		for (var i=0; i<inputs.length; i++){
+			if($(inputs[i]).val() !== ""){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	function markRowToBeSkipped($tr){
+		$($tr).find(".input-field").addClass("loom-ignore");
+		$($tr).addClass("skipThisRow");
+	}
+	
+	function unmarkRowsToBeSkipped($tr){
+		$($tr).find(".input-field").removeClass("loom-ignore");
+		$($tr).removeClass("skipThisRow");
 	}
 	return Class;
 });

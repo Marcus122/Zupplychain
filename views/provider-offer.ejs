@@ -36,7 +36,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="columns three"><span>Website</span>
-                                    <%=quote.userData.website%></div>
+                                    <%=quote.userData.website||'N/A'%></div>
                                     <div class="columns three"><span>Transport</span>
                                     <%=config.transport[quote.transport.type]%></div>
                                     <%if(quote.comments.quotationRequest && quote.comments.quotationRequest !== ""){%>
@@ -130,7 +130,9 @@
                                             <select name="paymentType">
                                                 <option value="0">Invoice</option>
                                                 <option value="1">Credit Card</option>
-                                                <option value="2">BACS transfer</option>   
+                                                <option value="2">Direct debit</option>
+                                                <option value="3">BACS transfer</option>   
+                                                <option value="4">PayPal</option>
                                             </select>
                                         </div>
                                         <div class="input-field">
@@ -146,6 +148,13 @@
                                             <label for = "other-payment-terms">Please Specify (Days)</label>
                                             <input name="other-payment-terms" type="text" placeholder="Please Specify (Days)"/>
                                         </div>
+                                        <div class="input-field">
+                                            <label for = "paymentType">Invoice Frequency</label>
+                                            <select name="invoice-frequency">
+                                                <option value="0">Weekly</option>
+                                                <option value="1">Monthly</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="six columns">
                                         <div class="input-field">
@@ -153,8 +162,7 @@
                                             <select name="prepaymentRequired">
                                                 <option value="0">None</option>
                                                 <option value="1">1 Week in Advance</option>
-                                                <option value="2">2 Weeks in Advance</option>
-                                                <option value="3">4 Weeks in Advance</option>   
+                                                <option value="2">2 Weeks in Advance</option>   
                                             </select>
                                         </div>
                                         <div class="input-field">
@@ -164,18 +172,21 @@
                                                 <option value="1">In Full Before Final Dispatch</option>
                                             </select>
                                         </div>
+                                        <div class="input-field">
+                                            <input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
+                                        </div>
                                     </div>
                                 </div>
                                 <%if (quote.transport.type === "1"){%>
                                     <div class="main row transport">
                                         <div class="six columns">
                                             <div class="input-field">
-                                                <h3>Dispatch Location</h3>
-                                                <p><%= quote.transport.dispatchLocation.split(" ")[0] %></p>
+                                                <p>Dispatch Location</p>
+                                                <p><b><%= quote.transport.dispatchLocation.split(" ")[0] %></b></p>
                                             </div>
                                             <div class="input-field">
-                                                <h3>To</h3>
-                                                <p><%= quote.warehouse.postcode %></p>
+                                                <p>To</p>
+                                                <p><b><%= quote.warehouse.postcode %></b></p>
                                                 <input type="hidden" name="dispatchLocation" value='<%= quote.transport.dispatchLocation.split(" ")[0] %>'/>
                                             </div>
                                             <div class="input-field">
@@ -185,48 +196,53 @@
                                         </div>
                                         <div class="six columns">
                                             <div class="input-field">
-                                                <h3>Number of Pallets</h3>
-                                                <p><%=quote.search.totalPallets%></p>
+                                                <p>Number of Pallets</p>
+                                                <p><b><%=quote.search.totalPallets%></b></p>
                                             </div>
                                             <div class="input-field">
-                                                <h3>Estimated Miles</h3>
+                                                <p>Estimated Miles<p>
                                                 <p <%if (distance === config.googleDistanceMatrixErrText ){%>
                                                     class="distance-error"
                                                 <%}%>
-                                                ><%= distance %></p>
+                                                ><b><%= distance %></b></p>
                                                 <input type="hidden" name="distance" value="<%= distance %>"/>
                                             </div>
                                             <div class="input-field check">
                                                 <label for="decline-transport-request">Or Decline Transport Request<input type="checkbox" name="decline-transport-request" id="decline-transport-request"/></label>
                                             </div>
                                         </div>
-                                        <div class="columns twelve">
-                                            <div class="input-field">
-                                                <div class="hint--top description-container">
-                                                    <textarea name="further-comments" placeholder="Any further comments?" data-loom-validators="complexTelephoneNumberNotInInput"></textarea>
-                                                </div>
-                                            </div>
-                                            <!--<div class="input-field check checkbox">
-                                                <label for="terms">I have read and accept the ZupplyChain Terms and Conditions<input type="checkbox" name="terms" id="terms" required="required"/></label>
-                                            </div>-->
-                                            <div class="input-field">
-                                                <input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
-                                            </div>
-                                        </div>
                                     </div>
                                 <%}%>
-                            </div>
-                            <div class="content-box action row">
-                                <div class="eight columns">
-                                    <!--<p>Press the SUBMIT button to reply to the customer's storage request with your payment terms. You will be notified by email when the customer accepts or rejects your offer.</p>-->
-                                    <div class="input-field check checkbox">
-                                        <label for="terms">I have read and accept the ZupplyChain Terms and Conditions<input type="checkbox" name="terms" id="terms" required="required"/></label>
+                                <div class="main row comments">
+                                    <div class="columns twelve">
+                                        <div class="input-field">
+                                            <div class="hint--top description-container">
+                                                <textarea name="further-comments" placeholder="Any further comments? (including whether you can offer additional product insurance)" data-loom-validators="complexTelephoneNumberNotInInput"></textarea>
+                                            </div>
+                                        </div>
+                                        <!--<div class="input-field check checkbox">
+                                            <label for="terms">I have read and accept the ZupplyChain Terms and Conditions<input type="checkbox" name="terms" id="terms" required="required"/></label>
+                                        </div>-->
                                     </div>
                                 </div>
-                                <div class="four columns submit-request-container">
-                                    <button type="submit" class="button action">SUBMIT OFFER</button>
-                                    <span>OR</span>
+                            </div>
+                            <div class="content-box action row">
+                                <div class="columns one">
                                     <button type="button" class="button action">DECLINE</button>
+                                </div>
+                                <!--<div class="six columns">-->
+                                    <!--<p>Press the SUBMIT button to reply to the customer's storage request with your payment terms. You will be notified by email when the customer accepts or rejects your offer.</p>-->
+                                    <!--<div class="input-field check checkbox">
+                                        <label for="terms">I have read and accept the ZupplyChain Terms and Conditions<input type="checkbox" name="terms" id="terms" required="required"/></label>
+                                    </div>
+                                </div>-->
+                                <div class="eleven columns submit-request-container">
+                                    <div class="input-field check checkbox columns seven">
+                                        <label for="terms">I have read and accept the ZupplyChain Terms and Conditions<input type="checkbox" name="terms" id="terms" required="required"/></label>
+                                    </div>
+                                    <button type="submit" class="button action">SUBMIT OFFER</button>
+                                    <!--<span>OR</span>
+                                    <button type="button" class="button action">DECLINE</button>-->
                                 </div>
                             </div>
                         </form>

@@ -12,9 +12,19 @@
 	h1,h2,h3{
 		text-transform:uppercase;
 	}
-	.what-is-zupply{
-		line-height:3.4rem;
-		font-size: 1.1em;
+	.intro{
+		.what-is-zupply{
+			line-height:3.4rem;
+			font-size: 1.1em;
+		}
+		a.register-now,
+		a.available-soon{
+			display:block;
+			margin-top:20px;
+		}
+		.main{
+			min-height:190px;
+		}
 	}
 	section{
 		.unit-margin-bottom(2.5);
@@ -32,11 +42,6 @@
 	}
 	.content-box{
 		box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
-	}
-	.types{
-		.main{
-			  min-height: 190px;
-		}
 	}
 	.service{
 		 .main{
@@ -101,6 +106,11 @@
 		position: relative;
 		top: -3px;
 	}
+	button.view-example{
+		float:right;
+		top:-3px;
+		position:relative;
+	}
 	.customers-header,
 	.providers-header{
 		display:inline-block;
@@ -124,7 +134,7 @@
 	width:70%;
 	margin-left:0;
 	input{
-		width:100%;
+		width:100% !important;
 	}
 }
 label[for="confirm-password"]{
@@ -159,6 +169,16 @@ label[for="confirm-password"]{
 		button{
 			padding:0;
 		}
+	}
+}
+
+#registration,
+#customer{
+	.banner.row{
+		&:extend(.generic-banner);
+		h1{
+        	&:extend(.h1-banner);
+    	}
 	}
 }
 
@@ -215,13 +235,8 @@ label[for="confirm-password"]{
 		border-bottom: 1px solid #000;
 		padding-bottom: 20px;
 	}
-	.footer{
-		height: 46px;
-		position: absolute;
-		bottom: 0;
-		width: 93.4%;
-		border-bottom-left-radius: 7px;
-    	border-bottom-right-radius: 7px;
+	form{
+		margin-bottom:0;
 	}
 	.home{
 		float:left;
@@ -286,11 +301,11 @@ label[for="confirm-password"]{
 		fieldset.main{
 			input:not([type='checkbox']),
 			select{
-				width:74%;
+				width:73%;
 			}
 			.container{
 				border-bottom: 1px solid #000;
-				padding-bottom: 40px;			
+				.unit-padding-bottom(2);			
 				p:first-of-type{
 					font-weight:bold;
 					margin-bottom:20px;
@@ -312,9 +327,16 @@ label[for="confirm-password"]{
 				.contact-details .contact{
 					font-weight:normal;
 					margin-bottom:0; 
+					display:inline-block;
 					.unit-margin-top(2);
+					.address{
+						width: 88%;
+						word-break: break-word;
+						display: inline-block;
+					}
 					.contacting-details{
-						float:right;
+						position: absolute;
+    					right: 0;
 						.telephone{
 							.unit-margin-right(2);
 							span{

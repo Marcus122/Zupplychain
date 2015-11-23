@@ -1,3 +1,6 @@
+<%
+	var numberSuffix = ["st","nd","rd"];
+%>
 <div data-contact-type="warehouse-specific-contacts" data-content="invoice-controller" class="hidden tab main">
 	<form id="invoice-controller" autocomplete="off" data-form-type="contacts-form" class="loom-form data-loom-no-submit="true" novalidate="novalidate">
 		<table class="simple dashboard-table" data-max-rows="2">
@@ -7,15 +10,15 @@
 				<th>Email</th>
 				<th>Phone Number</th>
 				<th>Status</th>
-				<%if(authorisations.contacts.warehouseContacts.edit===true){%><th><img src="/images/delete.png"></th><%}%>
-				<%if(authorisations.contacts.warehouseContacts.edit===true){%><th></th><%}%>
+				<%if(authorisations.contacts.warehouseContacts.edit===true && page !== 'contact-setup-walkthrough'){%><th><img src="/images/delete.png"></th><%}%>
+				<%if(authorisations.contacts.warehouseContacts.edit===true && page !== 'contact-setup-walkthrough'){%><th></th><%}%>
 			</thead>
 			<tbody>
 				<%if(warehouse.contacts){%>
 					<%if(warehouse.contacts.invoiceController.length > 0){%>
 						<%for(var i = 0; i<warehouse.contacts.invoiceController.length; i++){%>
-							<tr data-id="<%=warehouse.contacts.invoiceController[i]._id.toString()%>">
-								<td><%=i+1%>*</td>
+							<tr data-empty="false" data-id="<%=warehouse.contacts.invoiceController[i]._id.toString()%>">
+								<td><%=i+1%><span><%=numberSuffix[i]%></span>*</td>
 								<td data-field="name"><%=warehouse.contacts.invoiceController[i].name || 'N/A'%></td>
 								<td data-field="email"><%=warehouse.contacts.invoiceController[i].email%></td>
 								<td data-field="phone-number"><%=warehouse.contacts.invoiceController[i].phoneNumber || 'N/A'%></td>
@@ -34,8 +37,8 @@
 											<p class="registered-status complete"><%=registerStatus[0]%></p>
 									<%}%>
 								</td>
-								<%if(authorisations.contacts.warehouseContacts.edit===true){%><td data-field="delete"><%if(warehouse.contacts.invoiceController[i]._id != user.id && authorisations.contacts.warehouseContacts.edit===true){%><input type="checkbox" name="delete"/><%}%></td><%}%>
-								<%if(authorisations.contacts.warehouseContacts.edit===true){%><td data-field="resend-email"><%if(warehouse.contacts.invoiceController[i].expiry < Date.now() && warehouse.contacts.availabilityController[i].expiry !== null){%> <button name="resend-email" class="button action mini">Resend</button><%}%></td><%}%>
+								<%if(authorisations.contacts.warehouseContacts.edit===true && page !== 'contact-setup-walkthrough'){%><td data-field="delete"><%if(warehouse.contacts.invoiceController[i]._id != user.id && authorisations.contacts.warehouseContacts.edit===true){%><input type="checkbox" name="delete"/><%}%></td><%}%>
+								<%if(authorisations.contacts.warehouseContacts.edit===true && page !== 'contact-setup-walkthrough'){%><td data-field="resend-email"><%if(warehouse.contacts.invoiceController[i].expiry < Date.now() && warehouse.contacts.invoiceController[i].expiry !== null){%> <button name="resend-email" class="button action mini" data-disabled-on-ajax="true">Resend</button><%}%></td><%}%>
 							</tr>
 						<%}%>
 					<%}else{%>
@@ -46,8 +49,8 @@
 		</table>
 		<%if(authorisations.contacts.warehouseContacts.edit===true){%>
 			<div class="columns twelve button-container <%if(warehouse.contacts.invoiceController.length === 2){%>hidden<%}%>">
-				<button type="button" name="save-new-contacts" class="button action">Save</button>
-				<button type="button" name="delete" class="button action hidden">Delete</button>
+				<button data-disabled-on-ajax="true" type="button" name="save-new-contacts" class="button action">Save</button>
+				<button data-disabled-on-ajax="true" type="button" name="delete" class="button action hidden">Delete</button>
 			</div>
 		<%}%>
 	</form>

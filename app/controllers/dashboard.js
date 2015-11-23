@@ -22,6 +22,26 @@ exports.changePassword = function(user,password,cb){
 	user.save(cb);
 };
 
+exports.getWarehouseContactsByWildcard = function(req,res,query,cb){
+	var queryLen = query.length;
+	var matches = [];
+	var match = {};
+	var warehouseContacts = req.warehouse.toObject().contacts;
+	for (var i in warehouseContacts){
+		if(warehouseContacts[i].constructor === Array){
+			for(var j = 0; j<warehouseContacts[i].length; j++){
+				if(warehouseContacts[i][j].name.toLowerCase().substring(0,queryLen) === query.toLowerCase()){
+					match.name = warehouseContacts[i][j].name;
+					match.email = warehouseContacts[i][j].email;
+					match.phoneNumber = warehouseContacts[i][j].phoneNumber || 'N/A';
+					matches.push(match);
+				}
+			}
+		}
+	}
+	cb(matches);	
+};
+
 exports.checkUserExistsandCreateUser = function(req,res,data,cb){
 	user.user_by_email(data.email,function(err,results){
 		if(err){
@@ -202,4 +222,26 @@ exports.deleteItems = function(req,res,cb){
 exports.getAuthorisations = function(dashboardAccessLvl){
 	var auth = local.config.authorisationsByAccessLvl[dashboardAccessLvl]
 	return local.config.authorisations[auth];
+}
+
+exports.sortWarehousesByCreatedDate = function(warehouses){
+	warehouses.sort(function(x,y){
+		return x.created > y.created;
+	});
+	
+	return warehouses;
+}
+
+exports.getFirstWarehouseWithInconpleteContacts = function(warehouses){
+	var contacts;
+	for(var i = 0; i<warehouses.length; i++){
+		contacts = warehouses[i].contacts.toObject();
+		for(var j in contacts){
+			if(contacts[j].constructor === Array){
+				if(contacts[j].length < 2){
+					return warehouses[i];
+				}
+			}
+		}
+	}
 }

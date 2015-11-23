@@ -24,15 +24,15 @@
 									<p>Please fill in your details and we will contact you as soon as possible</p>
 									<div class="columns six">
 										<div class="input-field">
-											<label for="name">Name</label>
+											<label for="name">Name*</label>
 											<input type="text" name="name" required/>
 										</div>
 										<div class="input-field">
-											<label for="company-name">Company Name</label>
+											<label for="company-name">Company Name*</label>
 											<input type="text" name="company-name" required/>
 										</div>
 										<div class="input-field">
-											<label for="your-enquiry">Your Enquiry</label>
+											<label for="your-enquiry">Your Enquiry*</label>
 											<select name="your-enquiry" required>
 												<%for (var i = 0; i < config.contactUsEnquires.length; i++){%>
 													<option><%=config.contactUsEnquires[i]%></option>
@@ -42,12 +42,12 @@
 									</div>
 									<div class="columns six">
 										<div class="input-field">
-											<label for="email">Email</label>
-											<input type="text" name="email" required/>
+											<label for="email">Email*</label>
+											<input type="email" name="email" required/>
 										</div>
 										<div class="input-field">
 											<label for="telphone">Telephone</label>
-											<input type="tel" name="telephone" required/>
+											<input type="tel" name="telephone"/>
 										</div>
 										<div class="input-field">
 											<label for="request-callback">Request callback</label>
@@ -56,18 +56,18 @@
 									</div>
 									<div class="columns twelve">
 										<div class="input-field">
-											<label for="message">Message</label>
+											<label for="message">Message*</label>
 											<textarea name="message" data-loom-validator="complexTelephoneNumberNotInInput" placeholder="Type your message here" requiredrequired></textarea>
 										</div>
 									</div>
 									<div class="columns twelve button-container">
-										<button type="submit" class="action">Send</button>
+										<button data-disabled-on-ajax="true" type="submit" class="action">Send</button>
 									</div>
 									<div class="input-field">
 										<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
 									</div>
 									<div class="columns twelve contact-details">
-										<p class="contact">Zupplychain, <%=config.companyDetails.addressLine1%>, <%=config.companyDetails.addressLine2%>, <%=config.companyDetails.city%>, <%=config.companyDetails.postcode%> <span class="contacting-details"><span class="telephone"><span>T:</span> <%=config.companyDetails.telephone%></span> | <span class="email"><span>E:</span> <%=config.companyDetails.email%></p></span></span>
+										<p class="contact"><span class="address">Zupplychain, <%=config.companyDetails.addressLine1%>, <%=config.companyDetails.addressLine2%>, <%=config.companyDetails.city%>, <%=config.companyDetails.postcode%></span> <span class="contacting-details"><span class="telephone"><span>T:</span> <%=config.companyDetails.telephone%></span> | <span class="email"><span>E:</span> <%=config.companyDetails.email%></p></span></span>
 									</div>
 								</div>
 								<div class="not-registered-container">

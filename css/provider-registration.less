@@ -95,6 +95,13 @@ input[name="upload-docs"] + label{
 		-moz-box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.75);
 		box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.75);
 	}
+	&[disabled]{
+		cursor: auto;
+		box-shadow: none;
+		&:active{
+			transform: none;
+		}
+	}
 }
 
 label[for="photos"]{
@@ -152,7 +159,8 @@ label[for="photos"]{
 		margin-right:0;
 	}
 	label[for="maximum-insurance-level"]{
-		width:41%;
+		width:52%;
+		margin-right:0;
 	}
 	.row .input-field{
 		margin-bottom:0;
@@ -189,6 +197,11 @@ label[for="photos"]{
 	.document-image{
 		width:auto;
 	}
+	.row{
+		.columns.three{
+			float:right;
+		}
+	}
 }
 .tandc {
     float:left;
@@ -212,11 +225,6 @@ label[for="photos"]{
 	float:right;
 	max-width:100%;
 	white-space: initial;
-}
-.price-and-availability{
-	.text{
-		text-align:center;
-	}
 }
 .specifications{ 
 	h5{.unit-margin-vertical(2);}
@@ -245,6 +253,14 @@ label[for="photos"]{
 	}
 }
 .price-and-availability{
+	width:100%;
+	.tool-tip:after{
+		margin-left:-154px;
+	}
+	
+	.text{
+		text-align:center;
+	}
 
     .button-cell.open{
         background-color:#FFD;
@@ -514,7 +530,8 @@ form#define-space{
 		}
 	}
 }
-.define-space {
+.define-space,
+ .price-and-availability{
  .tool-tip:after{
     white-space:inherit;
     max-width:500px;
@@ -563,6 +580,9 @@ form#define-space{
 #price-and-availability-user-data {
 	.content-box {
 		box-shadow:0px 3px 12px rgba(0,0,0,0.3);
+		.main{
+			overflow-x:scroll;
+		}
 	}
 }
 

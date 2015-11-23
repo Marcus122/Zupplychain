@@ -2,12 +2,11 @@
     <script type="text/template" id="warehouse-pricing-row">
         <tr data-bind-class="cssClass">
                 <td class="week-commencing" data-bind-data-week-commencing="wcDate" >@wcDate | dateFormat@</td>
+                <td class="input-field no-success-validation-style"><div data-bind-class="cssClass"><input data-loom-type="number" data-bind-data-start-date="wcDate" type="text" data-bind-value="palletsRequired" /></div></td>
                 <td class="bar-container" >
                     <div data-bind-data-pallets-required="palletsRequired" class="useage-marker"></div>
-                    <div data-bind-class="cssClass"  data-bind-data-value="numPalletsStored">
-                    @barText@</div>
+                    <div data-bind-class="cssClass"  data-bind-data-value="numPalletsStored">@barText@</div>
                 </td>
-                <td class="input-field no-success-validation-style"><div data-bind-class="cssClass"><input data-loom-type="number" data-bind-data-start-date="wcDate" type="text" data-bind-value="palletsRequired" /></div></td>
                 <td>@price | currency@</td>
                 <td>@charge | currency@</td>
                 <td class="weeklyTotal">@totalPrice | currency@</td>
@@ -37,7 +36,7 @@
                     <th>Available Space</th>
                     <%if(typeof page !== undefined){
                         if(typeof page !== undefined && page !== "" && (page === "provider-offer" || page === 'provider-confirm-contract')){%>
-                            <th>Storage Name</th>
+                            <th>Storage Names</th>
                         <%}
                     }%>
                     <th>Price per Pallet per Week (&pound;)</th>
@@ -83,15 +82,15 @@
                         <div class="bar <%= storageProfile.numPalletsLeft == 0 ? "full" : "not-full" %>" data-value="<%= storageProfile.numPalletsStored%>">
                         <%= storageProfile.numPalletsLeft == 0 ? "OK" : storageProfile.numPalletsStored %></div>-->
                         <div data-pallets-required="<%=useageProfile[index][wcDate]%>" class="useage-marker"></div>
-                        <div class="bar <%= storageProfile.numPalletsLeft == 0 ? "full" : "not-full" %>" data-value="<%= storageProfile.numPalletsStored%>">
-                        <%= storageProfile.numPalletsStored %></div>
+                        <div class="bar <%= storageProfile.numPalletsLeft == 0 ? "full" : "not-full" %>" data-value="<%= storageProfile.numPalletsStored%>"><%= storageProfile.netSpaces %></div>
                     </td>
                     <%if(typeof page !== undefined){
                         if(typeof page !== undefined && page !== "" && (page === "provider-offer" || page === 'provider-confirm-contract')){%>
                             <%var storageNames = "";
                             for (var i = 0; i<storageProfile.storages.length; i++){
-                                storageNames = storageNames + storageProfile.storages[i].name + ',';
+                                storageNames = storageNames + storageProfile.storages[i].name + ': ' + config.palletTypes[storageProfile.storages[i].palletType] + ' width' + ', ';
                             }
+                            storageNames = storageNames.substring(0,storageNames.length - 1);
                             storageNames = storageNames.replace(/(^,)|(,$)/g, "")%>
                             <td class="storage-name" data-storage-name="<%= storageProfile.storages[0].name%>"><%= storageNames%></td>
                         <%}

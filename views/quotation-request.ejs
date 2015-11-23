@@ -18,12 +18,8 @@
                                 <div class="critera-popup">
                                     <ul>
                                         <li>
-                                           <span class="title">Pallet type</span>
-                                           <% if(query.palletType){%>
-                                                <span class="search-value"><%=query.palletType%></span>
-                                           <%}else{%>
-                                               <span class="search-value">Any</span>
-                                           <%}%>
+                                           <span class="title">Pallet width</span>
+                                           <em class="search-value"><%=config.palletTypes[query.palletType]%></em>
                                         </li>
                                         <li>
                                             <span class="title">Quantity</span>
@@ -93,12 +89,8 @@
 										<em class="search-value"><%=query.maxDistance%></em> 
                                     </div>
                                     <div class="columns two">
-										<span>  Pallet Type</span>
-										<% if(query.palletType){%>
-                                           <em class="search-value"><%=query.palletType%></em>
-                                       <%}else{%>
-                                           <em class="search-value">Any</em>
-                                      <%}%>
+										<span>Pallet Width</span>
+                                        <em class="search-value"><%=config.palletTypes[query.palletType]%></em>
                                     </div>
 									<div class="columns two">
 										<span>Qty</span>
@@ -209,16 +201,15 @@
                        
                         </div>
                         <div class="content-box action row">
-                            <div class="six columns">
+                            <div class="three columns">
                                 <!--<p>In order to confirm a quotation from your chosen warehouse please<br/> press the SUBMIT REQUEST button. You will receive a response within two working days.</p>-->
-                                <div class="input-field check checkbox">
+                                <a href="/search" class="back button action">Back to search results</a>
+                            </div>
+                            <div class="columns nine submit-request-container">
+                                <div class="input-field check checkbox seven">
                                     <label for="terms">I have read and accept the ZupplyChain Terms and Conditions<input type="checkbox" name="terms" id="terms" required="required"/></label>
                                 </div>
-                            </div>
-                            <div class="columns six submit-request-container">
                                 <button type="submit" class="button action">SUBMIT REQUEST</button>
-                                <span>OR</span>
-                                <a href="/search" class="back button action">Back to search results</a>
                             </div>
                           
                         </div>

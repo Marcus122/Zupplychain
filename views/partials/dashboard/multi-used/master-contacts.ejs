@@ -1,3 +1,6 @@
+<%
+	var numberSuffix = ["st","nd","rd"];
+%>
 <div data-company-id="<%=user.company.id%>" data-contact-type="master-contact" data-content="master-contact" class="tab main active">
 	<form id="company-contacts" autocomplete="off" data-form-type="contacts-form" class="loom-form data-loom-no-submit="true" novalidate="novalidate">
 		<table class="simple dashboard-table" data-max-rows="3">
@@ -8,14 +11,14 @@
 					<th>Email</th>
 					<th>Phone Number</th>
 					<th>Status</th>
-					<th><img src="/images/delete.png"></th>
-					<th></th>
+					<%if(page !== 'contact-setup-walkthrough'){%><th><img src="/images/delete.png"></th><%}%>
+					<%if(page !== 'contact-setup-walkthrough'){%><th></th><%}%>
 				</tr>
 			</thead>
 			<tbody>
 				<%for(var i = 0; i<masterContacts.length; i++){%>
-					<tr data-id="<%=masterContacts[i]._id.toString()%>">
-						<td><%=i+1%><%if(i<2){%>*<%}%></td>
+					<tr data-empty="false" data-id="<%=masterContacts[i]._id.toString()%>">
+						<td><%=i+1%><span><%=numberSuffix[i]%></span><%if(i<2){%>*<%}%></td>
 						<td data-field="name"><%=masterContacts[i].name || 'N/A'%></td>
 						<td data-field="email"><%=masterContacts[i].email%></td>
 						<td data-field="phone-number"><%=masterContacts[i].phoneNumber || 'N/A'%></td>
@@ -34,15 +37,15 @@
 									<p class="registered-status complete"><%=registerStatus[0]%></p>
 							<%}%>
 						</td>
-						<td data-field="delete"><%if(masterContacts.length > 1 && masterContacts[i]._id != user.id){%><input type="checkbox" name="delete"/><%}%></td>
-						<td data-field="resend-email"><%if(masterContacts[i].expiry < Date.now() && masterContacts[i].expiry !== null){%> <button name="resend-email" class="button action mini">Resend</button><%}%></td>
+						<%if(page !== 'contact-setup-walkthrough'){%><td data-field="delete"><%if(masterContacts.length > 1 && masterContacts[i]._id != user.id){%><input type="checkbox" name="delete"/><%}%></td><%}%>
+						<%if(page !== 'contact-setup-walkthrough'){%><td data-field="resend-email"><%if(masterContacts[i].expiry < Date.now() && masterContacts[i].expiry !== null){%> <button data-disabled-on-ajax="true" name="resend-email" class="button action mini">Resend</button><%}%></td><%}%>
 					</tr>
 				<%}%>
 			</tbody>
 		</table>
 			<div class="columns twelve button-container">
-				<button type="button" name="save-new-contacts" class="button action">Save</button>
-				<button type="button" name="delete" class="button action hidden">Delete</button>
+				<button data-disabled-on-ajax="true" type="button" name="save-new-contacts" class="button action">Save</button>
+				<button data-disabled-on-ajax="true" type="button" name="delete" class="button action hidden">Delete</button>
 			</div>
 	</form>
 </div>

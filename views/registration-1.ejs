@@ -10,14 +10,14 @@
 			</h1>
 			<div class="container">
 				<p class="desc medium-font">Follow our simple 3 step process to complete your registration</p>
-				<button class="button mini action" data-action="view-reg-example">View Example</button>
+				<button class="button mini action" data-url="videos/Zupplychain-Registration-Animation.mp4" data-action="view-reg-example">View Example</button>
 			</div>
 		</div>-->
 		<div class="banner">
 			<h1>Start your registration</h1>
 			<div class="container">
 				<p class="desc medium-font">Follow our simple 3 step process to complete your registration</p>
-				<button class="button mini action" data-action="view-reg-example">View Example</button>
+				<button class="button mini action" data-url="videos/Zupplychain-Registration-Animation.mp4" data-action="view-reg-example">View Example</button>
 			</div>
 		</div>
 		<!--<p class="tag-line">
@@ -162,7 +162,7 @@
 										<%}else{%>
 											<input data-json="insurance" type="checkbox" name="all-prod-insurance" value="" required>
 										<%}%>
-										<label for="all-prod-insurance">Please confirm your premises are insured for storing all products (except those in exceptions below)</label>
+										<label for="all-prod-insurance">Please confirm your premises are insured for storing other people's products (except those in exceptions below)</label>
 									</div>
 									<div class="row">
 										<div class="input-field columns twelve">
@@ -181,13 +181,13 @@
 									</div>
 									<div class="input-field">
 										<div class="hint--top description-container">
-											<textarea data-json="insurance" id="additional-insruance-description" name="additional-insurance-description" placeholder="Please detail product exceptions" data-loom-validators="complexTelephoneNumberNotInInput"><%=warehouse.insurance.additionalInsuranceDescription%></textarea>
+											<textarea data-json="insurance" id="additional-insruance-description" name="additional-insurance-description" placeholder="Please detail product you cannot store" data-loom-validators="complexTelephoneNumberNotInInput"><%=warehouse.insurance.additionalInsuranceDescription%></textarea>
 										</div>
 									</div>
 								<%}else{%>
 									<div class="input-field checkbox">
 										<input data-json="insurance" type="checkbox" name="all-prod-insurance" value="" required>
-										<label for="all-prod-insurance">Please confirm your premises are insured for storing all products (except those in exceptions below)</label>
+										<label for="all-prod-insurance">Please confirm your premises are insured for storing other people's products (except those in exceptions below)</label>
 									</div>
 									<div class="row">
 										<div class="input-field columns twelve">
@@ -202,7 +202,7 @@
 									</div>
 									<div class="input-field">
 										<div class="hint--top description-container">
-											<textarea data-json="insurance" id="additional-insruance-description" name="additional-insurance-description" placeholder="Please detail product exceptions" data-loom-validators="complexTelephoneNumberNotInInput"></textarea>
+											<textarea data-json="insurance" id="additional-insruance-description" name="additional-insurance-description" placeholder="Please detail product you cannot store" data-loom-validators="complexTelephoneNumberNotInInput"></textarea>
 										</div>
 									</div>
 								<%}%>
@@ -267,7 +267,7 @@
 												</div>
 												<span class="file-name columns four"><%=warehouse.documents[i].title%></span>
 												<input type="hidden" name="relative-path" value="<%=warehouse.documents[i].path%>"/> 
-												<div class="columns one upload">
+												<div class="columns three upload">
 													<button type="button" href="#" class="trash-button"><span>Delete</span></button>
 												</div>
 											</div>

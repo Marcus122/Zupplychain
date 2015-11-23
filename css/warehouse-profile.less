@@ -156,9 +156,6 @@
                     .input-field{
                         .unit-margin-bottom(1);
                     }
-                    p{
-                        margin-bottom:0;
-                    }
                 }
             }
         }
@@ -176,12 +173,72 @@
                 }
             }
         }
+        #provider-offer-form{
+            .submit-request-container{
+                .input-field{
+                    margin-left: 23% !important;
+                }
+            }
+            .main.row{
+                label[for="paymentTerms"]{
+                    width:21%;
+                    margin-right: 21px;
+                }
+                &.comments{
+                    .description-container{
+                        textarea[name="further-comments"]{
+                            margin-top:0;
+                        }
+                    }
+                }
+            }
+        }
+        #provider-confirm-contract{
+            .submit-request-container{
+                .input-field{
+                    margin-left:14% !important;
+                }
+            }
+        }
         #provider-offer-form,
         #provider-offer-reply-form,
         #provider-confirm-contract{
-            .content-box .main.row:nth-child(3),{
+            .content-box{
+                p{
+                    margin-bottom:0;
+                }
+                .main.row{
+                    .unit-padding-bottom(2) !important;
+                    .input-field{
+                        .unit-margin-bottom(1) !important;
+                    }
+                    &.comments{
+                        padding-bottom:0 !important;
+                    }
+                }
+            }
+            .submit-request-container{
+                .input-field{
+                    margin-left: 28%;
+                    &.checkbox{
+                        margin-right:37px;
+                    }
+                }
+                button{
+                    margin-right:0;
+                }
+            }
+            .content-box .main.row:nth-child(3),
+            .content-box .main.row:nth-child(4),{
                 margin-bottom: 0;
                 padding-bottom: 0;
+            }
+            .content-box .main.row:nth-child(4),
+            .content-box .main.row:nth-child(5){
+                padding-top:0;
+                .input-field{
+                    margin-bottom:0;
+                }
             }
             .accept-status-box{
                 p{
@@ -201,6 +258,22 @@
         #provider-offer-reply-form{
             .content-box:nth-child(2) .input-field:first-child{
                 margin-bottom: 0;
+            }
+            button[name="view-conversation"]{
+                margin-top:20px;
+            }
+        }
+        #quotation-request-form{
+            .submit-request-container{
+                .input-field{
+                    display:inline-block;
+                    &.checkbox{
+                        margin-right:37px;
+                    }
+                }
+                button{
+                    margin-right:0;
+                }
             }
         }
         #provider-offer-form,
@@ -249,6 +322,10 @@
         }
         .submit-request-container{
             text-align:right;
+            .input-field{ 
+                margin-top: 10px;
+                margin-bottom: 0;
+            }
             button,
             a{
                 margin: 0 10px;
@@ -297,6 +374,9 @@
 		}
         td {
             padding:2px 6px;
+            &.bar-container{
+                padding:2px 40px !important;
+            }
         }
 	    .key {
             padding:12px;
@@ -353,7 +433,7 @@
                     text-align:left;
                     padding:2px;
                     transition:  width 0.5s;
-                    height:38px;
+                    min-height:38px;
                     line-height: 2.5em;
                     font-weight:bold;
                     padding-left:4px;
@@ -387,7 +467,7 @@
                     top:0px;
                     width:3px;
                     background-color:@highlight;
-                    height:44px;
+                    height:100%;
                     
                 }   
             }
@@ -632,11 +712,19 @@
     }
 }
 
-#search-results-info div p span.address.js-address{
+#search-results-info {
+    div p span.address.js-address{
     width:160px;
     word-wrap: break-word;
     display: inline-block;
-} 
+    }
+    span{
+        color:#fff;
+        &.background{
+            color:#ccc !important;
+        }
+    } 
+}
 
 .warehouse-profile.provider-offer-reply{
     .input-field.checkbox{

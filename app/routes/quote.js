@@ -52,6 +52,7 @@ function updateQuoteReply(req,res) {
     offerData.prepaymentRequired = req.body.prepaymentRequired;
     offerData.finalPayment = req.body.finalPayment;
     offerData.paymentTermsAccepted = 'true';
+    offerData.invoiceFrequency = req.body['invoice-frequency'];
     quote.addOfferData(quoteId,offerData, function(err) {
             if (!err) {
                 transport.type = req.body.transportType;
@@ -131,6 +132,7 @@ function updateQuote(req,res) {
     offerData.paymentType = req.body.paymentType;
     offerData.prepaymentRequired = req.body.prepaymentRequired;
     offerData.finalPayment = req.body.finalPayment;
+    offerData.invoiceFrequency = req.body["invoice-frequency"];
     quote.addOfferData(quoteId,offerData, function(err) {
             if (!err) {
                 transport.type = req.body.transportType;

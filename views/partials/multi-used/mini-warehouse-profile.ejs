@@ -12,7 +12,7 @@
 		size = warehouse.size;
 		height = warehouse.height;
 		href = "/warehouse-profile/" + warehouse._id + "?fromSearch=true";
-		mainPhoto = warehouse.defaultPhoto || warehouse.photos[0] || "not-found.jpg";
+		mainPhoto = warehouse.defaultPhoto || warehouse.photo && warehouse.photos[0] || "not-found.jpg";
 		for (var i in warehouse.storageTemps) {
 			temp = temp + "<span class='icon-box temp-" + warehouse.storageTemps[i] +  "'></span>"
 		}
@@ -55,12 +55,12 @@
 				</div>
 			</div>
 		</div>
-		<p>Size: <span class="js-size"><%= size %></span>m<sup>2</sup><br/>
-		Height: <span class="js-height"><%= height %></span>m</p>
+		<p>Size: <%if(size){%><span class="js-size"><%= size%></span>m<sup>2</sup><br/><%}else{%><span class="js-size">N/A</span><br/><%}%>
+		Height: <%if(height){%><span class="js-height"><%= height%></span>m<%}else{%><span class="js-height">N/A</span><%}%></p>
 		<%if(typeof insurance != 'undefined' && page !== undefined && page !== 'search'){
 			if(insurance.allProductInsurance !== ""){%>
 				<p>Maximum Insurance Level:&nbsp;<span><%= insurance.maximumInsuranceLevel || 'N/A'%></span>
-				<br/>Exceptions:<br/><span><%=insurance.productExceptions || 'N/A'%></span></p>
+				<br/>Exceptions: <span><%=insurance.productExceptions || 'N/A'%></span></p>
 			<%}
 		}%>
 		<div class="controls">

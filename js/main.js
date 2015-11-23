@@ -10,11 +10,15 @@ require(["jquery","components/global","jqueryPlugins/jquery.scrollTo.min","loom/
     }
     
     function init(){
+        var global = new Global();
+        
         $(document).ajaxSend(function() {
 		  $("body").addClass("wait");
+          global.disableButtonsOnAjax();
 		});
 		 $(document).ajaxStop(function() {
 		  $("body").removeClass("wait");
+          global.enableButtonsOnAjaxCompletion();
 		});
         //fire up the loom form library.
         require(["loom/loom"], function(Loom){
@@ -25,7 +29,6 @@ require(["jquery","components/global","jqueryPlugins/jquery.scrollTo.min","loom/
         
         function handleError(response){
             if(response.xhr && response.xhr.status === 403){
-                var global = new Global();
                 global.show403Popup();
             }else{
                 var message = response.data.message || response.data;
@@ -56,6 +59,11 @@ require(["jquery","components/global","jqueryPlugins/jquery.scrollTo.min","loom/
         if (onPage("warehouse-profile") || onPage("quotation-request") || onPage("/provider-offer") || onPage("provider-confirm-contract")) {
             require(["components/warehouse-profile"], function(warehouseProfile){
                 warehouseProfile();
+            });
+        }
+        if(onPage("about-us")){
+             require(["components/static"], function(Static){
+                Static();
             });
         }
         

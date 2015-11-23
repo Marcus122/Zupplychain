@@ -156,6 +156,28 @@ define(["jquery","components/global"], function ($,Global) {
 			})
 		}
 		
+		function getWarehouseContactsSuggestions(warehouseId,data,cb){
+			var url = '/search-warehouse-contacts/' + warehouseId;
+			$.ajax({
+				url:url,
+				type: 'POST',
+				dataType:'json',
+				data: data,
+				headers: {'csrf-token':csrf},
+				success:function(response){
+					cb(response);
+				},
+				error:function(jqXHR,textStatus,errThrown){
+					if(jqXHR.status === 403){
+						handle403Error();
+					}else{
+						err = JSON.parse(jqXHR.responseText);
+						cb(err);
+					}
+				}
+			})
+		}
+		
 		function resendRegisterEmail(userId,data,cb){
 			var url = '/resend-register-email/' + userId;
 			$.ajax({
@@ -211,7 +233,8 @@ define(["jquery","components/global"], function ($,Global) {
 			resendRegisterEmail:resendRegisterEmail,
 			rebuildContactsView:rebuildContactsView,
 			rebuildWarehouseDropdownList:rebuildWarehouseDropdownList,
-			deleteItems:deleteItems
+			deleteItems:deleteItems,
+			getWarehouseContactsSuggestions:getWarehouseContactsSuggestions
 		}
 	}
 	return c;

@@ -16,11 +16,12 @@ var handler = function(app) {
 			if(err){
 				setErrorResponse("Warehouse not found",res);
 			}else{
-				req.data.warehouses = data.warehouses;
+				req.data.page = 'contact-setup-walkthrough';
+				req.data.warehouses = dashboard.sortWarehousesByCreatedDate(data.warehouses);
 				req.data.masterContacts = data.masterContacts;
 				req.data.registerStatus = data.registerStatus;
 				req.data.authorisations = data.authorisations;
-				req.data.warehouse = data.warehouses[0];
+				req.data.warehouse = dashboard.getFirstWarehouseWithInconpleteContacts(req.data.warehouses);
 				res.render('partials/dashboard/contact-setup-walkthrough',req.data);
 			}
 		});
@@ -32,8 +33,8 @@ var handler = function(app) {
 				if (err){
 					setErrorResponse("Warehouse not found",res);
 				}else{
-					req.data.warehouses = data.warehouses;
-					req.data.warehouse = data.warehouses[0];
+					req.data.warehouses = dashboard.sortWarehousesByCreatedDate(data.warehouses);
+					req.data.warehouse = req.data.warehouses[0];
 					req.data.masterContacts = data.masterContacts;
 					req.data.temperatures = data.temperatures;
 					req.data.services = data.services;
@@ -43,12 +44,19 @@ var handler = function(app) {
 					req.data.authorisations = data.authorisations;
 					req.data.completedTasks = getTasksThatHaveBeenCompleted(data);
 					req.data.dashboardAccessLvl = data.dashboardAccessLvl;
+					req.data.page = "dashboard";
 					res.render("dashboard",req.data);
 				}
 			});
 		}else{
 			res.render('/',req.data);
 		}
+	});
+	
+	app.post('/search-warehouse-contacts/:warehouse_id',function(req,res){
+		dashboard.getWarehouseContactsByWildcard(req,res,req.body.query,function(result){
+			setResponse(result,res);
+		})
 	});
 	
 	app.post('/update-contacts', function(req,res){
@@ -68,6 +76,7 @@ var handler = function(app) {
 	});
 	
 	app.get('/get-warehouse-contacts/:warehouse_id',function(req,res){
+		req.data.page = 'warehouse-specific-contacts';
 		req.data.warehouse = req.warehouse;
 		req.data.registerStatus = local.config.registerStatus;
 		req.data.authorisations = dashboard.getAuthorisations(req.data.user.dashboardAccessLvl);
@@ -115,6 +124,7 @@ var handler = function(app) {
 					req.data.masterContacts = masterContacts;
 					req.data.registerStatus = local.config.registerStatus;
 					req.data.authorisations = dashboard.getAuthorisations(req.data.user.dashboardAccessLvl);
+					req.data.page = 'dashboard';
 					res.render("partials/dashboard/contacts",req.data);
 				});
 			}

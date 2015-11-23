@@ -30,21 +30,22 @@ process.argv.forEach(function (val, index, array) {
         bind_address = live_bind_address;
 		console.log('live - JS and CSS using built versions, binding server to external IP');
 		
-		app.engine('ejs',function(filePath,options,callback){
-			ejs.__express(filePath,options,function(err,html){
-				if(err) return callback(err)
-				callback(null,minify(html,{
-					removeComments:true,
-					collapseWhitespace:true
-				}))
-			});
-		});
+		// app.engine('ejs',function(filePath,options,callback){
+		// 	ejs.__express(filePath,options,function(err,html){
+		// 		if(err) return callback(err)
+		// 		callback(null,minify(html,{
+		// 			removeComments:true,
+		// 			collapseWhitespace:true,
+		// 			preserveLineBreaks:true
+		// 		}))
+		// 	});
+		// });
 	
 	} else if (val.toLowerCase() ==='qa') {
         data.live=true;// live versions of JS and CSS
         //but bind addresses etc stay the same.
         console.log("QA - JS and CSS using built versions");
-    }
+	}
 });
 
 app.set('view engine', 'ejs');

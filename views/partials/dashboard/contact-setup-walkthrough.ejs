@@ -2,6 +2,7 @@
 <main id="contacts-setup" class="dashboard"><!--Part of the dashboard-->
 	<div class="banner row">
 		<h1>Contact Setup</h1>
+		<p class="desc medium-font">Warehouse: <%=warehouse.name%></p>
 	</div>
 	<section>
 		<div class="main">
@@ -12,32 +13,32 @@
 							<p class="heading">Introduction</p>
 							<p>Now you have registered your warehouse, we would like you to set up on Zupplychain the contacts within your business to respond to customer enquiries and manage transactions and operations.</p>
 							<p>For each type of contact, we will ask for two names. The second name will only be contacted should the first one not respond within a set period of time, usually 24 hours. The first contact will be copied on any messages sent to the second contact.</p>
-							<p>The same names can be used for different contact roles or as second contacts for other roles. You can not specify the same name as first and second contact for a specific role.</p>
+							<p>The same names can be used for different contact roles or as second contacts for other roles. You can not specify the same name as first and second contact for a specific role. <a data-action="go-to-matrix" href="#authorisation-matrix">You can find a summary of contact roles at the bottom of this page.</a></p>
 							<p>Phone numbers are optional. The Zupplychain system will automatically mail your contacts and those of the customer whenever there is a need to provide or respond to information. Many of the e-mails will just require a ‘confirmation’ or a tick box response. Zupplychain makes it that easy! There’s no need to remember or record customer contact details, phone numbers or e mail addresses. And all your inbound and outbound messages – whether concerning enquiries, agreed contracts or operational matters – can be found on your dashboard. As well as receiving messages via the dashboard, all nominated contacts will receive their messages to their specified e-mail inbox.</p>
 							<p class="heading">Master Contacts</p>
 							<p>Firstly, we need two (and an optional third) Master Contacts for the business who are the sole people who can set or amend pricing. The Master Contact can also amend availability and registration details and add further contacts to the account.</p>
 							<p>All further contacts can be warehouse specific. In all cases, we will need two contacts for each role. </p>
 							<div class="warehouse-tasks-tray trays open columns twelve">
-								<a class="warehouse-name open-tray-link">Add Master Contacts</a>
+								<a class="warehouse-name open-tray-link" href="#master-contact">Add Master Contacts</a>
 								<div class="tray">
 									<% include multi-used/master-contacts%>
 								</div>
 							</div>
-							<p class="heading">Availability and Enquires</p>
-							<p>Next, you can add two Availability Controllers. These contacts are the only ones, other than the Master Contact and the Enquiries Controller, who can add or amend registration and contact details for the specified warehouse, including availability (but not pricing).</p>
-							<p>When a potential customer chooses your warehouse, we will send a detailed enquiry to a specified contact – the Enquiries Controller. The enquiry will detail the customer’s search criteria and your storage name and pricing to which it has been matched. This contact will need to respond within 48 hours confirming availability, offering payment terms and, where requested, offering an in-bound transport price. Or this contact will decline the enquiry.</p>
-							<p>The Enquiries Controller will be able to add or amend registration details and availability (but not pricing) for the specified warehouse. Two Enquiries Controllers will be required, though they can be the same contacts as the Availability Controller.</p>
-							<div class="warehouse-tasks-tray trays open columns twelve">
-								<a class="warehouse-name open-tray-link">Add Availability and Enquires</a>
+							<p class="heading">Availability and Enquiries</p>
+							<p>Next, you can add two Availability Contacts. These contacts are the only ones, other than the Master Contact and the Enquiries Contact, who can add or amend registration and contact details for the specified warehouse, including availability (but not pricing).</p>
+							<p>When a potential customer chooses your warehouse, we will send a detailed enquiry to a specified contact – the Enquiries Contact. The enquiry will detail the customer’s search criteria and your storage name and pricing to which it has been matched. This contact will need to respond within 48 hours confirming availability, offering payment terms and, where requested, offering an in-bound transport price. Or this contact will decline the enquiry.</p>
+							<p>The Enquiries Contact will be able to add or amend registration details and availability (but not pricing) for the specified warehouse. Two Enquiries Contacts will be required, though they can be the same contacts as the Availability Contact.</p>
+							<div class="warehouse-tasks-tray trays open columns twelve" data-warehouse-contacts="<%=warehouse.contacts._id.toString()%>" data-warehouse-id="<%=warehouse._id.toString()%>" data-warehouse-name="<%=warehouse.name%>">
+								<a class="warehouse-name open-tray-link">Add Availability and Enquiries</a>
 								<div class="tray">
 									<div class="warehouse-tasks-tray trays open columns twelve">
-										<a class="warehouse-name open-tray-link">Availability Controller</a>
+										<a class="warehouse-name open-tray-link" href="#availability-controller">Availability Contact</a>
 										<div class="tray">
 											<% include multi-used/availability-controller%>
 										</div>
 									</div>
 									<div class="warehouse-tasks-tray trays open columns twelve">
-										<a class="warehouse-name open-tray-link <%if(warehouses.length === 1 || parseInt(warehouses.length) === 1){%>open<%}%>">Enquires Controller</a>
+										<a href="#enquires-controller" class="warehouse-name open-tray-link">Enquiries Contact</a>
 										<div class="tray">
 											<% include multi-used/enquires-controller%>
 										</div>
@@ -48,36 +49,36 @@
 							<p>If a customer has agreed an inbound transport quotation, we need a contact for transport. Once you have an agreed contract with a customer, we will start messaging both parties to confirm delivery dates, times and exact quantities. For this, you need to nominate a Goods-in contact.</p>
 							<p>For outbound movements, please specify a Picking and Dispatch contact.</p>
 							<p>Zupplychain will send you and the customer a pro forma invoice to send to the customer, based on Zupplychain’s records of the number of pallets held and your contract pricing. Please specify an invoicing contact.</p>
-							<p>Zupplychain will monitor customer payment history. Please nominate a Credit Controller we can contact.</p>
-							<div class="warehouse-tasks-tray trays open columns twelve">
-								<a class="warehouse-name open-tray-link <%if(warehouses.length === 1 || parseInt(warehouses.length) === 1){%>open<%}%>">Add Other Contacts</a>
-								<div class="tray <%if(warehouses.length === 1){%>open<%}%>">
+							<p>Zupplychain will monitor customer payment history. Please nominate a Credit Contact we can contact.</p>
+							<div class="warehouse-tasks-tray trays open columns twelve" data-warehouse-contacts="<%=warehouse.contacts._id.toString()%>" data-warehouse-id="<%=warehouse._id.toString()%>" data-warehouse-name="<%=warehouse.name%>">
+								<a class="warehouse-name open-tray-link">Add Other Contacts</a>
+								<div class="tray">
 									<div class="warehouse-tasks-tray trays open columns twelve">
-										<a class="warehouse-name open-tray-link <%if(warehouses.length === 1 || parseInt(warehouses.length) === 1){%>open<%}%>">Transport Coordinator</a>
+										<a class="warehouse-name open-tray-link" href="#transport-coordinator">Transport Coordinator</a>
 										<div class="tray">
 											<% include multi-used/transport-coordinator%>
 										</div>
 									</div>
 									<div class="warehouse-tasks-tray trays open columns twelve">
-										<a class="warehouse-name open-tray-link <%if(warehouses.length === 1 || parseInt(warehouses.length) === 1){%>open<%}%>">Goods-in</a>
+										<a class="warehouse-name open-tray-link" href="#goods-in">Goods-in</a>
 										<div class="tray">
 											<% include multi-used/goods-in%>
 										</div>
 									</div>
 									<div class="warehouse-tasks-tray trays open columns twelve">
-										<a class="warehouse-name open-tray-link <%if(warehouses.length === 1 || parseInt(warehouses.length) === 1){%>open<%}%>">Picking Dispatch</a>
+										<a class="warehouse-name open-tray-link" href="#picking-dispatch">Picking and Dispatch</a>
 										<div class="tray">
 											<% include multi-used/picking-dispatch%>
 										</div>
 									</div>
 									<div class="warehouse-tasks-tray trays open columns twelve">
-										<a class="warehouse-name open-tray-link <%if(warehouses.length === 1 || parseInt(warehouses.length) === 1){%>open<%}%>">Invoice Controller</a>
+										<a class="warehouse-name open-tray-link" href="#invoice-controller">Invoice Contact</a>
 										<div class="tray">
 											<% include multi-used/invoice-controller%>
 										</div>
 									</div>
 									<div class="warehouse-tasks-tray trays open columns twelve">
-										<a class="warehouse-name open-tray-link <%if(warehouses.length === 1 || parseInt(warehouses.length) === 1){%>open<%}%>">Credit Controller</a>
+										<a class="warehouse-name open-tray-link" href="#credit-controller">Credit Contact</a>
 										<div class="tray">
 											<% include multi-used/credit-controller%>
 										</div>
@@ -85,7 +86,9 @@
 								</div>
 							</div>
 							<p class="heading">Thank You and Welcome</p>
-							<p>Thank you. As you set up contacts on the Dashboard, we will send e-mails to those nominated informing them of and explaining their role and inviting them to set up a password.</p>
+							<p>Thank you. As you set up contacts we will send e-mails to those nominated informing them of and explaining their role and inviting them to set up a password.</p>
+							<br/><p class="heading" id="authorisation-matrix">Summary of Contact Roles</p>
+							<% include authorisations-table%>
 						</div>
 					</fieldset>
 				</div>

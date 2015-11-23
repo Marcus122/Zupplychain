@@ -1,4 +1,4 @@
-<tr class="active" data-tr="Expand" data-tr-closed="Collapse">
+<tr data-storage-group="<%=row.storageGroup%>" class="active" data-tr="Expand" data-tr-closed="Collapse">
 	<td data-th="Storage Name" class="text input-field no-success-validation-style">
 		<input type="hidden" value="<%=row.id%>" name="_id"/>
 		<input type="text" data-bind-value="name" data-bind-value-condition="name" required  value="<%=row.name%>" name="name" data-bind-placeholder="placeholder" placeholder="<%=row.placeholder%>"/>
@@ -34,6 +34,9 @@
 	</td>
 	<td data-th="Pallet Spaces" class="value input-field no-success-validation-style">
 		<input required name="palletSpaces"  type="number" value="<%=row.palletSpaces%>"/>
+	</td>
+	<td data-th="add-additional-pallet-width" class="action">
+		<button type="button" class="add-button"><span>Add</span></button>
 	</td>
 	<td data-th="Remove" class="action">
 		<% if( warehouse.storage && warehouse.storage.length===1){%>

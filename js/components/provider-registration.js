@@ -3,7 +3,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 	
     function Class(data) {
 		var templates = new Templates();
-		var storageNames=['A','B','C','D','E','F','G','H','I'];
+		var storageNames=['Area A','Area B','Area C','Area D','Area E','Area F','Area G','Area H','Area I'];
 		var storage=[];
 		var warehouse={};
 		var lm = new Loom();
@@ -29,17 +29,8 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			})
 			
 			$('button[data-action="view-reg-example"], #reg-help-bubble').click(function(){
-				var $this = $(this);
-				var template = templates.getTemplate('video-popup');
-				var $popup = template.bind({});
-				$('body').append($popup);
-				global.centerPopup($popup);
-				$($popup).removeClass('hidden');
-				$popup.find('iframe').attr('src', $this.data('url'));
-				if($this.attr('id') === 'reg-help-bubble' ){
-					$this.addClass('hidden');
-				}
-			})
+				global.showRegistrationExample($(this),false);
+			});
 			
 		}
 		function initInitialRegistration(){
@@ -417,7 +408,6 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
             
 		}
 		function step2(){
-            
             $("#define-space .back").click(function() {
                 saveDefinedSpace(function(response){
 					if (response !== undefined){
@@ -431,9 +421,10 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			var $defineSpaceTable = $('.define-space');
 			var $defineSpace = $('#define-space');
 			if(!$defineSpace.length) return;
-			$('.new-pallet button').on("click",function(ev){
+			$(document).on('click','.new-pallet button, td[data-th="add-additional-pallet-width"] button',function(ev){
 				ev.preventDefault();
-				addPallet();
+				ev.stopImmediatePropagation();
+				addPallet($(this));
 				removeButtons();
 			});
 			$defineSpaceTable.on("click",".trash-button",function(ev){
@@ -522,14 +513,52 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					$defineSpaceTable.find('.trash-button').removeClass('hidden');
 				}
 			}
-			function addPallet(){
+			function addPallet($this){
 				var template = templates.getTemplate("define-space-row");
 				var data={};
-				data.name = storageNames[$('.define-space tbody tr').length];
-				var $element = template.bind(data);
-				$('.define-space tbody').append($element);
+				data.row = {}
+				var $element
+				var storageName = $this.parent().siblings('td[data-th="Storage Name"]').find('input[name="name"]').val();
+				var storageType = $this.parent().siblings('td[data-th="Storage Temp"]').find('select[name="temp"]').val();
+				var storageGroup;
+				var $prevEle;
+				if(storageName){
+					data.name = storageName;
+					$element = template.bind(data);
+					$element.removeAttr('data-storage-group')
+					$element.attr('data-storage-group',parseInt($this.parent('td').parent('tr').attr('data-storage-group')));
+					$this.parent('td').parent('tr').after($element);
+					$element.find('td[data-th="Storage Temp"]').find('select').val(parseInt(storageType));
+					$element.find('td[data-th="add-additional-pallet-width"]').find('button').unbind('click');
+				}else{
+					if($this.parent('td').length > 0 && $this.parent('td').data('th') === 'add-additional-pallet-width'){
+						storageGroup = parseInt($this.parent('td').parent('tr').attr('data-storage-group'));
+						$this.parent('td').parent('tr').find('td[data-th="Storage Name"]').find('input[name="name"]').val(storageNames[storageGroup]);
+						$this.parent('td').parent('tr').siblings('tr[data-storage-group="' + storageGroup + '"]').find('td[data-th="Storage Name"]').find('input[name="name"]').val(storageNames[storageGroup]);
+						$prevEle = $this.parent('td').parent('tr');
+					}else{
+						storageGroup = parseInt($('.define-space tbody').find('tr').last().attr('data-storage-group'));
+						storageGroup ++;
+						$prevEle = $('.define-space tbody').find('tr').last();
+					}
+					data.name = storageNames[storageGroup];
+					$element = template.bind(data);
+					$element.find('td[data-th="add-additional-pallet-width"]').find('button').unbind('click');
+					$element.removeAttr('data-storage-group')
+					$element.attr('data-storage-group',storageGroup);
+					$prevEle.after($element);
+					$element.find('td[data-th="Storage Temp"]')
+				}
 				rebindForm();
 			}
+			$(document).on('change','#define-space td[data-th="Storage Name"] input[name="name"]',function(){
+				var $this = $(this);
+				$('tr[data-storage-group="' + $this.closest('tr').attr('data-storage-group') + '"]').find('input[name="name"]').val($this.val());
+			});
+			$(document).on('change','#define-space td[data-th="Storage Temp"] select[name="temp"]',function(){
+				var $this = $(this);
+				$('tr[data-storage-group="' + $this.closest('tr').attr('data-storage-group') + '"]').find('select[name="temp"]').val($this.val());
+			});
 		}
 		function step3(){
             var $onStep3 = $('#price-and-availability-user-data');

@@ -36,7 +36,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="columns three"><span>Website</span>
-                                    <%=quote.userData.website%></div>
+                                    <%=quote.userData.website||'N/A'%></div>
                                     <div class="columns three"><span>Transport</span>
                                     <%=config.transport[quote.userData.transport]%></div>
                                     <%if(quote.comments.providerOfferReply && quote.comments.providerOfferReply !== ""){%>
@@ -116,6 +116,9 @@
                             <div class="input-field hidden">
 				                <input type="hidden" name="quoteId" value="<%= quote._id %>" />
 				            </div>
+                            <div class="input-field hidden">
+                                <input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
+                            </div>
                             <div class="content-box">
                                 <div class="header">
                                     <h2>Your Payment Terms<%if (quote.transport.type === "1"){%> and Inbound Transport<%}%></h2>
@@ -133,6 +136,10 @@
                                               <%}else{%>
                                                 <p><b><%= config.paymentTerms[quote.offerData.paymentTerms] %></b></p>
                                               <%}%>
+                                        </div>
+                                        <div class="input-field">
+                                            <p>Invoice Frequency</p>
+                                            <p><b><%= config.invoiceFrequency[quote.offerData.invoiceFrequency] %></b></p>
                                         </div>
                                     </div>
                                     <div class="five columns">
@@ -169,8 +176,8 @@
                                                 <p><b><%= quote.warehouse.postcode %></b></p>
                                             </div>
                                             <div class="input-field">
-                                                <p>Quote £</p>
-                                                <p><b><%= quote.transport.quote %></b></p>
+                                                <p>Quote</p>
+                                                <p><b>£<%= quote.transport.quote %></b></p>
                                             </div>
                                         </div>
                                         <div class="five columns">
@@ -193,14 +200,14 @@
                                 <%}%>
                             </div>
                             <div class="content-box action row">
-                                <div>
-                                    <div class="six columns input-field check checkbox">
-                                    <label for="terms">I have read and accept the Zupplychain Terms and Conditions<input type="checkbox" name="terms" id="terms" required="required"/></label>
-                                </div>
-                                <div class="five columns submit-request-container confirm-contract">
-                                    <button type="submit" class="button action">SEND ACKNOWLEDGEMENT</button>
-                                    <span>OR</span>
+                                <div class="columns one">
                                     <button type="button" class="button action">DECLINE</button>
+                                </div>
+                                <div class="eleven columns submit-request-container confirm-contract">
+                                    <div class="seven columns input-field check checkbox">
+                                        <label for="terms">I have read and accept the Zupplychain Terms and Conditions<input type="checkbox" name="terms" id="terms" required="required"/></label>
+                                    </div>
+                                    <button type="submit" class="button action">SEND ACKNOWLEDGEMENT</button>
                                 </div>
                             </div>
                         </form>

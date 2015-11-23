@@ -1,18 +1,24 @@
-<tr data-status="new">
-	<td>1*</td>
-	<td data-field="name" class="input-field no-success-validation-style"><input required type="text" name="name"/></td>
+<tr data-status="new" data-empty="true">
+	<td>1<span>st<span>*</td>
+	<td data-field="name" class="input-field no-success-validation-style"><input required type="text" name="name"/>
+		<ul class="contacts-suggestions hidden" data-action="suggestions-dropdown">
+		</ul>
+	</td>
 	<td data-field="email" class="input-field no-success-validation-style"><input required type="email" name="email"/></td>
 	<td data-field="phone-number" class="input-field no-success-validation-style"><input type="tel" name="phone-number"/></td>
 	<td data-field="register-status"></td>
-	<td data-field="delete"></td>
-	<td data-field="resend-email"></td>
+	<%if(page !== 'contact-setup-walkthrough'){%><td data-field="delete"></td><%}%>
+	<%if(page !== 'contact-setup-walkthrough'){%><td data-field="resend-email"></td><%}%>
 </tr>
-<tr data-status="new">
-	<td>2*</td>
-	<td data-field="name" class="input-field no-success-validation-style"><input required type="text" name="name"/></td>
+<tr data-status="new" data-empty="true">
+	<td>2<span>nd<span>*</td>
+	<td data-field="name" class="input-field no-success-validation-style"><input required type="text" name="name"/>
+		<ul class="contacts-suggestions hidden" data-action="suggestions-dropdown">
+		</ul>
+	</td>
 	<td data-field="email" class="input-field no-success-validation-style"><input required type="email" name="email"/></td>
 	<td data-field="phone-number" class="input-field no-success-validation-style"><input type="tel" name="phone-number"/></td>
 	<td data-field="register-status"></td>
-	<td data-field="delete"></td>
-	<td data-field="resend-email"></td>
+	<%if(page !== 'contact-setup-walkthrough'){%><td data-field="delete"></td><%}%>
+	<%if(page !== 'contact-setup-walkthrough'){%><td data-field="resend-email"></td><%}%>
 </tr>

@@ -52,12 +52,12 @@
 										</thead>
 										<tbody>
 											<tr>
-												<td data-field="task"><a data-go-to-link="view-tab-contacts" href="#contacts#warehouse-contacts#availability-controller">Add availability controllers</a></td>
+												<td data-field="task"><a data-go-to-link="view-tab-contacts" href="#contacts#warehouse-contacts#availability-controller">Add availability contacts</a></td>
 												<td><input disabled type="checkbox" name="task-completed" <%if(completedTasks[i][warehouses[i].id].availabilityController.allRequestsSent === true){%>checked<%}%>></td>
 												<td><input disabled type="checkbox" name="response-sent" <%if(completedTasks[i][warehouses[i].id].availabilityController.allRequestsResponded === true){%>checked<%}%>></td>
 											</tr>
 											<tr>
-												<td data-field="task"><a data-go-to-link="view-tab-contacts" href="#contacts#warehouse-contacts#enquires-controller">Add enquires controllers</a></td>
+												<td data-field="task"><a data-go-to-link="view-tab-contacts" href="#contacts#warehouse-contacts#enquires-controller">Add enquiries contacts</a></td>
 												<td><input disabled type="checkbox" name="task-completed" <%if(completedTasks[i][warehouses[i].id].enquiresController.allRequestsSent === true){%>checked<%}%>></td>
 												<td><input disabled type="checkbox" name="response-sent" <%if(completedTasks[i][warehouses[i].id].enquiresController.allRequestsResponded === true){%>checked<%}%>></td>
 											</tr>
@@ -82,7 +82,7 @@
 												<td><input disabled type="checkbox" name="response-sent" <%if(completedTasks[i][warehouses[i].id].invoiceController.allRequestsResponded === true){%>checked<%}%>></td>
 											</tr>
 											<tr>
-												<td data-field="task"><a data-go-to-link="view-tab-contacts" href="#contacts#warehouse-contacts#credit-controller">Add credit controller contacts</a></td>
+												<td data-field="task"><a data-go-to-link="view-tab-contacts" href="#contacts#warehouse-contacts#credit-controller">Add credit contact contacts</a></td>
 												<td><input disabled type="checkbox" name="task-completed" <%if(completedTasks[i][warehouses[i].id].creditController.allRequestsSent === true){%>checked<%}%>></td>
 												<td><input disabled type="checkbox" name="response-sent" <%if(completedTasks[i][warehouses[i].id].creditController.allRequestsResponded === true){%>checked<%}%>></td>
 											</tr>
