@@ -35,7 +35,7 @@ To this:
 */
 
 ({
-    mainConfigFile : "./main.js", // Pulls the 'paths' through from this file.
+    mainConfigFile : "./app.js", // Pulls the 'paths' through from this file.
 	baseUrl : "./",					
     name: "main",					
     out: "_dist/main.js",			 // File location for the minified .js

@@ -425,6 +425,19 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 				scrollToPos($(this).attr('href'),{offset:{top:-100},margin:true}); 
 			});
 			
+			function checkContactIsNotUsed($rows,email){
+				var numberFound = 0;
+				for (var i = 0; i<$rows.length; i++){
+					if($($rows[i]).find('td[data-field="email"]').find('input').val() === email || $($rows[i]).find('td[data-field="email"]').html() === email){
+						numberFound ++;
+						if(numberFound>1){
+							return true;
+						}
+					}
+				}
+				return false;
+			}
+			
 			$(document).on('keyup','form[data-form-type="contacts-form"] table tbody tr td[data-field="name"] input',function(){
 				var $this = $(this);
 				var uniqueContacts = [];
@@ -518,6 +531,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 					currentRows = [],
 					$table = $this.parent('div').siblings('table'),
 					rows = $table.find('tr[data-status="new"]'),
+					$allRows = $table.find('tr'),
 					shouldIgnore,
 					skippedRows = [];
 					
@@ -530,60 +544,62 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 						}
 					}
 					if(loom.isFormValid($this.closest('form').attr('id'))){
-						contactType = contactType.charAt(0).toUpperCase() + contactType.substring(1);
-						
-						
-						data.warehouseContacts = $this.closest('.warehouse-specific-contacts').data('warehouse-contacts') || $this.closest(".warehouse-tasks-tray").parent().closest(".warehouse-tasks-tray").data('warehouse-contacts') || "";
-						data.role = contactType;
-						data.roleCC = $(this).closest('.tab-content').prev('.tabs').find('li.active').find('a').attr('href') || $this.closest(".tray.open").prev('a').attr('href');
-						data.roleCC = data.roleCC.replace('#','').replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
-						data.warehouseId = $('select[name="warehouses"]').find(":selected").data('id') || $this.closest(".warehouse-tasks-tray").parent().closest(".warehouse-tasks-tray").data('warehouse-id');
-						data.warehouseName = $('select[name="warehouses"]').find(":selected").val() || $this.closest(".warehouse-tasks-tray").parent().closest(".warehouse-tasks-tray").data('warehouse-name');
-						for (var i = 0; i<rows.length; i++){
-							if($(rows[i]).find(".loom-ignore").length === 0){
-								data.email = $(rows[i]).find('td[data-field="email"]').find('input').val();
-								data.name = $(rows[i]).find('td[data-field="name"]').find('input').val();
-								if((data.email !== undefined && data.email !== "") && (data.name !== undefined && data.name !== "")){
-									contactsToAdd ++;
-									data.phoneNumber = $(rows[i]).find('td[data-field="phone-number"]').find('input').val();
-									data.dashboardAccess = $(rows[i]).find('tr[data-status="new"]').find('td[data-field="dashboard-access"]').find('input').val();
-									currentRows.push($(rows[i]));
-									DBCntr.createContact(data,function(response){
-										cbDone ++;
-										if(response.error === true){
-											error = true;
-										}else if(response.data.contactId !== undefined){
-											var contactsId = response.data.contactId;
-										}
-										
-										if(response.data.expiry === null){
-											currentRows[cbDone-1].find('td[data-field="register-status"]').append('<p class="registered-status complete">Registered</p>');
-										}else{
-											currentRows[cbDone-1].find('td[data-field="register-status"]').append('<p class="registered-status pending">Pending</p>');
-										}
-										
-										currentRows[cbDone-1].attr('data-id',response.data.userId);
-										currentRows[cbDone-1].attr('data-values-added',"true");
-										currentRows[cbDone-1].attr('data-empty',"false");
-										if (cbDone === contactsToAdd){
-											if(error === true){
-												Alerts.showPersistentErrorMessage('Not all contacts have been added');
+						if (!checkContactIsNotUsed($allRows, $(rows[0]).find('td[data-field="email"]').find('input').val())){
+							contactType = contactType.charAt(0).toUpperCase() + contactType.substring(1);
+							data.warehouseContacts = $this.closest('.warehouse-specific-contacts').data('warehouse-contacts') || $this.closest(".warehouse-tasks-tray").parent().closest(".warehouse-tasks-tray").data('warehouse-contacts') || "";
+							data.role = contactType;
+							data.roleCC = $(this).closest('.tab-content').prev('.tabs').find('li.active').find('a').attr('href') || $this.closest(".tray.open").prev('a').attr('href');
+							data.roleCC = data.roleCC.replace('#','').replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
+							data.warehouseId = $('select[name="warehouses"]').find(":selected").data('id') || $this.closest(".warehouse-tasks-tray").parent().closest(".warehouse-tasks-tray").data('warehouse-id');
+							data.warehouseName = $('select[name="warehouses"]').find(":selected").val() || $this.closest(".warehouse-tasks-tray").parent().closest(".warehouse-tasks-tray").data('warehouse-name');
+							for (var i = 0; i<rows.length; i++){
+								if($(rows[i]).find(".loom-ignore").length === 0){
+									data.email = $(rows[i]).find('td[data-field="email"]').find('input').val();
+									data.name = $(rows[i]).find('td[data-field="name"]').find('input').val();
+									if((data.email !== undefined && data.email !== "") && (data.name !== undefined && data.name !== "")){
+										contactsToAdd ++;
+										data.phoneNumber = $(rows[i]).find('td[data-field="phone-number"]').find('input').val();
+										data.dashboardAccess = $(rows[i]).find('tr[data-status="new"]').find('td[data-field="dashboard-access"]').find('input').val();
+										currentRows.push($(rows[i]));
+										DBCntr.createContact(data,function(response){
+											cbDone ++;
+											if(response.error === true){
+												error = true;
+											}else if(response.data.contactId !== undefined){
+												var contactsId = response.data.contactId;
+											}
+											
+											if(response.data.expiry === null){
+												currentRows[cbDone-1].find('td[data-field="register-status"]').append('<p class="registered-status complete">Registered</p>');
 											}else{
-												$this.parent('div').parent('div').attr('data-warehouse-contacts',contactsId);
-												Alerts.showSuccessMessage('All contacts have been successfully added',{centre:true});
-												rowInputsToText(rows);
-												for (var i = 0; i<skippedRows.length; i++){
-													unmarkRowsToBeSkipped($(skippedRows[i]));
-												}
-												loom.rebind($this.closest('form').attr('id'));
-												if($table.data('max-rows') === $table.find('tbody').find('tr[data-empty="false"]').length){
-													$this.parent().addClass('hidden');
+												currentRows[cbDone-1].find('td[data-field="register-status"]').append('<p class="registered-status pending">Pending</p>');
+											}
+											
+											currentRows[cbDone-1].attr('data-id',response.data.userId);
+											currentRows[cbDone-1].attr('data-values-added',"true");
+											currentRows[cbDone-1].attr('data-empty',"false");
+											if (cbDone === contactsToAdd){
+												if(error === true){
+													Alerts.showPersistentErrorMessage('Not all contacts have been added');
+												}else{
+													$this.parent('div').parent('div').attr('data-warehouse-contacts',contactsId);
+													Alerts.showSuccessMessage('All contacts have been successfully added',{centre:true});
+													rowInputsToText(rows);
+													for (var i = 0; i<skippedRows.length; i++){
+														unmarkRowsToBeSkipped($(skippedRows[i]));
+													}
+													loom.rebind($this.closest('form').attr('id'));
+													if($table.data('max-rows') === $table.find('tbody').find('tr[data-empty="false"]').length){
+														$this.parent().addClass('hidden');
+													}
 												}
 											}
-										}
-									});
+										});
+									}
 								}
 							}
+						}else{
+							Alerts.showPersistentErrorMessage("The same contact cannot be used more than once for the same role.");
 						}
 					}else{
 						loom.focusOnInvalidField($this.closest('form').attr('id'));
