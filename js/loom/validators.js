@@ -112,7 +112,7 @@ define({
 		return input;
 	},
 	UKPostCode : function(input) {
-        var re= /^[A-z]{1,3}[0-9]{1,3}[ ]*[0-9]{1,3}[A-z]{1,3}$/ ;
+        var re= /^[A-z]{1,3}[0-9]{1,3}[ ][0-9]{1,3}[A-z]{1,3}$/ ;
  		return re.test(input);
 	},
 	required : function(input) {

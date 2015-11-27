@@ -97,15 +97,15 @@
                                    <div class="six columns">
                                        <div class="input-field">
                                             <p>Payment Type Accepted</p>
-                                            <p><b>Payment accepted by <%= config.paymentTypes[quote.offerData.paymentType]%></b></p>
+                                            <p><b><%= config.paymentTypes[quote.offerData.paymentType]%></b></p>
                                             <input type="hidden" name="paymentType" value="<%= quote.offerData.paymentType%>"/>
                                        </div>
                                        <div class="input-field">
                                             <p>Payment Terms</p>
                                             <%if(quote.offerData.paymentTerms === '3'){%>
-                                                <p><b>Payment to be made within <%= quote.offerData.manualPaymentTerms%> of invoice date</b></p>
+                                                <p><b>Within <%= quote.offerData.manualPaymentTerms%> of invoice date</b></p>
                                             <%}else{%>
-                                                <p><b>Payment to be made within <%= config.paymentTerms[quote.offerData.paymentTerms]%> of invoice date</b></p>
+                                                <p><b>Within <%= config.paymentTerms[quote.offerData.paymentTerms]%> of invoice date</b></p>
                                             <%}%>
                                             <input type="hidden" name="paymentTerms" value="<%= quote.offerData.paymentTerms%>"/>
                                         </div>
@@ -118,12 +118,12 @@
                                     <div class="six columns">
                                         <div class="input-field">
                                             <p>Prepayment Required</p>
-                                            <p><b>Prepayment Required: <%= config.prepaymentRequired[quote.offerData.prepaymentRequired]%></b></p>
+                                            <p><b><%= config.prepaymentRequired[quote.offerData.prepaymentRequired]%></b></p>
                                             <input type="hidden" name="prepaymentRequired" value="<%= quote.offerData.prepaymentRequired%>"/> 
                                         </div>
                                         <div class="input-field">
                                             <p>Final Payment</p>
-                                            <p><b>Final Payment: <%= config.finalPayment[quote.offerData.finalPayment]%></b></p>
+                                            <p><b><%= config.finalPayment[quote.offerData.finalPayment]%></b></p>
                                             <input type="hidden" name="finalPayment" value="<%= quote.offerData.finalPayment%>"/>
                                         </div>
                                         <div class="input-field">

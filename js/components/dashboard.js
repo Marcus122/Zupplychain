@@ -1,4 +1,4 @@
-define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","templates/templates","jqueryPlugins/jquery.scrollTo.min"], function ($,Loom,Alerts,DBCntr,Templates,Scroll) {
+define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","templates/templates","jqueryPlugins/jquery.scrollTo.min","components/global"], function ($,Loom,Alerts,DBCntr,Templates,Scroll,Global) {
 	
     function Class() {
 		var templates = new Templates();
@@ -12,7 +12,8 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			$adminView = $('div[data-view="admin"]'),
 			$warehouseView = $('div[data-view="warehouses"]'),
 			$contactsView = $('div[data-view="contacts"]'),
-			$usersView = $('div[data-view="users"]');
+			$usersView = $('div[data-view="users"]'),
+			global = new Global();
 			
 		if(window.location.pathname === '/dashboard'){
 			initNavEvents();
@@ -92,8 +93,8 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 		}
 		
 		function changeToDisplayMode($tab){
-			$tab.find('input').prop('disabled',true);
-			$tab.find('button').prop('disabled',true);
+			$tab.find('input').not('[data-dont-disable="true"]').prop('disabled',true);
+			$tab.find('button').not('[data-dont-disable="true"]').prop('disabled',true);
 			$tab.find('textarea').prop('disabled',true);
 			$tab.find('select').prop('disabled',true);
 			$tab.find('label').attr('disabled','disabled');
@@ -122,8 +123,8 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 					$warehouseContainer.removeClass('hidden');
 					initTabs();
 					prepareWarehouseView($this);
-					$warehouseContainer.find('input').prop('disabled',true);
-					$warehouseContainer.find('button').prop('disabled',true);
+					$warehouseContainer.find('input').not('[data-dont-disable="true"]').prop('disabled',true);
+					$warehouseContainer.find('button').not('[data-dont-disable="true"]').prop('disabled',true);
 					$warehouseContainer.find('textarea').prop('disabled',true);
 					$warehouseContainer.find('select').prop('disabled',true);
 					$warehouseContainer.find('.form-footer div[data-function="save-buttons"]').addClass('hidden');
@@ -133,6 +134,30 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 						rebindAllLoomForms($("#view-edit-warehouse form.loom-form"))
 					});   
 				});
+			});
+			
+			$(document).on('click', '.add-volume-discount',function(evt){
+				evt.stopImmediatePropagation();
+				evt.cancelBubble = true;
+				if($("#volume-discount-popup").length === 0){
+				var volumeDiscount = templates.getTemplate("volume-discount");
+					if (!volumeDiscount) return;
+					var $popup = volumeDiscount.getElement();
+					$('body').append($popup);
+					global.centerPopup($popup);
+				}else{
+					$("#volume-discount-popup").removeClass('hidden');
+				}
+				var $discountPopup = $('.discount-popup');
+				if($('.view-edit-buttons').length > 0 && $(this).closest('#view-edit-warehouse').find('.view-edit-buttons').find('a[data-mode="view"]').hasClass("down")){
+					changeToDisplayMode($discountPopup);
+					var $lastTr = $('#volume-discount-table').find('tr').last();
+					if($lastTr.find('td.discount-to').val() === "" && $lastTr.find('td.discount-value').val() === ""){
+						$lastTr.remove();
+					}
+				}else if ($('.view-edit-buttons').length === 0 || $(this).closest('#view-edit-warehouse').find('.view-edit-buttons').find('a[data-mode="edit"]').hasClass("down")){
+					changeToEditMode($discountPopup);
+				}
 			});
 			
 			$(document).on('click', '.toggle-view-edit',function(){

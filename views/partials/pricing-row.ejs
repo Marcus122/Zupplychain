@@ -5,16 +5,16 @@
       var endOfNextYear = utils.getEndOfNextYear(new Date());
 	  %>
 	<td data-th="From" class="input-field no-success-validation-style">
-		<input readonly data-bind-max="to" data-loom-limit-day-of-week="1" required type="date" name="from" class="datepicker" data-bind-value="from" data-loom-add-controls="true" min="<%=today.toISOString().substring(0, 10)%>"/>
+		<input required="required" readonly data-bind-max="to" data-loom-limit-day-of-week="1" type="date" name="from" class="datepicker" data-bind-value="from" data-loom-add-controls="true" min="<%=today.toISOString().substring(0, 10)%>"/>
 	</td>
 	<td data-th="To" class="input-field no-success-validation-style" >
-		<input readonly data-bind-min="from" required data-bind-value="to" data-loom-limit-day-of-week="0" type="date" name="to" class="datepicker" data-loom-add-controls="true" max="<%=utils.formatDate(endOfNextYear)%>" min=""/>
+		<input required="required"readonly data-bind-min="from" data-bind-value="to" data-loom-limit-day-of-week="0" type="date" name="to" class="datepicker" data-loom-add-controls="true" max="<%=utils.formatDate(endOfNextYear)%>" min=""/>
 	</td>
 	<td data-th="Price per pallet per week" class="input-field no-success-validation-style">
-		<input data-loom-type="decimal" data-loom-decimal-places="2" data-bind-value="price" name="price" type="number" class="currency" required="required"/>
+		<input required="required" data-loom-type="decimal" data-loom-decimal-places="2" data-bind-value="price" name="price" type="number" class="currency"/>
 	</td>
 	<td data-th="Handling charge per pallet (In and Out)" class="input-field no-success-validation-style">
-		<input data-loom-type="decimal" data-loom-decimal-places="2" data-bind-value="charge" name="charge" type="number" class="currency" required="required"/>
+		<input required="required" data-loom-type="decimal" data-loom-decimal-places="2" data-bind-value="charge" name="charge" type="number" class="currency"/>
 	</td>
 	<div class="hidden input-field no-success-validation-style">
 		<input type="hidden" data-loom-type="decimal" data-loom-decimal-places="2" name="reserve" class="currency" value="0" />

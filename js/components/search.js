@@ -155,7 +155,9 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
                    response.results[i].href = '/warehouse-profile/' + response.results[i]._id + '?fromSearch=true';
                    var estimatedTotalPrice = 0.0;
                    for (var j in response.results[i].storageProfile) {
-                       estimatedTotalPrice += response.results[i].storageProfile[j].totalPrice;
+                       if (response.results[i].storageProfile[j].constructor === Object){
+                        estimatedTotalPrice += response.results[i].storageProfile[j].totalPrice;
+                       }
                    }
                    response.results[i].estimatedPrice = estimatedTotalPrice ? estimatedTotalPrice.toFixed(2) :  "N/A";
                    var row = template.bind(response.results[i]);

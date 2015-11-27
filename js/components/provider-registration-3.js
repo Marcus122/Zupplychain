@@ -145,11 +145,15 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         function showVolumeDiscountPopup(){
           //don't need the template stuff anymore.
           //var popup = $("#volume-discount-popup");
-          var volumeDiscount = templates.getTemplate("volume-discount");
-          if (!volumeDiscount) return;
-          var $popup = volumeDiscount.getElement();
-          $('body').append($popup);
-          global.centerPopup($popup);
+          if($("#volume-discount-popup").length === 0){
+            var volumeDiscount = templates.getTemplate("volume-discount");
+            if (!volumeDiscount) return;
+            var $popup = volumeDiscount.getElement();
+            $('body').append($popup);
+            global.centerPopup($popup);
+          }else{
+              $("#volume-discount-popup").removeClass('hidden');
+          }
         }    
     }
     
@@ -414,7 +418,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         function editButtonClick($buttonThatWasClicked) {
             var pricingOrAvailability = $buttonThatWasClicked.data("type");
             var storageId = $buttonThatWasClicked.closest("tr").data("id"),
-                forms = [],
+                $form,
                 $price = $buttonThatWasClicked.closest("tr").next().find('input[name="standard-pricing-price"]'),
                 $handlingCharge = $buttonThatWasClicked.closest("tr").next().find('input[name="standard-pricing-handling-charge"]'),
                 $inUse = $buttonThatWasClicked.closest("tr").next().find('input[name="inUse"]'),
@@ -428,12 +432,17 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
             //show/hide the next tr
             var wasOpen = ($traysToOpen.hasClass("open") && $trayHolderToOpen.hasClass('open'));
             var openTrays = $buttonThatWasClicked.parent().parent().parent().find('.trays.open').find('.tray-holder.open').find('form');
+            var $lastOpenTray = $(".trays.open");
             // for (var i = 0; i<openTrays.length; i++){
             //     $(openTrays[i]).trigger('submit');
             // }
             $(".trays").removeClass('open');
             $(".button-cell").removeClass('open');
             if (!wasOpen) {
+                $form = $lastOpenTray.find('form').first();
+                //if($('.view-edit-buttons').length === 0 || $('.view-edit-buttons').find('a[data-mode="edit"]').hasClass("down")){
+                    $($form).trigger('submit');
+                //}
                 $traysToOpen.addClass("open");
                 if(!$buttonCell.hasClass('success')){
                     $buttonCell.addClass("open");
@@ -460,18 +469,20 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                     }else{
                         $buttonThatWasClicked.closest(".button-cell").removeClass("success");
                     }
-                    forms = $buttonThatWasClicked.closest("tr").next('tr').find('.pricing-trays').find('form');
+                    $form = $buttonThatWasClicked.closest("tr").next('tr').find('.pricing-trays').find('form').first();
                 }else if($buttonThatWasClicked.data('type') === 'availability'){
                    if(checkSectionCompleted([$inUse,$to,$from])){
                         $buttonThatWasClicked.closest(".button-cell").addClass("success");
                     }else{
                         $buttonThatWasClicked.closest(".button-cell").removeClass("success");
                     } 
-                    forms = $buttonThatWasClicked.closest("tr").next('tr').find('.availability-trays').find('form');   
+                    $form = $buttonThatWasClicked.closest("tr").next('tr').find('.availability-trays').find('form').first(); //Saving one form will save everything   
                 }
-                for (var i = 0; i<forms.length; i++){
-                    $(forms[i]).trigger('submit');
-                }  
+                //for (var i = 0; i<forms.length; i++){
+                    //if($('.view-edit-buttons').length === 0 || $('.view-edit-buttons').find('a[data-mode="edit"]').hasClass("down")){
+                        $($form).trigger('submit');
+                    //}
+                //}  
             }
             
             //within the tr show either the price div or availability div depending on which one we clicked.
@@ -540,17 +551,38 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
             clearSkipMarkerRows();
             ev.preventDefault();
             var thisStorageId = $(this).data("storage-id");
-            var  $openCloseCellArea = $(this).parent().parent().parent().prev().find('button[data-form="' + $(this).data('id') + '"]').parent();
+            //var  $openCloseCellArea = $(this).parent().parent().parent().prev().find('button[data-form="' + $(this).data('id') + '"]').parent();
+            var  $openCloseCellArea = $(this).parent().parent().parent().prev().find('.open');
+            var th = $(this).find('button[type="submit"]').data('th') || $(this).find('button.action.done').data('th');
+            if($openCloseCellArea.length === 0) $openCloseCellArea = $(this).parent().parent().parent().prev().find('.button-cell.success[data-th="' + th + '"]')
             var $openTrayLink = $(this).find('.open-tray-link');
+            if(shouldIgnoreTheseInputs($(this).find('input'))){
+                markTheseInputsToBeSkipped($(this).find('input'));
+            }
+            lm.rebind($(this).attr('id'))
             if(lm.isFormValid($(this).attr('id')) ){ //check this form at least is valid before we try and save.
                 saveSingleStorage(thisStorageId);
-                if($openCloseCellArea.parent().next().hasClass('open')){
-                    $openCloseCellArea.addClass('success')
-                    $openCloseCellArea.removeClass('open')
-                    $openTrayLink.removeClass('open');
-                    $openTrayLink.addClass('success');
-                }
+                //if($openCloseCellArea.length > 0){
+                    if (checkSectionCompleted($(this).find('input'),$(this))){
+                        if($(this).data('obligatory')){
+                            $openCloseCellArea.addClass('success')
+                            $openCloseCellArea.removeClass('open');
+                        }
+                        //$openTrayLink.removeClass('open');
+                        $openTrayLink.addClass('success');
+                    }else{
+                        if($(this).data('obligatory')){
+                            $openCloseCellArea.removeClass('success');
+                            $openCloseCellArea.addClass('open');
+                        }
+                        //$openTrayLink.addClass('open');
+                        $openTrayLink.addClass('not-completed');
+                        $openTrayLink.removeClass('success');
+                    }
             }else{
+                lm.focusOnInvalidField($(this).attr('id'));
+            }
+            /*}else{
                 if($openCloseCellArea.parent().next().hasClass('open')){
                     $openCloseCellArea.removeClass('success')
                     $openCloseCellArea.addClass('open')
@@ -558,7 +590,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                     $openTrayLink.removeClass('success');
                 }
                 lm.focusOnInvalidField($(this).attr('id'));
-            }
+            }*/
         });
         
         $(document).on('click',"#save-and-finish",function(ev) {
@@ -660,13 +692,13 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         function shouldIgnoreTheseInputs(inputs){
              var ignore = true;
              for (var i=0;i<inputs.length;i++) {
-                 if ($(inputs[i]).val() === "") {
-                     console.log("found a inputs to ignore");
-                     return true;
+                 if ($(inputs[i]).val() !== "" && $(inputs[i]).attr("name") !== '_csrf' && $(inputs[i]).attr("name") !== 'from' && !$(inputs[i]).attr("disabled")) {
+                     return false;
                  }
              }
              
-             return false;
+             return true;
+             console.log("found a inputs to ignore");
         }
         
         function markThisRowToBeSkipped($row) {
@@ -756,6 +788,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                     return basicPricing;
                 } else {
                     Alerts.showPersistentErrorMessage("Unable to save this storage.. You must enter standard pricing for the storage first.");
+                    lm.focusOnInvalidField($('#'+formId));
                     throw "Basic Pricing invalid";
                     
                 }
@@ -785,6 +818,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                     return pricing;
                 } else {
                     Alerts.showPersistentErrorMessage("Unable to save this storage.. you have some invalid Date Specific Pricing entries");
+                    lm.focusOnInvalidField($('#'+formId));
                     throw "Date range pricing invalid";
                 }
                 unmarkAllTheseRows($rows);
@@ -835,6 +869,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                     return availability;
                 } else {
                     Alerts.showPersistentErrorMessage("Unable to save this storage.. you have some invalid Availability entries");
+                    lm.focusOnInvalidField($('#'+formId));
                     throw "Availability invalid";
                 }
                 unmarkAllTheseRows($rows);

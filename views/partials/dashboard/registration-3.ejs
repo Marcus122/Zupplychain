@@ -45,7 +45,7 @@
 						<%if(authorisations.warehouse.pricing === true){%>
 							<td class="button-cell pricing <%= pricingComplete ?  'success' : '' %>" data-th="Pricing">
 								<span class="edit-data">DATA</span>
-								<button data-type="pricing" type="button" class="popup mini"/>
+								<button data-dont-disable="true" data-type="pricing" type="button" class="popup mini"/>
 							</td>
 						<%}%>
 						<!--<td class="button-cell discounts" data-th="Volume Discount">
@@ -54,7 +54,7 @@
 						
 						<td class="button-cell pallets <%= palletsComplete ? 'success' : ''%>" data-th="Available Pallets">
 							<span class="edit-data">DATA</span>
-							<button data-type="availability" type="button" class="popup mini"/>
+							<button data-dont-disable="true" data-type="availability" type="button" class="popup mini"/>
 						</td>
 					
 						<!--<td data-th="Progress">
@@ -67,16 +67,16 @@
 					<tr class="trays" id="pricing-container-<%=storage._id %>">
 						<td colspan="5" class="js-storage" data-storage-id="<%=storage._id%>">
 							<div class="pricing-trays tray-holder <%if(authorisations.warehouse.pricing === false){%>hidden<%}%>">
-								<form  data-storage-id="<%=storage._id%>" id="standard-pricing-<%=storage._id %>" data-id="price-and-availability-user-data" class="loom-form provider-form standard-pricing-form" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" action="/complete-registration" novalidate>
+								<form  data-storage-id="<%=storage._id%>" id="standard-pricing-<%=storage._id %>" data-id="price-and-availability-user-data" class="loom-form provider-form standard-pricing-form" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" action="/complete-registration" novalidate data-obligatory="true">
 									<% include ../standard-pricing-tray %>
 								</form>
-								<form  data-storage-id="<%=storage._id%>" id="date-range-pricing-<%=storage._id %>" data-id="price-and-availability-user-data" class="loom-form provider-form date-range-pricing-form" data-storage_id="<%=storage._id%>" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" action="/complete-registration" novalidate>
+								<form  data-storage-id="<%=storage._id%>" id="date-range-pricing-<%=storage._id %>" data-id="price-and-availability-user-data" class="loom-form provider-form date-range-pricing-form" data-storage_id="<%=storage._id%>" data-loom-no-submit="true" data-obligatory="false" data-loom-prevent-default="false" method="post" action="/complete-registration" novalidate>
 									<% include ../date-range-pricing-tray %>
 								</form>
 
 							</div>
 							<div class="availability-trays tray-holder">
-								<form  data-storage-id="<%=storage._id%>" id="availability-<%=storage._id %>"  class="loom-form provider-form availability-form" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" data-storage_id="<%=storage._id%>">
+								<form  data-obligatory="true" data-storage-id="<%=storage._id%>" id="availability-<%=storage._id %>"  class="loom-form provider-form availability-form" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" data-storage_id="<%=storage._id%>">
 									<% include ../availability-tray %>
 								</form>
 							</div>
@@ -98,7 +98,7 @@
 				</div>
 			</div>-->
 			<%if(authorisations.warehouse.pricing === true){%>
-				<button href="#" class="add primary mini add-volume-discount">Add volume discount (optional)</button>
+				<button data-dont-disable="true" href="#" class="add primary mini add-volume-discount">Add volume discount (optional)</button>
 			<%}%>
 			<div class="view-edit-buttons bottom">
 				<a class="toggle-view-edit down" data-mode="view">View</a>

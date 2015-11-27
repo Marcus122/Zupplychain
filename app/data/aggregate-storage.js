@@ -47,11 +47,11 @@ var aggregateStorage = function(theStorages, VolumeDiscounts) {
         return willFit;
     }
     
-    function getStorageProfileForWeekCommencing(wcDate, numPallets, numLastWeek, lastWeekProfile) {
+    function getStorageProfileForWeekCommencing(wcDate, numPallets, numLastWeek, lastWeekProfile, firstTimeThrough) {
         var willFit;
         var filledStorageProfile;
         var storagesLastWeek;
-        var storagesThisWeek = getStoragesAsTheyAreThisWeek(wcDate);
+        var storagesThisWeek = getStoragesAsTheyAreThisWeek(wcDate,firstTimeThrough);
         
         willFit = willStorageFitThisWeek(storagesThisWeek,numPallets);
         if (!willFit){
@@ -91,12 +91,12 @@ var aggregateStorage = function(theStorages, VolumeDiscounts) {
         return totalSpace >= numPallets;
     }
     
-    function getStoragesAsTheyAreThisWeek(wcDate) {
+    function getStoragesAsTheyAreThisWeek(wcDate,firstTimeThrough) {
         var storagesThisWeek = [];
         for (var i in storages) {
             var freeSpaces = storages[i].getFreeSpacesAtDate(wcDate);
-            if (freeSpaces == 0) {
-                //continue;
+            if ((freeSpaces == 0 && firstTimeThrough)||freeSpaces === null) {
+                continue;
             }
             storagesThisWeek.push({
                 _id : storages[i]._id,
@@ -227,11 +227,13 @@ var aggregateStorage = function(theStorages, VolumeDiscounts) {
         var firstTimeThrough = true;
         var palletsRequiredLastWeek = 0;
         var lastWeekProfile ={};
+        var heighestAvailableSpace = 0;
         for (var i = 0; i<useageProfile.length; i++){
             for (var key in useageProfile[i]) {
                 var numPallets = useageProfile[i][key];
                 var wcDate = Date.parse(key);
-                var thisWeekProfile = getStorageProfileForWeekCommencing(wcDate, numPallets, palletsRequiredLastWeek, lastWeekProfile);
+                var thisWeekProfile = getStorageProfileForWeekCommencing(wcDate, numPallets, palletsRequiredLastWeek, lastWeekProfile,
+                firstTimeThrough);
                 weeklyProfilesIndexedByDate[key] = thisWeekProfile;
                 if (firstTimeThrough) {
                     firstWeekProfile =  weeklyProfilesIndexedByDate[key]
@@ -239,8 +241,12 @@ var aggregateStorage = function(theStorages, VolumeDiscounts) {
                 }
                 palletsRequiredLastWeek = numPallets;
                 lastWeekProfile = thisWeekProfile;
+                if(heighestAvailableSpace<weeklyProfilesIndexedByDate[key].netSpaces){
+                    heighestAvailableSpace = weeklyProfilesIndexedByDate[key].netSpaces;
+                }
             }
         }
+        weeklyProfilesIndexedByDate.heighestAvailableSpace = heighestAvailableSpace;
         return weeklyProfilesIndexedByDate;   
     }
     

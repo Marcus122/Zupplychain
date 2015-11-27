@@ -486,7 +486,7 @@ function updateWarehouse(req,res){
 					}else{
 						req.body.geo=latlng;
 						req.body.loc = { 'type' : 'Point', 'coordinates' : [latlng.lng, latlng.lat] };
-						//callback(error);
+						callback(null);
 					}
 				});
 			}else{

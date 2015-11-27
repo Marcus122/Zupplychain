@@ -151,6 +151,20 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			var photosAdded = false;
 			if(!$registration.length) return;
             
+			$(document).on('change','input[name="postcode"]',function(){
+				var $this = $(this);
+				var maxLimit = 3;
+				if($this.val().length >=5 && $this.val().length <=8){
+					$this.val($this.val().toUpperCase())
+					var postcodeLastThree = $this.val().substr($this.val().length - 3);
+					if($this.val().indexOf(' ')>=0){
+						maxLimit = 4
+					}
+					var postcodeFirstSection = $this.val().substr(0,$this.val().length - maxLimit);
+					$this.val(postcodeFirstSection + ' ' + postcodeLastThree);
+				}
+			});
+			
 			$registration.on("submit",function(ev){
 				ev.preventDefault();
 				saveWarehouse(function(result){

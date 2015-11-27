@@ -26,9 +26,10 @@
                         maxPallets = warehouse.storageProfile[wcDate].numPallets;
                     }
                 }
+                console.log(warehouse.storageProfile);
                 
         %>
-        <table data-max-pallets="<%= maxPallets * 1.5  %>">
+        <table data-max-pallets="<%= maxPallets * 1.5  %>" data-highest-available-space="<%=warehouse.storageProfile.heighestAvailableSpace%>">
             <thead>
                 <tr>
                     <th>Week Commencing</th>
@@ -64,48 +65,51 @@
                 var index = 0;
                 for (var wcDate in warehouse.storageProfile)
                 { 
-                    var storageProfile = warehouse.storageProfile[wcDate]%>
-                <tr class="animated <%= storageProfile.numPalletsLeft == 0 ? "full" : "not-full" %>">
-                    <td class="week-commencing" data-week-commencing="<%= wcDate %>" ><%= utils.printFormatDate(new Date(wcDate)) %></td>
-                    <td class="<%= !quoteView && "input-field" || "" %> no-success-validation-style">
-                    <% if (quoteView) { %>
-                        <!--<span><%=useageProfile[0][wcDate]%></span>-->
-                        <span><%=useageProfile[index][wcDate]%></span>
-                    <% } else { %>
-                        
-                            <input data-loom-type="number" data-start-date="<%= wcDate %>" type="text" value="<%=useageProfile[index][wcDate]%>" />
-                         
-                    <% } %>
-                    </td>
-                    <td class="bar-container" >
-                        <!--<div data-pallets-required="<%=useageProfile[index][wcDate]%>" class="useage-marker"></div>
-                        <div class="bar <%= storageProfile.numPalletsLeft == 0 ? "full" : "not-full" %>" data-value="<%= storageProfile.numPalletsStored%>">
-                        <%= storageProfile.numPalletsLeft == 0 ? "OK" : storageProfile.numPalletsStored %></div>-->
-                        <div data-pallets-required="<%=useageProfile[index][wcDate]%>" class="useage-marker"></div>
-                        <div class="bar <%= storageProfile.numPalletsLeft == 0 ? "full" : "not-full" %>" data-value="<%= storageProfile.numPalletsStored%>"><%= storageProfile.netSpaces %></div>
-                    </td>
-                    <%if(typeof page !== undefined){
-                        if(typeof page !== undefined && page !== "" && (page === "provider-offer" || page === 'provider-confirm-contract')){%>
-                            <%var storageNames = "";
-                            for (var i = 0; i<storageProfile.storages.length; i++){
-                                storageNames = storageNames + storageProfile.storages[i].name + ': ' + config.palletTypes[storageProfile.storages[i].palletType] + ' width' + ', ';
-                            }
-                            storageNames = storageNames.substring(0,storageNames.length - 1);
-                            storageNames = storageNames.replace(/(^,)|(,$)/g, "")%>
-                            <td class="storage-name" data-storage-name="<%= storageProfile.storages[0].name%>"><%= storageNames%></td>
-                        <%}
-                    }%>
-                    <td><%=storageProfile.highestPriceOfAnyStorageUsed.price  ? Number(storageProfile.highestPriceOfAnyStorageUsed.price).toFixed(2) : "N/A" %></td>
-                    <td>
-                    <% if (storageProfile.totalHandlingCharge) { //we only show the handling charge for weeks where it applies.%>
-                        <%=storageProfile.highestPriceOfAnyStorageUsed.charge ? Number(storageProfile.highestPriceOfAnyStorageUsed.charge).toFixed(2)  :"N/A" %>
-                    <% } %>
+                    if(warehouse.storageProfile[wcDate].constructor === Object){
+                        var storageProfile = warehouse.storageProfile[wcDate]%>
+                    <tr class="animated <%= storageProfile.numPalletsLeft == 0 ? "full" : "not-full" %>">
+                        <td class="week-commencing" data-week-commencing="<%= wcDate %>" ><%= utils.printFormatDate(new Date(wcDate)) %></td>
+                        <td class="<%= !quoteView && "input-field" || "" %> no-success-validation-style">
+                        <% if (quoteView) { %>
+                            <!--<span><%=useageProfile[0][wcDate]%></span>-->
+                            <span><%=useageProfile[index][wcDate]%></span>
+                        <% } else { %>
+                            
+                                <input data-loom-type="number" data-start-date="<%= wcDate %>" type="text" value="<%=useageProfile[index][wcDate]%>" />
+                            
+                        <% } %>
                         </td>
-                    <td class="weeklyTotal"><%=storageProfile.highestPriceOfAnyStorageUsed.charge ? parseFloat(storageProfile.totalPrice,10).toFixed(2) :"N/A"%></td>
-                </tr>
-                <%
-                        runningTotal += storageProfile.totalPrice;
-                        index ++;
+                        <td class="bar-container" >
+                            <!--<div data-pallets-required="<%=useageProfile[index][wcDate]%>" class="useage-marker"></div>
+                            <div class="bar <%= storageProfile.numPalletsLeft == 0 ? "full" : "not-full" %>" data-value="<%= storageProfile.numPalletsStored%>">
+                            <%= storageProfile.numPalletsLeft == 0 ? "OK" : storageProfile.numPalletsStored %></div>-->
+                            <div data-pallets-required="<%=useageProfile[index][wcDate]%>" class="useage-marker"></div>
+                            <div class="bar <%= storageProfile.numPalletsLeft == 0 ? "full" : "not-full" %>" data-value="<%= storageProfile.numPalletsStored%>"><%= storageProfile.netSpaces %></div>
+                        </td>
+                        <%if(typeof page !== undefined){
+                            if(typeof page !== undefined && page !== "" && (page === "provider-offer" || page === 'provider-confirm-contract')){%>
+                                <%var storageNames = "";
+                                for (var i = 0; i<storageProfile.storages.length; i++){
+                                    storageNames = storageNames + storageProfile.storages[i].name + ': ' + config.palletTypes[storageProfile.storages[i].palletType] + ' width' + ', ';
+                                }
+                                storageNames = storageNames.substring(0,storageNames.length - 1);
+                                storageNames = storageNames.replace(/(^,)|(,$)/g, "")%>
+                                <td class="storage-name" data-storage-name="<%= storageProfile.storages[0].name%>"><%= storageNames%></td>
+                            <%}
+                        }%>
+                        <%console.log(storageProfile.highestPriceOfAnyStorageUsed);%>
+                        <td><%=storageProfile.highestPriceOfAnyStorageUsed.price  ? Number(storageProfile.highestPriceOfAnyStorageUsed.price).toFixed(2) : "N/A" %></td>
+                        <td>
+                        <% if (storageProfile.totalHandlingCharge) { //we only show the handling charge for weeks where it applies.%>
+                            <%=storageProfile.highestPriceOfAnyStorageUsed.charge ? Number(storageProfile.highestPriceOfAnyStorageUsed.charge).toFixed(2)  :"N/A" %>
+                        <% } %>
+                            </td>
+                        <td class="weeklyTotal"><%=storageProfile.highestPriceOfAnyStorageUsed.charge ? parseFloat(storageProfile.totalPrice,10).toFixed(2) :"N/A"%></td>
+                    </tr>
+                    <%
+                            runningTotal += storageProfile.totalPrice;
+                            index ++;
+                    }//end if
                 } //end for
                 %>
             </tbody>

@@ -28,10 +28,10 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
 			});
             
             $("#choose-this-warehouse").click(function(e){
-                e.preventDefault();
-                var $popup = $("#choose-this-warehouse-popup");
-                $popup.css({position:"absolute", top:$('#estimated-total-cost').offset().top-400 });
-                $popup.removeClass('hidden');
+                // e.preventDefault();
+                // var $popup = $("#choose-this-warehouse-popup");
+                // $popup.css({position:"absolute", top:$('#estimated-total-cost').offset().top-400 });
+                // $popup.removeClass('hidden');
             });
             
             $("#choose-this-warehouse-popup .close").click(function(){
@@ -308,8 +308,11 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
             var $barTds = $theTable.find("td.bar-container");
             var barWidth = $barTds.width();
             var runningTotal = 0;
+            var highestAvailableSpace = parseInt($theTable.data("highest-available-space"));
             $barTds.each(function() {
                 var thisBar = $(this).find(".bar");
+                var availableSpace = thisBar.html();
+                var spaceDifference = highestAvailableSpace / availableSpace;
                 var baseLeft = thisBar.offset().left - $barTds.offset().left;
                 var thisValue = parseInt(thisBar.data("value"),10);
                 maxValue = parseInt(thisBar.html());
@@ -318,9 +321,11 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
                     thisBar.css("width", (barWidth / maxValue)  * thisValue);
                     palletsWontFit = true;
                 }
+                thisBar.css("width",barWidth/spaceDifference);
                 var $theMarker = thisBar.closest("tr").find(".useage-marker");
                 var markerValue = parseInt($theMarker.data("pallets-required"), 10);
-                var markerLeft = (barWidth /maxValue) * markerValue + baseLeft;
+                //var markerLeft = (barWidth /maxValue) * markerValue + baseLeft;
+                var markerLeft = (barWidth /highestAvailableSpace) * markerValue + baseLeft;
                 $theMarker.css("left", markerLeft);
             });
 
@@ -397,11 +402,13 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
             var runningTotal = 0.0;
             var palletsInLastWeek = 0;
             for (var wcDateString in storageProfile) {
-                var sp = storageProfile[wcDateString];
-                var storedPalletsSuccesfully = sp.numPallets <= sp.numPalletsStored;
-                var palletIncreaseThisWeek = Math.max(sp.numPallets - palletsInLastWeek, 0);
-                runningTotal += parseFloat(sp.totalPrice);
-                palletsInLastWeek = sp.numPallets;
+                if(storageProfile[wcDateString].constructor === Object){
+                    var sp = storageProfile[wcDateString];
+                    var storedPalletsSuccesfully = sp.numPallets <= sp.numPalletsStored;
+                    var palletIncreaseThisWeek = Math.max(sp.numPallets - palletsInLastWeek, 0);
+                    runningTotal += parseFloat(sp.totalPrice);
+                    palletsInLastWeek = sp.numPallets;
+                }
             }
             var totalToDisplay = runningTotal ? (runningTotal).toFixed(2) : "N/A";
             $("#estimated-total-cost .price").html(totalToDisplay);
@@ -412,40 +419,45 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
             var newLargestRequiredValue = 0;
             var $theTable = $(".warehouse-pricing table");
             var template = templates.getTemplate("warehouse-pricing-row");
+            var highestNumPallets = 0;
             for (var wcDateString in storageProfile) {
-                var rowObject = {}
-                var sp = storageProfile[wcDateString];
-                rowObject["wcDate"] = wcDateString;
-                rowObject["palletsRequired"] = sp.numPallets;
-                if (sp.totalPrice === null || sp.totalPrice === undefined || isNaN(sp.totalPrice)){
-                    rowObject["totalPrice"] = 'N/A'
-                } else {
-                    rowObject["totalPrice"] = sp.totalPrice;
-                }
-                newLargestRequiredValue = Math.max(newLargestRequiredValue, sp.numPallets);
-                rowObject["numPalletsStored"] = sp.numPalletsStored;
-                var fits = rowObject["palletsRequired"] <= rowObject["numPalletsStored"];
-                var extraCSSClass = fits ? "full " : "not-full ";
-                rowObject["barText"] = sp.netSpaces;
-                rowObject["cssClass"] = "bar " + extraCSSClass;
-                rowObject["price"] = sp.highestPriceOfAnyStorageUsed.price ? Number(sp.highestPriceOfAnyStorageUsed.price).toFixed(2) : "N/A";
-                if (sp.totalHandlingCharge > 0) {
-                    rowObject["charge"] = sp.highestPriceOfAnyStorageUsed.charge ? Number(sp.highestPriceOfAnyStorageUsed.charge).toFixed(2) : "N/A";
-                } else {
-                    rowObject["charge"] = "";
-                }
-                
-                var $tr = $(".warehouse-pricing table").find("td[data-week-commencing='" + wcDateString + "']").closest('tr');
-                var row = template.bind(rowObject);
-                if (wcDateOfRowThatChanged == wcDateString) {
-                    row.addClass("animated");
-                }
-                row.insertAfter($tr);
-                $tr.remove();
-                
-               
+                if(storageProfile[wcDateString].constructor === Object){
+                    var rowObject = {}
+                    var sp = storageProfile[wcDateString];
+                    rowObject["wcDate"] = wcDateString;
+                    rowObject["palletsRequired"] = sp.numPallets;
+                    if (sp.totalPrice === null || sp.totalPrice === undefined || isNaN(sp.totalPrice)){
+                        rowObject["totalPrice"] = 'N/A'
+                    } else {
+                        rowObject["totalPrice"] = sp.totalPrice;
+                    }
+                    newLargestRequiredValue = Math.max(newLargestRequiredValue, sp.numPallets);
+                    rowObject["numPalletsStored"] = sp.numPalletsStored;
+                    var fits = rowObject["palletsRequired"] <= rowObject["numPalletsStored"];
+                    var extraCSSClass = fits ? "full " : "not-full ";
+                    rowObject["barText"] = sp.netSpaces;
+                    rowObject["cssClass"] = "bar " + extraCSSClass;
+                    rowObject["price"] = sp.highestPriceOfAnyStorageUsed.price ? Number(sp.highestPriceOfAnyStorageUsed.price).toFixed(2) : "N/A";
+                    if (sp.totalHandlingCharge > 0) {
+                        rowObject["charge"] = sp.highestPriceOfAnyStorageUsed.charge ? Number(sp.highestPriceOfAnyStorageUsed.charge).toFixed(2) : "N/A";
+                    } else {
+                        rowObject["charge"] = "";
+                    }
+                    
+                    var $tr = $(".warehouse-pricing table").find("td[data-week-commencing='" + wcDateString + "']").closest('tr');
+                    var row = template.bind(rowObject);
+                    if (wcDateOfRowThatChanged == wcDateString) {
+                        row.addClass("animated");
+                    }
+                    row.insertAfter($tr);
+                    $tr.remove();
+                    if(highestNumPallets<sp.numPallets){
+                        highestNumPallets = sp.numPallets
+                    }
+                } 
             }
             $theTable.data("max-pallets", Math.round(newLargestRequiredValue * 1.5));
+            $theTable.data("highest-available-space",Math.max(highestNumPallets,storageProfile.heighestAvailableSpace))
             calculateAndDisplayTotal(storageProfile);
             initAvailabilityBars($theTable);
             lm.rebind($("#useageProfile-form"));

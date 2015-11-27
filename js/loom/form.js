@@ -147,7 +147,7 @@ define(["jquery", "./formField", "./loomConfig"],function($, FormField, Config){
 			if (!isValid){
 				showValidationMessage();
 				if (JUMP_TO_INVALID_FIELD_ON_SUBMIT) {
-					formElement.find('.input-field.error input').first().focus();
+					formElement.find('.input-field.error input').not('[type="date"]').first().focus();
 				}
 				return;
 			} else {
@@ -163,7 +163,7 @@ define(["jquery", "./formField", "./loomConfig"],function($, FormField, Config){
         }
         
         function focusOnInvalidField(){
-            $(this.formElement).find('.input-field.error input').first().focus();
+            $(this.formElement).find('.input-field.error input').not('[type="date"]').first().focus();
         }
 		
         function reset() {
