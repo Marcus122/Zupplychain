@@ -3,8 +3,12 @@ define({
 	getMaxValidator : function(maxVal, fieldType){
         if (fieldType == "date") { //expecing a date format of yyyy-mm-dd, this way simple string comparison will work
             return function(input) {
-                return input <= maxVal;
-            }
+				if (maxVal.indexOf('/') !== -1){
+					return new Date(parseInt(input.substr(6,4)),parseInt(input.substr(3,2))-1,parseInt(input.substr(0,2))) >=  new Date(parseInt(maxVal.substr(6,4)),parseInt(maxVal.substr(3,2))-1,parseInt(maxVal.substr(0,2)));
+				}else{
+                	return new Date(parseInt(input.substr(6,4)),parseInt(input.substr(3,2))-1,parseInt(input.substr(0,2))) <=  new Date(parseInt(maxVal.substr(0,4)),parseInt(maxVal.substr(5,2))-1,parseInt(maxVal.substr(8,2)));
+				}
+			}
         }
 		return function(input) {
 			if (input === undefined || input === NaN || input === "") {
@@ -16,8 +20,12 @@ define({
 	getMinValidator : function (minVal, fieldType){
        if (fieldType == "date") {
             return function(input) {
-                return new Date(input) >=  new Date(minVal);
-            }
+				if (minVal.indexOf('/') !== -1){
+					return new Date(parseInt(input.substr(6,4)),parseInt(input.substr(3,2))-1,parseInt(input.substr(0,2))) >=  new Date(parseInt(minVal.substr(6,4)),parseInt(minVal.substr(3,2))-1,parseInt(minVal.substr(0,2)));
+				}else{
+					return new Date(parseInt(input.substr(6,4)),parseInt(input.substr(3,2))-1,parseInt(input.substr(0,2))) >=  new Date(parseInt(minVal.substr(0,4)),parseInt(minVal.substr(5,2))-1,parseInt(minVal.substr(8,2)));
+				}
+			}
         }
 		return function(input) {
 			if (input === undefined || input === NaN || input === "") {
@@ -60,7 +68,8 @@ define({
 		return re.test(input);
 	},
 	date : function(input){ // YYYY-MM-DD
-		var re= /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/
+		//var re= /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/
+		var re = /^\d{2}([./-])\d{2}\1\d{4}$/;
 		return re.test(input);
 	},
 	datetime : function(input){

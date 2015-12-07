@@ -96,9 +96,9 @@ define(["jquery"],function($){
             
             var message = $("<div class='loom-alert " + messageClass + "'><p>" + message + "</p></div>");
             $(document.body).append(message);
-        //     if(options && options.centre){
-        //         centerPopup(message);
-        //     }
+             if(options && options.centre){
+                 centerPopup(message);
+             }
             if (settings.noFadeOut) {
                 settings.onComplete(message);
                 return;

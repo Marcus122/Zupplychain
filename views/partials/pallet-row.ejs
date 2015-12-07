@@ -5,10 +5,10 @@
 		  	  toDate.setYear(today.getFullYear() + 1);
               var endOfNextYear = utils.getEndOfNextYear(new Date());
 		  %>
-		<input readonly required type="date" data-loom-limit-day-of-week="1" name="from" class="datepicker" data-bind-value="from" data-loom-add-controls="true" value="" max="<%=utils.formatDate(endOfNextYear) %>"/>
+		<input readonly required type="text" data-loom-type="date" placeholder="dd/mm/yyy" data-loom-limit-day-of-week="1" name="from" class="datepicker" data-bind-value="from" data-loom-add-controls="true" value="" data-bind-min="nextRowFrom" max="<%=utils.formatDate(endOfNextYear) %>"/>
 	</td>
 	<td data-th="To" class="input-field no-success-validation-style">
-		<input readonly data-loom-limit-day-of-week="0" required data-bind-value="to" type="date" name="to" class="datepicker" data-loom-add-controls="true" max="<%=utils.formatDate(endOfNextYear) %>" data-bind-min="from" />
+		<input readonly data-loom-limit-day-of-week="0" required data-bind-value="to" type="text" data-loom-type="date" placeholder="dd/mm/yyy" name="to" class="datepicker" data-loom-add-controls="true" max="<%=utils.formatDate(endOfNextYear) %>" data-bind-min="nextRowFrom" />
 	</td>
 	<td data-retain-value="true" data-do-not-copy="true" data-th="Total Pallets" class="input-field no-success-validation-style">
 		<input disabled required data-bind-value="total" name="total" type="number"/>

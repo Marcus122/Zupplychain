@@ -26,7 +26,7 @@
 						</thead>
 						<tbody>
 							<tr>
-								<td data-field="task"><a href="/contacts-setup" target="_blank">Introduction to contacts setup</a></td>
+								<td data-field="task"><a href="/contacts-setup">Introduction to contacts setup</a></td>
 								<td></td>
 								<td></td>
 							</tr>
@@ -97,9 +97,9 @@
 		</div>
 	<%}%>
 	<%if (dashboardAccessLvl === 0 || dashboardAccessLvl === 1){%>
-		<div class="row types">
+		<div class="row types first-row">
 			<div class="columns six tile-main">
-				<a href="#admin" class="button tile-button">
+				<button data-href="#admin" class="button tile-button">
 					<div class="secondary content-box">
 						<div class="header">
 							<h3>Account</h3>
@@ -111,10 +111,10 @@
 							<p class="columns six">View and edit your account details</p>
 						</div>
 					</div>
-				</a>
+				</button>
 			</div>
 			<div class="columns six tile-main">
-				<a href="#contacts" class="button tile-button">
+				<button data-href="#contacts" class="button tile-button">
 					<div class="secondary content-box">
 						<div class="header">
 							<h3>Contacts</h3>
@@ -126,12 +126,12 @@
 							<p class="columns six">View and edit your warehouse contacts</p>
 						</div>
 					</div>
-				</a>
+				</button>
 			</div>
 		</div>
 		<div class="row types dashboard-access-level-<%=dashboardAccessLvl%>">
 			<div class="columns six tile-main">
-				<a href="#warehouses" class="button tile-button">
+				<button data-href="#warehouses" class="button tile-button">
 					<div class="secondary content-box">
 						<div class="header">
 							<h3>Warehouses</h3>
@@ -144,10 +144,10 @@
 							<p class="columns six">Add additional warehouses</p>
 						</div>
 					</div>
-				</a>
+				</button>
 			</div>
 			<div class="columns six tile-main">
-				<a href="#messages" class="button tile-button">
+				<button data-href="#messages" class="button tile-button">
 					<div class="secondary content-box">
 						<div class="header">
 							<h3>Messages</h3>
@@ -159,13 +159,13 @@
 							<p class="columns six">View your messages</p>
 						</div>
 					</div>
-				</a>
+				</button>
 			</div>
 		</div>
 	<%}else{%>
-		<div class="row types dashboard-access-level-2">
+		<div class="row types first-row dashboard-access-level-2">
 			<div class="columns six tile-main">
-				<a href="#admin" class="button tile-button">
+				<button data-href="#admin" class="button tile-button">
 					<div class="secondary content-box">
 						<div class="header">
 							<h3>Account</h3>
@@ -177,10 +177,10 @@
 							<p class="columns six">View and edit your account details</p>
 						</div>
 					</div>
-				</a>
+				</button>
 			</div>
 			<div class="columns six tile-main">
-				<a href="#messages" class="button tile-button">
+				<button data-href="#messages" class="button tile-button">
 					<div class="secondary content-box">
 						<div class="header">
 							<h3>Messages</h3>
@@ -192,12 +192,12 @@
 							<p class="columns six">View your messages</p>
 						</div>
 					</div>
-				</a>
+				</button>
 			</div>
 		</div>
 		<div class="row types dashboard-access-level-2">
 			<div class="columns six tile-main">
-				<a href="#contacts" class="button tile-button">
+				<button data-href="#contacts" class="button tile-button">
 					<div class="secondary content-box">
 						<div class="header">
 							<h3>Contacts</h3>
@@ -209,7 +209,7 @@
 							<p class="columns six">View and edit your warehouse contacts</p>
 						</div>
 					</div>
-				</a>
+				</button>
 			</div>
 		</div>
 	<%}%>

@@ -27,6 +27,10 @@ var handler = function(app) {
 		});
 	});
 	
+	app.get('/contacts-explanation',function(req,res){
+		res.render('partials/dashboard/contacts-explanation',req.data);
+	});
+	
 	app.get('/dashboard', checkForLogon, function(req,res){
 		if(req.data.user.type === 1 && req.data.user.expiry === null){
 			dashboard.getWarehousesByUser(req.data.user,function(err,data){

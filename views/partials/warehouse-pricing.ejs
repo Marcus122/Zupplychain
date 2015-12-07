@@ -69,7 +69,7 @@
                         var storageProfile = warehouse.storageProfile[wcDate]%>
                     <tr class="animated <%= storageProfile.numPalletsLeft == 0 ? "full" : "not-full" %>">
                         <td class="week-commencing" data-week-commencing="<%= wcDate %>" ><%= utils.printFormatDate(new Date(wcDate)) %></td>
-                        <td class="<%= !quoteView && "input-field" || "" %> no-success-validation-style">
+                        <td data-th="Estimated Requirements" class="<%= !quoteView && "input-field" || "" %> no-success-validation-style">
                         <% if (quoteView) { %>
                             <!--<span><%=useageProfile[0][wcDate]%></span>-->
                             <span><%=useageProfile[index][wcDate]%></span>

@@ -248,7 +248,7 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery", "loom/loomAl
             resultsElem.find('.view-details').attr("href" , "/warehouse-profile/" + data._id + "?fromSearch=true");
             if(data.size && data.size !== 'N/A'){ 
                 data.size = data.size;
-                if(resultsElem.find(".js-size").next('sup').length===0 && resultsElem.find(".js-size").next('.background').length===0) resultsElem.find(".js-size").after('<span class="background">m<sup>2</sup><span>');
+                if(resultsElem.find(".js-size").next('sup').length===0 && resultsElem.find(".js-size").next('.background').length===0) resultsElem.find(".js-size").after('<span class="background">m<sup>2</sup></span>');
             }else{
                 data.size = 'N/A'
                 resultsElem.find(".js-size").next('span').remove();

@@ -46,7 +46,8 @@ a button{
  .button.action,
   button.action{
     .highlight-grad;
-    .slight-shadow; 
+    .slight-shadow;
+    border-collapse:separate; 
     color:@light-text;
  }
  .button.primary,
@@ -309,7 +310,6 @@ button.input-button{
 
 .view-edit-buttons {
     display: inline-block;
-    float: right;
     margin-bottom: 20px;
     width:91px;
     &.bottom{
@@ -364,4 +364,8 @@ button.input-button{
 	button.no-resize{
 		width:auto;
 	}
+}
+
+.footer a.button.home{
+    float:left;
 }

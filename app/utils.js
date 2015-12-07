@@ -38,12 +38,19 @@ module.exports.getEndOfNextYear = function (date) {
     return date;
 }
 
-module.exports.printFormatDate = function(date) {
+module.exports.printFormatDate = function(date,line) {
     var dateString = date.toISOString();
     var yyyy = dateString.substr(0,4);
     var mm = dateString.substr(5,2);
     var dd = dateString.substr(8,2);
     return dd + "/" + mm + "/" + yyyy;
+}
+
+module.exports.formatDateToWire = function(date){
+    var yyyy = date.substr(6,4);
+    var mm   = date.substr(3,2);
+    var dd   = date.substr(0,2);
+    return yyyy + '-' + mm + '-' + dd;
 }
 
 module.exports.getClosestPreviousMonday = function(inDate) {

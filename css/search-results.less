@@ -13,12 +13,20 @@
     
 }
 
+.register-for-updates{
+    right: 0;
+    position: absolute;
+    top: 152px;
+    width: 208px;
+}
+
 #search-area{
     .input-field{
         position:relative;
     }
     .search-nag{
         display:none;
+        z-index:10000;
         position:absolute;
         bottom:50px;
         background-color:@secondary;
@@ -378,7 +386,7 @@
 }
 #results-area{
     position:relative;
-    overflow:initial;
+    overflow:inherit;
     .main{
         position:relative;
         width:100%;
@@ -483,11 +491,7 @@
     }
 }
 
-#search-results-table thead th:first-child{
-    z-index:-1;
-}
-#search-results-table th,
-#search-results-table tr  {
+#search-results-table th  {
        position:relative;
 }
 #search-results-table tr[data-selected="true"]{
@@ -511,7 +515,7 @@
         &:extend(.ion);
         position:absolute;
         right:4px;
-        top:50%;
+        top:attr(data-bottom-top);
         font-size: 1rem;
     }
     &:before{
@@ -519,7 +523,7 @@
         &:extend(.ion);
         position:absolute;
         right:4px;
-        top:40%;
+        top:attr(data-top-top);
         font-size: 1rem;
     }
 }

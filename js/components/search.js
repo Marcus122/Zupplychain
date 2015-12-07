@@ -188,7 +188,7 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
 			   $(".continue-links.footer.form-footer .button.action.large.next").attr("href", response.results[0].href);
                 $("#search-results-table tbody tr").first().addClass("selected");
             });
-            
+            $('#search-results-table').attr("data-loom-remember-sort",response.sameSearch);
             require(["loomTable/Table"], function(loomTable) {
                 var LoomTable = new loomTable($('#search-results-table'), {
                     fields : {
@@ -221,7 +221,18 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
     
     loom.addOnSuccessCallback("search-form", function(response){
         searchFormSuccess(response);
+        setTimeout(function(){
+            addSortArrows($('#search-results-table').find('thead'));
+        },50);
     });
+    
+    function addSortArrows($thead){
+        var height = $thead.height();
+        var sheet = document.styleSheets[0];
+        $thead.find('th.sortable').addClass('dyn-top');
+        sheet.insertRule('th.sortable.dyn-top:after{top:' + height*0.5 + 'px' + '}',0)
+        sheet.insertRule('th.sortable.dyn-top:before{top:' + height*0.4 + 'px' + '}',0)
+    }
     
     loom.addOnErrorCallback("search-form", function(response){
         Alerts.showPersistentErrorMessage("There was an error completing your search");

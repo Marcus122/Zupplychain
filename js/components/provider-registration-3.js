@@ -44,9 +44,12 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
     }
     
     function dateFromInput($inp) {
+        var date;
         console.log("date from input got:" + $inp.val());
         if ($inp.length && $inp.val()){
-            return new Date($inp.val());
+            date =  new Date($inp.val().substr(6,4) + '-' + $inp.val().substr(3,2) + '-' + $inp.val().substr(0,2));
+            //$inp.val($inp.val().substr(8,4) + '/' + $inp.val().substr(5,7) + '/' + $inp.val().substr(0,4));
+            return date;
         }
         return null;
     }
@@ -77,7 +80,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         var fromDate = dateFromInput($from);
         var nextFromDate = dateFromInput($nextFrom);
         
-        if($to.attr('type') != 'date'){
+        if($to.attr('type') != 'date' && $to.data('loom-type') != 'date'){
             setNumberValidators($to,$from,$nextFrom);
             return;
         }
@@ -92,12 +95,13 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         
         //if toDate is less than from, add a day to From and that's the new To value.
         if (toDate && toDate < fromDate) {
-            $to.val(addDays(fromDate,6).toISOString().substr(0,10));
+            $to.val(changeDateFormat('slash','dash',addDays(fromDate,6).toISOString().substr(0,10)));
         }
         
         //if next rows From is less than this rows To, increase next row's from.
         if ((!nextFromDate && toDate) || (toDate && toDate > nextFromDate)) {
-            $nextFrom.val(addDays(toDate,1).toISOString().substr(0,10));
+            $nextFrom.val(changeDateFormat('slash','dash',addDays(toDate,1).toISOString().substr(0,10)));
+            nextFromDate = dateFromInput($nextFrom);
         }
         
         
@@ -109,6 +113,14 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
             $to.attr("max", endOfNextYear.toISOString().substr(0,10));
         }
         
+    }
+    
+    function changeDateFormat(toFormat,fromFormat,date){
+        if(toFormat==='slash' && fromFormat === 'dash'){
+            return date.substr(8,2) + '/' + date.substr(5,2) + '/' + date.substr(0,4);
+        }else if (toFormat === 'dash' && fromFormat === 'slash'){
+            return date.substr(6,4) + '-' + date.substr(3,2) + '-' + date.substr(0,2);
+        }
     }
     
     function addDays(indat, days) {
@@ -276,15 +288,17 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         function addRow($table, templateName) {
             var data = {};
             var template = templates.getTemplate(templateName);
-            var to = $table.find('tbody tr').last().find('input[name="to"][type="date"]').val();
+            var to = $table.find('tbody tr').last().find('input[name="to"][data-loom-type="date"][type="text"]').val();
             if(to){
-                date = new Date(to);
+                to = changeDateFormat('dash','slash',to);
+                var date = new Date(to);
                 date.setDate(date.getDate()+1);
             }else{
                 date = new Date();
             }
             if (templateName !== 'pricing-row'){
-                data.from = date.toISOString().substring(0, 10);
+                data.from = changeDateFormat('slash','dash',date.toISOString().substring(0, 10));
+                data.nextRowFrom = date.toISOString().substring(0, 10);
             }
             var $newrow = template.bind(data);
             var $totalPalletsInput = $newrow.find("input[name='total']"); 
@@ -440,9 +454,9 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
             $(".button-cell").removeClass('open');
             if (!wasOpen) {
                 $form = $lastOpenTray.find('form').first();
-                //if($('.view-edit-buttons').length === 0 || $('.view-edit-buttons').find('a[data-mode="edit"]').hasClass("down")){
+                if($('.view-edit-buttons').length === 0 || $('.view-edit-buttons').find('a[data-mode="edit"]').hasClass("down")){
                     $($form).trigger('submit');
-                //}
+                }
                 $traysToOpen.addClass("open");
                 if(!$buttonCell.hasClass('success')){
                     $buttonCell.addClass("open");
@@ -479,9 +493,9 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                     $form = $buttonThatWasClicked.closest("tr").next('tr').find('.availability-trays').find('form').first(); //Saving one form will save everything   
                 }
                 //for (var i = 0; i<forms.length; i++){
-                    //if($('.view-edit-buttons').length === 0 || $('.view-edit-buttons').find('a[data-mode="edit"]').hasClass("down")){
+                    if($('.view-edit-buttons').length === 0 || $('.view-edit-buttons').find('a[data-mode="edit"]').hasClass("down")){
                         $($form).trigger('submit');
-                    //}
+                    }
                 //}  
             }
             
@@ -835,7 +849,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                         continue;
                     }
                     if (f == "from" || f == "to") {
-                        pricing[f] = new Date(value).toISOString().substring(0, 10);
+                        pricing[f] = new Date(changeDateFormat('dash','slash',value)).toISOString().substring(0, 10);
                     } else {
                         pricing[f] = value;
                     }
@@ -886,7 +900,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                         continue;
                     }
                     if (f == "from" || f == "to") {
-                        avail[f] = new Date(value).toISOString().substring(0, 10);
+                        avail[f] = new Date(changeDateFormat('dash','slash',value)).toISOString().substring(0, 10);
                     } else {
                         avail[f] = value;
                     }

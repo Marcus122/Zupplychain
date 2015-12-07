@@ -52,15 +52,15 @@
                                                   var thisPallets = storage.pallets[i];
                                                   var nextPallets = (i+1 < storage.pallets.length) ? storage.pallets[i+1] : null
 											  %>
-											<input readonly required="required" type="date" data-loom-limit-day-of-week="1" name="from" class="datepicker" data-bind-value="from" data-loom-add-controls="true" value="<%=thisPallets.from.toISOString().substring(0, 10)%>" min="<%= lastPallets ? utils.formatDate(lastPallets.from) : utils.formatDate(lastMonday) %>" />
+											<input readonly required="required" type="text" data-loom-type="date" placeholder="dd/mm/yyyy" data-loom-limit-day-of-week="1" name="from" class="datepicker" data-bind-value="from" data-loom-add-controls="true" value="<%=utils.printFormatDate(thisPallets.from)%>" min="<%= lastPallets ? utils.formatDate(lastPallets.from) : utils.formatDate(lastMonday) %>" />
 										</td>
 										<%if(thisPallets.to !== ""){%>
 											<td data-th="To" class="input-field no-success-validation-style">
-												<input required="required" readonly data-loom-limit-day-of-week="0" required="required" data-bind-value="to" type="date" name="to" class="datepicker" data-loom-add-controls="true" value="<%=thisPallets.to.toISOString().substring(0, 10)%>" min="<%=thisPallets.from.toISOString().substring(0, 10)%>" max="<%nextPallets ? utils.formatDate(nextPallets.from) : utils.formatDate(endOfNextYear)%>"/>
+												<input type="text" data-loom-type="date" placeholder="dd/mm/yyyy" required="required" readonly data-loom-limit-day-of-week="0" required="required" data-bind-value="to" name="to" class="datepicker" data-loom-add-controls="true" value="<%=utils.printFormatDate(thisPallets.to)%>" min="<%=thisPallets.from.toISOString().substring(0, 10)%>" max="<%nextPallets ? utils.formatDate(nextPallets.from) : utils.formatDate(endOfNextYear)%>"/>
 											</td>
 										<%}else{%>
 											<td data-th="To" class="input-field no-success-validation-style">
-												<input required="required" readonly data-loom-limit-day-of-week="0" required="required" data-bind-value="to" type="date" name="to" class="datepicker" data-loom-add-controls="true" value="" data-bind-min="from" min="" max="<%=utils.formatDate(endOfNextYear)%>"/>
+												<input type="text" data-loom-type="date" placeholder="dd/mm/yyy" required="required" readonly data-loom-limit-day-of-week="0" required="required" data-bind-value="to" name="to" class="datepicker" data-loom-add-controls="true" value="" data-bind-min="from" min="" max="<%=utils.formatDate(endOfNextYear)%>"/>
 											</td>
 										<%}%>
 										<td data-retain-value="true" data-do-not-copy="true" data-th="Total Pallets" class="input-field no-success-validation-style">
@@ -85,10 +85,10 @@
 									<%if(storage.pallets.length === 0){%>
                                     <tr class="js-single-availability-inputs-container">
 										<td data-th="From" class="input-field no-success-validation-style">
-											<input required="required" readonly required="required" type="date" data-loom-limit-day-of-week="1" name="from" class="datepicker" data-bind-value="from" data-loom-add-controls="true" min="<%= lastPallets ? utils.formatDate(lastPallets.to) : utils.formatDate(lastMonday)%> " max="<%=utils.formatDate(endOfNextYear)%>" value="<%=lastPallets ? utils.formatDate(utils.addDays(lastPallets.to,1)) : utils.formatDate(lastMonday)%>"/>
+											<input required="required" readonly required="required" type="text" data-loom-type="date" placeholder="dd/mm/yyy" data-loom-limit-day-of-week="1" name="from" class="datepicker" data-bind-value="from" data-loom-add-controls="true" min="<%= lastPallets ? utils.formatDate(lastPallets.to) : utils.formatDate(lastMonday)%> " max="<%=utils.formatDate(endOfNextYear)%>" value="<%=lastPallets ? utils.printFormatDate(utils.addDays(lastPallets.to,1)) : utils.printFormatDate(lastMonday)%>"/>
 										</td>
 										<td data-th="To" class="input-field no-success-validation-style">
-											<input required="required" readonly data-loom-limit-day-of-week="0" required="required" data-bind-value="to" type="date" name="to" class="datepicker" data-loom-add-controls="true" value="" data-bind-min="from" min="" max="<%=utils.formatDate(endOfNextYear)%>"/>
+											<input required="required" readonly data-loom-limit-day-of-week="0" required="required" data-bind-value="to" type="text" data-loom-type="date" placeholder="dd/mm/yyy" name="to" class="datepicker" data-loom-add-controls="true" value="" data-bind-min="from" min="" max="<%=utils.formatDate(endOfNextYear)%>"/>
 										</td>
 										<td data-retain-value="true" data-do-not-copy="true" data-th="Total Pallets" class="input-field no-success-validation-style">
 											<input required="required" data-do-not-enable="true" disabled required="required" data-bind-value="total" name="total" type="number" value="<%= storage.palletSpaces %>"/>

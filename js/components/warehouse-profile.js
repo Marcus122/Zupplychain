@@ -306,10 +306,23 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
             var palletsWontFit = false;
             var maxValue = parseInt($theTable.data("max-pallets"), 10); //the max value is what value a bar would need to have to be 100%;
             var $barTds = $theTable.find("td.bar-container");
+            var $requirementsTds = $theTable.find('td[data-th="Estimated Requirements"]');
             var barWidth = $barTds.width();
             var runningTotal = 0;
             var highestAvailableSpace = parseInt($theTable.data("highest-available-space"));
-            $barTds.each(function() {
+            $requirementsTds.each(function() { //First get the highest value
+                var estimatedRequirement = parseInt($(this).find('input').val());
+                if(estimatedRequirement > highestAvailableSpace){
+                    highestAvailableSpace = estimatedRequirement;
+                    $theTable.attr("data-highest-available-space",highestAvailableSpace)
+                }
+            });
+            $barTds.each(function() { //Now build the bars
+                var estimatedRequirement = parseInt($(this).parent().find('td[data-th="Estimated Requirements"]').find('input').val());
+                if(estimatedRequirement > highestAvailableSpace){
+                    highestAvailableSpace = estimatedRequirement;
+                    $theTable.attr("data-highest-available-space",highestAvailableSpace)
+                }
                 var thisBar = $(this).find(".bar");
                 var availableSpace = thisBar.html();
                 var spaceDifference = highestAvailableSpace / availableSpace;
@@ -457,7 +470,7 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
                 } 
             }
             $theTable.data("max-pallets", Math.round(newLargestRequiredValue * 1.5));
-            $theTable.data("highest-available-space",Math.max(highestNumPallets,storageProfile.heighestAvailableSpace))
+            $theTable.data("highest-available-space",Math.max(highestNumPallets,storageProfile.heighestAvailableSpace));
             calculateAndDisplayTotal(storageProfile);
             initAvailabilityBars($theTable);
             lm.rebind($("#useageProfile-form"));

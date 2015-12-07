@@ -68,7 +68,7 @@
 				%>
 				<div class="input-field">
 					<label for="start-date">Start Date</label>
-					<input type="date" name="start-date" data-loom-add-controls="true" readonly required="required" min="<%=minDate.toISOString().substring(0, 10)%>" max="<%=maxDate.toISOString().substring(0, 10)%>" value="<%= session.whSC ? session.whSC.sc[0].startDate : today.toISOString().substring(0, 10)%>"/>
+					<input type="text" data-loom-type="date" placeholder="dd/mm/yyy" name="start-date" data-loom-add-controls="true" readonly required="required" min="<%=minDate.toISOString().substring(0, 10)%>" max="<%=maxDate.toISOString().substring(0, 10)%>" value="<%= session.whSC ? session.whSC.sc[0].startDate : utils.printFormatDate(today)%>"/>
 				</div>
 				<div class="input-field">
 					<label for="minDuration">Estimated Period</label>

@@ -151,9 +151,9 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 				var $discountPopup = $('.discount-popup');
 				if($('.view-edit-buttons').length > 0 && $(this).closest('#view-edit-warehouse').find('.view-edit-buttons').find('a[data-mode="view"]').hasClass("down")){
 					changeToDisplayMode($discountPopup);
-					var $lastTr = $('#volume-discount-table').find('tr').last();
-					if($lastTr.find('td.discount-to').val() === "" && $lastTr.find('td.discount-value').val() === ""){
-						$lastTr.remove();
+					var $trs = $('#volume-discount-table').find('tbody tr');
+					if($trs.last().find('td.discount-to').val() === "" && $trs.last().find('td.discount-value').val() === "" && $trs.length > 1){
+						$trs.last().remove();
 					}
 				}else if ($('.view-edit-buttons').length === 0 || $(this).closest('#view-edit-warehouse').find('.view-edit-buttons').find('a[data-mode="edit"]').hasClass("down")){
 					changeToEditMode($discountPopup);
@@ -326,7 +326,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 		function prepareWarehouseView($this){
 			var $viewEditButtons = $('.view-edit-buttons');
 			$this.closest('div[data-view="warehouses"]').find('.content-box[data-content="warehouses"]').addClass('hidden');
-			$this.closest('.dashboard-container').parent('.main').css('background-color','initial');
+			$this.closest('.dashboard-container').parent('.main').css('background-color','#fff');
 			//$this.closest('div[data-view="warehouses"]').find('input[type="date"]').datepicker().removeClass('hidden');
 			loom = new Loom();
 			if($this.data('action') === ACTION_ADD_NEW_WAREHOUSE){
@@ -344,6 +344,17 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 				$('.dashboard-container').removeClass('nine');
 				$('.dashboard-container').addClass('eleven');
 			}
+			$(document).on('click','button.tile-button',function(evt){
+				if (evt.target.nodeName !== 'A'){
+					var href = $(this).data('href');
+					goToView(href);
+					$('li.active').removeClass('active');
+					$('.dashboard-back').removeClass('hidden');
+					$('#vertical-nav').find('a[href="' + href + '"]').parent().addClass('active');
+					scrollToPos('body');
+					minimiseDashboardNav($('li.minimise-dashboard-nav'));
+				}
+			});
 			$(document).on('click','li.minimise-dashboard-nav',function(){
 				minimiseDashboardNav($(this));
 			});
@@ -447,7 +458,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			
 			$('a[data-action="go-to-matrix"]').click(function(e){
 				e.preventDefault();
-				scrollToPos($(this).attr('href'),{offset:{top:-100},margin:true}); 
+				scrollToPos($(this).attr('href'),{offset:{top:-110},margin:true}); 
 			});
 			
 			function checkContactIsNotUsed($rows,email){
@@ -597,8 +608,13 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 											if(response.data.expiry === null){
 												currentRows[cbDone-1].find('td[data-field="register-status"]').append('<p class="registered-status complete">Registered</p>');
 											}else{
-												currentRows[cbDone-1].find('td[data-field="register-status"]').append('<p class="registered-status pending">Pending</p>');
-											}
+												if(response.data.expiry < new Date().toISOString()){
+													currentRows[cbDone-1].find('td[data-field="register-status"]').append('<p class="registered-status expired">Expired</p>');
+													currentRows[cbDone-1].find('td[data-field="resend-email"]').append('<button name="resend-email" class="button action mini" data-disabled-on-ajax="true">Resend</button>');
+												}else{
+													currentRows[cbDone-1].find('td[data-field="register-status"]').append('<p class="registered-status pending">Pending</p>');
+												}
+											}	
 											
 											currentRows[cbDone-1].attr('data-id',response.data.userId);
 											currentRows[cbDone-1].attr('data-values-added',"true");
@@ -720,7 +736,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 								//$rows[i].remove();
 								if(cbCompleted === len){
 									for (var j= 0; j<deletedRows.length; j++){
-										deletedRows[j].remove();
+										$(deletedRows[j]).remove();
 									}
 									$rows = $table.find('tbody').find('tr');
 									for(var k = 0; k<$rows.length; k++){

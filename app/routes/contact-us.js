@@ -1,5 +1,6 @@
 var emailer = require('../controllers/emailer.js');
 var local = require("../local.config.js");
+var RegisterForUpdates = require('../controllers/register-for-updates.js');
 var handler = function(app) {
 	app.post('/send-email',function(req,res){
 		req.data.title = 'Contact Us';
@@ -17,7 +18,17 @@ var handler = function(app) {
 					if(err){
 						setResponse('Error: Request not sent',res,true);
 					}else{
-						setResponse('Success: Request sent',res,false);
+						if(req.body['your-enquiry'] === 'Register for Updates'){
+							RegisterForUpdates.saveData(req.body.name,req.body["company-name"],req.body.email,req.body.telephone,function(err){
+								if(err){
+									setResponse('Error: Request not sent',res,true);
+								}else{
+									setResponse('Success: Request sent',res,false);
+								}
+							});
+						}else{
+							setResponse('Success: Request sent',res,false);
+						}
 					}
 				});
 			}else{

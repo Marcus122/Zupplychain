@@ -178,6 +178,8 @@
     background: -o-linear-gradient(top, @top 0%,@bottom 100%); /* Opera 11.10+ */
     background: -ms-linear-gradient(top, @top 0%,@bottom 100%); /* IE10+ */
     background: linear-gradient(to bottom, @top 0%,@bottom 100%); /* W3C */
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=@top, endColorstr=@bottom)";/*IE 9-*/
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=@top, endColorstr=@bottom);/*IE 9-*/
  }
  
  .highlight-grad{
@@ -753,8 +755,10 @@ span.highlight-bright{
     min-width:122px;
  }
  th {
-    background-color:@tertiary;
     border-right: 1px solid @white;
+ }
+ thead{
+     background: @tertiary;
  }
  th:last-child{
     border-right:1px solid @tertiary;
@@ -884,7 +888,7 @@ span.highlight-bright{
     .tray-holder{
         display:none;
         &.open {
-            display:initial;
+            display:block;
         }
     }
     .aside{

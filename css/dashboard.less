@@ -160,7 +160,7 @@
 		padding-top:0;
 	}
 	a{
-		text-decoration: initial;
+		text-decoration: none;
 	}
 	.banner{
 		margin-bottom:0;
@@ -172,10 +172,13 @@
 		display: inline-block;
 		margin-top: 20px;
 	}
-	a.tile-button{
-		text-align: initial;
+	.first-row{
+		.unit-margin-bottom(2);
+	}
+	button.tile-button{
+		text-align: left;
 		color: #333;
-		text-transform: initial;
+		text-transform: none;
 		padding: 0;
 		white-space: normal;
 		width:100%;
@@ -285,6 +288,16 @@
 		background-color: #6a6666;
 	}
 	div[data-view="contacts"]{
+		.header{
+			position: relative;
+			.button{
+				position: absolute;
+				right: 0;
+				top: 0;
+				margin-top: 13px;
+				margin-right: 13px;
+			}
+		}
 		.button-container{
 			#add-new-contact-container{
 				&:extend(.add-new-contacts-container);
@@ -459,6 +472,21 @@
 				margin-right:20px;
 			}
 		}
+		.view-edit-buttons{
+			position:relative;
+			left:991px;
+		}
+		#price-and-availability-user-data
+			.content-box{
+				.view-edit-buttons{
+					left: 606px;
+				}
+			}
+			form#define-space{
+				.view-edit-buttons{
+					left:911px;
+				}
+			}
 	}
 	.dashboard-table{
 		border-collapse:separate;
@@ -491,7 +519,8 @@
 			margin-bottom:0;
 		}
 	}
-	&#contacts-setup{
+	&#contacts-setup,
+	&#contacts-explanation{
 		section .main{
 			padding-left: 0;
 			padding-top: 0;
@@ -608,5 +637,11 @@
 				background:#d7d7d7;
 			}
 		}
+	}
+}
+
+#change-password-form{
+	div[data-function="save-buttons"] button{
+		.unit-margin-top(2);
 	}
 }

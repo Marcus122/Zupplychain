@@ -33,7 +33,8 @@ define(["jquery","loom/loom","loom/loomAlerts","templates/templates"], function 
 				centerPopup($popup);
 			}
 			$($popup).removeClass('hidden');
-			$popup.find('iframe').attr('src', $this.data('url'));
+			$popup.find('source').attr('src', $this.data('url'));
+			$popup.find('source').attr('type', 'video/' + $this.data('url').split('.')[1]);
 			if($this.attr('id') === 'reg-help-bubble' ){
 				$this.addClass('hidden');
 			}

@@ -1,0 +1,47 @@
+<% include ../top %> 
+<main id="contacts-explanation" class="dashboard"><!--Part of the dashboard-->
+	<div class="banner row">
+		<h1>EXPLANATION OF ZUPPLYCHAIN STORAGE PROVIDER CONTACTS</h1>
+	</div>
+	<section>
+		<div class="main">
+			<div class="columns twelve">
+				<div class="secondary content-box">
+					<fieldset class="main">
+						<div class="container">
+							<p class="heading">Introduction</p>
+							<p>Once a warehouse has been registered on Zupplychain, we ask the Master Contact to set up other contacts for each warehouse that has been registered so as to respond to customer enquiries and manage transactions and operations.</p>
+							<p>For each type of contact, there are two names nominated The second name will only be contacted should the first one not respond within a set period of time, usually 24 hours. The first contact will be copied on any messages sent to the second contact.</p>
+							<p>The same names can be used for different contact roles or as second contacts for other roles. You same name cannot be specified as first and second contact for a specific role. <a data-action="go-to-matrix" href="#authorisation-matrix">You can find a summary of contact roles at the bottom of this page.</a></p>
+							<p>The Zupplychain system will automatically mail your business’ contacts and those of the customer whenever there is a need to provide or respond to information. Many of the mails will just require a ‘confirmation’ or a tick box response. Zupplychain makes it that easy! There’s no need to remember or record customer contact details, phone numbers or e mail addresses. And all your inbound and outbound messages – whether concerning enquiries, agreed contracts or operational matters – can be found on your dashboard, which you will be able to see once you have registered. As well as receiving messages via the dashboard, all nominated contacts will receive the messages relevant to their role in their specified e mail in box.</p>
+							<p class="heading">Master Contacts</p>
+							<p>Master Contact are the sole users who can set or amend pricing for all warehouses. This contact can also amend availability, and will have full access to the dashboard. The Master Contact is the only contact who can add or amend registration details for any warehouse.</p>
+							<p>All further contacts can be warehouse specific.</p>
+							<p class="heading">Availability Contact</p>
+							<p>This contact is the only one, other than the Master Contact and the Enquiries Contact, who can add or amend registration details for the specified warehouse, including availability (but not pricing).</p>
+							<p class="heading">Enquiries Contact</p>
+							<p>When a potential customer chooses your warehouse, we will send a detailed enquiry to the Enquiries Contact. The enquiry will detail the customer’s search criteria and your storage name and pricing to which it has been matched. This Enquiries Contact will need to respond within 48 hours confirming availability, offering payment terms and, where requested, offering an in-bound transport price; or this decline the enquiry.</p>
+							<p>The Enquiries Contact will be able to add or amend registration details and availability (but not pricing) for the specified warehouse.</p>
+							<p class="heading">Transport Co-ordinator</p>
+							<p>If a customer has agreed an inbound transport quotation, the Transport Co-ordinator will be contacted with the details. The Enquiries Contact will have previously quoted for the transport requirement.</p>
+							<p class="heading">Goods-In Contact</p>
+							<p>Once there is an agreed contract with a customer, we will start messaging the customer and the storage provider’s Goods-In Contact to confirm delivery dates, times and exact quantities.</p>
+							<p class="heading">Picking and Dispatch Contact</p>
+							<p>A picking and dispatch contact will be contacted for out-bound movements.</p>
+							<p class="heading">Accounts and Credit Control</p>
+							<p>Zupplychain will send you and the customer a pro forma invoice to send the customer, based on Zupplychain’s records of the number of pallets held and your contract pricing. We will send this to the Accounts Contact. Zupplychain will also monitor customer payment history with your Credit Controller (who may be the same contact as Accounts).</p>
+							<p class="heading" id="authorisation-matrix">Summary of Contact Roles</p>
+							<% include authorisations-table%>
+						</div>
+					</fieldset>
+				</div>
+			</div>
+		</div>
+	</section>
+	<div class="continue-links footer form-footer">
+		<div class="container">
+			<a href="#" class="button simple tandc">View Terms and Conditions</a>
+		</div>
+	</div>
+</main>
+<% include ../bottom %>

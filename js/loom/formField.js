@@ -27,6 +27,7 @@ function FormField($inputElement, $typeName) {
     this.DECIMAL_PLACES_ATTR_NAME               = "data-loom-decimal-places";
     this.GREATER_THAN_ATTR_NAME                 = "data-loom-greater-than";
     this.DOES_NOT_MATCH_ATTR_NAME               = "data-loom-does-not-match";
+    this.DONE_NOT_ADD_SUCCESS_CSS               = "data-loom-do-not-show-success-css"
     
     //Class properties
     this.value                  = "";
@@ -318,7 +319,9 @@ FormField.prototype.clearValidationMessages = function(){
     }
 		
 FormField.prototype.showSuccessMessage = function(){
-            this.validationElement.addClass("success");
+            if(this.element.closest('form').attr(this.DONE_NOT_ADD_SUCCESS_CSS) !== "true"){
+                this.validationElement.addClass("success");
+            }
     }
 		
 FormField.prototype.showValidationMessage = function(nameOfValidatorThatFailed){
@@ -580,12 +583,13 @@ ADate.prototype.setValueFromBoundInput = function(input) {
         contents = input; //optionally passing in a value;
     }
     // if in format DD/MM/YYYY, convert to YYYY-MM-DD for the back end - in modern browsers the browser will convert to YYYY-MM-DD so we need to preserve that.
-    if (contents.indexOf("/") != -1) {
+    if (contents.indexOf("/") != -1 && 1===2) {
         var components = this.element.val().split("/");
         var year = components[2];
         var month = components[1]
         var day = components[0];
-        this.value = year + '-' + month + '-' + day;
+        //this.value = year + '-' + month + '-' + day;
+        this.value = day + "/" + month + "/" + year;
     } else {
         this.value = this.element.val(); // just assume everythings ok, the validator will pick up any errors.
     }
@@ -599,12 +603,29 @@ ADate.prototype.doesBrowserSupportDateField = function() {
     return !(input.value === notADateValue);
 }
 
+ADate.prototype.convertToNoneHTML5DateStr = function(dateStr){
+    if(dateStr){
+        var d = new Date(dateStr);
+        if(Object.prototype.toString.call(d) === "[object Date]"){
+            if(isNaN(d.getTime())){
+                return dateStr.substr(8,10) + '-' + dateStr.substr(3,2) + '-' + dateStr.substr(0,2);
+            }else{
+                return dateStr;
+            }
+        }else{
+            return dateStr;
+        }
+    }
+}
+
 ADate.prototype.setupControls = function() {
     var that = this;
     var dateFormat = "dd/mm/yy";
-    if (this.doesBrowserSupportDateField()) { //if the browser supports HTML5 date type, we need to use the spec format of yyyy-mm-dd;
+    /*if (this.doesBrowserSupportDateField()) { //if the browser supports HTML5 date type, we need to use the spec format of yyyy-mm-dd;
         dateFormat = "yy-mm-dd"
-    }
+        this.element.attr('min',this.convertToNoneHTML5DateStr(this.element.attr('min')));
+        this.element.attr('max',this.convertToNoneHTML5DateStr(this.element.attr('max')));
+    }*/
     var minDate = this.element.attr('min') ? new Date(this.element.attr('min')) : null;
     var maxDate = this.element.attr('max') ? new Date(this.element.attr('max')) : null;
     var limitDayOfWeekTo = parseInt(this.element.attr("data-loom-limit-day-of-week"));
@@ -624,7 +645,8 @@ ADate.prototype.setupControls = function() {
             dateFormat: dateFormat,
             onSelect: function(dateText, inst) {
                 if(dateText !== inst.lastVal){
-                    $(this).change();
+                    //$(this).val(dateText);
+                   $(this).change();
                 }
                 that.setValueFromBoundInput(dateText);
                 that.isValid();

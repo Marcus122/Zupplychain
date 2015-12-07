@@ -148,6 +148,7 @@ exports.config = {
     },
     
     contactUsEnquires: [
+        'Register for Updates',
         'Offering Storage',
         'Looking for Space',
         'Media Enquires',

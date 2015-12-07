@@ -70,13 +70,13 @@
 								<form  data-storage-id="<%=storage._id%>" id="standard-pricing-<%=storage._id %>" data-id="price-and-availability-user-data" class="loom-form provider-form standard-pricing-form" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" action="/complete-registration" novalidate data-obligatory="true">
 									<% include ../standard-pricing-tray %>
 								</form>
-								<form  data-storage-id="<%=storage._id%>" id="date-range-pricing-<%=storage._id %>" data-id="price-and-availability-user-data" class="loom-form provider-form date-range-pricing-form" data-storage_id="<%=storage._id%>" data-loom-no-submit="true" data-obligatory="false" data-loom-prevent-default="false" method="post" action="/complete-registration" novalidate>
+								<form data-loom-do-not-show-success-css="true" data-storage-id="<%=storage._id%>" id="date-range-pricing-<%=storage._id %>" data-id="price-and-availability-user-data" class="loom-form provider-form date-range-pricing-form" data-storage_id="<%=storage._id%>" data-loom-no-submit="true" data-obligatory="false" data-loom-prevent-default="false" method="post" action="/complete-registration" novalidate>
 									<% include ../date-range-pricing-tray %>
 								</form>
 
 							</div>
 							<div class="availability-trays tray-holder">
-								<form  data-obligatory="true" data-storage-id="<%=storage._id%>" id="availability-<%=storage._id %>"  class="loom-form provider-form availability-form" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" data-storage_id="<%=storage._id%>">
+								<form  data-loom-do-not-show-success-css="true" data-obligatory="true" data-storage-id="<%=storage._id%>" id="availability-<%=storage._id %>"  class="loom-form provider-form availability-form" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" data-storage_id="<%=storage._id%>">
 									<% include ../availability-tray %>
 								</form>
 							</div>

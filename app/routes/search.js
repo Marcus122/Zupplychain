@@ -50,6 +50,7 @@ var handler = function(app) {
 function searchHandler(req,res){
     var resultsData = req.data.results;
     resultsData.userWarehouse = req.data.userWarehouse;
+    resultsData.sameSearch = req.data.sameSearch;
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify(resultsData));
 }
@@ -66,7 +67,7 @@ function isSessionSearchEqualToQuery(newSearch, sessionSearch){
         newSearch.totalPallets === sessionSearch.totalPallets &&
         newSearch.minDuration === sessionSearch.minDuration &&
         newSearch.postcode === sessionSearch.postcode &&
-        newSearch.radius === sessionSearch.radius &&
+        newSearch.radius === sessionSearch.maxDistance &&
         parseInt(newSearch.palletType) === sessionSearch.palletType &&
         newSearch.weight === sessionSearch.weight &&
         newSearch.height === sessionSearch.height &&
@@ -141,6 +142,7 @@ function doSearch(query,req,res,sameSearch,next) {
             req.data.error = error;
         }
         req.data.results = results;
+        req.data.sameSearch = sameSearch;
             if (sameSearch === true || sameSearch == undefined){
                 getSelectedWarehousesbyUser(req,function(err,userWarehouse){
                     req.data.userWarehouse = userWarehouse;
@@ -250,13 +252,17 @@ function getUseageProfileFromRequest(req) {
 
 function getQueryFromRequest(req) {
         
-
+        var startDate;
         var radius          = parseInt(req.body["max-distance"],10);
         var radiusInMetres  = radius * 1609.344;
         var minDuration     = parseInt(req.body.minDuration,10);
 		var weight          = parseFloat(req.body.weight, 10);
 		var height          = parseFloat(req.body.height, 10);
-        var startDate       = new Date(req.body["start-date"]);
+        if (req.body["start-date"].indexOf('/') !== -1){
+            startDate       = new Date(Utils.formatDateToWire(req.body["start-date"]));
+        }else{
+            startDate       = new Date(req.body["start-date"]);
+        }
         weight              = isNaN(weight) ? 0 : weight;
         height              = isNaN(height) ? 0 : height;
         var totalPallets    = parseInt(req.body["quantity"],10);

@@ -92,13 +92,13 @@
                                                             <form  data-storage-id="<%=storage._id%>" id="standard-pricing-<%=storage._id %>" data-id="price-and-availability-user-data" class="loom-form provider-form standard-pricing-form" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" action="/complete-registration" novalidate data-obligatory="true">
 																<% include ./partials/standard-pricing-tray %>
                                                             </form>
-                                                            <form  data-storage-id="<%=storage._id%>" id="date-range-pricing-<%=storage._id %>" data-id="price-and-availability-user-data" class="loom-form provider-form date-range-pricing-form" data-storage_id="<%=storage._id%>" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" action="/complete-registration" novalidate data-obligatory="false">
+                                                            <form  data-loom-do-not-show-success-css="true" data-storage-id="<%=storage._id%>" id="date-range-pricing-<%=storage._id %>" data-id="price-and-availability-user-data" class="loom-form provider-form date-range-pricing-form" data-storage_id="<%=storage._id%>" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" action="/complete-registration" novalidate data-obligatory="false">
                                                                 <% include ./partials/date-range-pricing-tray %>
                                                             </form>
 
                                                        </div>
                                                        <div class="availability-trays tray-holder">
-                                                            <form  data-storage-id="<%=storage._id%>" id="availability-<%=storage._id %>"  class="loom-form provider-form availability-form" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" data-storage_id="<%=storage._id%>" data-id="availability-user-data" data-obligatory="true">
+                                                            <form  data-loom-do-not-show-success-css="true" data-storage-id="<%=storage._id%>" id="availability-<%=storage._id %>"  class="loom-form provider-form availability-form" data-loom-no-submit="true" data-loom-prevent-default="false" method="post" data-storage_id="<%=storage._id%>" data-id="availability-user-data" data-obligatory="true">
 																<% include ./partials/availability-tray %>
                                                             </form>
                                                        </div>
@@ -171,7 +171,7 @@
 							<h2>Pricing: Storage @name@</h2>
 						</div>
 						<button class="close no-resize"><span>close</span></button>
-						<form id="pricing-form" class="loom-form" novalidate method="post" data-loom-no-submit="true">
+						<form data-loom-do-not-show-success-css="true" id="pricing-form" class="loom-form" novalidate method="post" data-loom-no-submit="true">
 							<div class="input-field">
 								<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
 							</div>
@@ -271,7 +271,7 @@
 						<div class="main">
 							<h2>Available Pallets</h2>
 							<p>Specify your pallet availability for up to the next 12 months.</p>
-							<form method="post" id="pallets-form" class="loom-form" novalidate data-loom-no-submit="true">
+							<form data-loom-do-not-show-success-css="true" method="post" id="pallets-form" class="loom-form" novalidate data-loom-no-submit="true">
 								<div class="input-field">
 									<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
 								</div>

@@ -59,10 +59,10 @@ for (var i = 0; i < storage.pricing.length; i++) {
       var nextDateRange = (i+1 < storage.pricing.length) ? storage.pricing[i+1] : null
 	  %>
         <td data-th="From" class="input-field no-success-validation-style">
-		<input readonly type="date" data-loom-limit-day-of-week="1" name="from" class="datepicker" data-bind-value="from" data-loom-add-controls="true" value="<%=thisDateRange.from.toISOString().substring(0, 10)%>" min="<%= lastDateRange ? utils.formatDate(lastDateRange.from) : utils.formatDate(lastMonday) %>" />
+		<input readonly type="text" data-loom-type="date" placeholder="dd/mm/yyy" data-loom-limit-day-of-week="1" name="from" class="datepicker" data-bind-value="from" data-loom-add-controls="true" value="<%=utils.printFormatDate(thisDateRange.from)%>" min="<%= lastDateRange ? utils.formatDate(lastDateRange.from) : utils.formatDate(lastMonday) %>" />
 	</td>
 	<td data-th="To" class="input-field no-success-validation-style" >
-		<input required="required" readonly data-loom-limit-day-of-week="0" data-bind-value="to" type="date" name="to" class="datepicker" data-loom-add-controls="true" value="<%=thisDateRange.to.toISOString().substring(0, 10)%>" min="<%=thisDateRange.from.toISOString().substring(0, 10)%>" max="<%nextDateRange ? utils.formatDate(nextDateRange.from) : utils.formatDate(endOfNextYear)%>"/>
+		<input required="required" readonly data-loom-limit-day-of-week="0" data-bind-value="to" type="text" data-loom-type="date" placeholder="dd/mm/yyy" name="to" class="datepicker" data-loom-add-controls="true" value="<%=utils.printFormatDate(thisDateRange.to)%>" min="<%=thisDateRange.from.toISOString().substring(0, 10)%>" max="<%nextDateRange ? utils.formatDate(nextDateRange.from) : utils.formatDate(endOfNextYear)%>"/>
 	</td>
 	<td data-th="Price per pallet per week" class="input-field no-success-validation-style">
 		<input required="required" data-loom-type="decimal" data-loom-decimal-places="2" data-bind-value="price" name="price" type="number" class="currency" value="<%=thisDateRange.price %>"/>
@@ -80,16 +80,16 @@ for (var i = 0; i < storage.pricing.length; i++) {
   <% 
   lastDateRange = thisDateRange;
   }
-  var blankRowFromDate = lastDateRange ? utils.formatDate(utils.addDays(lastDateRange.to, 1)) : lastMonday
+  var blankRowFromDate = lastDateRange ? utils.addDays(lastDateRange.to, 1) : lastMonday
   %>
   <!-- add a blank row -->
   
   <tr class="js-single-date-range-inputs-container">
         <td data-th="From" class="input-field no-success-validation-style">
-		<input required="required" readonly type="date" data-loom-limit-day-of-week="1" name="from" class="datepicker" data-bind-value="from" data-loom-add-controls="true" value="<%= blankRowFromDate %>" min="<%= lastDateRange ? utils.formatDate(lastDateRange.from) : utils.formatDate(lastMonday) %>" />
+		<input required="required" readonly type="text" data-loom-type="date" placeholder="dd/mm/yyy" data-loom-limit-day-of-week="1" name="from" class="datepicker" data-bind-value="from" data-loom-add-controls="true" value="<%= utils.printFormatDate(blankRowFromDate) %>" min="<%= lastDateRange ? utils.formatDate(lastDateRange.from) : utils.formatDate(lastMonday) %>" />
 	</td>
 	<td data-th="To" class="input-field no-success-validation-style" >
-		<input required="required" readonly data-loom-limit-day-of-week="0" data-bind-value="to" type="date" name="to" class="datepicker" data-loom-add-controls="true" value="" min="<%= blankRowFromDate %>" max="<%= utils.formatDate(endOfNextYear)%>"/>
+		<input required="required" readonly data-loom-limit-day-of-week="0" data-bind-value="to" type="text" data-loom-type="date" placeholder="dd/mm/yyy" name="to" class="datepicker" data-loom-add-controls="true" value="" min="<%= utils.formatDate(blankRowFromDate) %>" max="<%= utils.formatDate(endOfNextYear)%>"/>
 	</td>
 	<td data-th="Price per pallet per week" class="input-field no-success-validation-style">
 		<input required="required" data-loom-type="decimal" data-loom-decimal-places="2" data-bind-value="price" name="price" type="number" class="currency" value=""/>
