@@ -85,7 +85,7 @@ warehouseSchema.statics = {
 		this.findOne({ _id : id })
 		  .populate('storage')
 		  .populate('user')
-      .deepPopulate(['contacts.creditController','contacts.invoiceController','contacts.pickingDispatch','contacts.goodsIn','contacts.transportCoordinator','contacts.enquiresController','contacts.availabilityController'])
+      .deepPopulate(['contacts.creditController.user','contacts.invoiceController.user','contacts.pickingDispatch.user','contacts.goodsIn.user','contacts.transportCoordinator.user','contacts.enquiresController.user','contacts.availabilityController.user'])
 		  .exec(cb);
   },
   loadByUser: function(user,cb){
@@ -93,7 +93,7 @@ warehouseSchema.statics = {
 		  .populate({
 			  	path:'storage',
 				options:{
-					sort:'sortOrder'
+					sort:['storage.sortOrder']
 				}
 			})
 		  .populate('user')

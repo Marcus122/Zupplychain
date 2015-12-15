@@ -97,7 +97,7 @@
 								<div class="input-field">
 									<label for="description">Company and Warehouse Description</label>
 									<div class="hint--top description-container">
-										<textarea id="description" name="description" placeholder="A short description about your company and warehouse" data-loom-validators="complexTelephoneNumberNotInInput"><%=warehouse.description%></textarea>
+										<textarea id="description" name="description" placeholder="A short description about your company and warehouse" data-loom-validators="complexTelephoneNumberNotInInput|emailNotInInput"><%=warehouse.description%></textarea>
 									</div>
 								</div>
 								<div class="row">
@@ -166,7 +166,7 @@
 									</div>
 									<div class="row">
 										<div class="input-field columns twelve">
-											<label for="maximum-insurance-level">Maximum insurance level per customer pallet:</label>
+											<label for="maximum-insurance-level">Maximum insurance level per pallet or per kilo/tonne/label>
 											<input data-json="insurance" type="text" name="maximum-insurance-level" value="<%=warehouse.insurance.maximumInsuranceLevel%>" spellcheck="true">
 										</div>
 										<div class="input-field columns six">
@@ -181,7 +181,7 @@
 									</div>
 									<div class="input-field">
 										<div class="hint--top description-container">
-											<textarea data-json="insurance" id="additional-insruance-description" name="additional-insurance-description" placeholder="Please detail product you cannot store" data-loom-validators="complexTelephoneNumberNotInInput"><%=warehouse.insurance.additionalInsuranceDescription%></textarea>
+											<textarea data-loom-validators="complexTelephoneNumberNotInInput|emailNotInInput" data-json="insurance" id="additional-insruance-description" name="additional-insurance-description" placeholder="Please detail product you cannot store"><%=warehouse.insurance.additionalInsuranceDescription%></textarea>
 										</div>
 									</div>
 								<%}else{%>
@@ -191,7 +191,7 @@
 									</div>
 									<div class="row">
 										<div class="input-field columns twelve">
-											<label for="maximum-insurance-level">Maximum insurance level per customer pallet</label>
+											<label for="maximum-insurance-level">Maximum insurance level per pallet or per kilo/tonne</label>
 											<input data-json="insurance" type="text" name="maximum-insurance-level" spellcheck="true">
 										</div>
 										<div class="input-field columns six">
@@ -202,7 +202,7 @@
 									</div>
 									<div class="input-field">
 										<div class="hint--top description-container">
-											<textarea data-json="insurance" id="additional-insruance-description" name="additional-insurance-description" placeholder="Please detail product you cannot store" data-loom-validators="complexTelephoneNumberNotInInput"></textarea>
+											<textarea data-loom-validators="complexTelephoneNumberNotInInput|emailNotInInput" data-json="insurance" id="additional-insruance-description" name="additional-insurance-description" placeholder="Please detail product you cannot store"></textarea>
 										</div>
 									</div>
 								<%}%>
@@ -280,7 +280,7 @@
 					</div>
 					<fieldset class="form-footer">
                      
-                                <a class="button simple tandc" href="#">VIEW TERMS AND CONDITIONS</a>
+                                <a class="button simple tandc" href="/terms-and-conditions">VIEW TERMS AND CONDITIONS</a>
                      
 						<%if( warehouse._id ){%>
 							<input name="id" value="<%=warehouse._id%>" type="hidden"/>

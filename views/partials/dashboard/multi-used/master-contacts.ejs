@@ -2,32 +2,35 @@
 	var numberSuffix = ["st","nd","rd"];
 %>
 <div data-company-id="<%=user.company.id%>" data-contact-type="master-contact" data-content="master-contact" class="tab main active">
-	<form id="company-contacts" autocomplete="off" data-form-type="contacts-form" class="loom-form data-loom-no-submit="true" novalidate="novalidate">
+	<form data-loom-do-not-show-success-css="true" id="company-contacts" autocomplete="off" data-form-type="contacts-form" class="loom-form data-loom-no-submit="true" novalidate="novalidate">
 		<table class="simple dashboard-table" data-max-rows="3">
 			<thead>
 				<tr>
 					<th>No.</th>
 					<th>Name</th>
 					<th>Email</th>
-					<th>Phone Number</th>
+					<th>Phone Number (Optional)</th>
 					<th>Status</th>
+					<th></th>
 					<%if(page !== 'contact-setup-walkthrough'){%><th><img src="/images/delete.png"></th><%}%>
 					<%if(page !== 'contact-setup-walkthrough'){%><th></th><%}%>
 				</tr>
 			</thead>
 			<tbody>
-				<%for(var i = 0; i<masterContacts.length; i++){%>
-					<tr data-empty="false" data-id="<%=masterContacts[i]._id.toString()%>">
+				
+				<% masterContacts.sort(function(x,y) { return x.sortOrder > y.sortOrder });
+				for(var i = 0; i<masterContacts.length; i++){%>
+					<tr data-empty="false" data-id="<%=masterContacts[i].user._id.toString()%>">
 						<td><%=i+1%><span><%=numberSuffix[i]%></span><%if(i<2){%>*<%}%></td>
-						<td data-field="name"><%=masterContacts[i].name || 'N/A'%></td>
-						<td data-field="email"><%=masterContacts[i].email%></td>
-						<td data-field="phone-number"><%=masterContacts[i].phoneNumber || 'N/A'%></td>
+						<td data-field="name"><%=masterContacts[i].user.name || 'N/A'%></td>
+						<td data-field="email"><%=masterContacts[i].user.email%></td>
+						<td data-field="phone-number"><%=masterContacts[i].user.phoneNumber || 'N/A'%></td>
 						<td data-field="register-status">
 							<%switch(true){
-								case (masterContacts[i].expiry >= Date.now() && masterContacts[i].expiry !== null):%>
+								case (masterContacts[i].user.expiry >= Date.now() && masterContacts[i].user.expiry !== null):%>
 									<p class="registered-status pending"><%=registerStatus[1]%></p>
 									<%break;
-								case (masterContacts[i].expiry < Date.now() && masterContacts[i].expiry !== null):%>
+								case (masterContacts[i].user.expiry < Date.now() && masterContacts[i].user.expiry !== null):%>
 									<p class="registered-status expired"><%=registerStatus[2]%></p>
 									<%break;
 								case null:%>
@@ -37,8 +40,9 @@
 									<p class="registered-status complete"><%=registerStatus[0]%></p>
 							<%}%>
 						</td>
-						<%if(page !== 'contact-setup-walkthrough'){%><td data-field="delete"><%if(masterContacts.length > 1 && masterContacts[i]._id != user.id){%><input type="checkbox" name="delete"/><%}%></td><%}%>
-						<%if(page !== 'contact-setup-walkthrough'){%><td data-field="resend-email"><%if(masterContacts[i].expiry < Date.now() && masterContacts[i].expiry !== null){%> <button data-disabled-on-ajax="true" name="resend-email" class="button action mini">Resend</button><%}%></td><%}%>
+						<td data-field="clear"><button name="clear" class="hidden button action mini" data-disabled-on-ajax="true">Clear</button></td>
+						<%if(page !== 'contact-setup-walkthrough'){%><td data-field="delete"><%if(masterContacts.length > 1 && masterContacts[i].user._id != user.id){%><input type="checkbox" name="delete"/><%}%></td><%}%>
+						<%if(page !== 'contact-setup-walkthrough'){%><td data-field="resend-email"><%if(masterContacts[i].user.expiry < Date.now() && masterContacts[i].user.expiry !== null){%> <button data-disabled-on-ajax="true" name="resend-email" class="button action mini">Resend</button><%}%></td><%}%>
 					</tr>
 				<%}%>
 			</tbody>

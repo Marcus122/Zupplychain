@@ -59,7 +59,7 @@
 				<div class="input-field">
 					<label for="description">Company and Warehouse Description</label>
 					<div class="hint--top description-container">
-						<textarea id="description" name="description" placeholder="A short description about your company and warehouse" data-loom-validators="complexTelephoneNumberNotInInput"><%=warehouse.description%></textarea>
+						<textarea data-loom-validators="complexTelephoneNumberNotInInput|emailNotInInput" id="description" name="description" placeholder="A short description about your company and warehouse"><%=warehouse.description%></textarea>
 					</div>
 				</div>
 				<div class="row">
@@ -131,7 +131,7 @@
 					</div>
 					<div class="row">
 						<div class="input-field columns twelve">
-							<label for="maximum-insurance-level">Maximum insurance level per customer pallet</label>
+							<label for="maximum-insurance-level">Maximum insurance level per pallet or per kilo/tonne</label>
 							<input data-json="insurance" type="text" name="maximum-insurance-level" value="<%=warehouse.insurance.maximumInsuranceLevel%>">
 						</div>
 						<div class="input-field columns six">
@@ -146,7 +146,7 @@
 					</div>
 					<div class="input-field">
 						<div class="hint--top description-container">
-							<textarea data-json="insurance" id="additional-insruance-description" name="product-exceptions" placeholder="Please detail any exceptions" data-loom-validators="complexTelephoneNumberNotInInput"><%=warehouse.insurance.productExceptions%></textarea>
+							<textarea data-json="insurance" id="additional-insruance-description" name="product-exceptions" placeholder="Please detail any exceptions" data-loom-validators="complexTelephoneNumberNotInInput|emailNotInInput"><%=warehouse.insurance.productExceptions%></textarea>
 						</div>
 					</div>
 				<%}else{%>
@@ -156,7 +156,7 @@
 					</div>
 					<div class="row">
 						<div class="input-field columns twelve">
-							<label for="maximum-insurance-level">Maximun insurance level per customer pallet</label>
+							<label for="maximum-insurance-level">Maximun insurance level per pallet or per kilo/tonne</label>
 							<input data-json="insurance" type="text" name="maximum-insurance-level">
 						</div>
 						<div class="input-field columns six">
@@ -167,7 +167,7 @@
 					</div>
 					<div class="input-field">
 						<div class="hint--top description-container">
-							<textarea data-json="insurance" id="additional-insruance-description" name="product-exceptions" placeholder="Please detail any exceptions" data-loom-validators="complexTelephoneNumberNotInInput"></textarea>
+							<textarea data-json="insurance" id="additional-insruance-description" name="product-exceptions" placeholder="Please detail any exceptions" data-loom-validators="complexTelephoneNumberNotInInput|emailNotInInput"></textarea>
 						</div>
 					</div>
 				<%}%>
@@ -229,7 +229,7 @@
 								<div class="columns five document-image">
 									<img src="./images/pdf.png"/>
 								</div>
-								<span class="file-name columns four"><%=warehouse.documents[i].title%></span>
+								<a class="file-name columns four" href="<%=warehouse.documents[i].path%>"><%=warehouse.documents[i].title%></a>
 								<input type="hidden" name="relative-path" value="<%=warehouse.documents[i].path%>"/> 
 								<div class="columns three">
 									<button type="button" href="#" class="trash-button"><span>Delete</span></button>

@@ -3,7 +3,10 @@ title = "Contact Assignment";
 subtitle = "Complete your registration"; 
 %>
 <% include ./partials/header %> 
-	<p><%=referer%> has assigned you to the role of <%=role%> for company <%=company%><%if(warehouse != ""){%>, within the warehouse <%=warehouse%><%}%>.</p>
-	<p>To complete the registration process please click <a href="<%=link%>">here</a>.</p>
-	<p>The link will expire in 14 days at which point the referer will need to re-send the link.</p>
+	<p>Dear <%=name%></p>
+	<p><%=masterContact%> has registered <%=company%> on zupplychain.com. Zupplychain.com is an on-line marketplace to sell warehouse storage by the pallet space to potential customers.</p>
+	<p><%=referer%> has nominated you to be <%=roleNumber%> <%=role%>.</p>
+	<%-content%>
+	<p>Please follow this <a href="<%=link%>">link</a> to set up your personal Zupplychain account and password.</p>
+	<p>Thank you and welcome to Zupplychain!</p>
 <% include ./partials/footer %> 

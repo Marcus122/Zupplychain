@@ -112,7 +112,7 @@ function uploadDocument(req,res){
 				req.fields - fields;
 				for (var i in files){
 					for (var j in files[i]){
-						fh.renameFile(files[i][j].path, local.config.upload_folders[0] + req.warehouse.id + '/' + files[i][j].originalFilename,function(err){
+						fh.renameFile(fields.tempLocation[i], local.config.upload_folders[0] + req.warehouse.id + '/' + files[i][j].originalFilename,function(err){
 							if(err){
 								if ((req.warehouse.storage === undefined || req.warehouse.storage.length === 0)){
 									fh.deleteFolderRecursive(local.config.upload_folders[0] + req.warehouse.id);

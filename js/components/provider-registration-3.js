@@ -1,4 +1,4 @@
-define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom/loomAlerts","components/global"], function ($,Warehouse,Loom,Templates,Alerts,Global) {    
+define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom/loomAlerts","components/global","jqueryPlugins/jquery.scrollTo.min"], function ($,Warehouse,Loom,Templates,Alerts,Global,Scroll) {    
     
     var lm = new Loom();
     var global = new Global();
@@ -142,7 +142,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
     initVolDiscountTablebehaviour();
     
     function initPopup() {
-        $(document).on('click',".close-me",function(){
+        $(document).on('click','.close-me, button[data-action="close-popup"]',function(){
             $(this).closest(".popup-window").addClass('hidden');
         });
     }
@@ -219,18 +219,25 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
             var $newRows = $copyFromRows.clone(false);
             var newRowCounter = 0;
             
-            for (var i = 0; i<$toRows.find('td').length; i++){
-                if($($toRows.find('td')[i]).data('retain-value')){
-                    $($newRows[newRowCounter]).find('td[data-th="' + $($toRows.find('td')[i]).data('th') + '"] input').val($($toRows.find('td')[i]).find('input').val())
-                    newRowCounter ++;
+            for (var j = 0; j<$toRows.length; j++){
+                for (var i = 0; i<$toRows.find('td').length; i++){
+                    if($($($toRows[j]).find('td')[i]).data('retain-value')){
+                        $($newRows[newRowCounter]).find('td[data-th="' + $($($toRows[j]).find('td')[i]).data('th') + '"] input').val($($($toRows[j]).find('td')[i]).find('input').val())
+                        newRowCounter ++;
+                    }
                 }
             }
-            
-           for (var i = 0; i<$newRows.find('td').length; i++){
-                if($($newRows.find('td')[i]).data('do-not-copy') && !$($newRows.find('td')[i]).data('retain-value')){
-                    $($newRows.find('td')[i]).find('input').val("");
+           
+           for (var j = 0; j<$newRows.length; j++){
+            for (var i = 0; i<$($newRows[j]).find('td').length; i++){
+                    if($($($newRows[j]).find('td')[i]).data('retain-value')){
+                        $($newRows[j]).find('td[data-th="' + $($toRows.find('td')[i]).data('th') + '"] input').val(parseInt($($toRows.find('td')[i]).find('input').val()));
+                    }
+                    if($($($newRows[j]).find('td')[i]).data('do-not-copy') && !$($($newRows[j]).find('td')[i]).data('retain-value')){
+                        $($($newRows[j]).find('td')[i]).find('input').val("");
+                    }
                 }
-            }
+           }
             
             clearPricing($toTable);
             $toTable.find("tbody").append($newRows);
@@ -427,6 +434,10 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         $(document).on('click','.popup',function(evt){ 
                 var $this = $(this);
                 editButtonClick($this);
+                require(["jqueryPlugins/jquery.scrollTo.min"],function(Scroll){
+                    var pos = $this.parent().parent().offset().top - ($this.parent().parent().offset().top - $this.closest('.main').offset().top);
+                    $.scrollTo(pos);
+                });
         });
 
         function editButtonClick($buttonThatWasClicked) {
@@ -513,9 +524,6 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                 $trayHolderToOpen.find("div").first().find(".open-tray-link").addClass("success");
                 $trayHolderToOpen.find("div").first().find(".open-tray-link").removeClass("not-completed");
             }
-            require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) {
-                $.scrollTo('body');
-            });
             
             if ($trayHolderToOpen.find("form:nth-child(2)").find('div').first()){ //If it has two inner trays
                 $trayHolderToOpen.find("form:nth-child(2)").find('div').first().find('.tray').addClass('open');
@@ -527,7 +535,8 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                     $trayHolderToOpen.find("form:nth-child(2)").find('div').first().find(".open-tray-link").removeClass('success');
                 }
             }
-            
+            $('.sp-nag').fadeOut();
+            $('.availability-nag').fadeOut();
         }
         
     }
@@ -564,28 +573,82 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         $(document).on('submit',".provider-form","submit", function(ev) {
             clearSkipMarkerRows();
             ev.preventDefault();
-            var thisStorageId = $(this).data("storage-id");
+            var $this = $(this);
+            var thisStorageId = $this.data("storage-id");
             //var  $openCloseCellArea = $(this).parent().parent().parent().prev().find('button[data-form="' + $(this).data('id') + '"]').parent();
-            var  $openCloseCellArea = $(this).parent().parent().parent().prev().find('.open');
-            var th = $(this).find('button[type="submit"]').data('th') || $(this).find('button.action.done').data('th');
-            if($openCloseCellArea.length === 0) $openCloseCellArea = $(this).parent().parent().parent().prev().find('.button-cell.success[data-th="' + th + '"]')
-            var $openTrayLink = $(this).find('.open-tray-link');
-            if(shouldIgnoreTheseInputs($(this).find('input'))){
-                markTheseInputsToBeSkipped($(this).find('input'));
+            var  $openCloseCellArea = $this.parent().parent().parent().prev().find('.open');
+            var th = $this.find('button[type="submit"]').data('th') || $this.find('button.action.done').data('th');
+            if($openCloseCellArea.length === 0) $openCloseCellArea = $this.parent().parent().parent().prev().find('.button-cell.success[data-th="' + th + '"]')
+            var $openTrayLink = $this.find('.open-tray-link');
+            if(shouldIgnoreTheseInputs($this.find('input'))){
+                markTheseInputsToBeSkipped($this.find('input'));
             }
-            lm.rebind($(this).attr('id'))
-            if(lm.isFormValid($(this).attr('id')) ){ //check this form at least is valid before we try and save.
-                saveSingleStorage(thisStorageId);
+            lm.rebind($this.attr('id'))
+            if(lm.isFormValid($this.attr('id')) ){ //check this form at least is valid before we try and save.
+                $('.sp-nag').fadeOut();
+                $('.availability-nag').fadeOut();
+                saveSingleStorage(thisStorageId,function(storage){
+                    var array;
+                    var field1;
+                    var field2;
+                    if($this.attr('class').indexOf('date-range-pricing') !== -1){
+                        if(checkSectionCompleted($this.prev('form').find('input'))){
+                            if(!checkSectionCompleted($this.parent().next('div').find('form').find('input'))){
+                                $this.parent().find('.sp-nag').html("Great, don't forget to add availability for this storage name");
+                                $this.parent().find('.sp-nag').fadeIn();
+                            }
+                        }else{
+                            $this.parent().find('.sp-nag').html("Great, don't forget to add standard pricing for this storage name");
+                            $this.parent().find('.sp-nag').fadeIn();
+                        }
+                         array = 'pricing';
+                         field1 = 'charge';
+                        field2 = 'price';
+                         checkAndAppend(field1,field2,array,storage,$this);
+                    }else if($this.attr('class').indexOf('availability') !== -1) {
+                        if(!checkSectionCompleted($this.parent().prev('div').find('form').first().find('input'))){
+                            $this.parent().find('.sp-nag').html("Great, don't forget to add standard pricing for this storage name");
+                            $this.parent().find('.sp-nag').fadeIn();
+                        }
+                         array = 'pallets'
+                         field1 = 'free';
+                        field2 = 'inUse';
+                         checkAndAppend(field1,field2,array,storage,$this);
+                    }else{
+                        if(!checkSectionCompleted($this.parent().next('div').find('form').find('input'))){
+                            $this.parent().find('.availability-nag').html('Have you completed availability?');
+                            $this.parent().find('.availability-nag').fadeIn();
+                        }
+                         checkAndAppend('charge','price','pricing',storage,$this.next('.date-range-pricing-form'));
+                         checkAndAppend('free','inUse','pallets',storage,$this.parent().parent().find('.availability-form'));
+                    }
+                    function checkAndAppend(field1,field2,array,storage,$form){
+                        var row = $form.closest('tr').prev('tr');
+                        var action;
+                        if(storage[array]){
+                            if(storage[array][0]){
+                                if((storage[array][0][field1] === null || storage[array][0][field1] < 0 || storage[array][0][field1] === '') || (storage[array][0][field2] === null || storage[array][0][field2] < 0 || storage[array][0][field2] === '')){
+                                    action = 'remove';
+                                }else{
+                                    action = 'append';
+                                }
+                            }else{
+                                action = 'remove';
+                            }
+                            ammendStorageToCopyDD(row.find('td[data-th="Storage Name"]').find('span').html(),row.find('td[data-th="Pallet Width"]').find('span').html(),$form,action)
+                        }
+                    }
+                });
                 //if($openCloseCellArea.length > 0){
-                    if (checkSectionCompleted($(this).find('input'),$(this))){
-                        if($(this).data('obligatory')){
+                    if (checkSectionCompleted($this.find('input'),$this)){
+                        if($this.data('obligatory')){
                             $openCloseCellArea.addClass('success')
                             $openCloseCellArea.removeClass('open');
                         }
                         //$openTrayLink.removeClass('open');
                         $openTrayLink.addClass('success');
                     }else{
-                        if($(this).data('obligatory')){
+                        if($this.data('obligatory')){
                             $openCloseCellArea.removeClass('success');
                             $openCloseCellArea.addClass('open');
                         }
@@ -594,7 +657,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                         $openTrayLink.removeClass('success');
                     }
             }else{
-                lm.focusOnInvalidField($(this).attr('id'));
+                lm.focusOnInvalidField($this.attr('id'));
             }
             /*}else{
                 if($openCloseCellArea.parent().next().hasClass('open')){
@@ -619,6 +682,26 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                callPAndAWarningPopup();
             }
         });
+        
+        function ammendStorageToCopyDD(name,type,$form,action){
+            var forms = $('table.price-and-availability').find('form.' + $form.attr('class').replace(/ /g,'.').replace('.invalid',''));
+            var $select;
+            for (var i = 0; i < forms.length; i++){
+                if($form.attr('id') === $(forms[i]).attr('id')){
+                    continue;
+                }
+                
+                $select = $(forms[i]).find('select[name="copy-from"]');
+                
+                if(action === 'remove'){
+                    $select.find('option[value="' +  $form.data('storage-id') + '"]').each(function(){
+                        $(this).remove();
+                    });
+                }else if(action="append" && $select.find('option[value="' + $form.data('storage-id') + '"]').length === 0){
+                    $select.append('<option value="' + $form.data('storage-id') + '">Copy from: ' + name + ' ' + type + 'm width</option>');
+                }
+            }
+        }
         
         function openSavedPopup(){
             var saveTemplate = templates.getTemplate("save-registration");
@@ -669,7 +752,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
             window.location.href = url;
         }
         
-        function saveSingleStorage(id) {
+        function saveSingleStorage(id,cb) {
             var target = $("#pricing-container-" + id);
             var storageJSON = getStorageJSON($(target)); //".js-all-storages"
             //get storage with the id we passed in.
@@ -684,6 +767,9 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                     Alerts.showSuccessMessage("Data saved");
                     lm.clearValidationStylesOnAllForms();
                 });
+                if(cb){
+                    cb(thisStorage);
+                }
             }
             
             

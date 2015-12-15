@@ -12,6 +12,43 @@ var handler = function(app) {
     app.get('/emails/:template', function (req,res) {
 		res.render("emails/" + req.params.template,req.data);
 	});
+    app.get('/testimonials', function (req,res) {
+		res.render("testimonials",req.data);
+	});
+    app.get('/reviews', function (req,res) {
+		res.render("reviews",req.data);
+	});
+    app.get('/terms-and-conditions', function (req,res) {
+         res.render("terms-and-conditions/terms-and-conditions-landing",req.data);
+    });
+    app.get('/terms-and-conditions/:page', function (req,res) {
+        switch (req.params.page){
+            case 't-and-c-sp-zc':
+                res.render("terms-and-conditions/t-and-c-sp-zc",req.data);
+                break;
+            case 't-and-c-sp-c':
+                res.render("terms-and-conditions/t-and-c-sp-c",req.data);
+                break;
+            case 'terms-of-service':
+                res.render("terms-and-conditions/terms-of-service",req.data);
+                break;
+            case 'terms-of-use':
+                res.render("terms-and-conditions/terms-of-website-use",req.data);
+                break;
+            case 'acceptable-user-policy':
+                res.render("terms-and-conditions/acceptable-use-policy",req.data);
+                break;
+            case 'cookie-policy':
+                res.render("terms-and-conditions/cookie-policy",req.data);
+                break;
+            case 'privacy-policy':
+                res.render("terms-and-conditions/privacy-policy",req.data);
+                break;
+            default:
+                res.render("terms-and-conditions/terms-and-conditions-landing",req.data);
+                break;
+        }
+	});
     app.get('/emails/:template/:quoteId', function (req,res) {
         Quote.getById(req.params.quoteId, function(err, quote) {
             if (err || !quote) {

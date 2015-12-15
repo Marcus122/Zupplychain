@@ -1,12 +1,13 @@
 <tr data-status="new" data-empty="true">
 	<td>@num@</td>
-	<td data-field="name" class="input-field no-success-validation-style"><input required type="text" name="name"/>
+	<td data-field="name" class="input-field no-success-validation-style"><%if(authorisations.contacts.warehouseContacts.edit===true && page !== 'contact-setup-walkthrough'){%><input required type="text" name="name"/><%}%>
 		<ul class="contacts-suggestions hidden" data-action="suggestions-dropdown">
 		</ul>
 	</td>
-	<td data-field="email" class="input-field no-success-validation-style"><input required type="email" name="email"/></td>
-	<td data-field="phone-number" class="input-field no-success-validation-style"><input type="tel" name="phone-number"/></td>
+	<td data-field="email" class="input-field no-success-validation-style"><%if(authorisations.contacts.warehouseContacts.edit===true && page !== 'contact-setup-walkthrough'){%><input required type="email" name="email"/><%}%></td>
+	<td data-field="phone-number" class="input-field no-success-validation-style"><%if(authorisations.contacts.warehouseContacts.edit===true && page !== 'contact-setup-walkthrough'){%><input type="tel" name="phone-number"/><%}%></td>
 	<td data-field="register-status"></td>
-	<%if(page !== 'contact-setup-walkthrough'){%><td data-field="delete"></td><%}%>
-	<%if(page !== 'contact-setup-walkthrough'){%><td data-field="resend-email"></td><%}%>
+	<td data-field="clear" class="input-field no-success-validation-style"><button name="clear" class="button action mini hidden" data-disabled-on-ajax="true">Clear</button></td>
+	<%if(authorisations.contacts.warehouseContacts.edit===true && page !== 'contact-setup-walkthrough'){%><td data-field="delete"></td><%}%>
+	<%if(authorisations.contacts.warehouseContacts.edit===true && page !== 'contact-setup-walkthrough'){%><td data-field="resend-email"></td><%}%>
 </tr>

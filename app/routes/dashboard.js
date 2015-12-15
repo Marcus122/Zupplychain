@@ -7,6 +7,8 @@ var local = require("../local.config.js");
 var path = require('path');
 var emailer = require("../controllers/emailer.js");
 var utils  = require("../utils.js");
+var contactsEmailContent = require("../data/contacts-email-content.js");
+var fs = require("../controllers/file-handler.js")
 
 var handler = function(app) {
 	app.param('warehouse_id', warehouses.load);
@@ -233,30 +235,41 @@ function resendRegisterEmail(req,res,cb){
 				emailContactData.subtitle = 'Complete Registration';
 				emailContactData.referer = req.data.user.name;
 				emailContactData.role = req.body.role;
+				var emailContactType = req.body.contactType;
 				emailContactData.company = req.data.user.company.name;
 				emailContactData.link = req.protocol + '://' + req.headers.host + '/initial-registration/' + user._id.toString();
 				emailContactData.warehouse = "";
 				emailContactData.config = local.config;
-			res.render('emails/create-contact',emailContactData,function(err,template){
-				if(err){
-					cb(err);
-					//Delete the created user
-				}else{
-					emailer.sendMail(req,res,template,req.body.email,'info@zupplychain.com','Complete Registration',function(err){
-						if(err){
-							//Delete the created user
-						}else{
-							user.expiry = new Date(+new Date + 12096e5);
-							users.update(user,function(err){
-								if(err){
-									//Delete the created user
-								}else{
-									cb(null);
-								}
-							},true)
-						}
-					});
-				}
+				emailContactData.roleNumber = req.body.roleNumber;
+				emailContactData.host = req.protocol + '://' + req.headers.host;
+				emailContactData.name = req.body.name;
+				emailContactData.masterContact = req.body.masterContact;
+				emailContactData.contactType = req.body.role;
+				emailContactData.firstContact = req.body.firstContact;
+			contactsEmailContent.loadByEmailTypeAndContactType(0,emailContactType,function(err,result){
+				var ejs = require('ejs')
+				emailContactData.content = ejs.render(result.content,emailContactData)
+				res.render('emails/create-contact',emailContactData,function(err,template){
+					if(err){
+						cb(err);
+						//Delete the created user
+					}else{
+						emailer.sendMail(req,res,template,req.body.email,'info@zupplychain.com','Complete Registration',function(err){
+							if(err){
+								//Delete the created user
+							}else{
+								user.expiry = new Date(+new Date + 12096e5);
+								users.update(user,function(err){
+									if(err){
+										//Delete the created user
+									}else{
+										cb(null);
+									}
+								},true)
+							}
+						});
+					}
+				});
 			});
 		}
 	});
@@ -323,7 +336,8 @@ function createContact(req,res,cb){
 		tableId = "",
 		cntr,
 		contacts = {},
-		contactsType = "";
+		contactsType = "",
+		emailContactType;
 	data.email = req.body.email;
 	data.type = 1//hard coded for now
 	data.name = req.body.name;
@@ -343,47 +357,64 @@ function createContact(req,res,cb){
 			if (req.body.role == 'Master Contact'){
 				tableId = req.data.user.company._id;
 				cntr = companyCtrl;
+				emailContactType = req.body.role;
 				contactsType = "Master Contacts";
 				req.body.role = "Master Contacts";
 			}else{
 				tableId = req.body.warehouseContacts;
 				cntr = warehouseContacts;
 				contactsType = "Warehouse Contacts";
+				emailContactType = req.body.roleNumber + ' ' + req.body.role;
 			}
 			if(tableId !== ""){
 				cntr['update' + req.body.role.replace(/\s/g, '')](tableId,user._id,function(err,result){
 					var emailContactData = {};
+					console.log(emailContactType);
 					emailContactData.referer = req.data.user.name;
 					emailContactData.role = req.body.role;
+					emailContactData.roleNumber = req.body.roleNumber;
 					emailContactData.company = req.data.user.company.name;
 					emailContactData.link = req.protocol + '://' + req.headers.host + '/initial-registration/' + user._id.toString();
 					emailContactData.warehouse = req.body.warehouseName || "";
 					emailContactData.config = local.config;
 					emailContactData.host = req.protocol + '://' + req.headers.host;
+					emailContactData.name = req.body.name;
+					emailContactData.masterContact = req.body.masterContact;
+					emailContactData.contactType = req.body.role;
+					emailContactData.firstContact = req.body.firstContact;
 					if (userExisted === false || user.expiry !== null){
-						res.render('emails/create-contact',emailContactData,function(err,template){
-							if(err){
-								cb(err);
-								//Delete the created user
-							}else{
-								emailer.sendMail(req,res,template,req.body.email,'info@zupplychain.com','Complete Registration',function(err){
-									cb(false,{userId: user._id.toString(),expiry:user.expiry,contactId:tableId});
-								});
-							}
-						});
+						contactsEmailContent.loadByEmailTypeAndContactType(0,emailContactType,function(err,result){
+							emailContactData.content = result.content;
+							var ejs = require('ejs')
+							emailContactData.content = ejs.render(result.content,emailContactData)
+							res.render('emails/create-contact',emailContactData,function(err,template){
+								if(err){
+									cb(err);
+									//Delete the created user
+								}else{
+									emailer.sendMail(req,res,template,req.body.email,'info@zupplychain.com','Complete Registration',function(err){
+										cb(false,{userId: user._id.toString(),expiry:user.expiry,contactId:tableId});
+									});
+								}
+							});
+					});
 					}else{
-						res.render('emails/user-contact-exists',emailContactData,function(err,template){
-							if(err){
-								cb(err);
-								//Delete the created user
-							}else{
-								emailer.sendMail(req,res,template,req.body.email,'info@zupplychain.com','Complete Registration',function(err){
-									cb(false,{userId: user._id.toString(),expiry:user.expiry,contactId:tableId});
-								});
-							}
+						contactsEmailContent.loadByEmailTypeAndContactType(0,emailContactType,function(err,result){
+							var ejs = require('ejs')
+							emailContactData.content = ejs.render(result.content,emailContactData)
+							res.render('emails/user-contact-exists',emailContactData,function(err,template){
+								if(err){
+									cb(err);
+									//Delete the created user
+								}else{
+									emailer.sendMail(req,res,template,req.body.email,'info@zupplychain.com','Complete Registration',function(err){
+										cb(false,{userId: user._id.toString(),expiry:user.expiry,contactId:tableId});
+									});
+								}
+							});
 						});
 				}
-				});
+				},req.body.sortOrder);
 			}else{
 				contacts.warehouse = req.body.warehouseId;
 				var jsonCc = req.body.role.replace(/\s/g, '');
@@ -425,7 +456,7 @@ function createContact(req,res,cb){
 							});
 						}
 					}
-				});
+				},req.body.sortOrder);
 			}
 		}
 	},false)

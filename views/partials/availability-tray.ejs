@@ -1,5 +1,5 @@
 <div class="availability-tray" data-contains-copy-function="true">
-    <a class="open-tray-link">Available Pallet Spaces</a>
+    <a class="open-tray-link">Available Pallet Spaces <div class="tool-tip hint--bottom" data-hint="Specify your pallet availability for up to the end of the next calendar year.">?</div></a>
     <div class="tray">
 	<div class="input-field">
 		<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
@@ -14,7 +14,7 @@
 											<label for="copy-from">Copy from another storage?</label>
 											<select name="copy-from">
 												<%for( var i=0; i<warehouse.storage.length;i++ ){ 
-													if (storage._id == warehouse.storage[i]._id) {
+													if (storage._id == warehouse.storage[i]._id || warehouse.storage[i].pallets.length === 0 || ( warehouse.storage[i].pallets[0].free === null || warehouse.storage[i].pallets[0].inUse === null)) {
 														continue;
 													}
 												%>
@@ -33,7 +33,7 @@
 											<th>To (Sunday)</th>
 											<th>Total Pallets</th>
 											<th>Estimated in Use <div class="tool-tip hint--top" data-hint="Specify here the number of pallet spaces you expect to be in use. 
-											The remainder "Estimated Free" will be available for Zupplychain users.">?</div></th>
+											The remainder 'Estimated Free' will be available for Zupplychain users.">?</div></th>
 											<th>Estimated Free</th>
 											<th class="remove-col"/>
 										</tr>
@@ -119,6 +119,9 @@
 						</div><!-- end inner -->
 								<div class="row controls">
 									<div class="save">
+										<div class="sp-nag" style="">
+											Have you completed standard pricing?
+										</div>
 										<button class="action done" data-th="Available Pallets">save</button>
 									</div>
 								</div>

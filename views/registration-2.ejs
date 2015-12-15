@@ -38,10 +38,11 @@
 														<th>Storage Name <div class="tool-tip hint--bottom" data-hint="Use this column to define each type of storage area in your warehouse which has different characteristics either in terms of pallet types or how you wish to price it.  You can have as many storage names as suits, allowing you to specify different weight/heights and different pricing/availability. You can specify the same space more than once, e.g., 0.8 metre wide pallets, 300 quantity and 1.2 wide pallets, 200 quantity (in this case, please repeat the same storage name)">?</div></th>
 														<th>Pallet Width </th>
 														<th>Storage Type </th>
-														<th>Max Pallet Weight <br/> (kg) </th>
-														<th>Max Pallet Height <br/> (m) </th>
+														<th>Max Weight Per Pallet <br/> (kg) </th>
+														<th>Max Height Per Pallet <br/> (m) </th>
 														<th>Total Pallet Spaces <div class="tool-tip hint--left" data-hint="This is the total number of pallet spaces in your warehouse of the pallet name type. You can specify the number available at specific dates for Zupplychain users in Step 3">?</div></th>
-														<th>Add Additional Pallet Width</th>
+														<th>Add Additional Pallet Width<div class="tool-tip hint--bottom" data-hint="You can specify the same space again with a different pallet width, different maximum weight (if applicable and
+														in stage 3, different pricing">?</div></th>
 														<th><img src="../images/delete.png" alt="delete"/></th>
 													</tr>
 												</thead>
@@ -49,8 +50,11 @@
 													<%
 													if( !warehouse.storage || !warehouse.storage.length ){
 														var row = {};
-														row.name = " Area A",
+														row.name = "Area A",
 														row.storageGroup = 1;%>
+														<% include ./partials/define-space-row %>
+														<%row.name = "Area B"
+														row.storageGroup = 2;%>
 														<% include ./partials/define-space-row %>
 													<%}else{
 														for( var i=0; i < warehouse.storage.length; i++ ){

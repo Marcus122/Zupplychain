@@ -50,6 +50,7 @@ exports.load = function(req,res,next,id) {
 		}else{
 			//Check warehouse is for user
 			req.warehouse = warehouse;
+			req.warehouse.storage = storage.sortStoragesByNameAndPalletType(req.warehouse.storage)
 			return next();
 		}
 	});
@@ -71,6 +72,9 @@ exports.warehouse_by_user = function (user,callback) {
 		if(err){
 			return callback(err);
 		}else{
+			for (var i = 0; i<warehouses.length; i++){
+				if(warehouses[i].storage) warehouses[i].storage = storage.sortStoragesByNameAndPalletType(warehouses[i].storage);
+			}
 			return callback(null,warehouses)
 		}
 	});
@@ -143,6 +147,4 @@ exports.limitStorageToMatching = function(storage, query) {
     var result = Warehouse.filterStorageOnQuery(storage,query);
     return result;
 };*/
-
-
 };

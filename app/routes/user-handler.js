@@ -31,7 +31,7 @@ var handler = function(app) {
   
   
 	app.get('/login',function(req,res){
-		if(Object.keys(req.data.user).length > 0){
+		if(Object.keys(req.data.user).length > 0 && req.data.user.active === true){
 			res.redirect('/dashboard');
 		}else{
 			res.render("login",req.data);

@@ -81,11 +81,13 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			$tab.find('select').prop('disabled',false);
 			$tab.find('label').removeAttr('disabled');
 			$tab.find('div[data-function="save-buttons"]').removeClass('hidden');
-			if(!$tab.find('a[data-mode="edit"]').hasClass('down')){
+			if(!$tab.find('a[data-mode="edit"]').hasClass('down') || !$tab.siblings('div').find('a[data-mode="edit"]').hasClass('down')){
 				$tab.find('a[data-mode="edit"]').addClass('down');
+				$tab.siblings('div').find('a[data-mode="edit"]').addClass('down')
 			}
-			if ($tab.find('a[data-mode="view"]').hasClass('down')){
+			if ($tab.find('a[data-mode="view"]').hasClass('down') || $tab.siblings('div').find('a[data-mode="view"]').hasClass('down')){
 				$tab.find('a[data-mode="view"]').removeClass('down');
+				$tab.siblings('div').find('a[data-mode="view"]').removeClass('down');
 			}
 			$tab.find('input[data-clear-on-edit-mode="true"]').each(function(){
 				$(this).val("")
@@ -99,11 +101,13 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			$tab.find('select').prop('disabled',true);
 			$tab.find('label').attr('disabled','disabled');
 			$tab.find('div[data-function="save-buttons"]').addClass('hidden');
-			if($tab.find('a[data-mode="edit"]').hasClass('down')){
+			if($tab.find('a[data-mode="edit"]').hasClass('down') || $tab.siblings('div').find('a[data-mode="edit"]').hasClass('down')){
 				$tab.find('a[data-mode="edit"]').removeClass('down');
+				$tab.siblings('div').find('a[data-mode="edit"]').removeClass('down')
 			}
-			if (!$tab.find('a[data-mode="view"]').hasClass('down')){
+			if (!$tab.find('a[data-mode="view"]').hasClass('down') || !$tab.siblings('div').find('a[data-mode="view"]').hasClass('down')){
 				$tab.find('a[data-mode="view"]').addClass('down');
+				$tab.siblings('div').find('a[data-mode="view"]').addClass('down')
 			}
 			$tab.find('input[data-populate-on-display-mode]').each(function(){
 				$(this).val($(this).data('populate-on-display-mode'));
@@ -162,7 +166,8 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			
 			$(document).on('click', '.toggle-view-edit',function(){
 				var $this = $(this);
-				var $tab = $this.closest('[data-view-edit-capture-zone="true"]')
+				var $tab = $this.closest('[data-view-edit-capture-zone="true"]');
+				if ($tab.length === 0) $tab = $this.parent().next('[data-view-edit-capture-zone="true"]')
 				if (!$this.hasClass('down')){
 					if($this.data('mode') === 'view'){
 						changeToDisplayMode($tab);
@@ -348,11 +353,15 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 				if (evt.target.nodeName !== 'A'){
 					var href = $(this).data('href');
 					goToView(href);
-					$('li.active').removeClass('active');
+					$('#vertical-nav').find('li.active').removeClass('active');
 					$('.dashboard-back').removeClass('hidden');
 					$('#vertical-nav').find('a[href="' + href + '"]').parent().addClass('active');
 					scrollToPos('body');
-					minimiseDashboardNav($('li.minimise-dashboard-nav'));
+					if(href === '#contacts' && $('div[data-one-warehouse="true"]').length > 0 && $('li a[href="#master-contact"]').length === 0){
+						$('div[data-one-warehouse="true"]').removeClass('hidden');
+						$('.warehouse-specific-contacts').removeClass('hidden');
+					}
+					//minimiseDashboardNav($('li.minimise-dashboard-nav'));
 				}
 			});
 			$(document).on('click','li.minimise-dashboard-nav',function(){
@@ -377,7 +386,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 				$li.parent('ul').parent('#vertical-nav').parent('.main').css('background-color','#d7d7d7');
 				$li.addClass('active').siblings().removeClass('active');
 				scrollToPos('body');
-				minimiseDashboardNav($('li.minimise-dashboard-nav'));
+				//minimiseDashboardNav($('li.minimise-dashboard-nav'));
 				if(backLinks.length > 1){
 					$('.dashboard-back').removeClass('hidden');
 				}
@@ -450,11 +459,11 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			var COMPULSORY_CONTACTS = 2;
 			var numberSuffix = ["st","nd","rd"];
 			initDelete();
+			addEmptyRowsToTables(["master-contact","availability-controller","enquires-controller","transport-coordinator","goods-in","picking-dispatch","invoice-controller","credit-controller"]);//Attempt to add empty rows to all tables if they are there.
 			loom.rebind($('form[data-form-type="contacts-form"]'))
 			if ($('#warehouse-contacts').hasClass('active')){
 				$('#warehouse-contacts').removeClass('hidden');
 			}
-			addEmptyRowsToTables(["master-contact","availability-controller","enquires-controller","transport-coordinator","goods-in","picking-dispatch","invoice-controller","credit-controller"]);//Attempt to add empty rows to all tables if they are there.
 			
 			$('a[data-action="go-to-matrix"]').click(function(e){
 				e.preventDefault();
@@ -473,6 +482,33 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 				}
 				return false;
 			}
+			$(document).on('keyup','form[data-form-type="contacts-form"] table tbody tr input',function(){
+				var $this = $(this);
+				var $tr = $this.closest('tr');
+				var inputs = $tr.find('input');
+				for (var i =0; i<inputs.length; i++){
+					if($(inputs[i]).val() !== '' || $(inputs[i]).parent().hasClass('error')){
+						$tr.find('td[data-field="clear"]').find('button').removeClass('hidden');
+						break;
+					}else{
+						$tr.find('td[data-field="clear"]').find('button').addClass('hidden');
+					}
+				}
+			});
+			
+			$(document).on('click','td[data-field="clear"] button',function(e){
+				e.preventDefault();
+				var $this = $(this);
+				var $tr = $this.closest('tr');
+				var inputs = $tr.find('input');
+				for (var i =0; i<inputs.length; i++){
+					$(inputs[i]).val('');
+					$(inputs[i]).parent().removeClass('success');
+					$(inputs[i]).parent().removeClass('error');
+					$(inputs[i]).parent().removeClass('error-depends');
+				}
+				$this.addClass('hidden');
+			});
 			
 			$(document).on('keyup','form[data-form-type="contacts-form"] table tbody tr td[data-field="name"] input',function(){
 				var $this = $(this);
@@ -539,13 +575,26 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			
 			$(document).on('click', 'button[name="resend-email"]',function(){
 				var $this = $(this),
+				$tr = $this.closest('tr'),
+				$table = $this.closest('table'),
+				roleNumbers = ['First','Second','Third'],
 				data = {},
 				contactType = $this.closest('div.tab.main').data('content').replace(/-([a-z])/g, function (g) { return ' ' + g[1].toUpperCase(); });
 				contactType = contactType.charAt(0).toUpperCase() + contactType.substring(1);
 				
 				data.role = contactType;
 				data.email = $this.parent('td').siblings('td[data-field="email"]').html();
-				
+				data.roleNumber = roleNumbers[$tr.index()];
+				data.name = $tr.find('td[data-field="name"]').html();
+				data.masterContact = $('form#company-contacts').find('table tbody tr').first().find('td[data-field="name"]').html();
+				if(!data.masterContact) data.masterContact = $('input[name="master-contact-name"]').val();
+				if (data.role !== 'Master Contact'){
+					data.contactType = data.roleNumber + ' ' + contactType;
+				}else{
+					data.contactType = contactType;
+				}
+				data.firstContact = $table.find('tbody tr').first().find('td[data-field="name"]').find('input').val();
+				if(!data.firstContact) data.firstContact = $table.find('tbody tr').first().find('td[data-field="name"]').html();
 				DBCntr.resendRegisterEmail($this.parent('td').parent('tr').data('id'),data,function(result){
 					if(result.err === true){
 						Alerts.showPersistentErrorMessage('Error: Email not sent');
@@ -569,7 +618,8 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 					rows = $table.find('tr[data-status="new"]'),
 					$allRows = $table.find('tr'),
 					shouldIgnore,
-					skippedRows = [];
+					skippedRows = [],
+					roleNumbers = ['First','Second','Third'];
 					
 					for (var i = 0; i<rows.length; i++){
 						shouldIgnore = shouldIgnoreThisRow($(rows[i]));
@@ -588,10 +638,16 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 							data.roleCC = data.roleCC.replace('#','').replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
 							data.warehouseId = $('select[name="warehouses"]').find(":selected").data('id') || $this.closest(".warehouse-tasks-tray").parent().closest(".warehouse-tasks-tray").data('warehouse-id');
 							data.warehouseName = $('select[name="warehouses"]').find(":selected").val() || $this.closest(".warehouse-tasks-tray").parent().closest(".warehouse-tasks-tray").data('warehouse-name');
+							data.masterContact = $('form#company-contacts').find('table tbody tr').first().find('td[data-field="name"]').html();
+							if(!data.masterContact) data.masterContact = $('input[name="master-contact-name"]').val();
+							data.firstContact = $table.find('tbody tr').first().find('td[data-field="name"]').find('input').val();
+							if(!data.firstContact) data.firstContact = $table.find('tbody tr').first().find('td[data-field="name"]').html();
 							for (var i = 0; i<rows.length; i++){
 								if($(rows[i]).find(".loom-ignore").length === 0){
 									data.email = $(rows[i]).find('td[data-field="email"]').find('input').val();
 									data.name = $(rows[i]).find('td[data-field="name"]').find('input').val();
+									data.sortOrder = (i + 1) + $table.find('tbody tr').not('[data-status="new"]').length;
+									data.roleNumber = roleNumbers[(i) + $table.find('tbody tr').not('[data-status="new"]').length];
 									if((data.email !== undefined && data.email !== "") && (data.name !== undefined && data.name !== "")){
 										contactsToAdd ++;
 										data.phoneNumber = $(rows[i]).find('td[data-field="phone-number"]').find('input').val();

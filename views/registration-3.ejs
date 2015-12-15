@@ -59,7 +59,7 @@
 													<td class="text" data-th="Storage Name">
 														<span><%=storage.name%></span>
 													</td>
-													<td class="text" data-th="Pallet Type">
+													<td class="text" data-th="Pallet Width">
 														<span><%=palletTypes[storage.palletType]%></span>
 													</td>
 													<td class="text" data-th="Pallet Spaces">
@@ -110,7 +110,7 @@
 										<!--<div class="row">
 											<!--<div class="columns five check checkbox input-field">
 												<input required type="checkbox" name="accept" id="accept"/>
-												<label for="accept">*I agree to the terms and conditions.</label>
+												<label for="accept"><a href="/terms-and-conditions" target="_blank">*I agree to the terms and conditions.</a></label>
 											</div>-->
 											<!--<div class="columns four offset-by-five">
 												<button href="#" class="view tertiary forward mini">View list of Documentation</button>
@@ -141,12 +141,12 @@
 													<label for="tel">Contact Number*</label><input type="tel" name="contact" id="tel" required>
 												</div>
 												<div class="input-field columns six">
-													<label for="password">Password*</label><input type="password" name="password" id="password" required>
+													<label for="password">Password*</label><input type="password" name="password" id="password" data-loom-validators="passwordPolicyStrict" required>
 												</div>
 											</div>
 											<div class="row">
 												<div class="input-field columns six">
-													<label for="confirm-password">Confirm Password*</label><input type="password" name="confirm-password" id="confirm-password" required data-loom-confirm="password">
+													<label for="confirm-password">Confirm Password*</label><input type="password" name="confirm-password" data-loom-validators="passwordPolicyStrict" id="confirm-password" required data-loom-confirm="password">
 												</div>
 											</div>
 										</div>
@@ -362,12 +362,12 @@
 									<p>Choose a password</p>
 								<%}%>
 								<div class="input-field no-success-validation-style">
-									<input data-pattern="(?=.*[A-z])(?=.*[0-9])" type="password" name="password" placeholder="Password" minlength="8" required/>
+									<input data-loom-validators="passwordPolicyStrict" type="password" name="password" placeholder="Password" minlength="8" required/>
 								</div>
 								<div class="input-field no-success-validation-style">
-									<input data-loom-confirm="password" data-pattern="(?=.*[A-z])(?=.*[0-9])" type="password" name="confirm-password" placeholder="Confirm Password" minlength="8" required/>
+									<input data-loom-confirm="password" data-loom-validators="passwordPolicyStrict" type="password" name="confirm-password" placeholder="Confirm Password" minlength="8" required/>
 									<ul class="messages">
-										 <li class="msg-info">Password must be at least 8 characters in length, contain at least one number and both passwords must match.</li>
+										 <li class="msg-info">Password must be at least 8 characters (one must be uppercase) in length, contain at least one number and both passwords must match.</li>
 									 </ul>
 								</div>
 								<div class="input-field">
@@ -378,7 +378,7 @@
 								</div>
 								<div class="check checkbox input-field">
 									<input required type="checkbox" name="accept" id="accept"/>
-									<label for="accept">I agree to the terms and conditions.</label>
+									<label for="accept"><a href="/terms-and-conditions" target="_blank">I agree to the terms and conditions.</a></label>
 								</div>
 								<button class="action done">finish</button>
 							</form>
@@ -393,6 +393,6 @@
 		 <script type="text/template" id="p-and-a-warning">
 		    <% include ./partials/pricing-and-availability-warning%> 
 		 </script>
-		 <script type="text/template"" id="video-popup">
+		 <script type="text/template" id="video-popup">
 			<%include ./partials/video-popup%>
 		</script>

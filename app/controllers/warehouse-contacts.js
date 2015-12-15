@@ -5,32 +5,32 @@ var company = require("../controllers/company.js");
 var local = require("../local.config.js");
 exports.version = "0.1.0";
 
-exports.updateAvailabilityController = function(warehouseContact,user,cb){
-	WarehouseContacts.update({_id:warehouseContact},{$push:{availabilityController:user}}).exec(cb);	
+exports.updateAvailabilityController = function(warehouseContact,user,cb,sortOrder){
+	WarehouseContacts.update({_id:warehouseContact},{$push:{availabilityController:{'user':user,'sortOrder':sortOrder}}}).exec(cb);	
 }
 
-exports.updateEnquiresController = function(warehouseContact,user,cb){
-	WarehouseContacts.update({_id:warehouseContact},{$push:{enquiresController:user}}).exec(cb);	
+exports.updateEnquiresController = function(warehouseContact,user,cb,sortOrder){
+	WarehouseContacts.update({_id:warehouseContact},{$push:{enquiresController:{'user':user,'sortOrder':sortOrder}}}).exec(cb);	
 }
 
-exports.updateTransportCoordinator = function(warehouseContact,user,cb){
-	WarehouseContacts.update({_id:warehouseContact},{$push:{transportCoordinator:user}}).exec(cb);	
+exports.updateTransportCoordinator = function(warehouseContact,user,cb,sortOrder){
+	WarehouseContacts.update({_id:warehouseContact},{$push:{transportCoordinator:{'user':user,'sortOrder':sortOrder}}}).exec(cb);	
 }
 
-exports.updateGoodsIn = function(warehouseContact,user,cb){
-	WarehouseContacts.update({_id:warehouseContact},{$push:{goodsIn:user}}).exec(cb);	
+exports.updateGoodsIn = function(warehouseContact,user,cb,sortOrder){
+	WarehouseContacts.update({_id:warehouseContact},{$push:{goodsIn:{'user':user,'sortOrder':sortOrder}}}).exec(cb);	
 }
 
-exports.updatePickingDispatch = function(warehouseContact,user,cb){
-	WarehouseContacts.update({_id:warehouseContact},{$push:{pickingDispatch:user}}).exec(cb);	
+exports.updatePickingDispatch = function(warehouseContact,user,cb,sortOrder){
+	WarehouseContacts.update({_id:warehouseContact},{$push:{pickingDispatch:{'user':user,'sortOrder':sortOrder}}}).exec(cb);	
 }
 
-exports.updateInvoiceController = function(warehouseContact,user,cb){
-	WarehouseContacts.update({_id:warehouseContact},{$push:{invoiceController:user}}).exec(cb);	
+exports.updateInvoiceController = function(warehouseContact,user,cb,sortOrder){
+	WarehouseContacts.update({_id:warehouseContact},{$push:{invoiceController:{'user':user,'sortOrder':sortOrder}}}).exec(cb);	
 }
 
-exports.updateCreditController = function(warehouseContact,user,cb){
-	WarehouseContacts.update({_id:warehouseContact},{$push:{creditController:user}}).exec(cb);	
+exports.updateCreditController = function(warehouseContact,user,cb,sortOrder){
+	WarehouseContacts.update({_id:warehouseContact},{$push:{creditController:{'user':user,'sortOrder':sortOrder}}}).exec(cb);	
 }
 
 exports.createWarehouseContacts = function(data,cb){

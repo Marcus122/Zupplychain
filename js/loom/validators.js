@@ -181,7 +181,15 @@ define({
 			return true;
 		}
 	},
-	
+	emailNotInInput : function(input){
+		var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+		var isEmailInInput = re.test(input);
+		if(isEmailInInput){
+			return false;
+		}else{
+			return true;
+		}
+	},
 	//Complex ones
 	getRequiredWhenOtherFieldSetValidator : function(otherInputField) {
 		return function(thisInputValue) {

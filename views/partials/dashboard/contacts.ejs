@@ -18,6 +18,8 @@
 			<div class="tab-content">
 				<%if(authorisations.contacts.masterContacts === true){%>
 					<% include multi-used/master-contacts%>
+				<%}else{%>
+					<input type="hidden" name="master-contact-name" value="<%=masterContacts[0].user.name%>"/>
 				<%}%>
 				<% include ../../partials/dashboard/warehouse-dropdown-list%>
 			</div>

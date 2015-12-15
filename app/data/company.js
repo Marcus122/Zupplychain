@@ -21,16 +21,29 @@ companySchema.statics = {
 		.exec(cb)
 	},
 	loadByUser: function(user,cb){
-		this.find({masterContacts:mongoose.Types.ObjectId(user)})
+		this.find({"masterContacts.user":mongoose.Types.ObjectId(user)})
 		.exec(cb)
 	},
 	removeMasterContact: function(id,user,cb){
 		//this.update({_id:id},{$pull:{masterContacts:{$in:[user]}}}).exec(cb);
 		this.findOne({_id:id},function(err,result){
+			var deletedCounter = 0;
+			var deleteIndexes = [];
 			if(err){
 				cb(err);
 			}else{
-				result.masterContacts.pull(user);
+				result.masterContacts.forEach(function(element,index){
+					if (element['user'].equals(mongoose.Types.ObjectId(user))){
+						//result.splice(index,1);
+						deleteIndexes.push(index);
+						deletedCounter ++;
+					}else{
+						result.masterContacts[index]['sortOrder'] -= deletedCounter;
+					}
+				});
+				for (var i = 0; i<deleteIndexes.length; i++){
+					result.masterContacts.splice(deleteIndexes[i],1);
+				}
 				if (result.contactsDeletedAt === undefined || (Date.now() - Date.parse(result.contactsDeletedAt)) > 7){
 					result.masterContactsDeletedAt = Date.now();
 				}

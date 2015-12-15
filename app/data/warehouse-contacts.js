@@ -6,13 +6,34 @@ var mongoose = require('mongoose'),
 	
 var fields = {
 	warehouse: { type: Schema.ObjectId, ref: 'warehouse' },
-	availabilityController: [{ type: Schema.ObjectId, ref: 'users', index: { unique: true } }],
-	enquiresController: [{ type: Schema.ObjectId, ref: 'users', index: { unique: true } }],
-	transportCoordinator: [{ type: Schema.ObjectId, ref: 'users', index: { unique: true } }],
-	goodsIn: [{ type: Schema.ObjectId, ref: 'users', index: { unique: true } }],
-	pickingDispatch: [{ type: Schema.ObjectId, ref: 'users', index: { unique: true } }],
-	invoiceController: [{ type: Schema.ObjectId, ref: 'users', index: { unique: true } }],
-	creditController: [{ type: Schema.ObjectId, ref: 'users', index: { unique: true } }],
+	availabilityController: [{ 
+		user:{type: Schema.ObjectId, ref: 'users' },
+		sortOrder:{type:Number,default:0}
+	}],
+	enquiresController: [{ 
+		user: {type: Schema.ObjectId, ref: 'users'},
+		sortOrder:{type:Number,default:0}
+	}],
+	transportCoordinator: [{ 
+		user: {type: Schema.ObjectId, ref: 'users'},
+		sortOrder:{type:Number,default:0}
+	}],
+	goodsIn: [{ 
+		user: {type: Schema.ObjectId, ref: 'users'},
+		sortOrder:{type:Number,default:0}
+	}],
+	pickingDispatch: [{ 
+		user: {type: Schema.ObjectId, ref: 'users'},
+		sortOrder:{type:Number,default:0}
+	}],
+	invoiceController: [{ 
+		user: {type: Schema.ObjectId, ref: 'users'},
+		sortOrder:{type:Number,default:0}
+	}],
+	creditController: [{ 
+		user: {type: Schema.ObjectId, ref: 'users'},
+		sortOrder:{type:Number,default:0} 
+	}],
 	contactsDeletedAt: {type: Date},
 };
 
@@ -24,13 +45,13 @@ warehouseContactsSchema.statics = {
 		.exec(cb)
 	},
 	loadWarehousesContactsByACOrEC: function(userId,cb){
-    	this.find({$or:[{availabilityController:{$in:[userId]}},{enquiresController:{$in:[userId]}}]}).exec(cb);
+    	this.find({$or:[{"availabilityController.user":{$in:[userId]}},{"enquiresController.user":{$in:[userId]}}]}).exec(cb);
   	},
 	removeByWarehouse: function(warehouse,cb){
 		this.find({warehouse: warehouse}).remove().exec(cb);
 	},
 	loadByUser: function(userId,cb){
-		this.find({$or:[{availabilityController:{$in:[userId]}},{enquiresController:{$in:[userId]}},{creditController:{$in:[userId]}},{invoiceController:{$in:[userId]}},{pickingDispatch:{$in:[userId]}},{goodsIn:{$in:[userId]}},{transportCoordinator:{$in:[userId]}}]})
+		this.find({$or:[{"availabilityController.user":{$in:[userId]}},{"enquiresController.user":{$in:[userId]}},{"creditController.user":{$in:[userId]}},{"invoiceController.user":{$in:[userId]}},{"pickingDispatch.user":{$in:[userId]}},{"goodsIn.user":{$in:[userId]}},{"transportCoordinator.user":{$in:[userId]}}]})
 		.exec(cb);
 	},
 	deleteWhContact: function(id,user,contactType,cb){
@@ -38,10 +59,24 @@ warehouseContactsSchema.statics = {
 		// object[contactType] = user;
 		// this.update({_id:id},{$pull:object}).exec(cb);
 		this.findOne({_id:id},function(err,result){
+			var deletedCounter = 0;
+			var deleteIndexes = [];
 			if(err){
 				cb(err);
 			}else{
-				result[contactType].pull(user);
+				result[contactType].forEach(function(element,index){
+					if (element['user'].equals(mongoose.Types.ObjectId(user))){
+						//result[contactType].splice(index,1);
+						deleteIndexes.push(index);
+						deletedCounter ++;
+					}else{
+						result[contactType][index]['sortOrder'] -= deletedCounter;
+					}
+				});
+				for (var i = 0; i<deleteIndexes.length; i++){
+					result[contactType].splice(deleteIndexes[i],1);
+				}
+				//result[contactType].pull(user);
 				if (result.contactsDeletedAt === undefined || (Date.now() - Date.parse(result.contactsDeletedAt)) > 7){
 					result.contactsDeletedAt = Date.now();
 				}

@@ -2,7 +2,8 @@ var User = require("../controllers/users.js"),
 	local = require("../local.config.js"),
 	multiparty = require('multiparty'),
 	utils = require('../utils.js'),
-	fs = require('fs');
+	fs = require('fs'),
+	emailer = require('../controllers/emailer.js')
 
 var handler = function(app) {
 	app.get('/provider-registration', function(req,res){
@@ -36,6 +37,22 @@ var handler = function(app) {
 	});
 	app.post('/register-contact/:userId',registerContact);
 };
+function sendRegisteredEmail(req,res,emailData,cb){
+	emailData.title = 'Registration Complete';
+	emailData.subtitle = 'Registration Complete';
+	emailData.config = local.config;
+	res.render('emails/registered',emailData,function(err,template){
+		if(err){
+			console.log(err);
+			cb(err);
+		}else{
+			emailer.sendMail(req,res,template,emailData.email,'info@zupplychain.com','Registration Complete',function(err){
+				cb(null);
+			});
+		}
+	});
+}
+
 function registerContact(req,res){
 	User.user_by_id(req.params.userId,function(err,user){
 		if(err){
@@ -51,10 +68,15 @@ function registerContact(req,res){
 				if(err && err.message !== "Email Address Already Exists"){
 					setErrorResponse('Oops someting went wrong',res)
 				}else{
-					User.login(req,res,function(err,user){
-						res.writeHead(200, {"Content-Type": "application/json"});
-						var output = {redirectUrl: '/dashboard'};
-						res.end(JSON.stringify(output) + "\n");
+					var emailData = {};
+					emailData.email = req.body.email;
+					emailData.loginUrl = req.protocol + '://' + req.headers.host + '/login';
+					sendRegisteredEmail(req,res,emailData,function(){
+						User.login(req,res,function(err,user){
+							res.writeHead(200, {"Content-Type": "application/json"});
+							var output = {redirectUrl: '/dashboard'};
+							res.end(JSON.stringify(output) + "\n");
+						});
 					});
 				}
 			},true);
@@ -102,7 +124,12 @@ function completeRegistration(req,res){
 			res.end(JSON.stringify(err));
 			return;
 		}else{
-			res.send({redirect: '/registration-complete'});
+			var emailData = {};
+			emailData.email = req.body.email;
+			emailData.loginUrl = req.protocol + '://' + req.headers.host + '/login';
+			sendRegisteredEmail(req,res,emailData,function(){
+				res.send({redirect: '/registration-complete'});
+			});
 		}
 	});
 }
@@ -122,7 +149,12 @@ function saveRegistration(req,res){
 		if(err){
 			res.end(JSON.stringify(err));
 		}else{
-			res.end(JSON.stringify({error:false}));
+			var emailData = {};
+			emailData.email = req.body.email;
+			emailData.loginUrl = req.protocol + '://' + req.headers.host + '/login';
+			sendRegisteredEmail(req,res,emailData,function(){
+				res.end(JSON.stringify({error:false}));
+			});
 		}
 	});
 }
@@ -136,6 +168,8 @@ function uploadFile(req,res,next){
 		 		if(err){
 		 			if(err.code === 'EEXIST'){}
 		 		}
+				//var parts = files[0][i].originalFilename.split('.');
+				//files[0][i].originalFilename = parts[0] + '-' + Math.floor(new Date() / 1000) + '.' + parts[1];
 		 		fs.rename(files[0][i].path, local.config.upload_folders[2] + files[0][i].originalFilename);//Temporary folder until it is uploaded correctly
 		 		next();
 			});

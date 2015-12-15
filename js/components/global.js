@@ -11,6 +11,19 @@ define(["jquery","loom/loom","loom/loomAlerts","templates/templates"], function 
 			
 		}
 		
+			$(document).find('textarea').blur(function(){
+				if($(this).closest('.input-field').hasClass('error-complexTelephoneNumberNotInInput')){
+					$(this).parent().attr('data-hint','The description cannot contain phone numbers');
+				}else if(!$(this).closest('input-field').hasClass('error-complexTelephoneNumberNotInInput')){
+					$(this).parent().removeAttr('data-hint');
+					if($(this).closest('.input-field').hasClass('error-emailNotInInput')){
+						$(this).parent().attr('data-hint','The description cannot contain email addresses');
+					}else if(!$(this).closest('.input-field').hasClass('error-emailNotInInput')) {
+						$(this).parent().removeAttr('data-hint');
+					}
+				}
+			});
+		
 		function centerPopup($element){
 			var top;
 			var $window = $(window);

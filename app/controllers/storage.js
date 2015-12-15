@@ -81,22 +81,29 @@ exports.buildStorageNamesAndRenderPage = function(req,res,page){
         x = 0;
     
     var storagesLoop = function (chosenStorage,page){
-    exports.getStorageName(chosenStorage[x],function(){
-        
-        x++;
-        
-        if(x<chosenStorage.length){
-            storagesLoop(chosenStorage,page);
-        }else if (x===chosenStorage.length){
-            i++;
-            x=0;
-        }
-        
-        if (i === Object.keys(req.data.quote.storageProfile).length){
-            res.render(page,req.data);
-        }
-        
-    });
+	if (chosenStorage && chosenStorage.Constructor === Object){
+		exports.getStorageName(chosenStorage[x],function(){
+			
+			x++;
+			
+			if(x<chosenStorage.length){
+				storagesLoop(chosenStorage,page);
+			}else if (x===chosenStorage.length){
+				i++;
+				x=0;
+			}
+			
+			if (i === Object.keys(req.data.quote.storageProfile).length){
+				res.render(page,req.data);
+			}
+			
+		});
+	}else{
+		i++;
+		if (i === Object.keys(req.data.quote.storageProfile).length){
+			res.render(page,req.data);
+		}
+	}
     }
     
     for (key in req.data.quote.storageProfile){
@@ -104,4 +111,11 @@ exports.buildStorageNamesAndRenderPage = function(req,res,page){
             storagesLoop(req.data.quote.storageProfile[key].storages,page);
         }
     }
+}
+
+exports.sortStoragesByNameAndPalletType = function(storages){
+	storages.sort(function(x,y) { 
+		return x.name > y.name || x.palletType > y.palletType;
+	});
+	return storages;
 }

@@ -24,11 +24,12 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			});
 			
 			$('#reg-help-bubble .close').click(function(e){
-				$('#reg-help-bubble').addClass('hidden');
+				setTimer(60000*8);
 				e.stopPropagation()
 			})
 			
 			$('button[data-action="view-reg-example"], #reg-help-bubble').click(function(){
+				setTimer(60000*8);
 				global.showRegistrationExample($(this),false);
 			});
 			
@@ -146,6 +147,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			var documentTitles = [];
 			var images = [];
 			var imageTempLocations = [];
+			var docTempLocations = [];
 			var deletedDocuments = [];
 			var deletedImages = [];
 			var photosAdded = false;
@@ -225,14 +227,6 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					}
 				});
 			});
-			$registration.find('textarea[name="description"]').blur(function(){
-				if($(this).closest('.input-field').hasClass('error-complexTelephoneNumberNotInInput')){
-					$(this).parent().attr('data-hint','The description cannot contain phone numbers');
-				}else if(!$(this).closest('input-field').hasClass('error-complexTelephoneNumberNotInInput')){
-					$(this).parent().removeAttr('data-hint');
-				}
-				
-			});
 			$registration.find('textarea[name="description"]').keyup(function(){
 				if(!$(this).closest('input-field').hasClass('error-complexTelephoneNumberNotInInput')){
 					$(this).parent().removeAttr('data-hint');
@@ -277,7 +271,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				});
 			}
 			function uploadFiles(warehouseId,cb){
-				Warehouse.uploadDocument(warehouseId,documents,documentTitles,function(result){
+				Warehouse.uploadDocument(warehouseId,documents,documentTitles,docTempLocations,function(result){
 					if (result.error === false || result.error === null){
 						Warehouse.uploadImage(warehouseId,images,imageTempLocations,function(result){
 							if(cb) cb(result);
@@ -310,10 +304,10 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					photosAdded = true;
 					for(var i in data){
 						var image = data[i];
-						image.file = '/images/tmp/' + data[i].name;
+						image.file = '/tmp/' + data[i].name;
 						var $image = template.bind( image );
 						$image.attr('data-image-index',index)
-						imageTempLocations.push('./images/tmp/' + data[i].name);
+						imageTempLocations.push('./tmp/' + data[i].name);
 						if ($photoArea.find('.isDefault').length === 0){
 							$("#defaultPhoto").val(image.name);
 							$(".document").removeClass("isDefault");
@@ -331,20 +325,31 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					evt.preventDefault();
 					$(this).closest('#document-area').find('.input-field.file-title').addClass('error').addClass('error-required');	
 				}
-			})
+			});
 			addDocument.onchange = function(evt){
+				var $this = $(this);
 				if($uploadDoc.prop("files").length > 0){
-					if($(this).closest('#document-area').find('input[name="file-title"]').val() !== ""){
-						$(this).closest('#document-area').find('.input-field.file-title').removeClass('error').removeClass('error-required');
-						var uploadTemplate = templates.getTemplate("upload-document");
-						var $uploadTemplate = uploadTemplate.bind(data);
-						$uploadTemplate.find(".file-name").html($('input[name="file-title"]').val())
-						$uploadTemplate.attr('data-doc-index',documents.length)
-						$('#upload-documents').append($uploadTemplate);
-						documentTitles.push($('input[name="file-title"]').val());
-						documents.push($uploadDoc.prop("files"));
-						//$uploadDoc.val("");
-						$(this).closest('#document-area').find('input[name="file-title"]').val("");
+					if($this.closest('#document-area').find('input[name="file-title"]').val() !== ""){
+						var files = $uploadDoc.prop("files");
+						if(!files) return;
+						sendFile(files,function(data){
+							for(var i in data){
+								var doc = data[i];
+								docTempLocations.push('./tmp/' + doc.name);
+								$this.closest('#document-area').find('.input-field.file-title').removeClass('error').removeClass('error-required');
+								var uploadTemplate = templates.getTemplate("upload-document");
+								var $uploadTemplate = uploadTemplate.bind(data);
+								$uploadTemplate.find(".file-name").html($('input[name="file-title"]').val());
+								$uploadTemplate.find(".file-name").attr('href','/tmp/' + doc.name);
+								$uploadTemplate.find(".file-name").attr('target','_blank');
+								$uploadTemplate.attr('data-doc-index',documents.length)
+								$('#upload-documents').append($uploadTemplate);
+								documentTitles.push($('input[name="file-title"]').val());
+								documents.push($uploadDoc.prop("files"));
+								//$uploadDoc.val("");
+								$this.closest('#document-area').find('input[name="file-title"]').val("");
+							}
+						});
 					}else{
 						evt.preventDefault();
 						$(this).closest('#document-area').find('.input-field.file-title').addClass('error').addClass('error-required');

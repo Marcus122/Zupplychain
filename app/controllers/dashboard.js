@@ -30,10 +30,10 @@ exports.getWarehouseContactsByWildcard = function(req,res,query,cb){
 	for (var i in warehouseContacts){
 		if(warehouseContacts[i].constructor === Array){
 			for(var j = 0; j<warehouseContacts[i].length; j++){
-				if(warehouseContacts[i][j].name.toLowerCase().substring(0,queryLen) === query.toLowerCase()){
-					match.name = warehouseContacts[i][j].name;
-					match.email = warehouseContacts[i][j].email;
-					match.phoneNumber = warehouseContacts[i][j].phoneNumber || 'N/A';
+				if(warehouseContacts[i][j].user.name && warehouseContacts[i][j].user.name.toLowerCase().substring(0,queryLen) === query.toLowerCase()){
+					match.name = warehouseContacts[i][j].user.name;
+					match.email = warehouseContacts[i][j].user.email;
+					match.phoneNumber = warehouseContacts[i][j].user.phoneNumber || 'N/A';
 					matches.push(match);
 				}
 			}

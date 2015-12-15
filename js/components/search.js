@@ -13,10 +13,12 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
     var cameHereViaBackButton = (hasSearch && !(window.location.hash == "#search-area"));
     if (cameHereViaBackButton) { 
        require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) {
+           setTimeout(function(){
                     $(".search-results").fadeIn().removeClass('hidden');
-                    $.scrollTo(".search-results", {duration : 100, offset : -0 });
+                    $.scrollTo(".search-results", { offset : -0 });
                     $("#search-description-popup").css({position:"absolute", top:$('.search-results').offset().top-500 });
-                });  
+                },1000);  
+       });
     }
     
     if($('input[name="first-search"]').val() === "true"){

@@ -57,7 +57,9 @@
 									<div class="columns twelve">
 										<div class="input-field">
 											<label for="message">Message*</label>
-											<textarea name="message" data-loom-validator="complexTelephoneNumberNotInInput" placeholder="Type your message here" requiredrequired></textarea>
+											<div class="hint--top content-container">
+												<textarea name="message" data-loom-validators="complexTelephoneNumberNotInInput|emailNotInInput" placeholder="Type your message here" requiredrequired></textarea>
+											</div>
 										</div>
 									</div>
 									<div class="columns twelve button-container">

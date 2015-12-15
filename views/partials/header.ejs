@@ -7,7 +7,7 @@
 	<aside>
 	
 	<div class="contact-info">
-		Call Us: <span>08888 888 888</span>
+		Call Us: <span><%=config.companyDetails.telephone%></span>
 	</div>
 	<%if (user.email != undefined){%>
 		<nav class="user-links">
@@ -26,8 +26,8 @@
 			<li><a href="/">home</a></li>
 			<li><a href="/about-us">about us</a></li>
 			<li><a href="/news">news</a></li>
-			<li><a href="#">reviews</a></li>
-			<li><a href="#">testimonials</a></li>
+			<li><a href="/reviews">reviews</a></li>
+			<li><a href="/testimonials">testimonials</a></li>
 			<li><a href="/contact-us">Contact Us</a></li>
 		</ul>
 	</nav>

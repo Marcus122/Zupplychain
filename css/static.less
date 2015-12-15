@@ -182,6 +182,9 @@ label[for="confirm-password"]{
 		&:extend(.generic-banner);
 		h1{
         	&:extend(.h1-banner);
+			text-transform:none;
+			float:left;
+			padding:0;
     	}
 	}
 }
@@ -324,9 +327,13 @@ label[for="confirm-password"]{
 					margin-right: 72px;
 					vertical-align: top;
 				}
-				textarea{
-					width: 100%;
-					height:200px;
+				.content-container{
+					width:100%;
+					textarea{
+						width: 100%;
+						height:200px;
+						border-radius:7px;
+					}
 				}
 				.contact-details .contact{
 					font-weight:normal;
@@ -400,5 +407,57 @@ label[for="confirm-password"]{
 .registration-complete{
 	.content-box .main{
 		text-align:center;
+	}
+}
+
+#terms-and-conditions-landing{
+	#documents{
+		.unit-margin-left(2);
+		.unit-margin-right(2);
+		width:96.7%
+	}
+}
+
+.testimonials,
+.reviews,
+#terms-and-conditions-landing{
+	.banner{
+		margin-bottom:0;
+	}
+}
+
+.coming-soon{
+	background-color: @primary;
+    color: #fff;
+    text-align: center;
+    vertical-align: middle;
+    background-image: url('../images/lorry-image.png');
+    height: 362px;
+    background-repeat: no-repeat;
+    background-position-y: 42%;
+	.text{
+		width: 263px;
+		display: inline-block;
+		.unit-margin-top(6.3);
+		h1{
+			.unit-margin-bottom(2.5);
+		}
+	}
+}
+
+#terms-and-conditions{
+	ol{
+		counter-reset: item;
+		>li{
+			p{
+				font-size:90%;
+				text-indent:31px
+			}
+			display: block;
+			&:before{
+				content: counters(item, ".") ". ";
+				counter-increment: item;
+			}
+		}
 	}
 }

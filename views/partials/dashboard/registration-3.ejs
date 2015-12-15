@@ -36,7 +36,7 @@
 						<td class="text" data-th="Storage Name">
 							<span><%=storage.name%></span>
 						</td>
-						<td class="text" data-th="Pallet Type">
+						<td class="text" data-th="Pallet Width">
 							<span><%=palletTypes[storage.palletType]%></span>
 						</td>
 						<td class="text" data-th="Pallet Spaces">
@@ -88,7 +88,7 @@
 			<!--<div class="row">
 				<!--<div class="columns five check checkbox input-field">
 					<input required type="checkbox" name="accept" id="accept"/>
-					<label for="accept">*I agree to the terms and conditions.</label>
+					<label for="accept"><a href="/terms-and-conditions">*I agree to the terms and conditions.</a></label>
 				</div>-->
 				<!--<div class="columns four offset-by-five">
 					<button href="#" class="view tertiary forward mini">View list of Documentation</button>
@@ -125,12 +125,12 @@
 						<label for="tel">Contact Number*</label><input type="tel" name="contact" id="tel" required>
 					</div>
 					<div class="input-field columns six">
-						<label for="password">Password*</label><input type="password" name="password" id="password" required>
+						<label for="password">Password*</label><input data-loom-validators="passwordPolicyStrict" type="password" name="password" id="password" required>
 					</div>
 				</div>
 				<div class="row">
 					<div class="input-field columns six">
-						<label for="confirm-password">Confirm Password*</label><input type="password" name="confirm-password" id="confirm-password" required data-loom-confirm="password">
+						<label for="confirm-password">Confirm Password*</label><input type="password" data-loom-validators="passwordPolicyStrict" name="confirm-password" id="confirm-password" required data-loom-confirm="password">
 					</div>
 				</div>
 			</div>

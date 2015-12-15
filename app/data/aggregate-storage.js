@@ -151,7 +151,7 @@ var aggregateStorage = function(theStorages, VolumeDiscounts) {
             while(continueLoop){
                 if(counter>0){
                     for(var j = counter-1; j>=0; j--){
-                        if(storagesThisWeek[i].name === storagesThisWeek[j].name){
+                        if((storagesThisWeek[i].name === storagesThisWeek[j].name) && storagesThisWeek[j].numPalletsStored > 0){ //Don't use the same storage space again if something has already been stored we can't make assumptions about space.
                             continueLoop =false;
                             break;
                         }

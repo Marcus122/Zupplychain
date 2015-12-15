@@ -6,8 +6,8 @@ var local = require("../local.config.js");
 
 exports.version = "0.1.0";
 
-exports.updateMasterContacts = function(company,user,cb){
-	Company.update({_id:company},{$push:{masterContacts:user}}).exec(cb);	
+exports.updateMasterContacts = function(company,user,cb,sortOrder){
+	Company.update({_id:company},{$push:{masterContacts:{'user':user,'sortOrder':sortOrder}}}).exec(cb);	
 }
 
 exports.updateWarehouses = function(company,warehouse,cb){
@@ -38,15 +38,17 @@ exports.findByUser =  function(user,callback){
 exports.getMasterContactsUserData = function(company,cb){
 	var cbCompleted = 0;
 	var masterContacts = [];
+	var counter = 0;
 	Company.load(company,function(err,result){
 		var resultObj = result.toObject();
 		for (var i = 0; i < resultObj.masterContacts.length; i++){
-			User.user_by_id(resultObj.masterContacts[i],function(err,user){
+			User.user_by_id(resultObj.masterContacts[i].user,function(err,user){
 				if(err){
 					//Do nothing, the warehouse will not be in the results
 				}else{
 					cbCompleted ++;
-					masterContacts.push(user.toObject())
+					masterContacts.push({'user':user.toObject(),'sortOrder':resultObj.masterContacts[counter].sortOrder})
+					counter ++;
 					if(resultObj.masterContacts.length === cbCompleted){
 						cb(null,masterContacts);
 					}

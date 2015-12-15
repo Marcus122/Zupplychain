@@ -2,32 +2,34 @@
 	var numberSuffix = ["st","nd","rd"];
 %>
 <div data-contact-type="warehouse-specific-contacts" data-content="transport-coordinator" class="tab main active">
-	<form id="transport-coordinator"autocomplete="off" data-form-type="contacts-form" class="loom-form data-loom-no-submit="true" novalidate="novalidate">
+	<form  data-loom-do-not-show-success-css="true" id="transport-coordinator"autocomplete="off" data-form-type="contacts-form" class="loom-form data-loom-no-submit="true" novalidate="novalidate">
 		<table class="simple dashboard-table" data-max-rows="2">
 			<thead>
 				<th>No.</th>
 				<th>Name</th>
 				<th>Email</th>
-				<th>Phone Number</th>
+				<th>Phone Number (Optional)</th>
 				<th>Status</th>
+				<th></th>
 				<%if(authorisations.contacts.warehouseContacts.edit===true && page !== 'contact-setup-walkthrough'){%><th><img src="/images/delete.png"></th><%}%>
 				<%if(authorisations.contacts.warehouseContacts.edit===true && page !== 'contact-setup-walkthrough'){%><th></th><%}%>
 			</thead>
 			<tbody>
-				<%if(warehouse.contacts){%>
+				<%if(warehouse.contacts){
+					warehouse.contacts.transportCoordinator.sort(function(x,y) { return x.sortOrder > y.sortOrder });%>
 					<%if(warehouse.contacts.transportCoordinator.length > 0){%>
 						<%for(var i = 0; i<warehouse.contacts.transportCoordinator.length; i++){%>
-							<tr data-empty="false" data-id="<%=warehouse.contacts.transportCoordinator[i]._id.toString()%>">
+							<tr data-empty="false" data-id="<%=warehouse.contacts.transportCoordinator[i].user._id.toString()%>">
 								<td><%=i+1%><span><%=numberSuffix[i]%></span>*</td>
-								<td data-field="name"><%=warehouse.contacts.transportCoordinator[i].name || 'N/A'%></td>
-								<td data-field="email"><%=warehouse.contacts.transportCoordinator[i].email%></td>
-								<td data-field="phone-number"><%=warehouse.contacts.transportCoordinator[i].phoneNumber || 'N/A'%></td>
+								<td data-field="name"><%=warehouse.contacts.transportCoordinator[i].user.name || 'N/A'%></td>
+								<td data-field="email"><%=warehouse.contacts.transportCoordinator[i].user.email%></td>
+								<td data-field="phone-number"><%=warehouse.contacts.transportCoordinator[i].user.phoneNumber || 'N/A'%></td>
 								<td data-field="register-status">
 									<%switch(true){
-										case (warehouse.contacts.transportCoordinator[i].expiry >= Date.now() && warehouse.contacts.transportCoordinator[i].expiry !== null):%>
+										case (warehouse.contacts.transportCoordinator[i].user.expiry >= Date.now() && warehouse.contacts.transportCoordinator[i].user.expiry !== null):%>
 											<p class="registered-status pending"><%=registerStatus[1]%></p>
 											<%break;
-										case (warehouse.contacts.transportCoordinator[i].expiry < Date.now() && warehouse.contacts.transportCoordinator[i].expiry !== null):%>
+										case (warehouse.contacts.transportCoordinator[i].user.expiry < Date.now() && warehouse.contacts.transportCoordinator[i].user.expiry !== null):%>
 											<p class="registered-status expired"><%=registerStatus[2]%></p>
 											<%break;
 										case null:%>
@@ -37,8 +39,9 @@
 											<p class="registered-status complete"><%=registerStatus[0]%></p>
 									<%}%>
 								</td>
-								<%if(authorisations.contacts.warehouseContacts.edit===true && page !== 'contact-setup-walkthrough'){%><td data-field="delete"><%if(warehouse.contacts.transportCoordinator[i]._id != user.id && authorisations.contacts.warehouseContacts.edit===true){%><input type="checkbox" name="delete"/><%}%></td><%}%>
-								<%if(authorisations.contacts.warehouseContacts.edit===true && page !== 'contact-setup-walkthrough'){%><td data-field="resend-email"><%if(warehouse.contacts.transportCoordinator[i].expiry < Date.now() && warehouse.contacts.transportCoordinator[i].expiry !== null){%> <button name="resend-email" class="button action mini" data-disabled-on-ajax="true">Resend</button><%}%></td><%}%>
+								<td data-field="clear"><button name="clear" class="hidden button action mini" data-disabled-on-ajax="true">Clear</button></td>
+								<%if(authorisations.contacts.warehouseContacts.edit===true && page !== 'contact-setup-walkthrough'){%><td data-field="delete"><%if(warehouse.contacts.transportCoordinator[i].user._id != user.id && authorisations.contacts.warehouseContacts.edit===true){%><input type="checkbox" name="delete"/><%}%></td><%}%>
+								<%if(authorisations.contacts.warehouseContacts.edit===true && page !== 'contact-setup-walkthrough'){%><td data-field="resend-email"><%if(warehouse.contacts.transportCoordinator[i].user.expiry < Date.now() && warehouse.contacts.transportCoordinator[i].user.expiry !== null){%> <button name="resend-email" class="button action mini" data-disabled-on-ajax="true">Resend</button><%}%></td><%}%>
 							</tr>
 						<%}%>
 					<%}else{%>

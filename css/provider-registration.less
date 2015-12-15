@@ -254,6 +254,9 @@ label[for="photos"]{
 }
 .price-and-availability{
 	width:100%;
+	.row{
+		position:relative;
+	}
 	.tool-tip:after{
 		margin-left:-154px;
 	}
@@ -832,5 +835,49 @@ input.currency{
 		z-index: 600;
 		left: 183px;
 		top: 31px;
+	}
+}
+
+.date-range-pricing-tray{
+	.controls{
+		position:relative;
+	}
+	.sp-nag{
+		bottom:57px;
+		right:0px;
+	}
+}
+
+.standard-pricing-tray{
+	.availability-nag{
+		bottom:55px;
+		right:0;
+	}
+}
+
+.availability-tray{
+	.sp-nag{
+		right:3px;
+		bottom:54px;
+	}
+}
+
+.sp-nag,.availability-nag{
+	display:none;
+	z-index:10000;
+	position:absolute;
+	background-color:@secondary;
+	padding:10px;
+	border-radius:3px;
+	width:250px;
+	color:#fff;
+	&:before{
+		content: " ";
+		border: 10px solid;
+		border-color: @secondary transparent  transparent  transparent;
+		position:absolute;
+		bottom:-20px;
+		display:block;
+		right:4px;
 	}
 }

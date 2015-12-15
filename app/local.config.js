@@ -20,7 +20,7 @@ exports.config = {
 	upload_folders: [
          __dirname + '/../docs/',
          __dirname + '/../images/warehouse-images/',
-         __dirname + '/../images/tmp/'
+         __dirname + '/../tmp/'
     ],
     
     upload_folder_rel_path: [
@@ -36,7 +36,7 @@ exports.config = {
     ],
     
     companyDetails : {
-        "telephone" : "01888 888 888",
+        "telephone" : "0161 705 4326",
         "fax" : "01888 888 888",
         "email" : "info@zupplychain.com",
         "addressLine1" : "64-68 Blackburn Street",

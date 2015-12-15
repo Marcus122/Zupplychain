@@ -40,7 +40,7 @@ define(["jquery","components/global"], function ($,Global) {
 			});
 		}
 		
-	function uploadDocument(warehouseId,files,documentTitles,cb){
+	function uploadDocument(warehouseId,files,documentTitles,tempLocations,cb){
 		if (files.length > 0){
 			if(!files) return;
 			var data = new FormData();
@@ -51,6 +51,12 @@ define(["jquery","components/global"], function ($,Global) {
 			});
 			$.each(documentTitles, function(key, value){
 				data.append("title", value);
+			});
+			$.each(tempLocations, function(key, value){
+				data.append("tempLocation", value);
+			});
+			$.each(tempLocations, function(key, value){
+				data.append("tempLocation", value);
 			});
 			$.ajax({
 				url: '/documents/upload/' + warehouseId,
