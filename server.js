@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var load = require('./app/load');
+var init = require('./app/init');
 var cookieParser = require('cookie-parser');
 var db = require('./app/data/db');
 var session = require('express-session');
@@ -19,15 +20,21 @@ var random = Math.random()*100;
 random = random.toString();
 data.live=false;
 var port = 8081;
+var http_port = 80
 var bind_address = "0.0.0.0";
-var live_port = 80;
+var live_port = 443;
 var live_bind_address = "46.20.238.210";
+var system;
+var options;
+var secure;
 
 process.argv.forEach(function (val, index, array) {
 	if(val.toLowerCase() ==='live' || val.toLowerCase() ==="prod"){
 		data.live=true;
+		data.secure = true;
         port = live_port;
         bind_address = live_bind_address;
+		system = val.toLowerCase();
 		console.log('live - JS and CSS using built versions, binding server to external IP');
 		
 		// app.engine('ejs',function(filePath,options,callback){
@@ -40,11 +47,41 @@ process.argv.forEach(function (val, index, array) {
 		// 		}))
 		// 	});
 		// });
+		
+		var fs = require("fs");
+		var ca = []
+		var chain = fs.readFileSync("../../etc/pki/tls/certs/positivessl-bundle.crt", 'utf8');
+		chain = chain.split('\n');
+		var cert = [];
+		var line;
+		for(var i = 0, len = chain.length; i < len; i++){
+			line = chain[i]
+			if(!(line.length !== 0)){
+				continue;
+			}
+			cert.push(line);
+			if(line.match(/-END CERTIFICATE-/)){
+				ca.push(cert.join("\n"))
+				cert = []
+			}
+		}
+		options = {
+			key: fs.readFileSync("../../etc/pki/tls/private/zupplychain.com.key"),
+			cert: fs.readFileSync("../../etc/pki/tls/certs/zupplychain.com.crt"),
+			ca: ca
+		}
+		
+		app.use(helmet.contentSecurityPolicy({upgradeInsecureRequests:""}));
+		secure = true;
 	
 	} else if (val.toLowerCase() ==='qa') {
         data.live=true;// live versions of JS and CSS
         //but bind addresses etc stay the same.
         console.log("QA - JS and CSS using built versions");
+		system = val.toLowerCase();
+	}else{
+		system = val.toLowerCase();
+		secure = false;
 	}
 });
 
@@ -72,7 +109,8 @@ app.use(session({secret: crypto.createHash('sha256').update(random).digest("hex"
 				 resave: true,
 				 saveUninitialized: true,
                  store: new mongostore({ mongooseConnection: dbInstance }),
-				 httpOnly:true
+				 httpOnly:true,
+				 cookie:{secure:secure}
 				 }));
                  
 // parse application/json 
@@ -87,18 +125,7 @@ app.use(csurf());
 
 //Utils.startProviderContactListReminderCronJob(app);
 
-app.use(function(req, res, next){
-	res.locals.session = req.session;
-	res.locals.url = req.protocol + '://' + req.get('host') + req.originalUrl;
-	res.locals.csrfTokenFunction = req.csrfToken;
-	if(req.url == '/favicon.ico'){
-		res.writeHead(200, {'Content-Type': 'image/x-icon'} );
-		res.end();
-	}else{
-		next()
-	}
-});
-
+app.use(init(data));
 app.get('/demo', function (req,res) {
     res.render("demo",req.data);
 });
@@ -119,8 +146,20 @@ require('./app/routes/static')(app);
 require('./app/routes/error')(app);
 
 
+if (system === 'live' || system ==="prod"){
+	var https = require('https');
+	app.use(helmet.hsts({
+	  maxAge: 31536000000,
+	  includeSubdomains: true,
+	  force : true
+	}));
+	var server = https.createServer(options,app);
+	server.listen(port,bind_address);
+	port = http_port;
+}
+
 console.log("starting node server, you'll see 'listening' on the next line if it was a success:")
 app.listen(port, bind_address, function() {
-        console.log("listening... go to localhost:" + port);
+		console.log("listening... go to localhost:" + port);
 });
     
