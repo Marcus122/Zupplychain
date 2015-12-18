@@ -67,7 +67,8 @@ function warehouseRegistrationComplete(req,res) {
 function uploadImage(req,res){
 	var form = new multiparty.Form();
 	var numSuccessfullCb = 0;
-	var photos = []
+	var photos = [];
+	var imageExists = false;
 	if (req.warehouse.photos !== undefined){
 		photos = req.warehouse.photos;
 	}
@@ -81,7 +82,15 @@ function uploadImage(req,res){
 								//Todo some form of error handling
 								setErrorResponse('Image Upload Error',res);
 							}else{
-								photos.push(req.warehouse.id + '/' + files[numSuccessfullCb][j].originalFilename)
+								imageExists = false;
+								for (var k = 0; k<photos.length; k++){
+									if(photos[k].path === req.warehouse.id + '/' + files[numSuccessfullCb][j].originalFilename){
+										imageExists = true;
+									}
+								}
+								if (imageExists === false){
+									photos.push({'path':req.warehouse.id + '/' + files[numSuccessfullCb][j].originalFilename})
+								}
 								numSuccessfullCb ++;
 								if (numSuccessfullCb === Object.keys(files).length){
 									warehouse.updateWarehousePhoto(req.warehouse.id,photos,function(err){
@@ -113,7 +122,7 @@ function uploadDocument(req,res){
 				for (var i in files){
 					for (var j in files[i]){
 						fh.renameFile(fields.tempLocation[i], local.config.upload_folders[0] + req.warehouse.id + '/' + files[i][j].originalFilename,function(err){
-							if(err){
+							if(err && err.code !== 'ENOENT'){
 								if ((req.warehouse.storage === undefined || req.warehouse.storage.length === 0)){
 									fh.deleteFolderRecursive(local.config.upload_folders[0] + req.warehouse.id);
 									warehouse.removeWarehouse(req.warehouse._id);//Remove this warehouse we are in step1 so it will create another later
@@ -237,7 +246,7 @@ function deleteImagesAndEmptyDir(req,res){
 							if (photoSpliced === true){
 								j --;
 							}
-							if (photos[j] === fields[i][0]){
+							if (photos[j].path === fields[i][0]){
 								photos.splice(j,1);
 								photoSpliced = true;
 							}

@@ -55,9 +55,6 @@ define(["jquery","components/global"], function ($,Global) {
 			$.each(tempLocations, function(key, value){
 				data.append("tempLocation", value);
 			});
-			$.each(tempLocations, function(key, value){
-				data.append("tempLocation", value);
-			});
 			$.ajax({
 				url: '/documents/upload/' + warehouseId,
 				type: 'POST',

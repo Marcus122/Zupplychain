@@ -432,8 +432,21 @@
 		position:relative;
 		div[data-view-edit-capture-zone]{
 			display:inline-block;
-			margin-top:54px;
 			width:100%;
+			.view-warehouse-utility-buttons{
+				margin-bottom: 64px;
+				.view-edit-buttons{
+					position:absolute;
+					left:0;
+					margin-top:6px;
+				}
+				.save-button.header{
+					position:absolute;
+					right:0;
+					margin-top:0;
+					width:inherit;
+				}
+			}
 		}
 		section.tabs{
 			border-bottom: 30px solid #f28711;
@@ -477,10 +490,6 @@
 				margin-left:20px;
 				margin-right:20px;
 			}
-		}
-		.view-edit-buttons{
-			position:absolute;
-			right:0;
 		}
 		#price-and-availability-user-data
 			.content-box{

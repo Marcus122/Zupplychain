@@ -52,30 +52,7 @@
 			background:@primary;
 		}
 		.service-box{
-			min-height: 220px;
-			  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
-			background: @tertiary;
-			.border-radius(10px,10px,10px,10px);
-			.unit-padding(2);
-			.service-info{
-				float:right;
-				//width:200px;
-				width:57%;
-			}
-			.service-image{
-				//width:86px;
-				float:left;
-				width:29px;
-			}
-			h3{
-				font-size:2rem;
-				font-weight:bold;
-			}
-			p{
-				margin:0;
-			}
-			font-size:1.4rem;
-			line-height:2.4rem;
+			&:extend(.service-box);
 		}
 	}
 	.header.curved{
@@ -177,7 +154,8 @@ label[for="confirm-password"]{
 }
 
 #registration,
-#customer{
+#customer,
+#home-page{
 	.banner.row{
 		&:extend(.generic-banner);
 		h1{
@@ -186,6 +164,15 @@ label[for="confirm-password"]{
 			float:left;
 			padding:0;
     	}
+	}
+	.service-box{
+		&:extend(.service-box);
+		color: #857668;
+		.unit-margin-bottom(3);
+		.unit-margin-top(3);
+		&.no-margin-top{
+			margin-top:0;
+		}
 	}
 }
 
@@ -431,7 +418,7 @@ label[for="confirm-password"]{
     color: #fff;
     text-align: center;
     vertical-align: middle;
-    background-image: url('../images/lorry-image.png');
+    background-image: url('/images/lorry-image.png');
     height: 362px;
     background-repeat: no-repeat;
     background-position-y: 42%;

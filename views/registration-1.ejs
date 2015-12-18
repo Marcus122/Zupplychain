@@ -166,7 +166,7 @@
 									</div>
 									<div class="row">
 										<div class="input-field columns twelve">
-											<label for="maximum-insurance-level">Maximum insurance level per pallet or per kilo/tonne/label>
+											<label for="maximum-insurance-level">Maximum insurance level per pallet or per kilo or tonne</label>
 											<input data-json="insurance" type="text" name="maximum-insurance-level" value="<%=warehouse.insurance.maximumInsuranceLevel%>" spellcheck="true">
 										</div>
 										<div class="input-field columns six">
@@ -191,7 +191,7 @@
 									</div>
 									<div class="row">
 										<div class="input-field columns twelve">
-											<label for="maximum-insurance-level">Maximum insurance level per pallet or per kilo/tonne</label>
+											<label for="maximum-insurance-level">Maximum insurance level per pallet or per kilo or tonne</label>
 											<input data-json="insurance" type="text" name="maximum-insurance-level" spellcheck="true">
 										</div>
 										<div class="input-field columns six">
@@ -226,18 +226,18 @@
 								<div id="upload-photos" class="row upload-area">
 									<%if(warehouse.photos){
 										for(var i=0;i<warehouse.photos.length;i++){
-											var url = "/images/warehouse-images/" + warehouse.photos[i];%>
-											<div data-image-index="<%=i%>" class="columns four row document <%=warehouse.defaultPhoto == warehouse.photos[i] ? "isDefault" : "" %>">
-												<div class="columns five image <%if(warehouse.photos[i] == warehouse.defaultPhoto){%>isDefault<%}%>">
+											var url = "/images/warehouse-images/" + warehouse.photos[i].path;%>
+											<div data-image-index="<%=i%>" class="columns four row document <%=warehouse.defaultPhoto == warehouse.photos[i].path ? "isDefault" : "" %>">
+												<div class="columns five image <%if(warehouse.photos[i].path == warehouse.defaultPhoto){%>isDefault<%}%>">
 													<img src="<%=url%>"/>
 												</div>
-												<span class="file-name columns four"><%=warehouse.photos[i].replace(warehouse.id+'/',"");%></span>
-												<input type="hidden" name="photo" data-array="photos" value="<%=warehouse.photos[i];%>"/>
+												<span class="file-name columns four"><%=warehouse.photos[i].path.replace(warehouse.id+'/',"");%></span>
+												<input type="hidden" name="photo" data-array="photos" value="<%=warehouse.photos[i].path;%>"/>
 												<div class="columns one">
 													<button type="button" href="#" class="trash-button"><span>Delete</span></button>
 												</div>
                                                         <span class="default-photo-label">Main image</span>
-                                                        <button data-photo="<%=warehouse.photos[i];%>" class="tiny simple make-default-photo" type="button">Use as main image</button>
+                                                        <button data-photo="<%=warehouse.photos[i].path;%>" class="tiny simple make-default-photo" type="button">Use as main image</button>
 											</div>
 										<%}
 									}%>

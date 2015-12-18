@@ -151,6 +151,7 @@ exports.config = {
         'Register for Updates',
         'Offering Storage',
         'Looking for Space',
+        'General Feedback',
         'Media Enquires',
         'Forgot your Password',
         'Other'

@@ -116,6 +116,16 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 		
 		function initWarehouseTab(){
 			
+			$(document).on('click','.save-button.header',function(){
+				var id = $('li.active.checked').data('trigger-id');
+				var triggerType = $('li.active.checked').data('trigger-type');
+				if(triggerType === 'form-submit'){
+					$(id).trigger('submit');
+				}else if(triggerType === 'click'){
+					$(id).trigger('click');
+				}
+			})
+			
 			$(document).on('click','table[data-type="warehouses-table"] tbody tr td .button',function(e){
 				e.preventDefault();
 				var $this = $(this);
@@ -130,6 +140,8 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 					$warehouseContainer.find('input').not('[data-dont-disable="true"]').prop('disabled',true);
 					$warehouseContainer.find('button').not('[data-dont-disable="true"]').prop('disabled',true);
 					$warehouseContainer.find('textarea').prop('disabled',true);
+					$($warehouseContainer.find('label[for="docs"]')[1]).attr('disabled','disabled');
+					$($warehouseContainer.find('label[for="photos"]')[1]).attr('disabled','disabled');
 					$warehouseContainer.find('select').prop('disabled',true);
 					$warehouseContainer.find('.form-footer div[data-function="save-buttons"]').addClass('hidden');
 					
@@ -166,7 +178,8 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			
 			$(document).on('click', '.toggle-view-edit',function(){
 				var $this = $(this);
-				var $tab = $this.closest('[data-view-edit-capture-zone="true"]');
+				var $tab = $this.parent().siblings('[data-view-edit-capture-zone="true"]');
+				if($tab) $tab = $this.closest('[data-view-edit-capture-zone="true"]');
 				if ($tab.length === 0) $tab = $this.parent().next('[data-view-edit-capture-zone="true"]')
 				if (!$this.hasClass('down')){
 					if($this.data('mode') === 'view'){
