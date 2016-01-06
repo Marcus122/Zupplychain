@@ -4,6 +4,7 @@
 		<th>Warehouse Name</th>
 		<th>Address</th>
 		<th>View/Edit Warehouse</th>
+        <th>View Warehouse Profile</th>
 	</tr>
 </thead>
 <tbody>
@@ -12,7 +13,8 @@
 			<td data-field="name"><%=warehouses[i].name%></td>
 			<td data-field="address"><%=warehouses[i].city%>, <%=warehouses[i].postcode%></td>
 			<td data-field="view-edit-warehouse"><a data-action="view-edit-warehouse" class="action button" href="/view-edit-warehouse/<%=warehouses[i]._id%>">View</a></td>
-		</tr>
+		    <td data-field="view-warehouse-profile"><a href="/warehouse-profile/<%=warehouses[i]._id%>"  target="_blank" class="action button" data-go-to-page="true">View</a></td>
+        </tr>
 	<%}%>
 </tbody>
 </table>

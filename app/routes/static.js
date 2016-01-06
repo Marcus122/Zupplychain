@@ -18,6 +18,9 @@ var handler = function(app) {
     app.get('/reviews', function (req,res) {
 		res.render("reviews",req.data);
 	});
+    app.get('/faq', function (req,res) {
+		res.render("faq",req.data);
+	});
     app.get('/terms-and-conditions', function (req,res) {
          res.render("terms-and-conditions/terms-and-conditions-landing",req.data);
     });

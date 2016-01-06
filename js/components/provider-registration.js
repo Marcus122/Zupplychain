@@ -3,7 +3,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 	
     function Class(data) {
 		var templates = new Templates();
-		var storageNames=['Area A','Area B','Area C','Area D','Area E','Area F','Area G','Area H','Area I'];
+		var storageNames=['Type 1','Type 2','Type 3','Type 4','Type 5','Type 6','Type 7','Type 8','Type 9'];
 		var storage=[];
 		var warehouse={};
 		var lm = new Loom();
@@ -552,15 +552,15 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				}else{
 					if($this.parent('td').length > 0 && $this.parent('td').data('th') === 'add-additional-pallet-width'){
 						storageGroup = parseInt($this.parent('td').parent('tr').attr('data-storage-group'));
-						$this.parent('td').parent('tr').find('td[data-th="Storage Name"]').find('input[name="name"]').val(storageNames[storageGroup]);
-						$this.parent('td').parent('tr').siblings('tr[data-storage-group="' + storageGroup + '"]').find('td[data-th="Storage Name"]').find('input[name="name"]').val(storageNames[storageGroup]);
+						$this.parent('td').parent('tr').find('td[data-th="Storage Name"]').find('input[name="name"]').val(storageNames[storageGroup-1]);
+						$this.parent('td').parent('tr').siblings('tr[data-storage-group="' + storageGroup + '"]').find('td[data-th="Storage Name"]').find('input[name="name"]').val(storageNames[storageGroup-1]);
 						$prevEle = $this.parent('td').parent('tr');
 					}else{
 						storageGroup = parseInt($('.define-space tbody').find('tr').last().attr('data-storage-group'));
-						storageGroup ++;
+						data.name = storageNames[storageGroup];
+                        storageGroup ++;
 						$prevEle = $('.define-space tbody').find('tr').last();
 					}
-					data.name = storageNames[storageGroup];
 					$element = template.bind(data);
 					$element.find('td[data-th="add-additional-pallet-width"]').find('button').unbind('click');
 					$element.removeAttr('data-storage-group')
@@ -613,7 +613,11 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					if($input.attr('type') === 'file'){
 						//object[array].push($input.prop("files"));
 					}else{
-						object[array].push($input.val());
+                        if($input.data('backend-value')){
+                            object[array].push($input.data('backend-value'));
+                        }else{
+						  object[array].push($input.val());
+                        }
 					}
 				}
 			}else if(json){

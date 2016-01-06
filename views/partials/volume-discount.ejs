@@ -20,7 +20,7 @@
 						<!--<span>Max number of pallets: <strong><%= warehouse.totalPalletSpaces %></strong></span>-->
 					</div>
 					
-					<form method="post" id="discount-form" class="volume-discount-form loom-form" novalidate data-loom-no-submit="true">
+					<form method="post" data-loom-do-not-show-success-css="true" id="discount-form" class="volume-discount-form loom-form" novalidate data-loom-no-submit="true">
 						<div class="input-field">
 							<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
 						</div>

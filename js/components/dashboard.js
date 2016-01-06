@@ -23,7 +23,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			initWarehouseTab();
 			initPaging($('table[data-type="warehouses-table"]'));
 		}
-			initTrayBehaviour();
+			// initTrayBehaviour();//Change
 			initContactsTab();
 		
 		loom.addOnSuccessCallback("login-form", function(response){
@@ -36,7 +36,11 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 		
 		function triggerHashClick(){
 			var hash = $.trim(window.location.hash);
-			if(hash) $('a[href$="' + hash + '"]').trigger('click');
+			if(hash){
+                $('a[href$="' + hash + '"]').trigger('click');
+            }else{
+                $('a[href$=main]').trigger('click');
+            }
 		}
 		
 		$(document).on('click','a[data-go-to-link="view-tab-contacts"]',function(){
@@ -81,6 +85,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			$tab.find('select').prop('disabled',false);
 			$tab.find('label').removeAttr('disabled');
 			$tab.find('div[data-function="save-buttons"]').removeClass('hidden');
+            $tab.find('div[data-function="save-buttons header"]').removeClass('hidden');
 			if(!$tab.find('a[data-mode="edit"]').hasClass('down') || !$tab.siblings('div').find('a[data-mode="edit"]').hasClass('down')){
 				$tab.find('a[data-mode="edit"]').addClass('down');
 				$tab.siblings('div').find('a[data-mode="edit"]').addClass('down')
@@ -101,6 +106,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			$tab.find('select').prop('disabled',true);
 			$tab.find('label').attr('disabled','disabled');
 			$tab.find('div[data-function="save-buttons"]').addClass('hidden');
+            $tab.find('div[data-function="save-buttons header"]').addClass('hidden');
 			if($tab.find('a[data-mode="edit"]').hasClass('down') || $tab.siblings('div').find('a[data-mode="edit"]').hasClass('down')){
 				$tab.find('a[data-mode="edit"]').removeClass('down');
 				$tab.siblings('div').find('a[data-mode="edit"]').removeClass('down')
@@ -127,29 +133,31 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			})
 			
 			$(document).on('click','table[data-type="warehouses-table"] tbody tr td .button',function(e){
-				e.preventDefault();
-				var $this = $(this);
-				var $warehouseContainer = $('#view-edit-warehouse');
-				DBCntr.loadWarehouse($this.attr('href'),function(response){
-					var $warehouse = $(response);
-					$warehouseContainer.empty();
-					$warehouseContainer.append($warehouse);
-					$warehouseContainer.removeClass('hidden');
-					initTabs();
-					prepareWarehouseView($this);
-					$warehouseContainer.find('input').not('[data-dont-disable="true"]').prop('disabled',true);
-					$warehouseContainer.find('button').not('[data-dont-disable="true"]').prop('disabled',true);
-					$warehouseContainer.find('textarea').prop('disabled',true);
-					$($warehouseContainer.find('label[for="docs"]')[1]).attr('disabled','disabled');
-					$($warehouseContainer.find('label[for="photos"]')[1]).attr('disabled','disabled');
-					$warehouseContainer.find('select').prop('disabled',true);
-					$warehouseContainer.find('.form-footer div[data-function="save-buttons"]').addClass('hidden');
-					
-					require(["components/provider-registration"], function(Registration) {
-						Registration();
-						rebindAllLoomForms($("#view-edit-warehouse form.loom-form"))
-					});   
-				});
+				if($(this).data('go-to-page') !== true){
+                    e.preventDefault();
+                    var $this = $(this);
+                    var $warehouseContainer = $('#view-edit-warehouse');
+                    DBCntr.loadWarehouse($this.attr('href'),function(response){
+                        var $warehouse = $(response);
+                        $warehouseContainer.empty();
+                        $warehouseContainer.append($warehouse);
+                        $warehouseContainer.removeClass('hidden');
+                        initTabs();
+                        prepareWarehouseView($this);
+                        $warehouseContainer.find('input').not('[data-dont-disable="true"]').prop('disabled',true);
+                        $warehouseContainer.find('button').not('[data-dont-disable="true"]').prop('disabled',true);
+                        $warehouseContainer.find('textarea').prop('disabled',true);
+                        $($warehouseContainer.find('label[for="docs"]')[1]).attr('disabled','disabled');
+                        $($warehouseContainer.find('label[for="photos"]')[1]).attr('disabled','disabled');
+                        $warehouseContainer.find('select').prop('disabled',true);
+                        $warehouseContainer.find('.form-footer div[data-function="save-buttons"]').addClass('hidden');
+                        
+                        require(["components/provider-registration"], function(Registration) {
+                            Registration();
+                            rebindAllLoomForms($("#view-edit-warehouse form.loom-form"))
+                        });   
+                    });
+                }
 			});
 			
 			$(document).on('click', '.add-volume-discount',function(evt){
@@ -223,13 +231,13 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			});
 			
 			$(document).on('submit','#define-space',function(e){
+                rebuilPricingAndAvailability();
 				var $tab = $('ul.tabs li:nth-child(3).four.columns')
 				var clickedTab = $tab.find('a').attr('href');
 				$('.tab-content ' + clickedTab).removeClass('hidden').siblings().addClass('hidden');
 				$tab.addClass('active').siblings('li').removeClass('active');
 				$('#add-new-warehouse ul li:nth-child(2)').addClass('checked');
 				e.preventDefault();
-				rebuilPricingAndAvailability();
 			});
 			
 			$(document).on('click', '.form-footer .back', function(){
@@ -242,13 +250,15 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			
 			$(document).on('click','#define-space .save',function(e){
 				rebuilPricingAndAvailability();
-				changeToDisplayMode($('div[data-view="warehouses"]'));
+                if ($(this).closest('#add-new-warehouse').length === 0 && $(this).closest('form').find('.error').length === 0){
+                    changeToDisplayMode($('div[data-view="warehouses"]'));
+                }
 			});
 			
 			$(document).on('click','#registration .save',function(e){
 				rebuildWarehouseList();
 				rebuildWarehouseDropdownList();
-				if($(this).closest('form').find('.error').length === 0){
+				if($(this).closest('#add-new-warehouse').length === 0 && $(this).closest('form').find('.error').length === 0){
 					changeToDisplayMode($('div[data-view="warehouses"]'));
 				}
 			});
@@ -315,6 +325,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			var links = $this.attr('href').split('#');
 			goToView('#' + links[1]);
 			goToTab('#' + links[2]);
+            $('a[href="#' + links[1] + '"]').parent('li').addClass('active').siblings('li').removeClass('active');
 			$('a[href="#' + links[2] + '"]').parent('li').addClass('active').siblings('li').removeClass('active');
 			$('.warehouse-specific-contacts').addClass('hidden');
 			if(links[3]){
@@ -875,21 +886,14 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			}
 		}
 		
-		function initTrayBehaviour(){
-			$(document).on("click", ".warehouse-tasks-tray .open-tray-link", function(evt){
-				openTray($(this));
-				if(evt.stopPropagation) evt.stopPropagation();
-				if(evt.cancelBubble!=null) evt.cancelBubble = true;
-				evt.preventDefault();
-			});
-			
-			function openTray($linkThatWasClicked) {
-				$($linkThatWasClicked.parent().find(".tray")[0]).toggleClass("open");
-				$linkThatWasClicked.toggleClass("open");
-				$($linkThatWasClicked.parent().find(".tray")[0]).find('div.main').removeClass('hidden');
-				//scrollToPos('.trays');
-        	}
-		}
+		// function initTrayBehaviour(){//Change
+		// 	$(document).on("click", ".warehouse-tasks-tray .open-tray-link", function(evt){
+		// 		global.openTray($(this));
+		// 		if(evt.stopPropagation) evt.stopPropagation();
+		// 		if(evt.cancelBubble!=null) evt.cancelBubble = true;
+		// 		evt.preventDefault();
+		// 	});
+		// }
 		
 		function displayWCSuggestionsDropdown(data,$this){
 			var $dropdown = $this.next('ul');

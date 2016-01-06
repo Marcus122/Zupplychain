@@ -11,18 +11,25 @@ define(["jquery","loom/loom","loom/loomAlerts","templates/templates"], function 
 			
 		}
 		
-			$(document).find('textarea').blur(function(){
-				if($(this).closest('.input-field').hasClass('error-complexTelephoneNumberNotInInput')){
-					$(this).parent().attr('data-hint','The description cannot contain phone numbers');
-				}else if(!$(this).closest('input-field').hasClass('error-complexTelephoneNumberNotInInput')){
-					$(this).parent().removeAttr('data-hint');
-					if($(this).closest('.input-field').hasClass('error-emailNotInInput')){
-						$(this).parent().attr('data-hint','The description cannot contain email addresses');
-					}else if(!$(this).closest('.input-field').hasClass('error-emailNotInInput')) {
-						$(this).parent().removeAttr('data-hint');
-					}
-				}
-			});
+        $(document).find('textarea').blur(function(){
+            if($(this).closest('.input-field').hasClass('error-complexTelephoneNumberNotInInput')){
+                $(this).parent().attr('data-hint','The description cannot contain phone numbers');
+            }else if(!$(this).closest('input-field').hasClass('error-complexTelephoneNumberNotInInput')){
+                $(this).parent().removeAttr('data-hint');
+                if($(this).closest('.input-field').hasClass('error-emailNotInInput')){
+                    $(this).parent().attr('data-hint','The description cannot contain email addresses');
+                }else if(!$(this).closest('.input-field').hasClass('error-emailNotInInput')) {
+                    $(this).parent().removeAttr('data-hint');
+                }
+            }
+        });
+            
+        $(document).on("click", ".static .open-tray-link", function(evt){//Change
+            openTray($(this));
+            if(evt.stopPropagation) evt.stopPropagation();
+            if(evt.cancelBubble!=null) evt.cancelBubble = true;
+            evt.preventDefault();
+        });
 		
 		function centerPopup($element){
 			var top;
@@ -66,13 +73,21 @@ define(["jquery","loom/loom","loom/loomAlerts","templates/templates"], function 
 				$(buttons[i]).removeAttr('disabled');
 			}
 		}
+        
+        function openTray($linkThatWasClicked) {//Change
+            $($linkThatWasClicked.parent().find(".tray")[0]).toggleClass("open");
+            $linkThatWasClicked.toggleClass("open");
+            $($linkThatWasClicked.parent().find(".tray")[0]).find('div.main').removeClass('hidden');
+            //scrollToPos('.trays');
+        }
 		
 		return {
 			show403Popup:show403Popup,
 			centerPopup:centerPopup,
 			disableButtonsOnAjax:disableButtonsOnAjax,
 			enableButtonsOnAjaxCompletion:enableButtonsOnAjaxCompletion,
-			showRegistrationExample:showRegistrationExample
+			showRegistrationExample:showRegistrationExample,
+            openTray:openTray//Change
 		}
 	}
 	

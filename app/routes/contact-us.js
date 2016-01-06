@@ -14,7 +14,7 @@ var handler = function(app) {
 		req.data.subject = req.body['your-enquiry']
 		res.render('emails/contact-us',req.data,function(err,template){
 			if (!err){
-				emailer.sendMail(req,res,template,'matthew.alton@weaveability.com',req.body.email,req.body['your-enquiry'],function(err){
+				emailer.sendMail(req,res,template,process.env.NODEMAILER_EMAIL_ADDRESS,req.body.email,req.body['your-enquiry'],function(err){
 					if(err){
 						setResponse('Error: Request not sent',res,true);
 					}else{

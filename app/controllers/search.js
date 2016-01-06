@@ -2,6 +2,7 @@
 var warehouse = require("../controllers/warehouses");
 var Search = require("../data/search");
 var Utils = require("../utils.js");
+var searchController= require("../controllers/search.js");
 
 exports.clearSearchFromSession = function(req) {
     req.session.whSC = null;
@@ -34,6 +35,26 @@ exports.getFromSession = function(req, cb) {
     } else {
         cb("couldnt get from session");
     }
+}
+
+exports.buildDefaultSearchByWarehouse = function(warehouse){
+        var effectiveStartDate = Utils.getClosestPreviousMonday(new Date()) 
+        var useageProfile = searchController.generateBlankUseageProfile(effectiveStartDate, 52, 10);
+          return {
+            "postcode"          : warehouse.postcode,
+            "radius"            : 25 * 1609.344,
+            "palletType"        : warehouse.storage[0].palletType,
+            "weight"            : warehouse.storage[0].weight,
+            "height"            : warehouse.storage[0].height, 
+            "temp"              : warehouse.storage[0].temp, 
+            "totalPallets"      : 10, 
+            "radiusInMetres"    : 25 * 1609.34, 
+            "minDuration"       : 52, 
+            "startDate"         : new Date(), 
+            "description"       : 'Shoes', 
+            "maxDistance"       : 25 * 1609.34, 
+            "useageProfile"     : useageProfile,
+        };
 }
 
 exports.saveToSession = function(search,req,cb) {

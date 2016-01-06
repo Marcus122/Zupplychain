@@ -104,16 +104,19 @@ exports.config = {
     // },
     
     palletTypes : {
-        0 : "0.8",
-        1 : "1.0",
-        2 : "1.2",
-        3 : "2.4"
+        0 : "0.8w x 1.2d (euro)",
+        1 : "1.0w x 1.2d",
+        2 : "1.2w x 1.2d"
+    },
+    
+    palletTypesToWidth: {
+        "0.8w x 1.2d (euro)" : "0.8",
+        "1.0w x 1.2d" : "1.0",
+        "1.2w x 1.2d" : "1.2"
     },
     
     temperatures : { // miss out 0 as we'll code for zero being a wild card.
         1 : "Ambient",
-        2 : "Chilled",
-        3 : "Frozen",
         4 : "Outside",
         5 : "Bonded"
     },
@@ -152,7 +155,7 @@ exports.config = {
         'Offering Storage',
         'Looking for Space',
         'General Feedback',
-        'Media Enquires',
+        'Media Enquiries',
         'Forgot your Password',
         'Other'
     ],

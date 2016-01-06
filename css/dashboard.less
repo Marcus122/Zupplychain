@@ -73,7 +73,18 @@
 		button.save{
 			float:right;
 		}
+        .view-edit-buttons{//Change
+            float:right;
+        }
 	}
+    div[data-view="warehouses"]{
+        table{
+           .unit-margin-top(2);
+        }
+        .add-new-warehouse-container{
+            .unit-margin-bottom(2);
+        }
+    }
 	table{
 		td[data-field="task"]{
 			text-align:left;
@@ -316,12 +327,13 @@
 					height: 100%;
 					.unit-margin-top(1);
 					.unit-margin-left(2);
+                    position: absolute;//Change
+                    width: 96%;//Change
 				}
 			}
 			&.two-tabs{
 				li{
 					width:49.5%;
-					text-align:left;
 					height:42px;
 					margin-right:1%;
 						@media @mobile{
@@ -512,6 +524,9 @@
 			td:first-of-type{border-bottom-left-radius:7px;}
 			td:last-of-type{border-bottom-right-radius:7px;}
 		}
+        // td.input-field.select{
+        //     background: url('/images/dropdown-arrow.png') no-repeat 86% rgba(0, 0, 0, 0) !important;
+        // }
 		thead tr{
 			th:first-of-type{border-top-left-radius:7px;}
 			th:last-of-type{border-top-right-radius:7px;}

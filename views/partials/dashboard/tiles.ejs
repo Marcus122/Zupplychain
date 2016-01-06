@@ -39,7 +39,7 @@
 					</table>
 					<%for(var i = 0; i<warehouses.length; i++){
 						if(completedTasks[i][warehouses[i].id].contactSetupComplete === false){%>
-							<div class="warehouse-tasks-tray trays open">
+							<div class="static warehouse-tasks-tray trays open">
 								<a class="warehouse-name open-tray-link <%if(warehouses.length === 1 || parseInt(warehouses.length) - parseInt(completedTasks.numWarehousesCompleted) === 1){%>open<%}%>"><%=warehouses[i].name%></a>
 								<div class="tray <%if(warehouses.length === 1 || parseInt(warehouses.length) - parseInt(completedTasks.numWarehousesCompleted) === 1){%>open<%}%>">
 									<table id="tasks" data-warehouse-id="<%=warehouses[i].id%>">

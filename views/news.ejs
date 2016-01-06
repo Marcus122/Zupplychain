@@ -3,7 +3,8 @@
 	<div class="banner">
 		<h1>News</h1>
 	</div>
-	<div class="news-container">
+	<section>
+      <div class="main">
 		<%
 			if (id !== undefined){
 				switch(id){
@@ -23,7 +24,7 @@
 				<%include ./partials/news-posts%>
 			<%}
 		%>
-		<div class="other-posts columns three">
+		<!--<div class="other-posts columns three">
 			<div class="third-party-post content-box">
 				<div class="header">
 					<h3>press articles</h3>
@@ -91,8 +92,9 @@
 					<a class="button action mini" href="/testimonials">See More</a>
 				</div>
 			</div>
-		</div>
-	</div>
+		</div>-->
+      </div>
+	</section>
 <div class="continue-links footer form-footer">
 	<div class="container">
 		<a href="/" class="button simple news-home">home</a>

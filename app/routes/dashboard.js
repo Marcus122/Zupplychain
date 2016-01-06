@@ -211,7 +211,7 @@ var handler = function(app) {
 			if(err){
 				setErrorResponse("Warehouse not found",res);
 			}else{
-				req.data.warehouses = warehouses;
+                req.data.warehouses = dashboard.sortWarehousesByCreatedDate(warehouses);
 				req.data.warehouse = warehouses[0];
 				req.data.authorisations = dashboard.getAuthorisations(req.data.user.dashboardAccessLvl)
 				res.render('partials/dashboard/warehouse-list',req.data);

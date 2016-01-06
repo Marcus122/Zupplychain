@@ -41,21 +41,21 @@ require(["jquery","components/global","jqueryPlugins/jquery.scrollTo.min","loom/
                Search();
             });   
         }
-        if (onPage("login") || onPage("dashboard") || onPage("contacts-setup") || onPage("contacts-explanation")){
-            require(["components/dashboard"], function(Dashboard) {
-               Dashboard();
-            });   
-        }
         if (onPage("contact-us")){
             require(["components/contact-us"], function(ContactUs) {
                //ContactUs();
             });   
         }
-		if (onPage("provider-registration-1") || onPage("provider-registration-2") || onPage("provider-registration-3") || onPage("initial-registration")){
+		if (onPage("provider-registration-1") || onPage("provider-registration-2") || onPage("provider-registration-3") || onPage("initial-registration") || onPage("dashboard")){
 			require(["components/provider-registration"],function(Registration){
 				Registration();
 			});
 		}
+        if (onPage("login") || onPage("dashboard") || onPage("contacts-setup") || onPage("contacts-explanation")){
+            require(["components/dashboard"], function(Dashboard) {
+               Dashboard();
+            });   
+        }
         if (onPage("warehouse-profile") || onPage("quotation-request") || onPage("/provider-offer") || onPage("provider-confirm-contract")) {
             require(["components/warehouse-profile"], function(warehouseProfile){
                 warehouseProfile();

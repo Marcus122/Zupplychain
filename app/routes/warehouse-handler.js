@@ -234,12 +234,14 @@ function deleteImagesAndEmptyDir(req,res){
 						fh.readDir(local.config.upload_folders[1] + req.warehouse.id,function(err,files){
 							if (err && err.code !== 'ENOENT'){
 								setErrorResponse('Photo Delete Error',res);
-							}else if (files.length === 0){
-								fh.deleteDir(local.config.upload_folders[1] + req.warehouse.id,function(err){
-									if (err && err.code !== 'ENOENT'){
-										setErrorResponse('Photo Delete Error',res);
-									}
-								});
+							}else if (files){
+                                if (files.length === 0){
+                                    fh.deleteDir(local.config.upload_folders[1] + req.warehouse.id,function(err){
+                                        if (err && err.code !== 'ENOENT'){
+                                            setErrorResponse('Photo Delete Error',res);
+                                        }
+                                    });
+                                }
 							}
 						});
 						for (var j = 0; j<photos.length; j++){
@@ -284,8 +286,7 @@ function updateVolumeDiscount(req,res) {
 
 function warehouseProfile (req,res){
     req.data.warehouse = req.warehouse;
-
-    if (req.query.fromSearch && req.session.search && Object.keys(req.session.search).length > 0) {
+    if ((req.query.fromSearch && req.session.search && Object.keys(req.session.search).length > 0) || (req.header('referer').indexOf(req.hostname) > -1 && req.header('referer').indexOf('/dashboard') > -1)) {
         req.data.minDurationOptions = local.config.minDurationOptions;
         req.data.temperatures = local.config.temperatures;
 		req.data.page = 'warehouse-profile';
@@ -293,8 +294,10 @@ function warehouseProfile (req,res){
         search.getFromSession(req, function(err, query){
             if (!err) {
 				req.data.query = query;
-                req.data.warehouse.generateStorageProfile(query);
+            }else{
+                req.data.query = search.buildDefaultSearchByWarehouse(req.data.warehouse);
             }
+             req.data.warehouse.generateStorageProfile(req.data.query);
             res.render("warehouse-profile",req.data);
         });
     }

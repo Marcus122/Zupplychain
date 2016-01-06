@@ -7,7 +7,7 @@
 		<select name="palletType" required>
         			<option value=""/>
         <% for (i in palletTypes) { %>
-            <option value="<%= i %>" <%= row.palletType == i ? "selected='selected'" : "" %> >
+            <option data-backend-value="<%=config.palletTypesToWidth[palletTypes[i]]%>" value="<%= i %>" <%= row.palletType == i ? "selected='selected'" : "" %> >
             <%= palletTypes[i] %>
             </option>
             <%

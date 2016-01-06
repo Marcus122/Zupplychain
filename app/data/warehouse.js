@@ -128,7 +128,7 @@ warehouseSchema.statics = {
   },*/
   
   checkPalletWidthIsValidSize: function(selectedPalletWidth,palletSize){ //A valid size is a size which is the >= the selected pallet size
-    return Number(local.config.palletTypes[palletSize]) >= Number(local.config.palletTypes[selectedPalletWidth]);
+    return Number(local.config.palletTypesToWidth[local.config.palletTypes[palletSize]]) >= Number(local.config.palletTypesToWidth[local.config.palletTypes[selectedPalletWidth]]);
   },
   
   //Don't check pallet types match anymore

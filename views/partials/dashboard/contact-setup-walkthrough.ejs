@@ -19,7 +19,7 @@
 							<p class="heading">Master Contacts</p>
 							<p>Firstly, we need two (and an optional third) Master Contacts for the business who are the sole people who can set or amend pricing. The Master Contact can also amend availability and registration details and add further contacts to the account.</p>
 							<p>All further contacts can be warehouse specific. In all cases, we will need two contacts for each role. </p>
-							<div class="warehouse-tasks-tray trays open columns twelve">
+							<div class="static warehouse-tasks-tray trays open columns twelve">
 								<a class="warehouse-name open-tray-link" href="#master-contact">Add Master Contacts</a>
 								<div class="tray">
 									<% include multi-used/master-contacts%>
@@ -29,16 +29,16 @@
 							<p>Next, you can add two Availability Contacts. These contacts are the only ones, other than the Master Contact and the Enquiries Contact, who can add or amend registration and contact details for the specified warehouse, including availability (but not pricing).</p>
 							<p>When a potential customer chooses your warehouse, we will send a detailed enquiry to a specified contact – the Enquiries Contact. The enquiry will detail the customer’s search criteria and your storage name and pricing to which it has been matched. This contact will need to respond within 48 hours confirming availability, offering payment terms and, where requested, offering an in-bound transport price. Or this contact will decline the enquiry.</p>
 							<p>The Enquiries Contact will be able to add or amend registration details and availability (but not pricing) for the specified warehouse. Two Enquiries Contacts will be required, though they can be the same contacts as the Availability Contact.</p>
-							<div class="warehouse-tasks-tray trays open columns twelve" data-warehouse-contacts="<%=warehouse.contacts._id.toString()%>" data-warehouse-id="<%=warehouse._id.toString()%>" data-warehouse-name="<%=warehouse.name%>">
+							<div class="static warehouse-tasks-tray trays open columns twelve" data-warehouse-contacts="<%=warehouse.contacts._id.toString()%>" data-warehouse-id="<%=warehouse._id.toString()%>" data-warehouse-name="<%=warehouse.name%>">
 								<a class="warehouse-name open-tray-link">Add Availability and Enquiries</a>
 								<div class="tray">
-									<div class="warehouse-tasks-tray trays open columns twelve">
+									<div class="static warehouse-tasks-tray trays open columns twelve">
 										<a class="warehouse-name open-tray-link" href="#availability-controller">Availability Contact</a>
 										<div class="tray">
 											<% include multi-used/availability-controller%>
 										</div>
 									</div>
-									<div class="warehouse-tasks-tray trays open columns twelve">
+									<div class="static warehouse-tasks-tray trays open columns twelve">
 										<a href="#enquires-controller" class="warehouse-name open-tray-link">Enquiries Contact</a>
 										<div class="tray">
 											<% include multi-used/enquires-controller%>
@@ -54,31 +54,31 @@
 							<div class="warehouse-tasks-tray trays open columns twelve" data-warehouse-contacts="<%=warehouse.contacts._id.toString()%>" data-warehouse-id="<%=warehouse._id.toString()%>" data-warehouse-name="<%=warehouse.name%>">
 								<a class="warehouse-name open-tray-link">Add Other Contacts</a>
 								<div class="tray">
-									<div class="warehouse-tasks-tray trays open columns twelve">
+									<div class="static warehouse-tasks-tray trays open columns twelve">
 										<a class="warehouse-name open-tray-link" href="#transport-coordinator">Transport Coordinator</a>
 										<div class="tray">
 											<% include multi-used/transport-coordinator%>
 										</div>
 									</div>
-									<div class="warehouse-tasks-tray trays open columns twelve">
+									<div class="static warehouse-tasks-tray trays open columns twelve">
 										<a class="warehouse-name open-tray-link" href="#goods-in">Goods-in</a>
 										<div class="tray">
 											<% include multi-used/goods-in%>
 										</div>
 									</div>
-									<div class="warehouse-tasks-tray trays open columns twelve">
+									<div class="static warehouse-tasks-tray trays open columns twelve">
 										<a class="warehouse-name open-tray-link" href="#picking-dispatch">Picking and Dispatch</a>
 										<div class="tray">
 											<% include multi-used/picking-dispatch%>
 										</div>
 									</div>
-									<div class="warehouse-tasks-tray trays open columns twelve">
+									<div class="static warehouse-tasks-tray trays open columns twelve">
 										<a class="warehouse-name open-tray-link" href="#invoice-controller">Invoice Contact</a>
 										<div class="tray">
 											<% include multi-used/invoice-controller%>
 										</div>
 									</div>
-									<div class="warehouse-tasks-tray trays open columns twelve">
+									<div class="static warehouse-tasks-tray trays open columns twelve">
 										<a class="warehouse-name open-tray-link" href="#credit-controller">Credit Contact</a>
 										<div class="tray">
 											<% include multi-used/credit-controller%>

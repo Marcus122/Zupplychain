@@ -29,7 +29,7 @@
 					<!--<select name="pallet-type" id="pallet-type" required="required">
 						<%
 						for (var i in palletTypes){%>
-							<option value="<%=i%>" <%if (session.whSC && session.whSC.sc[0].palletType == i){%>
+							<option data-backend-value="<%=config.palletTypesToWidth[palletTypes[i]]%>" value="<%=i%>" <%if (session.whSC && session.whSC.sc[0].palletType == i){%>
 																	selected
 																<%}%>><%=palletTypes[i]%></option>
 						<%}%>
@@ -37,7 +37,7 @@
 					<select name="pallet-type" id="pallet-type" required="required" disabled>
 						<%
 						for (var i in palletTypes){%>
-							<option value="<%=i%>" <%if (session.search && query.palletType == i){%>
+							<option data-backend-value="<%=config.palletTypesToWidth[palletTypes[i]]%>" value="<%=i%>" <%if (session.search && query.palletType == i){%>
 																	selected
 																<%}%>><%=palletTypes[i]%></option>
 						<%}%>

@@ -7,65 +7,68 @@
 		</div>
         <% include ./partials/choose-this-warehouse-popup%>  
         <section>
-        <%if (query && Object.keys(query).length > 0){%>
+        <%  var query = query;
+            if (query && Object.keys(query).length > 0){%>
                 <div class="search-header">
                     <div class="row">
                         <div class="columns three back-to-search">
                             <a href="/search" class="button action">Back to search results</a>
                         </div>
-                        <div class="search-criteria columns three">
-                            <span class="button-text">MY SEARCH CRITERIA</span>
-                            <button class="view primary tiny"></button>
-                            <div class="my-search-criteria">
-                                <div class="critera-popup">
-                                    <ul>
-                                        <li>
-                                           <span class="title">Pallet width</span>
-                                           <span class="search-value"><%=palletWidths[query.palletType]%></span>
-                                        </li>
-                                        <li>
-                                            <span class="title">Quantity</span>
-                                            <span class="search-value"><%=query.totalPallets%></span> 
-                                        </li>
-                                        <li>
-                                            <span class="title">Target postcode</span>
-                                            <span class="search-value"><%=query.postcode%></span> 
-                                        </li>
-                                        <li>
-                                            <span class="title">Max distance</span>
-                                            <span class="search-value"><%=query.maxDistance%></span> 
-                                        </li>
-                                        <li>
-                                            <span class="title">Product description</span>
-                                            <span class="search-value"><%=query.description%></span> 
-                                        </li>
-                                        <li>
-                                            <span class="title">Start date</span>
-                                            <span class="search-value"><%=query.startDate.toISOString().substring(8,10)%>/<%=query.startDate.toISOString().substring(5,7)%>/<%=query.startDate.toISOString().substring(0,4)%></span> 
-                                        </li>
-                                        <li>
-                                            <span class="title">Min Duration</span>
-                                            <span><%=minDurationOptions[parseInt(query.minDuration,10)]%></span> 
-                                        </li>
-                                        <li>
-                                            <span class="title">Height (m)</span>
-                                            <span class="search-value"><%=query.height%></span> 
-                                        </li>
-                                        <li>
-                                            <span class="title">Weight (kg)</span>
-                                            <span class="search-value"><%=query.weight%></span> 
-                                        </li>
-                                        <li>
-                                            <span class="title">Type</span>
-                                            <span class="search-value"><%=temperatures[query.temp]%></span> 
-                                        </li>
-                                    </ul>
-                                    <div class="edit-search">
-                                        <a href="/search#search-area" class="button action">Edit search criteria</a>
+                        <%if(query){%>
+                            <div class="search-criteria columns three">
+                                <span class="button-text">MY SEARCH CRITERIA</span>
+                                <button class="view primary tiny"></button>
+                                <div class="my-search-criteria">
+                                    <div class="critera-popup">
+                                        <ul>
+                                            <li>
+                                            <span class="title">Pallet width</span>
+                                            <span class="search-value"><%=palletWidths[query.palletType]%></span>
+                                            </li>
+                                            <li>
+                                                <span class="title">Quantity</span>
+                                                <span class="search-value"><%=query.totalPallets%></span> 
+                                            </li>
+                                            <li>
+                                                <span class="title">Target postcode</span>
+                                                <span class="search-value"><%=query.postcode%></span> 
+                                            </li>
+                                            <li>
+                                                <span class="title">Max distance</span>
+                                                <span class="search-value"><%=query.maxDistance%></span> 
+                                            </li>
+                                            <li>
+                                                <span class="title">Product description</span>
+                                                <span class="search-value"><%=query.description%></span> 
+                                            </li>
+                                            <li>
+                                                <span class="title">Start date</span>
+                                                <span class="search-value"><%=query.startDate.toISOString().substring(8,10)%>/<%=query.startDate.toISOString().substring(5,7)%>/<%=query.startDate.toISOString().substring(0,4)%></span> 
+                                            </li>
+                                            <li>
+                                                <span class="title">Min Duration</span>
+                                                <span><%=minDurationOptions[parseInt(query.minDuration,10)]%></span> 
+                                            </li>
+                                            <li>
+                                                <span class="title">Height (m)</span>
+                                                <span class="search-value"><%=query.height%></span> 
+                                            </li>
+                                            <li>
+                                                <span class="title">Weight (kg)</span>
+                                                <span class="search-value"><%=query.weight%></span> 
+                                            </li>
+                                            <li>
+                                                <span class="title">Type</span>
+                                                <span class="search-value"><%=temperatures[query.temp]%></span> 
+                                            </li>
+                                        </ul>
+                                        <div class="edit-search">
+                                            <a href="/search#search-area" class="button action">Edit search criteria</a>
+                                        </div>
                                     </div>
                                 </div>
-                             </div>
-                        </div>
+                            </div>
+                        <%}%>
                         <div class="see-on-map columns four">
                             <span class="button-text">VIEW LOCATION ON A MAP</span>
                             <button class="map primary tiny"></button>

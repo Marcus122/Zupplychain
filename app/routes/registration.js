@@ -85,7 +85,7 @@ function registerContact(req,res){
 }
 function registrationHandler(req,res){
 	//If active send to dashboard
-		if(req.data.user.active && req.headers.referer.indexOf('provider-registration') === -1 ){ //disabled while we test stuff.
+		if(req.data.user.active){ //disabled while we test stuff.
 			res.redirect('/dashboard');
 		}
 		else if(req.params.step > 1 && !req.data.user._id ){

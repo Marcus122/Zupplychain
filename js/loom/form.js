@@ -163,6 +163,7 @@ define(["jquery", "./formField", "./loomConfig"],function($, FormField, Config){
         }
         
         function focusOnInvalidField(){
+            $(this.formElement).find('.input-field.error input').not('[type="date"]').first().focusout();//Focus out first
             $(this.formElement).find('.input-field.error input').not('[type="date"]').first().focus();
         }
 		

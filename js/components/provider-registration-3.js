@@ -213,6 +213,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         function copyStorage($fromTable,$toTable){ //clone all the tr's from the copy from table to the copy to.
             $fromTable;
             $toTable;
+            var $newInput;
             var $toRows = $toTable.find('tbody tr');
             var $form = $toTable.closest("form");
             var $copyFromRows=$fromTable.find("tbody tr");
@@ -231,7 +232,11 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
            for (var j = 0; j<$newRows.length; j++){
             for (var i = 0; i<$($newRows[j]).find('td').length; i++){
                     if($($($newRows[j]).find('td')[i]).data('retain-value')){
-                        $($newRows[j]).find('td[data-th="' + $($toRows.find('td')[i]).data('th') + '"] input').val(parseInt($($toRows.find('td')[i]).find('input').val()));
+                        $newInput =  $($newRows[j]).find('td[data-th="' + $($toRows.find('td')[i]).data('th') + '"] input');
+                        $newInput.val(parseInt($($toRows.find('td')[i]).find('input').val()));
+                        $newInput.attr('min',0);
+                        $newInput.attr('max',$newInput.siblings('td[data-th="Total Pallets"]').first().val());
+                        
                     }
                     if($($($newRows[j]).find('td')[i]).data('do-not-copy') && !$($($newRows[j]).find('td')[i]).data('retain-value')){
                         $($($newRows[j]).find('td')[i]).find('input').val("");
@@ -434,10 +439,17 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         $(document).on('click','.popup',function(evt){ 
                 var $this = $(this);
                 editButtonClick($this);
-                require(["jqueryPlugins/jquery.scrollTo.min"],function(Scroll){
-                    var pos = $this.parent().parent().offset().top - ($this.parent().parent().offset().top - $this.closest('.main').offset().top);
-                    $.scrollTo(pos);
-                });
+                //$this.parent().parent().next('tr').slideDown();
+                 require(["jqueryPlugins/jquery.scrollTo.min"],function(Scroll){
+                     var pos = $this.parent().parent().offset().top - ($this.parent().parent().offset().top - $this.closest('.main').offset().top);
+                //     $.scrollTo(pos);
+                       $.scrollTo(pos, {duration : 600, offset : -90 });
+                 });
+        });
+        
+        $(document).on('click','button[name="save-ind-storage"]',function(){
+           var $editButton = $('td.button-cell').find('button[data-type="' + $(this).data('type') + '"]');
+           editButtonClick($editButton);
         });
 
         function editButtonClick($buttonThatWasClicked) {
@@ -594,11 +606,11 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                     if($this.attr('class').indexOf('date-range-pricing') !== -1){
                         if(checkSectionCompleted($this.prev('form').find('input'))){
                             if(!checkSectionCompleted($this.parent().next('div').find('form').find('input'))){
-                                $this.parent().find('.sp-nag').html("Great, don't forget to add availability for this storage name");
+                                $this.parent().find('.sp-nag').html("Great, don't forget to add availability above for this storage name");
                                 $this.parent().find('.sp-nag').fadeIn();
                             }
                         }else{
-                            $this.parent().find('.sp-nag').html("Great, don't forget to add standard pricing for this storage name");
+                            $this.parent().find('.sp-nag').html("Great, don't forget to add standard pricing above for this storage name");
                             $this.parent().find('.sp-nag').fadeIn();
                         }
                          array = 'pricing';
@@ -607,7 +619,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                          checkAndAppend(field1,field2,array,storage,$this);
                     }else if($this.attr('class').indexOf('availability') !== -1) {
                         if(!checkSectionCompleted($this.parent().prev('div').find('form').first().find('input'))){
-                            $this.parent().find('.sp-nag').html("Great, don't forget to add standard pricing for this storage name");
+                            $this.parent().find('.sp-nag').html("Great, don't forget to add standard pricing above for this storage name");
                             $this.parent().find('.sp-nag').fadeIn();
                         }
                          array = 'pallets'
@@ -616,7 +628,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                          checkAndAppend(field1,field2,array,storage,$this);
                     }else{
                         if(!checkSectionCompleted($this.parent().next('div').find('form').find('input'))){
-                            $this.parent().find('.availability-nag').html('Have you completed availability?');
+                            $this.parent().find('.availability-nag').html("Great, don't forget to add availability above for this storage name");
                             $this.parent().find('.availability-nag').fadeIn();
                         }
                          checkAndAppend('charge','price','pricing',storage,$this.next('.date-range-pricing-form'));
@@ -889,7 +901,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                 } else {
                     Alerts.showPersistentErrorMessage("Unable to save this storage.. You must enter standard pricing for the storage first.");
                     lm.focusOnInvalidField($('#'+formId));
-                    throw "Basic Pricing invalid";
+                    //throw "Basic Pricing invalid";
                     
                 }
                 return false; 
@@ -919,7 +931,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                 } else {
                     Alerts.showPersistentErrorMessage("Unable to save this storage.. you have some invalid Date Specific Pricing entries");
                     lm.focusOnInvalidField($('#'+formId));
-                    throw "Date range pricing invalid";
+                    //throw "Date range pricing invalid";
                 }
                 unmarkAllTheseRows($rows);
                 lm.rebind($('#'+formId));
@@ -970,7 +982,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                 } else {
                     Alerts.showPersistentErrorMessage("Unable to save this storage.. you have some invalid Availability entries");
                     lm.focusOnInvalidField($('#'+formId));
-                    throw "Availability invalid";
+                   //throw "Availability invalid";
                 }
                 unmarkAllTheseRows($rows);
                 lm.rebind($('#'+formId));
@@ -1057,7 +1069,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                 unmarkAllTheseRows($rows);
                 if (calledFromSaveEverything) {
                     Alerts.showPersistentErrorMessage("You have some invalid volume discount entries, please check these then try and save again");
-                    throw "error invalid volume discounts";
+                    //throw "error invalid volume discounts";
                 }
             } 
         }
