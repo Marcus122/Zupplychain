@@ -112,6 +112,27 @@ define(["jquery","components/global"], function ($,Global) {
 				}
 			});
 		}
+        
+		function rebuildDashboardHome(cb){
+			var url = '/rebuild-dashboard-home';
+			$.ajax({
+				url: url,
+				type: 'GET',
+				dataType: 'html',
+				headers: {'csrf-token':csrf},
+				success: function(response){
+					cb(response)
+				},
+				error:function(jqXHR, textStatus, errThrown){
+					if(jqXHR.status === 403){
+						handle403Error();
+					}else{
+						err = JSON.parse(jqXHR.responseText);
+						cb(err);
+					}
+				}
+			});
+		}
 		
 		function getWarehouseContacts(warehouseId,cb){
 			var url = '/get-warehouse-contacts/' + warehouseId;
@@ -143,6 +164,9 @@ define(["jquery","components/global"], function ($,Global) {
 				data: data,
 				headers: {'csrf-token':csrf},
 				success:function(response){
+                    $('div[data-view="main"]').remove();
+                    $('.dashboard').find('#vertical-nav').after(response.data.main);
+                    $('.dashboard').find('#vertical-nav').siblings('div[data-view="main"]').addClass('hidden');//Change
 					cb(response);
 				},
 				error:function(jqXHR,textStatus,errThrown){
@@ -234,7 +258,8 @@ define(["jquery","components/global"], function ($,Global) {
 			rebuildContactsView:rebuildContactsView,
 			rebuildWarehouseDropdownList:rebuildWarehouseDropdownList,
 			deleteItems:deleteItems,
-			getWarehouseContactsSuggestions:getWarehouseContactsSuggestions
+			getWarehouseContactsSuggestions:getWarehouseContactsSuggestions,
+            rebuildDashboardHome:rebuildDashboardHome
 		}
 	}
 	return c;

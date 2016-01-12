@@ -9,15 +9,21 @@
 				<div class="discount-inner">
 				<%
 						warehouse.totalPalletSpaces = 0;
+                        var maxPalletsJSON = {};
 						if(warehouse.storage){
-							for (var j =0;j<warehouse.storage.length;j++) {
-								warehouse.totalPalletSpaces += warehouse.storage[j].palletSpaces;
+							for (var j =0;j<warehouse.storage.length;j++) {         
+                                if (maxPalletsJSON[warehouse.storage[j].name] == undefined || maxPalletsJSON[warehouse.storage[j].name] < warehouse.storage[j].palletSpaces){ 
+                                    maxPalletsJSON[warehouse.storage[j].name] = warehouse.storage[j].palletSpaces;
+                                }
 							}
+                            for(var i in maxPalletsJSON){
+                                warehouse.totalPalletSpaces += maxPalletsJSON[i];
+                            }
 						}
 					%>
 					<div class="discount-header">
 						<h2>Volume Discount</h2>
-						<!--<span>Max number of pallets: <strong><%= warehouse.totalPalletSpaces %></strong></span>-->
+						<span>Estimated max number of pallets: <strong><%= warehouse.totalPalletSpaces %></strong></span>
 					</div>
 					
 					<form method="post" data-loom-do-not-show-success-css="true" id="discount-form" class="volume-discount-form loom-form" novalidate data-loom-no-submit="true">

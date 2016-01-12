@@ -151,12 +151,13 @@ exports.config = {
     },
     
     contactUsEnquires: [
-        'Register for Updates',
+        'Register For Updates',
         'Offering Storage',
-        'Looking for Space',
+        'Looking For Space',
         'General Feedback',
         'Media Enquiries',
-        'Forgot your Password',
+        'Forgot Your Password',
+        'How Did You Hear From Us',
         'Other'
     ],
     

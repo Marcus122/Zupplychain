@@ -3,7 +3,8 @@ var User = require("../controllers/users.js"),
 	multiparty = require('multiparty'),
 	utils = require('../utils.js'),
 	fs = require('fs'),
-	emailer = require('../controllers/emailer.js')
+	emailer = require('../controllers/emailer.js'),
+    company = require('../controllers/company.js');
 
 var handler = function(app) {
 	app.get('/provider-registration', function(req,res){
@@ -36,6 +37,9 @@ var handler = function(app) {
 		});
 	});
 	app.post('/register-contact/:userId',registerContact);
+    app.get('/provider-register',function(req,res){
+       res.render("provider-simple-registration",req.data); 
+    });
 };
 function sendRegisteredEmail(req,res,emailData,cb){
 	emailData.title = 'Registration Complete';
@@ -85,16 +89,23 @@ function registerContact(req,res){
 }
 function registrationHandler(req,res){
 	//If active send to dashboard
-		if(req.data.user.active){ //disabled while we test stuff.
-			res.redirect('/dashboard');
-		}
-		else if(req.params.step > 1 && !req.data.user._id ){
-			redirectToStart(res);
-		}else if (req.data.user._id && req.idsMatch === false){
-			res.redirect('/logout');
-		}else{
-			res.render("registration" + "-" + req.params.step,req.data);
-		}
+		// if(req.data.user.active){ //disabled while we test stuff.
+		// 	res.redirect('/dashboard');
+		// }
+		// else if(req.params.step > 1 && !req.data.user._id ){
+		// 	redirectToStart(res);
+		// }else if (req.data.user._id && req.idsMatch === false){
+		// 	res.redirect('/logout');
+		// }else{
+		// 	res.render("registration" + "-" + req.params.step,req.data);
+		// }
+        if(!req.data.user._id){
+            res.redirect('/provider-register');
+        }else if (req.data.user._id && req.data.user.warehouses && req.data.user.warehouses.length === 0){
+            res.render("registration" + "-" + req.params.step,req.data);
+        }else{
+            res.redirect('/dashboard');
+        }
 }
 function populateData(req,res, next){
     req.data.temperatures = local.config.temperatures;
@@ -109,14 +120,18 @@ function populateData(req,res, next){
 	});
 }
 function completeRegistration(req,res){
-	if(!req.data.user._id) return redirectToStart(res);
+    var newCompany = {};
+	//if(!req.data.user._id) return redirectToStart(res);
 	req.data.user.email = req.body.email;
 	req.data.user.password = req.body.password;
 	req.data.user.contact = req.body.contact;
 	req.data.user.name = req.body.name;
 	req.data.user.type = req.body["user-type"];
+    req.data.user.phoneNumber = req.body["phone-number"];
 	req.data.user.expiry = null;//This user is now completing their registration, so there is no need for an expiry date
-	User.register(req.data.user,function(err){
+	req.data.user.dashboardAccessLvl = req.body["dashboard-access-level"]
+    req.data.user.active = true;
+    User.create(req,res,req.data.user,function(err,newUser){
 		if(err){
 			//var backURL=req.header('Referer') 
 		    //return backURL ? res.redirect(backURL) : redirectToStart(res);
@@ -124,14 +139,52 @@ function completeRegistration(req,res){
 			res.end(JSON.stringify(err));
 			return;
 		}else{
-			var emailData = {};
-			emailData.email = req.body.email;
-			emailData.loginUrl = req.protocol + '://' + req.headers.host + '/login';
-			sendRegisteredEmail(req,res,emailData,function(){
-				res.send({redirect: '/registration-complete'});
-			});
+            newCompany.name = req.body["company-name"];
+            newCompany.phoneNumber = req.body["company-phone-number"];
+            newCompany.website = req.body.website;
+            newCompany.warehouses = [];
+            if(newCompany.name){
+                company.create(req,res,newCompany,function(err,newCompany){
+                    if(err){
+                        res.writeHead(200, {"Content-Type": "application/json"});
+                        res.end(JSON.stringify(err));
+                        return; 
+                    }else{
+                        company.updateMasterContacts(newCompany._id,newUser._id,function(err,result){
+                            if(err){
+                                res.writeHead(200, {"Content-Type": "application/json"});
+                                res.end(JSON.stringify(err));
+                                return; 
+                            }else{
+                                newUser.company = result._id;
+                                User.updateCompany(newUser._id,newCompany._id,function(err,result){
+                                    if(err){
+                                        res.writeHead(200, {"Content-Type": "application/json"});
+                                        res.end(JSON.stringify(err));
+                                        return; 
+                                    }else{
+                                        var emailData = {};
+                                        emailData.email = req.body.email;
+                                        emailData.loginUrl = req.protocol + '://' + req.headers.host + '/login';
+                                        sendRegisteredEmail(req,res,emailData,function(){
+                                            res.send({redirect: '/registration-complete'});
+                                        });
+                                    }
+                                })
+                            }
+                        },1)
+                    }
+                });
+            }else{
+                var emailData = {};
+                emailData.email = req.body.email;
+                emailData.loginUrl = req.protocol + '://' + req.headers.host + '/login';
+                sendRegisteredEmail(req,res,emailData,function(){
+                    res.send({redirect: '/registration-complete'});
+                });
+            }
 		}
-	});
+	},true);
 }
 function saveRegistration(req,res){
 	//if(!req.data.user._id) return redirectToStart(res);

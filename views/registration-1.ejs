@@ -14,9 +14,9 @@
 			</div>
 		</div>-->
 		<div class="banner">
-			<h1>Start your registration</h1>
+			<h1>Create your first warehouse</h1>
 			<div class="container">
-				<p class="desc medium-font">Follow our simple 3 step process to complete your registration</p>
+				<p class="desc medium-font">Follow our simple 3 step process to create your first warehouse</p>
 				<button class="button mini action" data-url="videos/Zupplychain-Registration-Animation.mp4" data-action="view-reg-example">View Example</button>
 			</div>
 		</div>
@@ -47,11 +47,11 @@
 							</div>
 							<fieldset class="main">
 								<div class="columns six">
-									<div class="input-field">
+									<div class="input-field hidden">
 										<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
 									</div>
 									<div class="input-field">
-										<label for="company">Company Name*</label><input type="text" name="company" id="company" required value="<%=warehouse.company%>" spellcheck="true"/>
+										<label for="company">Company Name*</label><input type="text" name="company" id="company" required value="<%=warehouse.company || user.company.name%>" spellcheck="true" disabled/>
 									</div>
 									<div class="input-field">
 										<label for="warehouseName">Warehouse Name*</label><input type="text" name="name" id="warehouseName" required value="<%=warehouse.name%>" spellcheck="true"/>
@@ -280,7 +280,7 @@
 					</div>
 					<fieldset class="form-footer">
                      
-                                <a class="button simple tandc" href="/terms-and-conditions">VIEW TERMS AND CONDITIONS</a>
+                                <a class="button simple tandc" href="/terms-and-conditions" target="_blank">VIEW TERMS AND CONDITIONS</a>
                      
 						<%if( warehouse._id ){%>
 							<input name="id" value="<%=warehouse._id%>" type="hidden"/>

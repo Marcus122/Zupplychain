@@ -28,10 +28,10 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
 			});
             
             $("#choose-this-warehouse").click(function(e){
-                // e.preventDefault();
-                // var $popup = $("#choose-this-warehouse-popup");
-                // $popup.css({position:"absolute", top:$('#estimated-total-cost').offset().top-400 });
-                // $popup.removeClass('hidden');
+                e.preventDefault();
+                var $popup = $("#choose-this-warehouse-popup");
+                $popup.css({position:"absolute", top:$('#estimated-total-cost').offset().top-400 });
+                $popup.removeClass('hidden');
             });
             
             $("#choose-this-warehouse-popup .close").click(function(){
@@ -366,6 +366,8 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
             
             $(document).on("click", ".warehouse-pricing table tr td .refresh", function(evt){
                 changeUsageProfile($(this));
+                $('.change-warehouse-profile-row-number .view-less').removeClass('hidden');//Change
+                $('.change-warehouse-profile-row-number .view-more').addClass('hidden');
             });
             
             function changeUsageProfile($this){

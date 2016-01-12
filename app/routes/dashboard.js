@@ -58,6 +58,20 @@ var handler = function(app) {
 			res.render('/',req.data);
 		}
 	});
+    
+    app.get('/rebuild-dashboard-home',function(req,res){
+        dashboard.getWarehousesByUser(req.data.user,function(err,data){
+            if (err){
+                setErrorResponse("Warehouse not found",res);
+            }else{
+                req.data.warehouses = dashboard.sortWarehousesByCreatedDate(data.warehouses);
+                req.data.completedTasks = getTasksThatHaveBeenCompleted(data);
+                req.data.dashboardAccessLvl = data.dashboardAccessLvl;
+                req.data.authorisations = data.authorisations;
+                res.render("partials/dashboard/tiles",req.data);
+            }
+        });
+    });
 	
 	app.post('/search-warehouse-contacts/:warehouse_id',function(req,res){
 		dashboard.getWarehouseContactsByWildcard(req,res,req.body.query,function(result){
@@ -157,7 +171,8 @@ var handler = function(app) {
 				req.data.palletTypes = local.config.palletTypes;
 				req.data.specifications = local.config.specifications;
 				req.data.warehouse = {};
-				req.data.warehouse.company = warehouses[0].company;
+                req.data.warehouse.company = req.data.user.company.name;
+				if(!req.data.warehouse.company) req.data.warehouse.company = warehouses[0].company;
 				req.data.warehouse.photos = [];
 				req.data.warehouse.documents = [];
 				req.data.warehouse.storage = [];
@@ -182,7 +197,27 @@ var handler = function(app) {
 			if(err){
 				setResponseWithErr('An error occurred while creating contacts',res);
 			}else{
-				setResponse(results,res);
+                dashboard.getWarehousesByUser(req.data.user,function(err,data){
+                    if(err){
+                        setResponse(results,res);
+                    }else{
+                        req.data.completedTasks = getTasksThatHaveBeenCompleted(data);
+                        req.data.authorisations = data.authorisations;
+                        req.data.warehouses = dashboard.sortWarehousesByCreatedDate(data.warehouses);
+                        req.data.warehouse = req.data.warehouses[0];
+                        req.data.masterContacts = data.masterContacts;
+                        req.data.dashboardAccessLvl = data.dashboardAccessLvl;
+                        res.render('partials/dashboard/tiles',req.data,function(err,template){
+                            if(err){
+                                
+                            }else{
+                                results.main = template;
+                                setResponse(results,res);
+                            }
+                        });
+                        
+                    }
+                });
 			}
 		});
 	});
@@ -369,7 +404,6 @@ function createContact(req,res,cb){
 			if(tableId !== ""){
 				cntr['update' + req.body.role.replace(/\s/g, '')](tableId,user._id,function(err,result){
 					var emailContactData = {};
-					console.log(emailContactType);
 					emailContactData.referer = req.data.user.name;
 					emailContactData.role = req.body.role;
 					emailContactData.roleNumber = req.body.roleNumber;

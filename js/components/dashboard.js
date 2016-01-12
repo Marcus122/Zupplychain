@@ -33,6 +33,14 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 				window.location.href = '/dashboard';
 			}
         });
+        
+        function rebuildDashboardHome(){
+			DBCntr.rebuildDashboardHome(function(response){
+				var $container = $('div[data-view="main"]');
+                $container.remove();
+                $('#vertical-nav').after(response);
+			});
+		}
 		
 		function triggerHashClick(){
 			var hash = $.trim(window.location.hash);
@@ -224,8 +232,12 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 					$('.tab-content ' + clickedTab).removeClass('hidden').siblings().addClass('hidden');
 					$tab.addClass('active').siblings('li').removeClass('active');
 					$('#add-new-warehouse ul li:first-child').addClass('checked');
-					rebuildWarehouseList();
-					rebuildWarehouseDropdownList();
+					//rebuildWarehouseList();//Change
+					//rebuildWarehouseDropdownList();
+                    $('li[data-view="warehouses"]').removeClass('no-warehouses');
+                    $('li[data-view="warehouses"]').attr('data-changed','true');
+                    $('li[data-view="contacts"]').attr('data-changed','true');
+                    $('li[data-view="home"]').attr('data-changed','true');
 					e.preventDefault();
 				}
 			});
@@ -256,8 +268,9 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			});
 			
 			$(document).on('click','#registration .save',function(e){
-				rebuildWarehouseList();
+				rebuildWarehouseList();//Change
 				rebuildWarehouseDropdownList();
+                $('li[data-view="warehouses"]').removeClass('no-warehouses');
 				if($(this).closest('#add-new-warehouse').length === 0 && $(this).closest('form').find('.error').length === 0){
 					changeToDisplayMode($('div[data-view="warehouses"]'));
 				}
@@ -292,13 +305,16 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			});
 		}
 		
-		function rebuildWarehouseList(){
+		function rebuildWarehouseList(){//Change
 			DBCntr.rebuildWarehouseList(function(response){
-				var $warehouseTable = $('div[data-view="warehouses"] table[data-type="warehouses-table"]');
+				//var $warehouseTable = $('div[data-view="warehouses"] table[data-type="warehouses-table"]');
 				var $addNewWarehouseContainer = $('.add-new-warehouse-container');
-				$warehouseTable.parent().append(response);
-				$warehouseTable.parent().append($addNewWarehouseContainer.wrap('<p/>').parent().html());
-				$warehouseTable.remove()[0];
+                var $container = $('div[data-content="warehouses"] .main');
+                $container.find('table').remove();
+                $container.find('p').remove();
+				$container.append(response);
+				$container.append($addNewWarehouseContainer.wrap('<p/>').parent().html());
+				//$container.remove()[0];
 				$addNewWarehouseContainer.remove()[0];
 			});
 		}
@@ -308,6 +324,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 				var $warehouseContactsDDParent = $('#warehouse-contacts').parent();
 				$warehouseContactsDDParent.find('#warehouse-contacts').remove();
 				$warehouseContactsDDParent.append(response);
+                $warehouseContactsDDParent.find('#warehouse-contacts').find('p.no-warehouses').remove();
 				initContactsTab();
 			});
 		}
@@ -353,15 +370,15 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 		}
 		
 		function prepareWarehouseView($this){
-			var $viewEditButtons = $('.view-edit-buttons');
+			var $viewEditButtonsUtility = $('.view-warehouse-utility-buttons');
 			$this.closest('div[data-view="warehouses"]').find('.content-box[data-content="warehouses"]').addClass('hidden');
 			$this.closest('.dashboard-container').parent('.main').css('background-color','#fff');
 			//$this.closest('div[data-view="warehouses"]').find('input[type="date"]').datepicker().removeClass('hidden');
 			loom = new Loom();
 			if($this.data('action') === ACTION_ADD_NEW_WAREHOUSE){
-				$viewEditButtons.addClass('hidden').addClass('hidden');
+				$viewEditButtonsUtility.addClass('hidden').addClass('hidden');
 			}else if($this.data('action') === ACTION_VIEW_EDIT_WAREHOUSE){
-				$viewEditButtons.removeClass('hidden');
+				$viewEditButtonsUtility.removeClass('hidden');
 			}
 		}
 		
@@ -373,6 +390,18 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 				$('.dashboard-container').removeClass('nine');
 				$('.dashboard-container').addClass('eleven');
 			}
+            
+            $(document).on('click', 'li[data-changed="true"]',function(){//Change
+                var $this = $(this);
+                $this.removeAttr('data-changed');
+                if($this.data('view') === 'warehouses'){
+                    rebuildWarehouseList();//Change
+                }else if ($this.data('view') === 'contacts'){
+                    rebuildWarehouseDropdownList();
+                }else if ($this.data('view') === 'home'){
+                    rebuildDashboardHome();
+                }
+            });
 			$(document).on('click','button.tile-button',function(evt){
 				if (evt.target.nodeName !== 'A'){
 					var href = $(this).data('href');
@@ -539,19 +568,44 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 				var uniqueContacts = [];
 				var results = {};
 				var emails = [];
-				if($this.val().length >=3 && $this.closest('table').closest('div').data('contact-type') !== 'master-contact'){
-					var data = {};
-					data.query = $this.val();
-					DBCntr.getWarehouseContactsSuggestions($('select[name="warehouses"]').find(":selected").data('id') || $(this).closest(".warehouse-tasks-tray").parent().closest(".warehouse-tasks-tray").data('warehouse-id'),data,function(result){
-						results.data = result;
-						$.each(results.data.data,function(index,value){
-							if($.inArray(value.email,emails)===-1){
-								uniqueContacts.push(value);
-								emails.push(value.email)
-							}
-						})
-						displayWCSuggestionsDropdown(uniqueContacts,$this);
-					});
+                var data = {};
+				if($this.closest('table').closest('div').data('contact-type') !== 'master-contact'){
+                    $this.autocomplete({ //Change
+                        source:function(request,response){
+                            data.query = $this.val();
+                            DBCntr.getWarehouseContactsSuggestions($('select[name="warehouses"]').find(":selected").data('id') || $this.closest(".warehouse-tasks-tray").parent().closest(".warehouse-tasks-tray").data('warehouse-id'),data,function(result){
+                                results.data = result;
+                                // $.each(results.data.data,function(index,value){
+                                //     if($.inArray(value.email,emails)===-1){
+                                //         uniqueContacts.push(value);
+                                //         emails.push(value.email)
+                                //     }
+                                // })
+                                response($.map(results.data.data,function(suggestions){
+                                    if($.inArray(suggestions.email,emails)===-1){
+                                        emails.push(suggestions.email)
+                                        return{
+                                            label: suggestions.name,
+                                            value: "",
+                                            data: suggestions
+                                        }
+                                    }
+                                }))
+                                //displayWCSuggestionsDropdown(uniqueContacts,$this);
+                                
+                            });
+                        },
+                        select:function(event,ui){
+                            var item = ui.item.data;
+                            $this.closest('td').siblings('td[data-field="email"]').find('input').val(item.email);
+                            $this.val(item.name);
+                            $this.closest('td').siblings('td[data-field="phone-number"]').find('input').val(item.phoneNumber);
+                            
+                        },
+                        autoFocus: true,
+                        minLength: 3,
+                        delay: 100
+                    });
 				}
 			});
 			
@@ -684,7 +738,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 											}else if(response.data.contactId !== undefined){
 												var contactsId = response.data.contactId;
 											}
-											
+											$(rows[i]).find('button[name="clear"]').addClass('hidden');
 											if(response.data.expiry === null){
 												currentRows[cbDone-1].find('td[data-field="register-status"]').append('<p class="registered-status complete">Registered</p>');
 											}else{
@@ -767,7 +821,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 					$ele.append($row);
 				}
 				
-				$(document).on('click','button[name="delete"]',function(){
+				$(document).on('click','button[name="delete"]',function(){//Change
 					var $this = $(this);
 					var $table = $this.parent().prev('.dashboard-table');
 					var $rows = $table.find('tbody').find('tr');
@@ -792,12 +846,16 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 						data.warehouseContactId = data.warehouseContactId.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); })
 					}
 					len = $rows.find('td[data-field="delete"]').find('input[type="checkbox"]:checked').length;
-					for (var i = 0; i<$rows.length; i++){
+					data.ids = [];
+                    for (var i = 0; i<$rows.length; i++){
 						$currentRow = $($rows[i]);
 						if ($($rows[i]).find('td[data-field="delete"]').find('input').is(':checked')){
 							ids.push($($rows[i]).data('id'));
 							deletedRows.push($rows[i]);
-							data.id = $($rows[i]).data('id');
+							data.ids.push($($rows[i]).data('id'));
+                         }
+                    }
+                    
 							DBCntr.deleteItems(data,function(response){
 								cbCompleted ++;
 								if (response.err){
@@ -814,7 +872,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 								// 	addWarehouseContactRow($table.find('tbody'));
 								// }
 								//$rows[i].remove();
-								if(cbCompleted === len){
+								//if(cbCompleted === len){
 									for (var j= 0; j<deletedRows.length; j++){
 										$(deletedRows[j]).remove();
 									}
@@ -832,10 +890,10 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 									}else{
 										Alerts.showSuccessMessage('Items deleted');
 									}
-								}
+								//}
 							});
-						}
-					}
+						//}
+					//}
 				});
 			}
 		}
@@ -897,13 +955,17 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 		
 		function displayWCSuggestionsDropdown(data,$this){
 			var $dropdown = $this.next('ul');
+            var dropdownHeight = 0;
 			$dropdown.find('li').remove();
 			$dropdown.width($this.outerWidth()-2);
+            $dropdown.height($this.find('li'))
 			var template = templates.getTemplate("contacts-suggestion");
 			for (var i = 0; i<data.length; i++){
 				var $listItem = template.bind(data[i]);
 				$dropdown.append($listItem);
+                dropdownHeight += $listItem.find('a').outerHeight();
 			}
+            //$dropdown.height(dropdownHeight);
 			$dropdown.removeClass('hidden');
 			//$dropdown.slideToggle(200);
 		}

@@ -46,13 +46,16 @@ require(["jquery","components/global","jqueryPlugins/jquery.scrollTo.min","loom/
                //ContactUs();
             });   
         }
-		if (onPage("provider-registration-1") || onPage("provider-registration-2") || onPage("provider-registration-3") || onPage("initial-registration") || onPage("dashboard")){
+        //Change
+		if (onPage("provider-register") || onPage("provider-registration-1") || onPage("provider-registration-2") || onPage("provider-registration-3") || onPage("initial-registration")){
 			require(["components/provider-registration"],function(Registration){
 				Registration();
 			});
 		}
+        //Change
         if (onPage("login") || onPage("dashboard") || onPage("contacts-setup") || onPage("contacts-explanation")){
-            require(["components/dashboard"], function(Dashboard) {
+            require(["components/provider-registration","components/dashboard"], function(Registration,Dashboard) {
+               Registration();
                Dashboard();
             });   
         }
@@ -61,7 +64,7 @@ require(["jquery","components/global","jqueryPlugins/jquery.scrollTo.min","loom/
                 warehouseProfile();
             });
         }
-        if(onPage("about-us")){
+        if(onPage("about-us") || onPage('faq')){//Change
              require(["components/static"], function(Static){
                 Static();
             });

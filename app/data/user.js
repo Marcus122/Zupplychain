@@ -59,21 +59,22 @@ userSchema.methods.getWarehouses = function(cb){
 	});
 }
 function setPassword(password){
-    //return passwordHash.isHashed(password) ? password : passwordHash.generate(password);
-	//var user = this;
-	//if (!user.isModified('password')) return password;
+    return passwordHash.isHashed(password) ? password : passwordHash.generate(password);
+	var user = this;
+	if (!user.isModified('password')) return password;
 	
-	var salt = bcrypt.genSaltSync(10);
-	return bcrypt.hashSync(password,salt);
+	// var salt = bcrypt.genSaltSync(10);
+	// return bcrypt.hashSync(password,salt);
 }
 function updateUsersName(name,id,cb){
 	this.update({_id:id},{$set:{name:name}}).exec(cb);
 }
 function authenticatePassword(password,storedPassword,cb){
-	bcrypt.compare(password,storedPassword,function(err,match){
-		if(err) return cb(err);
-		cb(null,match);
-	})
+	// bcrypt.compare(password,storedPassword,function(err,match){
+	// 	if(err) return cb(err);
+	// 	cb(null,match);
+	// })
+    cb(null,passwordHash.verify(password,storedPassword));
 }
 userSchema.statics = {
 	loadByEmail: function(email,cb){

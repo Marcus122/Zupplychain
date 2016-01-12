@@ -1,7 +1,11 @@
-define(["jquery","loom/loom","loom/loomAlerts","templates/templates"], function ($,Loom,Alerts,Templates) {
+define(["jquery","loom/loom","loom/loomAlerts","templates/templates","jqueryPlugins/jquery.placeholder.min"], function ($,Loom,Alerts,Templates,Placeholder) {
 	
     function Class() {
 		var templates = new Templates();
+        
+        events();
+        
+        $(document).find('input, textarea').placeholder();
 		
 		function show403Popup(){
 			var template = templates.getTemplate('403-popup');
@@ -23,13 +27,29 @@ define(["jquery","loom/loom","loom/loomAlerts","templates/templates"], function 
                 }
             }
         });
-            
-        $(document).on("click", ".static .open-tray-link", function(evt){//Change
-            openTray($(this));
-            if(evt.stopPropagation) evt.stopPropagation();
-            if(evt.cancelBubble!=null) evt.cancelBubble = true;
-            evt.preventDefault();
-        });
+        
+        function events(){//Change
+            if($(document).find(".static .open-tray-link").length > 0){
+                var eve = $._data($(document).find('.static .open-tray-link')[0], 'events')
+                if (!eve){
+                    $(document).find(".static .open-tray-link").on("click", function(evt){//Change
+                        openTray($(this));
+                        if(evt.stopPropagation) evt.stopPropagation();
+                        if(evt.cancelBubble!=null) evt.cancelBubble = true;
+                        evt.preventDefault();
+                    });
+                }
+            }
+        }
+        
+        function getQueryVariable(variable){//Change
+            var query = window.location.search.substring(1);
+            var vars = query.split("&");
+            for (var i = 0; i<vars.length; i++){
+                var pair = vars[i].split("=");
+                if (pair[0] == variable) return pair[1];
+            }
+        }
 		
 		function centerPopup($element){
 			var top;
@@ -44,6 +64,10 @@ define(["jquery","loom/loom","loom/loomAlerts","templates/templates"], function 
 				top:top
 			});
 		}
+        
+        function fileAPISupported(){ //Change
+            return $("<input type='file'>").get(0).files !== undefined;
+        }
 		
 		function showRegistrationExample($this,shouldCenterPopup){
 			var template = templates.getTemplate('video-popup');
@@ -87,7 +111,9 @@ define(["jquery","loom/loom","loom/loomAlerts","templates/templates"], function 
 			disableButtonsOnAjax:disableButtonsOnAjax,
 			enableButtonsOnAjaxCompletion:enableButtonsOnAjaxCompletion,
 			showRegistrationExample:showRegistrationExample,
-            openTray:openTray//Change
+            openTray:openTray,//Change
+            getQueryVariable:getQueryVariable,//Change
+            fileAPISupported:fileAPISupported//Change
 		}
 	}
 	

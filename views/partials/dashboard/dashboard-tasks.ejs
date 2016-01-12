@@ -1,0 +1,73 @@
+<table id="company-tasks" class="dashboard-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Requests Sent</th>
+            <th>Response Received</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td data-field="task"><a data-go-to-link="view-tab-contacts" href="#contacts#master-contact">Add master contacts</a></td>
+            <td><input disabled type="checkbox" name="task-completed" <%if(completedTasks.masterContact.allRequestsSent === true){%>checked<%}%>></td>
+            <td><input disabled type="checkbox" name="response-sent" <%if(completedTasks.masterContact.allRequestsResponded === true){%>checked<%}%>></td>
+        </tr>
+    </tbody>
+</table>
+<%for(var i = 0; i<warehouses.length; i++){
+    if(completedTasks[i][warehouses[i].id].contactSetupComplete === false){%>
+        <div class="static warehouse-tasks-tray trays open">
+            <!--<a class="warehouse-name open-tray-link <%if(warehouses.length === 1 || parseInt(warehouses.length) - parseInt(completedTasks.numWarehousesCompleted) === 1){%>open<%}%>"><%=warehouses[i].name%></a>-->
+            <a class="warehouse-name open-tray-link"><%=warehouses[i].name%></a>
+            <!--<div class="tray <%if(warehouses.length === 1 || parseInt(warehouses.length) - parseInt(completedTasks.numWarehousesCompleted) === 1){%>open<%}%>">-->
+            <div class="tray">
+                <table id="tasks" data-warehouse-id="<%=warehouses[i].id%>">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Request Sent</th>
+                            <th>Response Received</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-field="task"><a data-go-to-link="view-tab-contacts" href="#contacts#warehouse-contacts#availability-controller">Add availability contacts</a></td>
+                            <td><input disabled type="checkbox" name="task-completed" <%if(completedTasks[i][warehouses[i].id].availabilityController.allRequestsSent === true){%>checked<%}%>></td>
+                            <td><input disabled type="checkbox" name="response-sent" <%if(completedTasks[i][warehouses[i].id].availabilityController.allRequestsResponded === true){%>checked<%}%>></td>
+                        </tr>
+                        <tr>
+                            <td data-field="task"><a data-go-to-link="view-tab-contacts" href="#contacts#warehouse-contacts#enquires-controller">Add enquiries contacts</a></td>
+                            <td><input disabled type="checkbox" name="task-completed" <%if(completedTasks[i][warehouses[i].id].enquiresController.allRequestsSent === true){%>checked<%}%>></td>
+                            <td><input disabled type="checkbox" name="response-sent" <%if(completedTasks[i][warehouses[i].id].enquiresController.allRequestsResponded === true){%>checked<%}%>></td>
+                        </tr>
+                        <tr>
+                            <td data-field="task"><a data-go-to-link="view-tab-contacts" href="#contacts#warehouse-contacts#transport-coordinator">Add transport coordinator</a></td>
+                            <td><input disabled type="checkbox" name="task-completed" <%if(completedTasks[i][warehouses[i].id].transportCoordinator.allRequestsSent === true){%>checked<%}%>></td>
+                            <td><input disabled type="checkbox" name="response-sent" <%if(completedTasks[i][warehouses[i].id].transportCoordinator.allRequestsResponded === true){%>checked<%}%>></td>
+                        </tr>
+                        <tr>
+                            <td data-field="task"><a data-go-to-link="view-tab-contacts" href="#contacts#warehouse-contacts#goods-in">Add goods-in contacts</a></td>
+                            <td><input disabled type="checkbox" name="task-completed" <%if(completedTasks[i][warehouses[i].id].goodsIn.allRequestsSent === true){%>checked<%}%>></td>
+                            <td><input disabled type="checkbox" name="response-sent" <%if(completedTasks[i][warehouses[i].id].goodsIn.allRequestsResponded === true){%>checked<%}%>></td>
+                        </tr>
+                        <tr>
+                            <td data-field="task"><a data-go-to-link="view-tab-contacts" href="#contacts#warehouse-contacts#picking-dispatch">Add picking and dispatch contacts</a></td>
+                            <td><input disabled type="checkbox" name="task-completed" <%if(completedTasks[i][warehouses[i].id].pickingDispatch.allRequestsSent === true){%>checked<%}%>></td>
+                            <td><input disabled type="checkbox" name="response-sent" <%if(completedTasks[i][warehouses[i].id].pickingDispatch.allRequestsResponded === true){%>checked<%}%>></td>
+                        </tr>
+                        <tr>
+                            <td data-field="task"><a data-go-to-link="view-tab-contacts" href="#contacts#warehouse-contacts#invoice-controller">Add invoice contacts</a></td>
+                            <td><input disabled type="checkbox" name="task-completed" <%if(completedTasks[i][warehouses[i].id].invoiceController.allRequestsSent === true){%>checked<%}%>></td>
+                            <td><input disabled type="checkbox" name="response-sent" <%if(completedTasks[i][warehouses[i].id].invoiceController.allRequestsResponded === true){%>checked<%}%>></td>
+                        </tr>
+                        <tr>
+                            <td data-field="task"><a data-go-to-link="view-tab-contacts" href="#contacts#warehouse-contacts#credit-controller">Add credit contact contacts</a></td>
+                            <td><input disabled type="checkbox" name="task-completed" <%if(completedTasks[i][warehouses[i].id].creditController.allRequestsSent === true){%>checked<%}%>></td>
+                            <td><input disabled type="checkbox" name="response-sent" <%if(completedTasks[i][warehouses[i].id].creditController.allRequestsResponded === true){%>checked<%}%>></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <%}
+}%>

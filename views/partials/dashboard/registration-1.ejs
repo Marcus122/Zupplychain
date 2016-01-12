@@ -13,7 +13,7 @@
 			<fieldset class="main">
 				<div class="columns six">
 					<div class="input-field">
-						<label for="company">Company Name*</label><input data-do-not-enable="true" readonly disabled type="text" name="company" id="company" required value="<%=warehouse.company%>"/>
+						<label for="company">Company Name*</label><input data-do-not-enable="true" readonly disabled type="text" name="company" id="company" required value="<%=warehouse.company || user.company.name%>"/>
 					</div>
 					<div class="input-field">
 						<label for="warehouseName">Warehouse Name*</label><input type="text" name="name" id="warehouseName" required value="<%=warehouse.name%>"/>

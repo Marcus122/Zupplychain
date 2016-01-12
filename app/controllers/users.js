@@ -15,6 +15,10 @@ exports.updateDashboardAccessLevel = function(user,accessLevel,cb){
 	User.update({_id:user},{$push:{dashboardAccessLvl:accessLevel}}).exec(cb);	
 }
 
+exports.updateCompany = function(user,company,cb){
+	User.update({_id:user},{company:company}).exec(cb);	
+}
+
 exports.checkCorrectDashboardAccessLevelAndUpdate = function(user,cb){
 	company.checkUserIsMaterContact(user,function(err,exists){
 		if(err){
@@ -111,15 +115,15 @@ exports.register = function(user,cb){
 			user.active=true;
 			//Activate each warehouse
 			//Dont need to wait for warehouses to update
-			user.getWarehouses(function(warehouses){
-				warehouses.forEach(function(warehouse){
-					warehouse.active=true;
-					warehouse.save();
-				});
-			});
-			user.save(function(err){
+			// user.getWarehouses(function(warehouses){
+			// 	warehouses.forEach(function(warehouse){
+			// 		warehouse.active=true;
+			// 		warehouse.save();
+			// 	});
+			// });
+			user.save(function(err,result){
 				if(!err){	 
-					cb(null);
+					cb(null,result);
 				}else{
 					cb(err);
 				}

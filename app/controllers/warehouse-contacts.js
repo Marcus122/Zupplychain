@@ -88,22 +88,23 @@ exports.loadWarehousesContactsByACOrEC = function(userId,cb){
 	});
 }
 
-exports.deleteContact = function(userId,contactType,warehouseContactId,cb){
-	WarehouseContacts.load(warehouseContactId,function(err,result){
+exports.deleteContact = function(userIds,contactType,warehouseContactId,cb){
+	var i = 0;
+    WarehouseContacts.load(warehouseContactId,function(err,result){
 		if(err){
 			cb(err);
 		}else{
-			WarehouseContacts.deleteWhContact(warehouseContactId,userId,contactType,function(err,result){
+			WarehouseContacts.deleteWhContact(warehouseContactId,userIds,contactType,function(err,result){
 				if(err){
 					cb(err);
 				}else{
-					//for (var i = 0; i<userIds.length; i++){
-						exports.checkWarehouseContactsExist(userId,function(err,exists){
+					for (i = 0; i<userIds.length; i++){
+						exports.checkWarehouseContactsExist(userIds[i],function(err,exists,userId){
 							if(err){
 								//See if there is a rollback function
 								cb(err);
 							}else if(!exists){
-								company.checkUserIsMaterContact(userId,function(err,exists){
+								company.checkUserIsMaterContact(userId,function(err,exists,userId){
 									if(err){
 										cb(err);
 									}else if(!exists){
@@ -135,7 +136,7 @@ exports.deleteContact = function(userId,contactType,warehouseContactId,cb){
 								});
 							}
 						});
-					//}
+					}
 				}
 			});
 		}
@@ -149,19 +150,23 @@ exports.loadWarehousesByUser = function(userId,cb){
 		if(err){
 			cb(err);
 		}else{
-			for (var i = 0; i<results.length; i++){
-				Warehouse.getById(results[i].warehouse,function(err,warehouse){
-					if(err){
-						//This warehouse won't appear in the list
-					}else{
-						userWarehouses.push(warehouse);
-					}
-					cbCompleted ++;
-					if(cbCompleted === results.length){
-						cb(false,userWarehouses)
-					}
-				});
-			}
+            if(results.length > 0){
+                for (var i = 0; i<results.length; i++){
+                    Warehouse.getById(results[i].warehouse,function(err,warehouse){
+                        if(err){
+                            //This warehouse won't appear in the list
+                        }else{
+                            userWarehouses.push(warehouse);
+                        }
+                        cbCompleted ++;
+                        if(cbCompleted === results.length){
+                            cb(false,userWarehouses)
+                        }
+                    });
+                }
+            }else{
+                cb(false,[])
+            }
 		}
 	});
 }
@@ -171,9 +176,9 @@ exports.checkWarehouseContactsExist = function(userId,cb){
 		if(err){
 			cb(err);
 		}else if(result.length !== 0){
-			cb(false,true);
+			cb(false,true,userId);
 		}else if(result.length === 0){
-			cb(false,false);
+			cb(false,false,userId);
 		}
 	});
 }

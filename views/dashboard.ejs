@@ -1,7 +1,7 @@
 <% include ./partials/top %>            
 <main class="dashboard">
 	<div class="banner">
-		<h1>Dashboard</h1>
+		<h1><%=user.name || warehouse.company%>'s Dashboard</h1>
 	</div>
 	<section>
 		<div class="main">
@@ -11,7 +11,7 @@
 					<li data-view="home"><a href="#main">Dashboard Home</a></li>
 					<li data-view="admin"><a href="#admin">Account</a></li>
 					<%if(authorisations.warehouse !== false){%>
-						<li data-view="warehouses"><a href="#warehouses">Warehouses</a></li>
+						<li data-view="warehouses" <%if(warehouses.length === 0){%>class="no-warehouses"<%}%>><a href="#warehouses">Warehouses</a></li>
 					<%}%>
 					<%if(authorisations.contacts !== false){%>
 						<li data-view="contacts"><a href="#contacts">Contacts</a></li>
@@ -32,8 +32,8 @@
 	</section>
 	<div class="continue-links footer form-footer">
 		<div class="container">
-			<a href="/terms-and-conditions" class="button simple dashboard-back hidden">back</a>
-			<a class="button simple tandc dashboard-tandc" href="/terms-and-conditions">VIEW TERMS AND CONDITIONS</a>
+			<a class="button simple dashboard-back hidden">back</a>
+			<a target="_blank" class="button simple tandc dashboard-tandc" href="/terms-and-conditions">VIEW TERMS AND CONDITIONS</a>
 		</div>
 	</div>
 </main>	

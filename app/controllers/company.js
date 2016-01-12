@@ -66,19 +66,23 @@ exports.warehouseByCompany = function(company,callback){
 			callback(err);
 		}else{
 			var resultObj = result.toObject();
-			for (var i = 0; i < resultObj.warehouses.length; i++){
-				warehouse.getById(resultObj.warehouses[i],function(err,warehouse){
-					if(err){
-						//Do nothing, the warehouse will not be in the results
-					}else{
-						cbCompleted ++;
-						warehouses.push(warehouse)
-						if(resultObj.warehouses.length === cbCompleted){
-							callback(null,warehouses);
-						}
-					}
-				});
-			}
+            if (resultObj.warehouses.length > 0){
+                for (var i = 0; i < resultObj.warehouses.length; i++){
+                    warehouse.getById(resultObj.warehouses[i],function(err,warehouse){
+                        if(err){
+                            //Do nothing, the warehouse will not be in the results
+                        }else{
+                            cbCompleted ++;
+                            warehouses.push(warehouse)
+                            if(resultObj.warehouses.length === cbCompleted){
+                                callback(null,warehouses);
+                            }
+                        }
+                    });
+                }
+            }else{
+                callback(null,[]);
+            }
 		}
 	});
 };
@@ -89,64 +93,67 @@ exports.checkUserIsMaterContact = function(userId,cb){
 			cb(err);
 		}else{
 			if(result.length > 0){
-				cb(false,true);
+				cb(false,true,userId);
 			}else if(result.length === 0){
-				cb(false,false);
+				cb(false,false,userId);
 			}
 		}
 	});
 }
 
-exports.deleteMasterContact = function(company,userId,cb){
-	User.user_by_id(userId,function(err,result){
-		if(err){
-			cb(err);
-		}else{
-			Company.removeMasterContact(company,result._id,function(err,result){
+exports.deleteMasterContact = function(company,userIds,cb){
+	//User.user_by_id(userId,function(err,result){
+		//if(err){
+			//cb(err);
+		//}else{
+            var i = 0;
+			Company.removeMasterContact(company,userIds,function(err,result){
 				if(err){
 					cb(err);
 				}else{
-					warehouseContacts.checkWarehouseContactsExist(userId,function(err,exists){
-						if(err){
-						//See if there is a rollback function
-							cb(err);
-						}else if(!exists){
-							exports.checkUserIsMaterContact(userId,function(err,exists){
-								if(err){
-									cb(err);
-								}else if(!exists){
-									User.deleteUser(userId,function(err,result){
-										if(err){
-											cb(err);
-											//See if there is a rollback function
-										}else{
-											cb(false,result);
-										}
-									});
-								}else{
-									User.updateDashboardAccessLevel(userId,local.config.dashboardAccessLevel.masterContact,function(err,result){
-										if(err){
-											cb(err);
-										}else{
-											cb(false);
-										}
-									});
-								}
-							});
-						}else{
-							User.checkCorrectDashboardAccessLevelAndUpdate(userId,function(err,result){
-								if(err){
-									cb(err);
-								}else{
-									cb(false);
-								}
-							});
-						}
-					});
+                    for (i = 0; i<userIds.length; i++){
+                        warehouseContacts.checkWarehouseContactsExist(userIds[i],function(err,exists,userId){
+                            if(err){
+                            //See if there is a rollback function
+                                cb(err);
+                            }else if(!exists){
+                                exports.checkUserIsMaterContact(userId,function(err,exists,userId){
+                                    if(err){
+                                        cb(err);
+                                    }else if(!exists){
+                                        User.deleteUser(userId,function(err,result){
+                                            if(err){
+                                                cb(err);
+                                                //See if there is a rollback function
+                                            }else{
+                                                cb(false,result);
+                                            }
+                                        });
+                                    }else{
+                                        User.updateDashboardAccessLevel(userId,local.config.dashboardAccessLevel.masterContact,function(err,result){
+                                            if(err){
+                                                cb(err);
+                                            }else{
+                                                cb(false);
+                                            }
+                                        });
+                                    }
+                                });
+                            }else{
+                                User.checkCorrectDashboardAccessLevelAndUpdate(userId,function(err,result){
+                                    if(err){
+                                        cb(err);
+                                    }else{
+                                        cb(false);
+                                    }
+                                });
+                            }
+                        });
+                    }
 				}
 			});
-		}
-	});
+		//}
+	//});
 }
 
 exports.load = function(id,cb){

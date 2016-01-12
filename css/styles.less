@@ -870,7 +870,7 @@ span.highlight-bright{
     }
     &.open{
         &:after{
-            content: "\f126";
+            content: "Close";
             }
             
     }
@@ -879,7 +879,7 @@ span.highlight-bright{
     }
     &:after{
         &:extend(.ion);
-        content: "\f123";
+        content: "Open";
         position:absolute;
         right:20px;
         font-size:24px;
@@ -1012,13 +1012,13 @@ td.success{
     line-height:2.4rem;
 }
 
-.ui-autocomplete{
+.ui-autocomplete{ //Change
     list-style:none;
-    width: 29.6% !important;
+    //width: 29.6% !important;
     li {
       padding: 6px 10px;
-      margin-bottom: 0;
-    } 
+      margin-bottom: 0 !important;
+    }
 }
 
 .ui-state-focus, .ui-widget-content .ui-state-focus{
@@ -1027,6 +1027,10 @@ td.success{
     font-weight: bold !important;
     color: #4F8A10 !important;
 } 
+
+.lowercase{
+    text-transform:lowercase;
+}
 
 /*! jQuery UI - v1.11.4 - 2015-07-06
 * http://jqueryui.com

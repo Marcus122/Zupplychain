@@ -10,6 +10,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 		var data={};
 		var DASHBOARD_PAGE = 'dashboard';
 		var global = new Global();
+        var regBubbleTimer;
 		
 		function initialize() {
 			step1();
@@ -17,6 +18,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			step3();
             postcodeAnywhereInit();
 			initInitialRegistration();
+            initSimpleRegistration();//Change
 			setTimer(60000*8);//Eight Minutes
 			
 			$(document).on("click",".popup-window .close",function(){
@@ -24,35 +26,47 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			});
 			
 			$('#reg-help-bubble .close').click(function(e){
-				setTimer(60000*8);
+                setTimer(60000*8);
+                $(this).parent().addClass('hidden');
 				e.stopPropagation()
 			})
 			
 			$('button[data-action="view-reg-example"], #reg-help-bubble').click(function(){
-				setTimer(60000*8);
+                setTimer(60000*8);
 				global.showRegistrationExample($(this),false);
 			});
 			
 		}
-		function initInitialRegistration(){
+		function initInitialRegistration(){//Change
 			lm.addOnSuccessCallback('contacts-registration',function(result){
 				if(result.redirectUrl){
 					window.location.href = result.redirectUrl;
 				}
 			});
 		}
+        
+        function initSimpleRegistration(){
+            lm.addOnSuccessCallback('complete-registration',function(data){
+				if (typeof data.redirect == 'string' && typeof data.redirect !== 'undefined'){
+					window.location = data.redirect;
+				}else if (data.message !== undefined){
+					Alerts.showErrorMessage(data.message);
+				}
+			});
+        }
+        
 		function setTimer(time){
-			var timer;
-			timer = setInterval(function(){
+			clearTimeout(regBubbleTimer);
+            regBubbleTimer = setInterval(function(){
 				if($('.popup-window.video-popup').length === 0){
 					var $regHelpBubble = $('#reg-help-bubble');
 					if($regHelpBubble.hasClass('hidden')){
 						$regHelpBubble.removeClass('hidden');
-						clearTimeout(timer);
+						clearTimeout(regBubbleTimer);
 						setTimer(30000)//30 seconds
 					}else{
 						$regHelpBubble.addClass('hidden');
-						clearTimeout(timer);
+						clearTimeout(regBubbleTimer);
 						setTimer(60000*8)//Eight Minutes
 					}
 				}
@@ -282,7 +296,8 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				});
 			}
 			//var $addPhoto = $('#add-photo');
-			var addPhoto = document.getElementsByName('upload-photos')[0];
+			//var addPhoto = document.getElementsByName('upload-photos')[0];
+            var addPhoto = $('input[name="upload-photos"]')[0];
 			var $uploadPhoto = $('#photos');
 			var $uploadDoc = $('#docs');
 		    var $defaultPhotoInput = $("input#deafultPhoto");
@@ -291,31 +306,35 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			var $documentArea = $('#upload-documents');
 			//$addPhoto.on("click",function(ev){
 			addPhoto.onchange = function(){
-				//ev.preventDefault();
-				var index = 0;
-				var files = $uploadPhoto.prop("files");
-				if(!files) return;
-				sendFile(files,function(data){
-					if(!warehouse.photos) warehouse.photos=[];
-					index = images.length;
-					images.push($uploadPhoto.prop("files"));
-					//$uploadPhoto.val("");
-					var template = templates.getTemplate("warehouse-image");
-					photosAdded = true;
-					for(var i in data){
-						var image = data[i];
-						image.file = '/tmp/' + data[i].name;
-						var $image = template.bind( image );
-						$image.attr('data-image-index',index)
-						imageTempLocations.push('./tmp/' + data[i].name);
-						if ($photoArea.find('.isDefault').length === 0){
-							$("#defaultPhoto").val(image.name);
-							$(".document").removeClass("isDefault");
-							$image.find('.image').parent().addClass("isDefault");
-						}
-						$photoArea.append($image);
-					}
-				});
+				if(global.fileAPISupported()){
+                    //ev.preventDefault();
+                    var index = 0;
+                    var files = $uploadPhoto.prop("files");
+                    if(!files) return;
+                    sendFile(files,function(data){
+                        if(!warehouse.photos) warehouse.photos=[];
+                        index = images.length;
+                        images.push($uploadPhoto.prop("files"));
+                        //$uploadPhoto.val("");
+                        var template = templates.getTemplate("warehouse-image");
+                        photosAdded = true;
+                        for(var i in data){
+                            var image = data[i];
+                            image.file = '/tmp/' + data[i].name;
+                            var $image = template.bind( image );
+                            $image.attr('data-image-index',index)
+                            imageTempLocations.push('./tmp/' + data[i].name);
+                            if ($photoArea.find('.isDefault').length === 0){
+                                $("#defaultPhoto").val(image.name);
+                                $(".document").removeClass("isDefault");
+                                $image.find('.image').parent().addClass("isDefault");
+                            }
+                            $photoArea.append($image);
+                        }
+                    });
+                }else{
+                    Alerts.showErrorMessage('Uploading files is not supported in this browser');
+                }
 			}
 			$uploadDoc.click(function(evt){
 				if($(this).closest('#document-area').find('input[name="file-title"]').val() !== ""){

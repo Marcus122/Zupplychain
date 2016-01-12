@@ -1,9 +1,14 @@
 <div id="warehouse-contacts" class="hidden tab main <%if(authorisations.contacts.masterContacts == false){%>active<%}%>">
-	<p>Please select your warehouse</p>
-	<select name="warehouses" class="columns four">
-		<%for(i = 0; i<warehouses.length; i++){%>
-			<option data-id="<%=warehouses[i]._id%>"><%=warehouses[i].name%></option>
-		<%}%>
-	</select>
-	<button name="view-warehouse-contacts" class="action mini columns two">View</button>
+    <%if (warehouses.length > 0){%>
+        <p>Please select your warehouse</p>
+        <select name="warehouses" class="columns four">
+            <%for(i = 0; i<warehouses.length; i++){%>
+                <option data-id="<%=warehouses[i]._id%>"><%=warehouses[i].name%></option>
+            <%}%>
+        </select>
+        <button name="view-warehouse-contacts" class="action mini columns two">View</button>
+    <%}else{%>
+        <p class="no-warehouses">Start selling your space!</p>
+        <p class="no-warehouses">Add a warehouse now!</p>
+    <%}%>
 </div>

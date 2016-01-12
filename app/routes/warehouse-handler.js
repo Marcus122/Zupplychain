@@ -290,6 +290,11 @@ function warehouseProfile (req,res){
         req.data.minDurationOptions = local.config.minDurationOptions;
         req.data.temperatures = local.config.temperatures;
 		req.data.page = 'warehouse-profile';
+        if (req.header('referer').indexOf('/dashboard') > -1){
+            req.data.referer = 'dashboard';
+        }else{
+            req.data.referer = 'other';
+        }
 		req.data.palletWidths = local.config.palletTypes;
         search.getFromSession(req, function(err, query){
             if (!err) {

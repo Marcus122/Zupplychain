@@ -1,0 +1,90 @@
+<% include ./partials/top%>
+    <div class="container">
+        <main id="provider-reg">
+            <div class="banner">
+                <h1>Register</h1>
+            </div>
+            <form class="loom-form" action="/complete-registration" novalidate id="complete-registration">
+                <section class="provider-fields">
+                    <div class="main">
+                        <div class="input-field hidden">
+                            <input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
+                        </div>
+                        <div class="content-box primary">
+                            <div class="header">
+                                <h2>Personal Information<h2>
+                            </div>
+                            <div class="main">
+                                <div class="columns twelve">
+                                    <div class="input-field">
+                                        <label for="name">Name</label>
+                                        <input required name="name" type="text" value="<%=user.name%>"/>
+                                    </div>
+                                    <div class="input-field">
+                                        <label for="email">Email</label>
+                                        <input required name="email" type="email" value="<%=user.email%>"/>
+                                    </div>
+                                    <div class="input-field">
+                                        <label for="phone-number">Phone Number (Optional)</label>
+                                        <input name="phone-number" type="tel" value="<%=user.phoneNumber%>"/>
+                                    </div>
+                                    <div class="input-field">
+                                        <label for="password">Password</label>
+                                        <input required name="password" type="password" data-loom-validators="passwordPolicyStrict" minlength="8"/>
+                                    </div>
+                                    <div class="input-field hidden">
+                                        <input required name="user-type" type="hidden" value="1"/>
+                                    </div>
+                                    <div class="input-field hidden">
+                                        <input required name="dashboard-access-level" type="hidden" value="0"/>
+                                    </div>
+                                    <div class="input-field">
+                                        <label for="confirm-password">Confirm Password</label>
+                                        <div class="columns password-with-hint">
+                                            <input required data-loom-confirm="password" name="confirm-password" type="password" data-loom-validators="passwordPolicyStrict" minlength="8"/>
+                                            <ul class="messages">
+                                                <li class="msg-info">Password must be at least 8 characters in length (one must be uppercase), and contain at least one number and both passwords must match.</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content-box primary">
+                            <div class="header">
+                                <h2>Company Information<h2>
+                            </div>
+                            <div class="main">
+                                <div class="columns twelve">
+                                    <div class="input-field">
+                                        <label for="name">Company Name</label>
+                                        <input required name="company-name" type="text"/>
+                                    </div>
+                                    <div class="input-field">
+                                        <label for="phone-number">Phone Number (Optional)</label>
+                                        <input name="company-phone-number" type="tel" value="<%=user.phoneNumber%>"/>
+                                    </div>
+                                    <div class="input-field">
+                                        <label for="email">Website</label>
+                                        <input required name="website" type="text"/>
+                                    </div>
+                                    <div class="check checkbox input-field">
+                                        <input required type="checkbox" name="accept" id="accept"/>
+                                        <label for="accept"><a href="/terms-and-conditions" target="_blank">I agree to the terms and conditions.</a></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer form-footer">
+                        <div class="container">
+                            <a target="_blank" class="button simple tandc" href="/terms-and-conditions">VIEW TERMS AND CONDITIONS</a>
+                            <button data-redirect="/registration-complete" id="save-and-finish" class="action next" type="submit">Regsiter</button>
+                        </div>
+                    </div>
+                </section>
+            </form>
+        </main>
+    </div>
+<% include ./partials/bottom %> 
+  

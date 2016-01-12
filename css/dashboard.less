@@ -182,6 +182,16 @@
 	.dashboard-container{
 		display: inline-block;
 		margin-top: 20px;
+        div[data-data="warehouses"],
+        div#warehouse-contacts{
+            text-align:center;
+            p.no-warehouses{
+                font-weight:bold;
+                font-size:2rem;
+                margin-top:2%;
+                color:@highlight;
+            }
+        }
 	}
 	.first-row{
 		.unit-margin-bottom(2);
@@ -246,6 +256,19 @@
 			&.active{
 				background-color:@primary !important;
 			}
+            &[data-view="warehouses"]{
+                &.no-warehouses{
+                    &:before{
+                        content:@ionicon-var-alert;
+                        &:extend(.ion);
+                        height:10px;
+                        color:red;
+                        float:right;
+                        .unit-margin-top(1.5);
+                        .unit-margin-right(2);
+                    }
+                }
+            }
 			a{
 				display: block;
 				margin: 10px;
@@ -298,7 +321,8 @@
 		text-align: center;
 		background-color: #6a6666;
 	}
-	div[data-view="contacts"]{
+	div[data-view="contacts"],
+    div[data-view="main"]{
 		.header{
 			position: relative;
 			.button{
@@ -630,6 +654,8 @@
 	background-color: #fff;
     border-bottom: none;
     border: 1px solid #ccc;
+    .unit-padding-top(1);
+    .unit-padding-bottom(1);
 }
 
 .add-new-contacts-container{
@@ -654,31 +680,39 @@
 }
 
 .contacts-suggestions{
-	font-weight:900;
+	font-weight:bold;
 	border: 1px solid #d7d7d7;
 	margin-bottom:-241px;
 	margin-bottom:0;
 	position:absolute;
 	width:20.2%;
-	max-height: 97px;
-    overflow: auto;
+    //overflow: auto; //Change
+    //background-color: #d7d7d7;
 	li{
-		position:relative;
 		list-style:none;
 		cursor:pointer;
 		margin-bottom:0;
+        padding: 6px 10px !important;
+        height:30px;
+        background: #d7d7d7;
+        //padding: 6px 10px !important;
+        //background-color: #d7d7d7;
+        &:hover{
+            background: #DFF2BF !important;
+            font-weight: bold !important;
+            color: #4F8A10 !important;
+        }
 		a{
 			transition:background-color 0.2s ease-in-out;
 			-webkit-transition:background-color 0.2s ease-in-out;
 			-moz-transition:background-color 0.2s ease-in-out;
 			display:block;
-			background:#FFF;
 			color:#333;
 			text-decoration:none;
 			margin:0 !important;
-			&:hover{
-				background:#d7d7d7;
-			}
+            height: inherit !important;
+            //padding: 6px 3px;
+            width: 86% !important;
 		}
 	}
 }

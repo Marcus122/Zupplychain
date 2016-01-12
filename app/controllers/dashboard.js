@@ -34,7 +34,7 @@ exports.getWarehouseContactsByWildcard = function(req,res,query,cb){
 					match.name = warehouseContacts[i][j].user.name;
 					match.email = warehouseContacts[i][j].user.email;
 					match.phoneNumber = warehouseContacts[i][j].user.phoneNumber || 'N/A';
-					matches.push(match);
+					matches.push({name:warehouseContacts[i][j].user.name,email:warehouseContacts[i][j].user.email,phoneNumber:warehouseContacts[i][j].user.phoneNumber});
 				}
 			}
 		}
@@ -189,31 +189,33 @@ exports.deleteItems = function(req,res,cb){
 			});
 		//}
 	}else if(req.body.type === 'warehouseSpecificContacts' || req.body.type === 'warehouseSpecificContact'){
-		warehouseContacts.deleteContact(req.body.id,req.body.subType,req.body.warehouseContactId,function(err,result){
-			//cbCompleted ++;
+		warehouseContacts.deleteContact(req.body.ids,req.body.subType,req.body.warehouseContactId,function(err,result){
+			cbCompleted ++;
 			if(err){
 				errOccured = true;
 			}else{
 				results.push(result);
 			}
-			companyCtrl.updateContactsReminderSent(req.body.company,false,function(err){
-				cb(errOccured,results);
-			});
+            if (cbCompleted === req.body.ids.length){
+                companyCtrl.updateContactsReminderSent(req.body.company,false,function(err){
+                    cb(errOccured,results);
+                });
+            }
 		});
 	}else if(req.body.type === 'masterContacts' || req.body.type === 'masterContact'){
 		//for(var i = 0; i<req.body.ids.length; i++){
-			companyCtrl.deleteMasterContact(req.body.company,req.body.id,function(err,result){
-				//cbCompleted ++;
+			companyCtrl.deleteMasterContact(req.body.company,req.body.ids,function(err,result){
+				cbCompleted ++;
 				if(err){
 					errOccured = true;
 				}else{
 					results.push(result);
 				}
-				//if (cbCompleted === req.body.ids.length){
+				if (cbCompleted === req.body.ids.length){
 					companyCtrl.updateContactsReminderSent(req.body.company,false,function(err){
 						cb(errOccured,results);
 					});
-				//}
+				}
 			});
 		//}
 	}

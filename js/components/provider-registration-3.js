@@ -143,7 +143,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
     
     function initPopup() {
         $(document).on('click','.close-me, button[data-action="close-popup"]',function(){
-            $(this).closest(".popup-window").addClass('hidden');
+            $(this).closest(".popup-window").remove();
         });
     }
         
@@ -157,15 +157,11 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         function showVolumeDiscountPopup(){
           //don't need the template stuff anymore.
           //var popup = $("#volume-discount-popup");
-          if($("#volume-discount-popup").length === 0){
             var volumeDiscount = templates.getTemplate("volume-discount");
             if (!volumeDiscount) return;
             var $popup = volumeDiscount.getElement();
             $('body').append($popup);
             global.centerPopup($popup);
-          }else{
-              $("#volume-discount-popup").removeClass('hidden');
-          }
         }    
     }
     
@@ -439,7 +435,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         $(document).on('click','.popup',function(evt){ 
                 var $this = $(this);
                 editButtonClick($this);
-                //$this.parent().parent().next('tr').slideDown();
+                //$this.parent().parent().next('tr').slideDown(); //Change
                  require(["jqueryPlugins/jquery.scrollTo.min"],function(Scroll){
                      var pos = $this.parent().parent().offset().top - ($this.parent().parent().offset().top - $this.closest('.main').offset().top);
                 //     $.scrollTo(pos);
@@ -447,7 +443,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                  });
         });
         
-        $(document).on('click','button[name="save-ind-storage"]',function(){
+        $(document).on('click','button[name="save-ind-storage"]',function(){//Change
            var $editButton = $('td.button-cell').find('button[data-type="' + $(this).data('type') + '"]');
            editButtonClick($editButton);
         });
@@ -527,7 +523,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
             $trayHolderToOpen.addClass("open");
             //within the div, close all the trays and then open the first tray.
             $trayHolderToOpen.find(".tray").removeClass("open");
-            $trayHolderToOpen.find(".open-tray-link").removeClass("open");
+            //$trayHolderToOpen.find(".open-tray-link").removeClass("open");
             $trayHolderToOpen.find("div").first().find(".tray").addClass('open');
             if(!$buttonCell.hasClass('success')){
                 $trayHolderToOpen.find("div").first().find(".open-tray-link").addClass("not-completed");

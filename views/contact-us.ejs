@@ -35,7 +35,7 @@
 											<label for="your-enquiry">Your Enquiry*</label>
 											<select name="your-enquiry" required>
 												<%for (var i = 0; i < config.contactUsEnquires.length; i++){%>
-													<option><%=config.contactUsEnquires[i]%></option>
+													<option value="<%=i%>"><%=config.contactUsEnquires[i]%></option>
 												<%}%>
 											</select>
 										</div>
@@ -90,7 +90,7 @@
 	</section>
 	<div class="continue-links footer form-footer">
 		<div class="container">
-			<a href="/" class="button simple home">home</a>
+			<a href="/terms-and-conditions" target="_blank" class="button simple tandc">Terms and Conditions</a>
 		</div>
 	</div>
 </main>

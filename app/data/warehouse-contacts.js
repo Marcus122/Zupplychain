@@ -54,7 +54,7 @@ warehouseContactsSchema.statics = {
 		this.find({$or:[{"availabilityController.user":{$in:[userId]}},{"enquiresController.user":{$in:[userId]}},{"creditController.user":{$in:[userId]}},{"invoiceController.user":{$in:[userId]}},{"pickingDispatch.user":{$in:[userId]}},{"goodsIn.user":{$in:[userId]}},{"transportCoordinator.user":{$in:[userId]}}]})
 		.exec(cb);
 	},
-	deleteWhContact: function(id,user,contactType,cb){
+	deleteWhContact: function(id,users,contactType,cb){
 		// var object = {};
 		// object[contactType] = user;
 		// this.update({_id:id},{$pull:object}).exec(cb);
@@ -64,18 +64,23 @@ warehouseContactsSchema.statics = {
 			if(err){
 				cb(err);
 			}else{
-				result[contactType].forEach(function(element,index){
-					if (element['user'].equals(mongoose.Types.ObjectId(user))){
-						//result[contactType].splice(index,1);
-						deleteIndexes.push(index);
-						deletedCounter ++;
-					}else{
-						result[contactType][index]['sortOrder'] -= deletedCounter;
-					}
-				});
+                for (var i = 0; i<users.length; i++){
+                    for (var j = 0; j<result[contactType].length; j++){
+                        if (result[contactType][j]['user'].equals(mongoose.Types.ObjectId(users[i]))){
+                            //result[contactType].splice(index,1);
+                            deleteIndexes.push(j);
+                            deletedCounter ++;
+                        }else{
+                            result[contactType][j]['sortOrder'] -= deletedCounter;
+                        }
+                    }
+                }
 				for (var i = 0; i<deleteIndexes.length; i++){
 					result[contactType].splice(deleteIndexes[i],1);
-				}
+				    if (deleteIndexes[i+1] > deleteIndexes[i]){
+                        deleteIndexes[i+1] --;
+                    }
+                }
 				//result[contactType].pull(user);
 				if (result.contactsDeletedAt === undefined || (Date.now() - Date.parse(result.contactsDeletedAt)) > 7){
 					result.contactsDeletedAt = Date.now();
