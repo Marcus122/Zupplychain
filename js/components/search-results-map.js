@@ -240,6 +240,7 @@ define(['async!https://maps.googleapis.com/maps/api/js' , "jquery", "loom/loomAl
             resultsElem.find('.js-name').html(data.name);
             resultsElem.find('.js-address').html(data.city + ", " + postCodeFirstHalf );
             resultsElem.find('.js-name').html(data.name);
+            resultsElem.find('.js-office-hours').html(data.officeHours);
             resultsElem.find('.js-image').addClass("rotateY90");
             resultsElem.find('.add-to-quote').data("id", data._id);
             var milePluralOrSingle = data.distanceFromSearch == "1" || data.distanceFromSearch == 1 ? " mile" : " miles" ;

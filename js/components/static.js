@@ -15,7 +15,7 @@ define(["jquery","components/global","jqueryPlugins/jquery.scrollTo.min"],functi
             e.preventDefault();
             var href = $(this).attr('href');
             $.scrollTo(href, {duration : 600, offset : -110 });
-        })
+        });
 		
 	}
 	

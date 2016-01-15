@@ -880,7 +880,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 									for(var k = 0; k<$rows.length; k++){
 										if(parseInt($($($rows[k]).find('td')[0]).html().replace('*','')) !== k){
 											rowNum = k+1;
-											$($($rows[k]).find('td')[0]).html(rowNum+numberSuffix[rowNum]+'*');
+											$($($rows[k]).find('td')[0]).html(rowNum+numberSuffix[rowNum-1]+'*');
 										}
 									}
 									addEmptyRowsToTables([$this.closest('form').parent('div').data('content')]);

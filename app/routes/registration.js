@@ -38,7 +38,11 @@ var handler = function(app) {
 	});
 	app.post('/register-contact/:userId',registerContact);
     app.get('/provider-register',function(req,res){
-       res.render("provider-simple-registration",req.data); 
+       if(!req.data.user._id){
+            res.render("provider-simple-registration",req.data); 
+       }else{
+           res.redirect('/dashboard');
+       }
     });
 };
 function sendRegisteredEmail(req,res,emailData,cb){

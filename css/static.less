@@ -133,6 +133,7 @@ label[for="confirm-password"]{
 		h2{
 			font-weight:100;
 			display:inline;
+            margin-bottom:0;
 		}
 		padding: @unit-px*2 @unit-px*6 @unit-px*2 @unit-px*8;
 		.button,
@@ -174,6 +175,9 @@ label[for="confirm-password"]{
 			margin-top:0;
 		}
 	}
+    .service-box{
+        min-height:303px !important;
+    }
 }
 
 #customer .what-is .main.four-points{
@@ -422,6 +426,7 @@ label[for="confirm-password"]{
     height: 362px;
     background-repeat: no-repeat;
     background-position-y: 42%;
+    background-size:contain;
 	.text{
 		width: 263px;
 		display: inline-block;
@@ -435,6 +440,9 @@ label[for="confirm-password"]{
 #terms-and-conditions{ //Change
     .banner.row{
         margin-bottom:0;
+    }
+    .heading{
+        font-weight:bold;
     }
     div.main{
         padding:0;
@@ -465,11 +473,16 @@ label[for="confirm-password"]{
 div.terms{
     float:right;
     p.terms{
-        margin-right:56px;
+        margin-right:44px;
     }
 }
 
 #faq{ //Change
+    .button-container{
+        .button:nth-child(2){
+            float:right;
+        }
+    }
     .banner{
         margin-bottom:0;
     }

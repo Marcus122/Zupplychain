@@ -10,7 +10,6 @@
 				<th>Email</th>
 				<th>Phone Number (Optional)</th>
 				<th>Status</th>
-				<th></th>
 				<%if(authorisations.contacts.warehouseContacts.edit===true && page !== 'contact-setup-walkthrough'){%><th><img src="/images/delete.png"></th><%}%>
 				<%if(authorisations.contacts.warehouseContacts.edit===true && page !== 'contact-setup-walkthrough'){%><th></th><%}%>
 			</thead>
@@ -39,7 +38,6 @@
 											<p class="registered-status complete"><%=registerStatus[0]%></p>
 									<%}%>
 								</td>
-								<td data-field="clear"><button name="clear" class="hidden button action mini" data-disabled-on-ajax="true">Clear</button></td>
 								<%if(authorisations.contacts.warehouseContacts.edit===true && page !== 'contact-setup-walkthrough'){%><td data-field="delete"><%if(warehouse.contacts.enquiresController[i].user._id != user.id && authorisations.contacts.warehouseContacts.edit===true){%><input type="checkbox" name="delete"/><%}%></td><%}%>
 								<%if(authorisations.contacts.warehouseContacts.edit===true && page !== 'contact-setup-walkthrough'){%><td data-field="resend-email"><%if(warehouse.contacts.enquiresController[i].user.expiry < Date.now() && warehouse.contacts.enquiresController[i].user.expiry !== null){%> <button data-disabled-on-ajax="true" name="resend-email" class="button action mini">Resend</button><%}%></td><%}%>
 							</tr>

@@ -870,7 +870,7 @@ span.highlight-bright{
     }
     &.open{
         &:after{
-            content: "Close";
+            content: @ionicon-var-minus-circled;
             }
             
     }
@@ -879,11 +879,12 @@ span.highlight-bright{
     }
     &:after{
         &:extend(.ion);
-        content: "Open";
+        content: @ionicon-var-plus-circled;
         position:absolute;
         right:20px;
         font-size:24px;
         font-size:2.4rem;
+        top:13px;
     }
 }
 
@@ -909,7 +910,7 @@ span.highlight-bright{
         background-color:#eee;
         .unit-padding(2);
         border-bottom:1px solid #ccc;
-        box-shadow:inset 0px 3px 10px rgba(0,0,0,0.3);
+        //box-shadow:inset 0px 3px 10px rgba(0,0,0,0.3);
         display:none;
         &.open{
             display:block;

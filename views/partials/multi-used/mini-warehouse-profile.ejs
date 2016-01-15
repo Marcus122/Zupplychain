@@ -20,6 +20,7 @@
 		miles = "<span class='miles'>" + warehouse.distanceFromSearch + "</span>" + milePluralOrSingle + " from search";
 		rating = warehouse.rating;
 		var insurance = warehouse.insurance;
+        var officeHours = warehouse.officeHours;
 	}
 %>
 <div class="search-result-info-box fixed hidden" id="search-results-info">
@@ -56,8 +57,9 @@
 			</div>
 		</div>
 		<p>Size: <%if(size){%><span class="js-size"><%= size%></span>m<sup>2</sup><br/><%}else{%><span class="js-size">N/A</span><br/><%}%>
-		Height: <%if(height){%><span class="js-height"><%= height%></span>m<%}else{%><span class="js-height">N/A</span><%}%></p>
-		<%if(typeof insurance != 'undefined' && page !== undefined && page !== 'search'){
+		Height: <%if(height){%><span class="js-height"><%= height%></span>m<%}else{%><span class="js-height">N/A</span><br/><%}%>
+		Office Hours: <span class="js-office-hours"><%=officeHours%></span></p>
+        <%if(typeof insurance != 'undefined' && page !== undefined && page !== 'search'){
 			if(insurance.allProductInsurance !== ""){%>
 				<p>Maximum Insurance Level:&nbsp;<span><%= insurance.maximumInsuranceLevel || 'N/A'%></span>
 				<br/>Exceptions: <span><%=insurance.productExceptions || 'N/A'%></span></p>

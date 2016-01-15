@@ -11,7 +11,7 @@ var handler = function(app) {
 		req.data.requestCallback = req.body["request-callback"];
 		req.data.message = req.body.message;
 		req.data.mailto = req.body.email;
-		req.data.subject = req.body['your-enquiry']
+		req.data.subject = local.config.contactUsEnquires[parseInt(req.body['your-enquiry'])]
 		res.render('emails/contact-us',req.data,function(err,template){
 			if (!err){
 				emailer.sendMail(req,res,template,process.env.NODEMAILER_EMAIL_ADDRESS,req.body.email,req.body['your-enquiry'],function(err){

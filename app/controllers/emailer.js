@@ -3,15 +3,21 @@ var fh = require('../controllers/file-handler.js');
 var Quote = require("../controllers/quote.js");
 exports.version = "0.1.0";
 
-//At the moment this is just testing sending a html emails with node
-exports.buildTransporter = function(req,res,cb){
-	var transporter = nodemailer.createTransport(process.env.NODEMAILER_TRANSPORT_PROTOCOL,{
-		service: process.env.NODEMAILER_SERVICE,
-		auth: {
-			user: process.env.NODEMAILER_EMAIL_ADDRESS,
-			pass: process.env.NODEMAILER_PASSWORD
-		}
-	});
+exports.buildTransporter = function(req,res,cb){                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            if (req.data.live === true){
+        var transporter = nodemailer.createTransport(process.env.NODEMAILER_TRANSPORT_PROTOCOL,{
+            name: process.env.NODEMAILER_SERVICE,
+            port: 25,
+            direct: true
+        });
+    }else{                          
+        var transporter = nodemailer.createTransport(process.env.NODEMAILER_TRANSPORT_PROTOCOL,{
+            service: process.env.NODEMAILER_SERVICE,
+            auth: {
+                user: process.env.NODEMAILER_EMAIL_ADDRESS,
+                pass: process.env.NODEMAILER_PASSWORD
+            }
+        });
+    }
 	
 	cb(transporter);
 }

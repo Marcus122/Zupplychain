@@ -157,7 +157,6 @@ exports.config = {
         'General Feedback',
         'Media Enquiries',
         'Forgot Your Password',
-        'How Did You Hear From Us',
         'Other'
     ],
     
