@@ -62,8 +62,8 @@ exports.update = function(warehouse,data,cb){
 	if (warehouse.photos !== undefined){
 		data.photos = warehouse.photos;
 	}
-	warehouse.specifications=[];
-	warehouse.services=[];
+	//warehouse.specifications=[];
+	//warehouse.services=[];
 	warehouse.set(data);
 	warehouse.save(cb);
 }

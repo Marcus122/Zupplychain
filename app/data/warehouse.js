@@ -55,7 +55,8 @@ var fields = {
 	}],
     rating: {type: Number},
     documents: Schema.Types.Mixed,
-    contacts: {type: Schema.ObjectId, ref: 'warehouseContacts' }
+    contacts: {type: Schema.ObjectId, ref: 'warehouseContacts' },
+    regComplete: { type: Boolean, default: false }
 };
 
 var warehouseSchema = new Schema(fields);

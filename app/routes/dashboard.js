@@ -14,19 +14,23 @@ var handler = function(app) {
 	app.param('warehouse_id', warehouses.load);
 	
 	app.get('/contacts-setup',function(req,res){
-		dashboard.getWarehousesByUser(req.data.user,function(err,data){
-			if(err){
-				setErrorResponse("Warehouse not found",res);
-			}else{
-				req.data.page = 'contact-setup-walkthrough';
-				req.data.warehouses = dashboard.sortWarehousesByCreatedDate(data.warehouses);
-				req.data.masterContacts = data.masterContacts;
-				req.data.registerStatus = data.registerStatus;
-				req.data.authorisations = data.authorisations;
-				req.data.warehouse = dashboard.getFirstWarehouseWithInconpleteContacts(req.data.warehouses);
-				res.render('partials/dashboard/contact-setup-walkthrough',req.data);
-			}
-		});
+        if (req.data.user._id && req.data.user.dashboardAccessLvl === 0){
+            dashboard.getWarehousesByUser(req.data.user,function(err,data){
+                if(err){
+                    setErrorResponse("Warehouse not found",res);
+                }else{
+                    req.data.page = 'contact-setup-walkthrough';
+                    req.data.warehouses = dashboard.sortWarehousesByCreatedDate(data.warehouses);
+                    req.data.masterContacts = data.masterContacts;
+                    req.data.registerStatus = data.registerStatus;
+                    req.data.authorisations = data.authorisations;
+                    req.data.warehouse = dashboard.getFirstWarehouseWithInconpleteContacts(req.data.warehouses);
+                    res.render('partials/dashboard/contact-setup-walkthrough',req.data);
+                }
+            });
+        }else{
+            res.redirect('/');
+        }
 	});
 	
 	app.get('/contacts-explanation',function(req,res){
@@ -281,6 +285,7 @@ function resendRegisterEmail(req,res,cb){
 				emailContactData.masterContact = req.body.masterContact;
 				emailContactData.contactType = req.body.role;
 				emailContactData.firstContact = req.body.firstContact;
+                req.data.prothost = req.protocol + '://' + req.headers.host;
 			contactsEmailContent.loadByEmailTypeAndContactType(0,emailContactType,function(err,result){
 				var ejs = require('ejs')
 				emailContactData.content = ejs.render(result.content,emailContactData)
@@ -416,6 +421,7 @@ function createContact(req,res,cb){
 					emailContactData.masterContact = req.body.masterContact;
 					emailContactData.contactType = req.body.role;
 					emailContactData.firstContact = req.body.firstContact;
+                    req.data.prothost = req.protocol + '://' + req.headers.host;
 					if (userExisted === false || user.expiry !== null){
 						contactsEmailContent.loadByEmailTypeAndContactType(0,emailContactType,function(err,result){
 							emailContactData.content = result.content;
@@ -466,6 +472,7 @@ function createContact(req,res,cb){
 						emailContactData.warehouse = req.body.warehouseName || "";
 						emailContactData.config = local.config;
 						emailContactData.host = req.protocol + '://' + req.headers.host;
+                        req.data.prothost = req.protocol + '://' + req.headers.host;
 						if (userExisted === false || user.expiry !== null){
 							res.render('emails/create-contact',emailContactData,function(err,template){
 								if(err){

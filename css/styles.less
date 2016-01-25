@@ -41,7 +41,7 @@
  
 
  // colours
- @primary: #9BC11F;
+ @primary: #82bc00;
  @secondary: #6A6666;
  @tertiary: #d7d7d7;
  @white: #fefefe;
@@ -219,9 +219,6 @@
  }
  header, footer, main{
     position:relative;
- }
- .hidden{
-     display:none;
  }
  .container {
     overflow:hidden;
@@ -858,7 +855,8 @@ span.highlight-bright{
 
 .open-tray-link{
     border-bottom:1px solid #ccc;
-    .unit-padding(2);
+    .unit-padding-vertical(1);
+    .unit-padding-horizontal(2);
     display:block;
     color:@dark-text !important;
     font-size:20px;
@@ -884,7 +882,8 @@ span.highlight-bright{
         right:20px;
         font-size:24px;
         font-size:2.4rem;
-        top:13px;
+        //top:13px;
+        top:26%;
     }
 }
 
@@ -980,10 +979,6 @@ td.success{
     background-repeat:no-repeat;
     background-position: 95% 50%;
     background-color: #dff2bf;
-}
-
-.hidden{
-    display:none;
 }
 
 .service-box{

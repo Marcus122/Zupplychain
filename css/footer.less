@@ -2,61 +2,81 @@
  
  footer{
     .unit-margin-top(2);
-    .small-font;
-    h5{
-        text-transform:uppercase;
-        margin-bottom:5px;
-    }
-    img {
-        .unit-margin-bottom(2);
-    }
-    ul {
-        list-style:none;
-        li {
-            display:inline-block;
+    .row.container{
+        .unit-margin-top(2.6);
+        .small-font;
+        .social-media-icons{
+            text-align: center;
+            margin-left: 3%;
+            margin-top: 17px;
+            a{
+                .unit-margin-right(1);
+                &:last-of-type{
+                    margin-right:0;
+                }
+                &:hover{
+                    background-color: @highlight;
+                    height: 50px;
+                    display: inline-block;
+                    border-radius: 28px;
+                }
+            }
         }
-    }
-    .contact span {
-        color:@primary;
-        .unit-margin-right;
-    }
-    .sm-icons a {
-        color:@secondary;
-        box-sizing:border-box;
-        font-size:16px;
-        font-size:1.6rem;
-        display:inline-block;
-        height:24px;
-        width:24px;
-        padding:0px;
-        text-align:center;
-        background-color:@white;
-        border-radius:12px;
-        .unit-margin-right(2px);
-        
-    }
-    .sm-icons a:hover {
-           color:@primary; 
+        h5{
+            text-transform:uppercase;
+            margin-bottom:5px;
         }
-    
-    .latest-tweet {
-        line-height:12px;
-        .tweet {
-            line-height:1.4em;
+        img {
+            .unit-margin-bottom(2);
         }
-        .ion-social-twitter{
+        ul {
+            list-style:none;
+            li {
+                display:inline-block;
+            }
+        }
+        .contact span {
             color:@primary;
-            font-size:20px;
-            float:left;
+            .unit-margin-right;
         }
-        button{
-            float:right;
-        }
-        .when, .author{
-            .unit-margin-left;
+        .sm-icons a {
+            color:@secondary;
+            box-sizing:border-box;
+            font-size:16px;
+            font-size:1.6rem;
+            display:inline-block;
+            height:24px;
+            width:24px;
+            padding:0px;
+            text-align:center;
+            background-color:@white;
+            border-radius:12px;
+            .unit-margin-right(2px);
             
-            font-size:10px;
         }
+        .sm-icons a:hover {
+            color:@primary; 
+            }
         
+        .latest-tweet {
+            line-height:12px;
+            .tweet {
+                line-height:1.4em;
+            }
+            .ion-social-twitter{
+                color:@primary;
+                font-size:20px;
+                float:left;
+            }
+            button{
+                float:right;
+            }
+            .when, .author{
+                .unit-margin-left;
+                
+                font-size:10px;
+            }
+            
+        }
     }
  }

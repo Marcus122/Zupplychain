@@ -366,8 +366,10 @@ define(["jquery","loom/loom","templates/templates","loom/loomAlerts",'async!http
             
             $(document).on("click", ".warehouse-pricing table tr td .refresh", function(evt){
                 changeUsageProfile($(this));
-                $('.change-warehouse-profile-row-number .view-less').removeClass('hidden');//Change
-                $('.change-warehouse-profile-row-number .view-more').addClass('hidden');
+                if($(this).closest('table').find('tr').length > 12){//Change
+                    $('.change-warehouse-profile-row-number .view-less').removeClass('hidden');//Change
+                    $('.change-warehouse-profile-row-number .view-more').addClass('hidden');
+                }
             });
             
             function changeUsageProfile($this){

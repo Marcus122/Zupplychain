@@ -11,6 +11,12 @@ module.exports = function(_data){
         req.data.config = local.config;
         req.data.utils = utils;
 		req.data.user = {};
+        if(req.session.cookiePolicyAgreed === undefined){
+            req.session.cookiePolicyAgreed = false;
+        }else{
+            req.session.cookiePolicyAgreed = true; 
+        }        
+        req.data.cookiePolicyAgreed = req.session.cookiePolicyAgreed;
 		var session = req.session //req.cookies["session-id"];
 		if(!session || !session.user_id) {
             return next();

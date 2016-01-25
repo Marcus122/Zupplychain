@@ -110,12 +110,62 @@
 	.welcome-box,
 	.tasks-box{
 		.main.row{
+            button{
+                .unit-margin-bottom(2);
+            }
 			padding: 10px;
 			text-align: center;
 			margin-bottom: 20px;
 			border-bottom-right-radius: 7px;
     		border-bottom-left-radius: 7px;
 			table{
+                tbody tr:hover{
+                    background-color:@primary;
+                    td a,td{
+                        color:#fff !important;
+                    }
+                }
+                td{
+                    padding:0;
+                    &.task-name{
+                        text-align: left;
+                        .unit-padding-left(2);
+                    }
+                    &.disabled{
+                        background-color: #ddd;
+                        cursor: not-allowed !important;
+                        color:#999;
+                        border-color: #BBB;
+                        .unit-padding-vertical(1.1);
+                        a{
+                            color:#999
+                        }
+                        &:hover{
+                            background-color: #ddd;
+                        }
+                    }
+                    &.no-link{
+                        .unit-padding-vertical(1.1);
+                    }
+                    a{
+                        display: block;
+                        color:inherit;
+                        .unit-padding-vertical(1.1);
+                    }
+                    .complete,
+                    &.complete{
+                        color:@primary;
+                    }
+                    .not-started,
+                    &.not-started{
+                        color:@invalid-dark;
+                    }
+                    .partially-complete,
+                    &.comming-soon,
+                    &.partially-complete{
+                        color:@highlight;
+                    }
+                }
 				width:100%;
 				thead tr th:nth-child(n+2){
 					max-width:27px;
@@ -181,7 +231,12 @@
 	}
 	.dashboard-container{
 		display: inline-block;
-		margin-top: 20px;
+		.unit-margin-top(2);
+        margin-left:3%;
+        width: 81.66666666667%;
+        &.eleven{
+            width:91.3333333333%;
+        }
         div[data-data="warehouses"],
         div#warehouse-contacts{
             text-align:center;
@@ -226,18 +281,18 @@
 				background: url("/images/small-warehouses-dashboard.png") no-repeat 50% 50%;
 			}
 			li[data-view="contacts"]{
-				background: url("/images/small-contacts-dashboard.png") no-repeat 50% 50%;
+				background: url("/images/small-contacts-dashboard.png") no-repeat 50% 50% #808080;
 			}
 			li[data-view="messages"]{
 				background: url("/images/small-messages-dashboard.png") no-repeat 50% 50%;
 			}
-			a{
+			a,p{
 				color:transparent;
 			}
 		}
 		margin:0;
 		background: #6a6666;
-		width: 13.5em;
+		width: 15%;
 		border-bottom-right-radius: 7px;
 		ul{
 			margin-bottom:0;
@@ -253,6 +308,17 @@
 			cursor:pointer;
 			height:100%;
 			height:44px;
+            &.disabled{
+                background-color:#808080;
+                color:#999;
+                cursor:not-allowed;
+                p{
+                    .unit-margin(1);
+                }
+                &:hover{
+                    background-color:#808080 !important;
+                }
+            }
 			&.active{
 				background-color:@primary !important;
 			}
@@ -341,7 +407,8 @@
 		section.master-contacts .main{
 			border: 1px solid #d7d7d7;
 		}
-		p.registered-status{
+		p.registered-status,
+        p.task-status{
 			&:extend(.registered-status);
 		}
 		ul{
@@ -494,7 +561,7 @@
 			border:none;
 			li{
 				padding:0;
-				a{
+				a,p{
 					font-size:2.1rem;
 					font-size:21px;
 					color:#fff;
@@ -623,8 +690,18 @@
 			td,th{
 				.unit-padding(1);
 			}
-			p.registered-status{
-				&:extend(.registered-status);
+			p.registered-status,
+            p.task-status{
+				//&:extend(.registered-status);
+                &.complete{
+                    color:@primary;
+                }
+                &.pending{
+                    color:@highlight;
+                }
+                &.expired{
+                    color:@invalid-dark;
+                }
 			}
 			.tray.open{
 				//background-color: #dff2bf;

@@ -11,10 +11,14 @@
 					<li data-view="home"><a href="#main">Dashboard Home</a></li>
 					<li data-view="admin"><a href="#admin">Account</a></li>
 					<%if(authorisations.warehouse !== false){%>
-						<li data-view="warehouses" <%if(warehouses.length === 0){%>class="no-warehouses"<%}%>><a href="#warehouses">Warehouses</a></li>
+                        <%if(warehouse){%>
+						  <li data-view="warehouses"><a href="#warehouses">Warehouses</a></li>
+                        <%}else{%>
+                            <li data-view="warehouses" class="disabled"><p>Warehouses</p></li>
+                        <%}%>
 					<%}%>
 					<%if(authorisations.contacts !== false){%>
-						<li data-view="contacts"><a href="#contacts">Contacts</a></li>
+						<li class="disabled" data-view="contacts"><p>Contacts</p></li>
 					<%}%>
 					<li data-view="messages"><a href="#messages">Messages</a></li>
 				</ul>

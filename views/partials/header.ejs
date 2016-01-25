@@ -1,9 +1,9 @@
 <header>
   <div class="container">
 	<a href="/" class="home-link">
-		<img class="logo" alt="Zupply Chain Logo" src="/images/MASTER-Zupplychain-logo.png"/>
+		<img class="logo" alt="Zupply Chain Logo" src="/images/zupplychain-logo-strapline.png"/>
 	</a>
-    <p class="tagline">we find pallets for space and space for pallets</p>
+    <!--<p class="tagline">we find pallets for space and space for pallets</p>-->
 	<aside>
 	
 	<div class="contact-info">
@@ -11,13 +11,13 @@
 	</div>
 	<%if (user.email != undefined){%>
 		<nav class="user-links">
-			<p><span>Signed in as:</span><br/><a href="/dashboard"><%=user.email%></a></p>
-            <p><a href="/logout">Signout</a></p>
+			<p class="signed-in-as"><span>Signed in as:</span><br/><a href="/dashboard"><%=user.email%></a></p>
+            <a class="button mini action logout"href="/logout">Logout</a>
 		</nav>
 	<%}else{%>
 		<nav class="user-links">
-			<p><a href="/login">Login</a></p>
-			<p><a href="/contact-us?enquiry=5">Forgot your password</a></p>
+			<p><a class="button mini action login" href="/login">Login</a></p>
+			<!--<p><a href="/contact-us?enquiry=5">Forgot your password</a></p>-->
 		</nav>
 	<%}%>
 	</aside>

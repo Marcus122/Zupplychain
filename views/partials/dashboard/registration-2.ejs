@@ -6,7 +6,7 @@
 	<div class="main">
 		<div class="content-box primary">
 			<div class="header">
-				<h3>Define your storage</h3>
+				<h3>Your storage details</h3>
 			</div>
 			<div class="main">
 				<fieldset>
@@ -14,8 +14,8 @@
 						<thead>
 							<tr>
 								<th>Pallet Type <div class="tool-tip hint--bottom" data-hint="Use this column to define each type of storage area in your warehouse which has different characteristics either in terms of pallet footprint or how you wish to price it.  You can have as many pallet types as suits, allowing you to specify different weight/heights and different pricing/availability. You can specify the same space more than once, e.g., 0.8w x 1.2d (euro) pallets, 300 quantity and 1.2w x 1.2d pallets, 200 quantity (in this case, please repeat the same pallet type)">?</div></th>
-								<th>Pallet Footprint </th>
 								<th>Storage Type </th>
+                                <th>Pallet Footprint </th>
 								<th>Max Weight Per Pallet <br/> (kg) </th>
 								<th>Max Height Per Pallet <br/> (m) </th>
 								<th>Total Pallet Spaces <div class="tool-tip hint--left" data-hint="This is the total number of pallet spaces in your warehouse of the pallet type. You can specify the number available at specific dates for Zupplychain users in Step 3">?</div></th>
@@ -28,10 +28,12 @@
 							if( !warehouse.storage || !warehouse.storage.length ){
 								var row = {};
 								row.name = "Type 1";
-								row.storageGroup = 1;%>
+								row.storageGroup = 1;
+                                row.regType = 'advanced';%>
 								<% include ../define-space-row %>
 								<%row.name = "Type 2";
-								row.storageGroup = 2;%>
+								row.storageGroup = 2;
+                                row.regType = 'advanced';%>
 								<% include ../define-space-row %>
 							<%}else{
 								var storageGroup = 0;
@@ -39,7 +41,7 @@
 								for( var i=0; i < warehouse.storage.length; i++ ){
 									row = warehouse.storage[i];
 									if(i>0){
-										if(row.name === warehouse.storage[i-1].name){
+										if(row.name === warehouse.storage[i-1].name && row.temp === warehouse.storage[i-1].temp){
 											row.storageGroup = storageGroup;
 										}else{
 											storageGroup ++;
@@ -48,7 +50,9 @@
 									}else{
 										row.storageGroup = storageGroup + 1
 										storageGroup ++
-									}%>
+									}
+                                    row.regType = 'advanced';
+                                    %>
 									<% include ../define-space-row %>
 								<%}
 							}%>

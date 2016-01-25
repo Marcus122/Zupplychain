@@ -1,15 +1,5 @@
-<div data-view="main" class="dashboard-container columns nine">
-	<%if(completedTasks.allWarehousesCompleted === false && authorisations.tasks === true){%>
-		<div class="columns twelve">
-			<!--<div class="content-box welcome-box">
-				<div class="header">
-					<h3>Welcome to Zupplychain</h3>
-				</div>
-				<div class="main row">
-					<p>To manage and operate your Zupplychain account, please set up some contacts below.</p>
-				</div>
-			</div>-->
-		</div>
+<div data-view="main" class="dashboard-container columns ten">
+	<!--<%if(completedTasks.allWarehousesCompleted === false && authorisations.tasks === true){%>
 		<div class="columns twelve">
 			<div class="content-box secondary tasks-box">
 				<div class="header">
@@ -17,11 +7,145 @@
                     <a href="/contacts-setup" class="button action">View Contacts Setup</a>
 				</div>
 				<div class="main row">
-                    <% include dashboard-tasks %> 
 				</div>
 			</div>
 		</div>
-	<%}%>
+	<%}%>-->
+    <div class="columns twelve">
+        <div class="content-box secondary tasks-box">
+            <div class="header">
+			     <h3>Registration</h3>
+            </div>
+            <div class="main row">
+                <p>To ensure your warehouse is included in search results, please complete steps 1 - 3. Step 4 will be available soon! For help please see our example video.</p>
+                <button class="button mini action" data-url="videos/Zupplychain-Registration-Animation.mp4" data-action="view-reg-example">View Example</button>
+                <table class="dashboard-table">
+                    <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="no-link task-name">Account Creation</td>
+                            <td class="no-link complete">
+                                COMPLETED
+                             </td>
+                        </tr>
+                        <tr>
+                            <td class="task-name">
+                                <%if((!warehouse) || (warehouse && !warehouse.regComplete)){%>
+                                    <a href="/provider-registration-1">Step 1: Your Warehouse Details</a>
+                                <%}else{%>
+                                    <a data-go-to-view="true" href="#warehouses">Step 1: Your Warehouse Details</a>
+                                <%}%>
+                            </td>
+                            <td>
+                            <%if(warehouse){
+                                if(!warehouse.regComplete){%>
+                                    <a href="/provider-registration-1" class="task-status complete">COMPLETED</a>
+                                <%}else{%>
+                                    <a data-go-to-view="true" href="#warehouses" class="task-status complete">COMPLETED</a>
+                                <%}%>
+                             <%}else{%>
+                                <a href="/provider-registration-1" class="task-status not-started">NOT STARTED</a>
+                              <%}%>
+                              </td>
+                        </tr>
+                        <tr>
+                            <td class="task-name <%if(!warehouse){%>disabled<%}%>">
+                                <%if(!warehouse){%>
+                                    Step 2: Your Storage Details
+                                <%}else{
+                                    if(!warehouse.regComplete){%>
+                                        <a href="/provider-registration-2">Step 2: Your Storage Details</a>
+                                    <%}else{%>
+                                        <a data-go-to-view="true" href="#warehouses">Step 2: Your Storage Details</a>
+                                    <%}%>
+                                <%}%>
+                            </td>
+                            <td <%if(!warehouse){%> class="disabled"<%}%>>
+                             <%if(!warehouse){%>
+                                NOT STARTED
+                             <%}else
+                             if(warehouse && warehouse.storage && warehouse.storage.length > 0){
+                                if(!warehouse.regComplete){%>
+                                    <a href="/provider-registration-2" class="task-status complete">COMPLETED</a>
+                                <%}else{%>
+                                    <a data-go-to-view="true" href="#warehouses" class="task-status complete">COMPLETED</a>
+                                <%}%>
+                             <%}else{%>
+                                <a href="/provider-registration-2" class="task-status not-started">NOT STARTED</a>
+                              <%}%></td>
+                        </tr>
+                        <tr>
+                            <td class="task-name <%if((!warehouse) || (warehouse && warehouse.storage && warehouse.storage.length === 0)){%>disabled<%}%>">
+                                <%if((!warehouse) || (warehouse && warehouse.storage && warehouse.storage.length === 0)){%>
+                                    Step 3: Your Pricing and Availability
+                                <%}else{
+                                    if(!warehouse.regComplete){%>
+                                        <a href="/provider-registration-3">Step 3: Your Pricing and Availability</a>
+                                    <%}else{%>
+                                        <a data-go-to-view="true" href="#warehouses">Step 3: Your Pricing and Availability</a>
+                                    <%}%>
+                                <%}%>
+                            </td>
+                            <td <%if((!warehouse) || (warehouse && warehouse.storage && warehouse.storage.length === 0)){%>class="disabled"<%}%>>
+                            <%anchorAdded=false%>
+                            <%if((!warehouse) || (warehouse && warehouse.storage && warehouse.storage.length === 0)){%>
+                                NOT STARTED
+                            <%}else{
+                                if(warehouse && warehouse.storage && warehouse.storage.length > 0){
+                                    for (var i = 0; i<warehouse.storage.length; i++){
+                                        if(warehouse.storage[i].basicPricing && warehouse.storage[i].basicPricing.price > 0 && warehouse.storage[i].basicPricing.charge > 0){
+                                            if(warehouse.storage[i].pallets[0].free != null){
+                                                if(!warehouse.regComplete){%>
+                                                    <a class="task-status complete" href="/provider-registration-3">COMPLETED</a>
+                                                <%}else{%>
+                                                    <a data-go-to-view="true" class="task-status complete" href="#warehouses">COMPLETED</a>
+                                                <%}%>
+                                                <%i = warehouse.storage.length;%>
+                                            <%}else{
+                                                if(!warehouse.regComplete){%>
+                                                    <a class="task-status partially-complete" href="/provider-registration-3">PARTIALLY COMPLETE</a>
+                                                <%}else{%>
+                                                    <a data-go-to-view="true" class="task-status partially-complete" href="#warehouses">PARTIALLY COMPLETE</a>
+                                                <%}%>
+                                                <%i = warehouse.storage.length;%>
+                                            <%}%>
+                                        <%}else if(warehouse.storage[i].pallets[0]){
+                                            if(!warehouse.regComplete){%>
+                                                <a class="task-status partially-complete" href="/provider-registration-3">PARTIALLY COMPLETE</a>
+                                            <%}else{%>
+                                                <a data-go-to-view="true" class="task-status partially-complete" href="#warehouses">PARTIALLY COMPLETE</a>
+                                            <%}%>
+                                            <%i = warehouse.storage.length;%>
+                                        <%}else{%>
+                                            <%if(anchorAdded === false){%>
+                                                <a href="/provider-registration-3" class="task-status not-started">NOT STARTED</a>
+                                            <%}%>
+                                            <%anchorAdded = true%>
+                                        <%}
+                                    }%>         
+                                <%}else{%>
+                                    <%if(anchorAdded === false){%>
+                                        <a href="/provider-registration-3" class="task-status not-started">NOT STARTED</a>
+                                    <%}%>
+                                    <%anchorAdded = true%>
+                                <%}%>
+                            <%}%>
+                          </td>
+                        </tr>
+                        <tr>
+                            <td class="no-link task-name">Step 4: Your Contacts and Authorisations</td>
+                            <td class="no-link comming-soon">COMMING SOON</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 	<%if (dashboardAccessLvl === 0 || dashboardAccessLvl === 1){%>
 		<div class="row types first-row">
 			<div class="columns six tile-main">
@@ -140,3 +264,6 @@
 		</div>
 	<%}%>
 </div>
+<script type="text/template"" id="video-popup">
+	<%include ../video-popup%>
+</script>

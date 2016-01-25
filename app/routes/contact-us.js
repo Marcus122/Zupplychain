@@ -12,6 +12,7 @@ var handler = function(app) {
 		req.data.message = req.body.message;
 		req.data.mailto = req.body.email;
 		req.data.subject = local.config.contactUsEnquires[parseInt(req.body['your-enquiry'])]
+        req.data.prothost = req.protocol + '://' + req.headers.host;
 		res.render('emails/contact-us',req.data,function(err,template){
 			if (!err){
 				emailer.sendMail(req,res,template,process.env.NODEMAILER_EMAIL_ADDRESS,req.body.email,req.body['your-enquiry'],function(err){
@@ -39,6 +40,8 @@ var handler = function(app) {
 	
     app.get('/contact-us', function (req,res) {
         req.data.config = local.config;
+        req.data.pageTitle = 'Contact Us | Pallet Space Rental | Warehouse Storage | ZupplyChain';
+        req.data.description = 'ZupplyChain Is A Protected Marketplace For Registering, Searching & Hiring Available Warehouse Space For Palletised Storage. Contact Us Now!';
 		res.render("contact-us",req.data);
 	});
 };

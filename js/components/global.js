@@ -40,6 +40,28 @@ define(["jquery","loom/loom","loom/loomAlerts","templates/templates","jqueryPlug
                     });
                 }
             }
+            $('button[name="agree-cookie-policy"]').click(function(){
+                var err;
+                var url = '/agree-cookie-policy';
+                var $this = $(this);
+                $.ajax({
+                    url:url,
+                    type: 'POST',
+                    dataType: 'json',
+                    headers: {'csrf-token':$('meta[name="csrf-token"]').attr("content")},
+                    success:function(response){
+                        $this.parent().remove();
+                    },
+                    error:function(jqXHR,textStatus,errThrown){
+                        if(jqXHR.status === 403){
+                            show403Popup();
+                        }else{
+                            err = JSON.parse(jqXHR.responseText);
+                            Alerts.showErrorMessage(err);
+                        }
+                    }
+                });
+            });
         }
         
         function getQueryVariable(variable){//Change
@@ -49,6 +71,17 @@ define(["jquery","loom/loom","loom/loomAlerts","templates/templates","jqueryPlug
                 var pair = vars[i].split("=");
                 if (pair[0] == variable) return pair[1];
             }
+        }
+        
+        function readJSCookieVal(valName){
+            var name = valName + "=";
+            var cookieParts = document.cookie.split(';');
+            for (var i=0; i<cookieParts.length; i++){
+                var val = cookieParts[i];
+                //while (val.charAt(0)==='')val = val.substring(1);
+                if(val.indexOf(name)===0)return val.substring(name.length,val.length);
+            }
+            return '';
         }
 		
 		function centerPopup($element){
@@ -113,7 +146,8 @@ define(["jquery","loom/loom","loom/loomAlerts","templates/templates","jqueryPlug
 			showRegistrationExample:showRegistrationExample,
             openTray:openTray,//Change
             getQueryVariable:getQueryVariable,//Change
-            fileAPISupported:fileAPISupported//Change
+            fileAPISupported:fileAPISupported,//Change
+            readJSCookieVal:readJSCookieVal//Change
 		}
 	}
 	

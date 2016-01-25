@@ -1,10 +1,16 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,700italic,400,600,700,800,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,700italic,400,600,700,800,300' rel='stylesheet' rel="nofollow" type='text/css'>
 	<link href="/images/favicon.ico" rel="SHORTCUT ICON" type="image/x-icon">
-	<title>Zupplychain - Logistics Solutions</title>
-	<meta name="description" content="">
+	<title>
+        <%if(typeof pageTitle != 'undefined'){%>
+            <%=pageTitle%>
+        <%}else{%>
+            Zupplychain - Logistics Solutions
+        <%}%>
+    </title>
+	<meta name="description" content="<%if(typeof description != 'undefined'){%><%=description%><%}%>">
 	<!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
 	<meta name="viewport" content="user-scalable = yes">
 	<meta name="csrf-token" content="<%=csrfTokenFunction()%>">

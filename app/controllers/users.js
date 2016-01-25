@@ -62,17 +62,23 @@ exports.checkCorrectDashboardAccessLevelAndUpdate = function(user,cb){
 
 exports.create = function (req,res,data,cb,cookieSet) {
 	var user = new User(data);
-	user.save(function(err){
-		if (!err) {
-			if (cookieSet === undefined || cookieSet === true){
-				setCookie(user,req,res);
-				req.data.user=user;
-			}
-			return cb(null, user.toObject());
+	User.loadByEmail(user.email,function(err,results){
+		if(!err && results.length > 0){
+			return cb({message:"Email Address Already Exists"});
 		}else{
-			 return cb(err);
-		}
-	});
+            user.save(function(err){
+                if (!err) {
+                    if (cookieSet === undefined || cookieSet === true){
+                        setCookie(user,req,res);
+                        req.data.user=user;
+                    }
+                    return cb(null, user.toObject());
+                }else{
+                    return cb(err);
+                }
+            });
+        }
+    });
 }
 exports.login = function(req,res,cb){
 	var passwordIncorrect={error:"The user name or password is incorrect"};

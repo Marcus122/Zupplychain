@@ -461,7 +461,9 @@ function batchStorage(req,res){
 			}else{ //otherwise update it.
 				_storage.user=req.data.user._id;
 				delete _storage.__v;
-				storage.updateWithData(_storage,function(err,Storage){
+                req.warehouse.regComplete = true;//If it comes into here they have clicked finish on reg 3
+				req.warehouse.save();
+                storage.updateWithData(_storage,function(err,Storage){
 					console.log("updating storage: " + _storage._id);
 					if(!err){
 						storageArr.push(Storage._id);

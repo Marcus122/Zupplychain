@@ -602,11 +602,11 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                     if($this.attr('class').indexOf('date-range-pricing') !== -1){
                         if(checkSectionCompleted($this.prev('form').find('input'))){
                             if(!checkSectionCompleted($this.parent().next('div').find('form').find('input'))){
-                                $this.parent().find('.sp-nag').html("Great, don't forget to add availability above for this storage name");
+                                $this.parent().find('.sp-nag').html("Don't forget to add availability above for this pallet type");
                                 $this.parent().find('.sp-nag').fadeIn();
                             }
                         }else{
-                            $this.parent().find('.sp-nag').html("Great, don't forget to add standard pricing above for this storage name");
+                            $this.parent().find('.sp-nag').html("Don't forget to add standard pricing above for this pallet type");
                             $this.parent().find('.sp-nag').fadeIn();
                         }
                          array = 'pricing';
@@ -615,7 +615,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                          checkAndAppend(field1,field2,array,storage,$this);
                     }else if($this.attr('class').indexOf('availability') !== -1) {
                         if(!checkSectionCompleted($this.parent().prev('div').find('form').first().find('input'))){
-                            $this.parent().find('.sp-nag').html("Great, don't forget to add standard pricing above for this storage name");
+                            $this.parent().find('.sp-nag').html("Don't forget to add standard pricing above for this pallet type");
                             $this.parent().find('.sp-nag').fadeIn();
                         }
                          array = 'pallets'
@@ -624,7 +624,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                          checkAndAppend(field1,field2,array,storage,$this);
                     }else{
                         if(!checkSectionCompleted($this.parent().next('div').find('form').find('input'))){
-                            $this.parent().find('.availability-nag').html("Great, don't forget to add availability above for this storage name");
+                            $this.parent().find('.availability-nag').html("Don't forget to add availability above for this pallet type");
                             $this.parent().find('.availability-nag').fadeIn();
                         }
                          checkAndAppend('charge','price','pricing',storage,$this.next('.date-range-pricing-form'));

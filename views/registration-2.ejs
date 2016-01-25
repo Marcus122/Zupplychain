@@ -15,9 +15,9 @@
 				</div>
 				<div class="row">
 					<ul class="tabs">
-						<li class="four columns checked"><span>Step 1</span> - Warehouse details</li>
-				<li class="four columns active checked"><span>Step 2</span> - Define your storage</li>
-				<li class="four columns"><span>Step 3</span> - Price and availability</li>
+						<li class="four columns checked"><span>Step 1</span> - Your yarehouse details</li>
+				<li class="four columns active checked"><span>Step 2</span> - Your Storage Details</li>
+				<li class="four columns"><span>Step 3</span> - Your pricing and availability</li>
 					</ul>
 					<section class="tab-content">
 						<form class="loom-form" data-loom-no-submit="true" method="post" action="/provider-registration-3" id="define-space" novalidate data-loom-do-not-show-success-css="true">
@@ -25,49 +25,120 @@
 							<div class="main">
 								<div class="content-box primary">
 									<div class="header">
-										<h3>Define your storage</h3>
+										<h3>Your Storage Details</h3>
 									</div>
 									<div class="main">
 										<fieldset>
 											<div class="input-field">
 												<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
 											</div>
-											<table class="max define-space responsive-table collapse">
-												<thead>
-													<tr>
-														<th>Pallet Type <div class="tool-tip hint--bottom" data-hint="Use this column to define each type of storage area in your warehouse which has different characteristics either in terms of pallet footprint or how you wish to price it.  You can have as many pallet types as suits, allowing you to specify different weight/heights and different pricing/availability. You can specify the same space more than once, e.g., 0.8w x 1.2d (euro) pallets, 300 quantity and 1.2w x 1.2d pallets, 200 quantity (in this case, please repeat the same pallet type)">?</div></th>
-														<th>Pallet Footprint</th>
-														<th>Storage Type </th>
-														<th>Max Weight Per Pallet <br/> (kg) </th>
-														<th>Max Height Per Pallet <br/> (m) </th>
-														<th>Total Pallet Spaces <div class="tool-tip hint--left" data-hint="This is the total number of pallet spaces in your warehouse of the pallet type. You can specify the number available at specific dates for Zupplychain users in Step 3">?</div></th>
-														<th>Add Additional Pallet footprint<div class="tool-tip hint--left" data-hint="You can specify the same space again with a different pallet footprint, different maximum weight (if applicable and
-														in stage 3, different pricing">?</div></th>
-														<th><img src="../images/delete.png" alt="delete"/></th>
-													</tr>
-												</thead>
-												<tbody>
-													<%
-													if( !warehouse.storage || !warehouse.storage.length ){
-														var row = {};
-														row.name = "Type 1",
-														row.storageGroup = 1;%>
-														<% include ./partials/define-space-row %>
-														<%row.name = "Type 2"
-														row.storageGroup = 2;%>
-														<% include ./partials/define-space-row %>
-													<%}else{
-														for( var i=0; i < warehouse.storage.length; i++ ){
-															row = warehouse.storage[i];%>
-															<% include ./partials/define-space-row %>
-														<%}
-													}%>
-												</tbody>
-											</table>
-											<p class="new-pallet">
-												<span class="primary">Add additional storage name</span>
-												<button class="add-button"><span>add</span></button>
-											</p>
+                                            <div class="static reg-2-tray trays">
+                                                <a class="warehouse-name open-tray-link quick-reg" data-reg-type="quick-reg">
+                                                    <div>
+                                                        <div class="heading">
+                                                            <p class="main-text">Quick</p>
+                                                            <p>Registration</p>
+                                                        </div>
+                                                        <img src="../images/quick-icon-reg-zupply.png" alt="Quick Registration"/>
+                                                        <span class="explanation-text">Use quick registration to define one pallet type for your warehouse. You can add advanced options later from your account.</span>
+                                                    </div>
+                                                </a>
+                                                <div class="tray">
+                                                    <table class="max define-space responsive-table collapse">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Pallet Type <div class="tool-tip hint--bottom" data-hint="In ‘quick registration’, you can define your warehouse as one type of pallet that covers all/most of your storage. In ‘advanced registration’, you can add multiple pallet types for which you can define different width/height/weight specifications as well as price differently.">?</div></th>
+<th>Storage Type <div class="tool-tip hint--bottom" data-hint="In ‘quick registration’ only ambient (room temperature) storage can be specified. In ‘advanced registration’, you can also specify bonded.">?</div></th>
+                                                                <th>Pallet Footprint <div class="tool-tip hint--bottom" data-hint="Choose one of the options available. In ‘advance registration’, you can specify the same pallet type with more than one pallet footprint (e.g. 0.8m wide euros, 600 spaces; and 1,2m wide, 400 spaces).">?</div></th>
+                                                                <th>Max Weight Per Pallet <br/> (kg) <div class="tool-tip hint--left" data-hint="Specify the maximum weight possible for this pallet type.">?</div></th>
+                                                                <th>Max Height Per Pallet <br/> (m) <div class="tool-tip hint--left" data-hint="Specify the maximum height possible for this pallet type.">?</div></th>
+                                                                <th>Total Pallet Spaces <div class="tool-tip hint--left" data-hint="This is the total number of pallet spaces you have of this pallet type in your warehouse. You can specify how many of these you want to make available on Zupplychain in the next registration step.">?</div></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <%
+                                                            if( !warehouse.storage || !warehouse.storage.length ){
+                                                                var row = {};
+                                                                row.name = "All",
+                                                                row.storageGroup = 1;
+                                                                row.regType = 'quick';%>
+                                                                <% include ./partials/define-space-row %>
+                                                            <%}else{
+                                                                //for( var i=0; i < warehouse.storage.length; i++ ){
+                                                                    row = warehouse.storage[0];
+                                                                    row.regType = 'quick';%>
+                                                                    <% include ./partials/define-space-row %>
+                                                                <%//}
+                                                            }%>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="static reg-2-tray trays">
+                                                <a class="warehouse-name open-tray-link advanced-reg" data-reg-type="advanced-reg">
+                                                    <div>
+                                                        <div class="heading">
+                                                            <p class="main-text">Advanced</p>
+                                                            <p>Registration</p>
+                                                        </div>
+                                                        <img src="../images/advanced-icon-reg-zupply.png" alt="Advanced Registration"/>
+                                                        <span class="explanation-text">Use advanced registration to define different pallet types (by footprint, weight, height or pricing) that you can store in your warehouse.</span>
+                                                    </div>
+                                                </a>
+                                                <div class="tray">
+                                                    <table class="max define-space responsive-table collapse">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Pallet Type <div class="tool-tip hint--bottom" data-hint="In ‘quick registration’, you can define your warehouse as one type of pallet that covers all/most of your storage. In ‘advanced registration’, you can add multiple pallet types for which you can define different width/height/weight specifications as well as price differently.">?</div></th>
+                                                                <th>Pallet Footprint <div class="tool-tip hint--bottom" data-hint="Choose one of the options available. In ‘advance registration’, you can specify the same pallet type with more than one pallet footprint (e.g. 0.8m wide euros, 600 spaces; and 1,2m wide, 400 spaces).">?</div></th>
+                                                                <th>Storage Type <div class="tool-tip hint--bottom" data-hint="In ‘quick registration’ only ambient (room temperature) storage can be specified. In ‘advanced registration’, you can also specify bonded.">?</div></th>
+                                                                <th>Max Weight Per Pallet <br/> (kg) <div class="tool-tip hint--left" data-hint="Specify the maximum weight possible for this pallet type.">?</div></th>
+                                                                <th>Max Height Per Pallet <br/> (m) <div class="tool-tip hint--left" data-hint="Specify the maximum height possible for this pallet type.">?</div></th>
+                                                                <th>Total Pallet Spaces <div class="tool-tip hint--left" data-hint="This is the total number of pallet spaces you have of this pallet type in your warehouse. You can specify how many of these you want to make available on Zupplychain in the next registration step.">?</div></th>
+                                                                <th>Add Additional Pallet footprint<div class="tool-tip hint--left" data-hint="You can specify the same space again with a different pallet footprint, different maximum weight (if applicable and
+                                                                in stage 3, different pricing">?</div></th>
+                                                                <th><img src="../images/delete.png" alt="delete"/></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <%
+                                                            if( !warehouse.storage || !warehouse.storage.length ){
+                                                                var row = {};
+                                                                row.name = "Type 1",
+                                                                row.storageGroup = 1;
+                                                                row.regType = 'advanced';%>
+                                                                <% include ./partials/define-space-row %>
+                                                                <%row.name = "Type 2"
+                                                                row.storageGroup = 2;
+                                                                row.regType = 'advanced';%>
+                                                                <% include ./partials/define-space-row %>
+                                                            <%}else{
+                                                                var storageGroup = 1;
+                                                                for( var i=0; i < warehouse.storage.length; i++ ){
+                                                                    row = warehouse.storage[i];
+                                                                    row.regType = 'advanced';
+                                                                    if(i>0){
+                                                                        if (warehouse.storage[i].name === warehouse.storage[i-1].name && warehouse.storage[i].temp === warehouse.storage[i-1].temp){
+                                                                        row.storageGroup = storageGroup;
+                                                                        }else{
+                                                                            storageGroup ++;
+                                                                            row.storageGroup = storageGroup;
+                                                                        }
+                                                                    }else{
+                                                                        row.storageGroup = storageGroup;
+                                                                    }
+                                                                    %>
+                                                                    <% include ./partials/define-space-row %>
+                                                                <%}
+                                                            }%>
+                                                        </tbody>
+                                                    </table>
+                                                    <p class="new-pallet">
+                                                        <span class="primary">Add additional storage name</span>
+                                                        <button class="add-button"><span>add</span></button>
+                                                    </p>
+                                                </div>
+                                            </div>
 										</fieldset>
 									</div>
 								</div>

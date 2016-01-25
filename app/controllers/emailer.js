@@ -9,7 +9,7 @@ exports.buildTransporter = function(req,res,cb){                                
             port: 25,
             direct: true
         });
-    }else{                          
+    }else{                        
         var transporter = nodemailer.createTransport(process.env.NODEMAILER_TRANSPORT_PROTOCOL,{
             service: process.env.NODEMAILER_SERVICE,
             auth: {

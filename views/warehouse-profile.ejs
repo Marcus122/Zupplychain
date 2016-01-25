@@ -11,10 +11,12 @@
             if (query && Object.keys(query).length > 0){%>
                 <div class="search-header">
                     <div class="row">
-                        <div class="columns three back-to-search">
-                            <a href="/search" class="button action">Back to search results</a>
-                        </div>
-                        <%if(query){%>
+                        <%if(referer != 'dashboard'){%>
+                            <div class="columns three back-to-search">
+                                <a href="/search" class="button action">Back to search results</a>
+                            </div>
+                        <%}%>
+                        <%if(query && referer != 'dashboard'){%>
                             <div class="search-criteria columns three">
                                 <span class="button-text">MY SEARCH CRITERIA</span>
                                 <button class="view primary tiny"></button>
@@ -126,7 +128,8 @@
                             <div class="columns four">
                                 <h4>Features</h4>
                                 <p>Size: <%= warehouse.size %>m<sup>2</sup>  <br/>
-                            Height: <%= warehouse.height %>m</p>
+                            Height: <%= warehouse.height %>m<br/>
+                            Office Hours:<br/><%= warehouse.officeHours %></p>
                                 <div class="temperatures">
 
                                     <% for (var i =0;i<warehouse.storageTemps.length; i++) { %>
@@ -195,9 +198,11 @@
             <%}%>
             <div class="continue-links footer form-footer">
 				<div class="container">
-				<a href="/search" class="back button action">Back to search results</a> <a href="/search#search-area" class="back button action back-to-search-criteria">Edit search criteria</a>
-<p class="doc-buttons">
-                        </p>
+                <%if (referer != 'dashboard'){%>
+                    <a href="/search" class="back button action">Back to search results</a> <a href="/search#search-area" class="back button action back-to-search-criteria">Edit search criteria</a>
+                            <p class="doc-buttons">
+                            </p>
+                 <%}%>
 				</div>
 			</div>
 		</section>

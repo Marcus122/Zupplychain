@@ -19,16 +19,16 @@
 				</div>
 				<div class="row">
 					<ul class="tabs">
-						<li class="four columns checked"><span>Step 1</span> - Warehouse details</li>
-                        <li class="four columns checked"><span>Step 2</span> - Define your storage</li>
-                        <li class="four columns active checked"><span>Step 3</span> - Price and availability</li>
+						<li class="four columns checked"><span>Step 1</span> - Your warehouse details</li>
+                        <li class="four columns checked"><span>Step 2</span> - Your storage details</li>
+                        <li class="four columns active checked"><span>Step 3</span> - Your pricing and availability</li>
 					</ul>
 					<section class="tab-content">
 							<input type="hidden" name="user-active" value="<%= user.active %>"/>
 							<div class="main" id="price-and-availability-user-data">
 								<div class="content-box primary">
 									<div class="header">
-										<h3>Define your Price and availability</h3>
+										<h3>Your pricing and availability</h3>
 									</div>
 									<div class="main">
 										<table class="max price-and-availability js-all-storages">
@@ -156,7 +156,7 @@
 							<fieldset class="form-footer">
 								<input name="warehouse" type="hidden" value="<%=warehouse._id%>"/>
 								<a href="/provider-registration-2"><button class="back" type="button">Back</button></a>
-								<button data-redirect="/registration-complete" id="save-and-finish" class="action next">Save &amp; Finish</button>
+								<button data-redirect="/warehouse-registration-complete" id="save-and-finish" class="action next">Save &amp; Finish</button>
 							</fieldset>
 					</section>
 				</div>

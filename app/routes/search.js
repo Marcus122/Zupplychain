@@ -19,6 +19,8 @@ var handler = function(app) {
         req.data.minDurationOptions = local.config.minDurationOptions;
         req.data.palletTypes = local.config.palletTypes;
         req.data.temperatures = local.config.temperatures;
+        req.data.pageTitle = 'Search For Pallet Space | Warehouse Storage Hire | ZupplyChain';
+        req.data.description = 'ZupplyChain Helps You Find Spare Warehouse Space Across The UK For Your On-Demand Palletised Storage Needs - Search Our Database Now!'
         req.data.page = 'search';
         if (req.session.firstSearch === undefined){
             req.session.firstSearch = "true";

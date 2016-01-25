@@ -8,6 +8,8 @@ var User = require("../controllers/users.js"),
 
 var handler = function(app) {
 	app.get('/provider-registration', function(req,res){
+        req.data.pageTitle = 'Register | Warehouse Advertising | Pallet Space | ZupplyChain';
+        req.data.description = 'ZupplyChain Helps You Advertise Your Spare Warehouse Space On Our Searchable MarketPlace - For Immediate Palletised Storage Hire - Register FREE Now!';
 		res.render("registration",req.data);
 	});
 	app.get('/customer', function(req,res){
@@ -15,6 +17,9 @@ var handler = function(app) {
 	});
 	app.get('/registration-complete', function(req,res){
 		res.render("registration-complete",req.data);
+	});
+	app.get('/warehouse-registration-complete', function(req,res){
+		res.render("warehouse-registration-complete",req.data);
 	});
 	app.get('/provider-registration/:step', populateData, registrationHandler);
 	app.get('/provider-registration-:step', populateData, registrationHandler);
@@ -39,6 +44,8 @@ var handler = function(app) {
 	app.post('/register-contact/:userId',registerContact);
     app.get('/provider-register',function(req,res){
        if(!req.data.user._id){
+            req.data.pageTitle = 'Register | Warehouse Advertising | Pallet Space | ZupplyChain';
+            req.data.description = 'ZupplyChain Is A Marketplace For Registering, Searching & Hiring Available Warehouse Space For Palletised Storage. Register FREE Now!';
             res.render("provider-simple-registration",req.data); 
        }else{
            res.redirect('/dashboard');
@@ -49,6 +56,7 @@ function sendRegisteredEmail(req,res,emailData,cb){
 	emailData.title = 'Registration Complete';
 	emailData.subtitle = 'Registration Complete';
 	emailData.config = local.config;
+    req.data.prothost = req.protocol + '://' + req.headers.host;
 	res.render('emails/registered',emailData,function(err,template){
 		if(err){
 			console.log(err);
@@ -105,10 +113,17 @@ function registrationHandler(req,res){
 		// }
         if(!req.data.user._id){
             res.redirect('/provider-register');
-        }else if (req.data.user._id && req.data.user.warehouses && req.data.user.warehouses.length === 0){
-            res.render("registration" + "-" + req.params.step,req.data);
+        }else if (req.data.user._id && req.data.user.warehouses && (!req.data.user.warehouses[0] || !req.data.user.warehouses[0].regComplete)){
+            if((req.params.step === '2' || req.params.step === '3') && (!req.data.user.warehouses[0] || !req.data.user.warehouses[0].name)){
+                res.redirect('/provider-registration-1')
+            }else
+            if(req.params.step === '3' && req.data.user.warehouses[0] && (!req.data.user.warehouses[0].storage || req.data.user.warehouses[0].storage.length === 0)){
+                res.redirect('/provider-registration-2')
+            }else{
+                res.render("registration" + "-" + req.params.step,req.data);
+            }
         }else{
-            res.redirect('/dashboard');
+            //res.redirect('/dashboard#warehouses');
         }
 }
 function populateData(req,res, next){
@@ -171,7 +186,7 @@ function completeRegistration(req,res){
                                         emailData.email = req.body.email;
                                         emailData.loginUrl = req.protocol + '://' + req.headers.host + '/login';
                                         sendRegisteredEmail(req,res,emailData,function(){
-                                            res.send({redirect: '/registration-complete'});
+                                            res.send({redirect: '/dashboard'});
                                         });
                                     }
                                 })

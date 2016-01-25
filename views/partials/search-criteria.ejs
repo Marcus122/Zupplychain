@@ -14,115 +14,117 @@
 		<%}%>
 		<div class="main">
 			<form class="storage-search loom-form" action="/search" id="search-form" novalidate autocomplete="off">
-			<div class="input-field">
-					<label for="postcode">Target Postcode/City</label>
-					<!--<input type="text" name="postcode" required="required" minlength="3" value="<%= session.whSC ? session.whSC.sc[0].postcode : " "%>"/>-->
-					<input type="text" name="postcode" required="required" minlength="3" disabled value="<%= session.search ? query.postcode : 'Bury'%>"/>
-				</div>
-                <div class="input-field number" >
-					<label for="max-distance">Max Distance (miles)</label>
-					<!--<input type="number"  step="5" name="max-distance" min="1" required="required" value="<%=session.whSC ? session.whSC.sc[0].maxDistance : 25 %>"/>-->
-					<input type="number"  step="5" name="max-distance" min="1" required="required" disabled value="<%=session.search ? query.maxDistance : 25 %>"/>
-				</div>
-				<div class="input-field">
-					<label for="pallet-type">Pallet Width</label>
-					<!--<select name="pallet-type" id="pallet-type" required="required">
-						<%
-						for (var i in palletTypes){%>
-							<option data-backend-value="<%=config.palletTypesToWidth[palletTypes[i]]%>" value="<%=i%>" <%if (session.whSC && session.whSC.sc[0].palletType == i){%>
-																	selected
-																<%}%>><%=palletTypes[i]%></option>
-						<%}%>
-					</select>-->
-					<select name="pallet-type" id="pallet-type" required="required" disabled>
-						<%
-						for (var i in palletTypes){%>
-							<option data-backend-value="<%=config.palletTypesToWidth[palletTypes[i]]%>" value="<%=i%>" <%if (session.search && query.palletType == i){%>
-																	selected
-																<%}%>><%=palletTypes[i]%></option>
-						<%}%>
-					</select>
-				</div>
-                
-				<div class="input-field number">
-					<label for="quantity">Number of Pallets</label>
-					<input type="text" data-loom-type="number" name="quantity" min="1" max="2000" required="required" value="<%= session.search ? query.totalPallets : "" %>"/>
-				</div>
-				
-				
-				<div class="input-field">
-					<label for="description">What are you storing?</label>
-					<!--<input type="text" name="description" minlength="0" maxlength="100" placeholder="" required="required" value="<%= session.whSC ? session.whSC.sc[0].description : "" %>"/>-->
-					<input type="text" name="description" minlength="0" maxlength="100" placeholder="" required="required" disabled value="<%= session.search ? query.description :  'Tinned Fruit'%>"/>
-				</div>
-				<div class="input-field has-search hidden">
-					<input type="hidden" name="hasSearch" value="true"/>
-			    </div>
-				<div class="input-field hidden">
-					<input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
-				</div><br/>
-				<%
-					var minDate = new Date();
-					var maxDate = new Date();
-					maxDate.setYear(minDate.getFullYear()+1);
-				%>
-				<div class="input-field">
-					<label for="start-date">Start Date</label>
-					<input type="text" data-loom-type="date" placeholder="dd/mm/yyy" name="start-date" data-loom-add-controls="true" readonly required="required" min="<%=minDate.toISOString().substring(0, 10)%>" max="<%=maxDate.toISOString().substring(0, 10)%>" value="<%= session.whSC ? session.whSC.sc[0].startDate : utils.printFormatDate(today)%>"/>
-				</div>
-				<div class="input-field">
-					<label for="minDuration">Estimated Period</label>
-					<select name="minDuration" required="required">
-                     <option value=""></option>
-                    <%
-                    var options = minDurationOptions;
-                    for (var key in options) {
-                    %>
-                        <option value="<%= key %>" 
-                        <% if (session.search && key == query.minDuration) { %>
-                            selected="selected"
-                        <% } %>
-                        ><%= options[key] %> </option>
-                    <%
-                    }
-                    %>
-                    </select>
-				</div>
-				<div class="input-field number">
-					<label for="height">Pallet Height (m)</label>
-					<input type="text" name="height" min="0" required="required" max="100" step=".1" value="<%=session.search ? query.height : ""%>" data-loom-type="decimal" data-loom-decimal-places="2" />
-				</div>
-				<div class="input-field number">
-					<label for="weight">Pallet Weight (kg)</label>
-					<input type="text" data-loom-type="number" name="weight" required="required" min="0" max="2000" value="<%=session.search ? query.weight : "" %>"/>
-				</div>
-				
-				<div class="input-field">
-					<label for="temperature">Storage Type</label>
-					<!--<select name="temperature">
-						<%var temps = temperatures;
-						for (var i in temps){%>
-								<option value="<%=i%>" <%if (session.whSC && session.whSC.sc[0].temp == i){%>
-																	selected
-															   <%}%>><%=temps[i]%></option>
-						<%}%>
-					</select>-->
-					<select name="temperature" disabled>
-						<%var temps = temperatures;
-						for (var i in temps){%>
-								<option value="<%=i%>" <%if (session.search && query.temp == i){%>
-																	selected
-															   <%}%>><%=temps[i]%></option>
-						<%}%>
-					</select>
-				</div>
-				<div class="input-field last">
-                    <div class="search-nag" style="">
-                        Your search criteria have changed, click below to search
+			<div class="columns twelve">
+                <div class="input-field">
+                        <label for="postcode">Target Postcode/City</label>
+                        <!--<input type="text" name="postcode" required="required" minlength="3" value="<%= session.whSC ? session.whSC.sc[0].postcode : " "%>"/>-->
+                        <input type="text" name="postcode" required="required" minlength="3" disabled value="<%= session.search ? query.postcode : 'Bury'%>"/>
                     </div>
-					<button type="submit" class="action forward">Search</button>
-					<p class="hidden invalid-postcode-message"></p>
-				</div>
+                    <div class="input-field number" >
+                        <label for="max-distance">Max Distance (miles)</label>
+                        <!--<input type="number"  step="5" name="max-distance" min="1" required="required" value="<%=session.whSC ? session.whSC.sc[0].maxDistance : 25 %>"/>-->
+                        <input type="number"  step="5" name="max-distance" min="1" required="required" disabled value="<%=session.search ? query.maxDistance : 25 %>"/>
+                    </div>
+                    <div class="input-field">
+                        <label for="pallet-type">Pallet Width</label>
+                        <!--<select name="pallet-type" id="pallet-type" required="required">
+                            <%
+                            for (var i in palletTypes){%>
+                                <option data-backend-value="<%=config.palletTypesToWidth[palletTypes[i]]%>" value="<%=i%>" <%if (session.whSC && session.whSC.sc[0].palletType == i){%>
+                                                                        selected
+                                                                    <%}%>><%=palletTypes[i]%></option>
+                            <%}%>
+                        </select>-->
+                        <select name="pallet-type" id="pallet-type" required="required" disabled>
+                            <%
+                            for (var i in palletTypes){%>
+                                <option data-backend-value="<%=config.palletTypesToWidth[palletTypes[i]]%>" value="<%=i%>" <%if (session.search && query.palletType == i){%>
+                                                                        selected
+                                                                    <%}%>><%=palletTypes[i]%></option>
+                            <%}%>
+                        </select>
+                    </div>
+                    
+                    <div class="input-field number">
+                        <label for="quantity">Number of Pallets</label>
+                        <input type="text" data-loom-type="number" name="quantity" min="1" max="2000" required="required" value="<%= session.search ? query.totalPallets : "" %>"/>
+                    </div>
+                    
+                    
+                    <div class="input-field">
+                        <label for="description">What are you storing?</label>
+                        <!--<input type="text" name="description" minlength="0" maxlength="100" placeholder="" required="required" value="<%= session.whSC ? session.whSC.sc[0].description : "" %>"/>-->
+                        <input type="text" name="description" minlength="0" maxlength="100" placeholder="" required="required" disabled value="<%= session.search ? query.description :  'Tinned Fruit'%>"/>
+                    </div>
+                    <div class="input-field has-search hidden">
+                        <input type="hidden" name="hasSearch" value="true"/>
+                    </div>
+                    <div class="input-field hidden">
+                        <input type="hidden" name="_csrf" value="<%=csrfTokenFunction()%>"/>
+                    </div>
+                    <%
+                        var minDate = new Date();
+                        var maxDate = new Date();
+                        maxDate.setYear(minDate.getFullYear()+1);
+                    %>
+                    <div class="input-field">
+                        <label for="start-date">Start Date</label>
+                        <input type="text" data-loom-type="date" placeholder="dd/mm/yyy" name="start-date" data-loom-add-controls="true" readonly required="required" min="<%=minDate.toISOString().substring(0, 10)%>" max="<%=maxDate.toISOString().substring(0, 10)%>" value="<%= session.whSC ? session.whSC.sc[0].startDate : utils.printFormatDate(today)%>"/>
+                    </div>
+                    <div class="input-field">
+                        <label for="minDuration">Estimated Period</label>
+                        <select name="minDuration" required="required">
+                        <option value=""></option>
+                        <%
+                        var options = minDurationOptions;
+                        for (var key in options) {
+                        %>
+                            <option value="<%= key %>" 
+                            <% if (session.search && key == query.minDuration) { %>
+                                selected="selected"
+                            <% } %>
+                            ><%= options[key] %> </option>
+                        <%
+                        }
+                        %>
+                        </select>
+                    </div>
+                    <div class="input-field number">
+                        <label for="height">Pallet Height (m)</label>
+                        <input type="text" name="height" min="0" required="required" max="100" step=".1" value="<%=session.search ? query.height : ""%>" data-loom-type="decimal" data-loom-decimal-places="2" />
+                    </div>
+                    <div class="input-field number">
+                        <label for="weight">Pallet Weight (kg)</label>
+                        <input type="text" data-loom-type="number" name="weight" required="required" min="0" max="2000" value="<%=session.search ? query.weight : "" %>"/>
+                    </div>
+                    
+                    <div class="input-field">
+                        <label for="temperature">Storage Type</label>
+                        <!--<select name="temperature">
+                            <%var temps = temperatures;
+                            for (var i in temps){%>
+                                    <option value="<%=i%>" <%if (session.whSC && session.whSC.sc[0].temp == i){%>
+                                                                        selected
+                                                                <%}%>><%=temps[i]%></option>
+                            <%}%>
+                        </select>-->
+                        <select name="temperature" disabled>
+                            <%var temps = temperatures;
+                            for (var i in temps){%>
+                                    <option value="<%=i%>" <%if (session.search && query.temp == i){%>
+                                                                        selected
+                                                                <%}%>><%=temps[i]%></option>
+                            <%}%>
+                        </select>
+                    </div>
+                    <div class="input-field last">
+                        <div class="search-nag" style="">
+                            Your search criteria have changed, click below to search
+                        </div>
+                        <button type="submit" class="action forward">Search</button>
+                        <p class="hidden invalid-postcode-message"></p>
+                    </div>
+                </div>
 			</form>
 		</div>
 </section>

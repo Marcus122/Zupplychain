@@ -194,7 +194,7 @@ label[for="confirm-password"]{
 #login{
 	height: auto;
 	overflow: hidden;
-	a.text-link,p{
+	a.text-link{
 		color:@primary;
 	}
 	a.forgot-password{
@@ -209,7 +209,6 @@ label[for="confirm-password"]{
 		display: block;
 		margin-bottom: 1rem;
 		margin-bottom: 10px;
-		color:@primary;
 		font-weight:bold;
 	}
 	input{
@@ -465,6 +464,15 @@ label[for="confirm-password"]{
                     content: counters(item, ".") ". ";
                     counter-increment: item;
                 }
+                ol li ol{
+                    counter-reset: item;
+                    >li{
+                        &:before{
+                            content: counter(item, lower-alpha) ") ";
+                            counter-increment: item;
+                        }
+                    }
+                }
             }
         }
     }
@@ -492,8 +500,8 @@ div.terms{
             background-color: #fff;
             border: 1px solid #ccc;
             border-bottom: none;
-            .unit-padding-bottom(1);
-            .unit-padding-top(1);
+            .unit-padding-vertical(1);
+            .unit-padding-right(7);
             span{
                 max-width: 97%;
                 display: inline-block; 
@@ -518,5 +526,23 @@ div.terms{
             border-right: 1px solid #ccc;
             border-top: 1px solid #ccc;
         }
+    }
+}
+
+.LPMcontainer.LPMoverlay{
+    background-color:@highlight !important;
+    outline-color:@highlight !important;
+}
+
+#cookie-policy{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: @primary;
+    color: #fff;
+    .unit-padding(0.5);
+    p{
+        display:inline-block;
+        .unit-margin-right(6);
     }
 }

@@ -39,11 +39,11 @@ exports.config = {
         "telephone" : "0161 705 4326",
         "fax" : "01888 888 888",
         "email" : "info@zupplychain.com",
-        "addressLine1" : "64-68 Blackburn Street",
-        "addressLine2" : "Radcliffe",
-        "city" : "Manchester",
+        "addressLine1" : "Imperial House",
+        "addressLine2" : "Hornby Street",
+        "city" : "Bury",
         "county" : "county",
-        "postcode" : "M26 2JS"
+        "postcode" : "BL9 5BN"
     },
     
     paymentTerms : [

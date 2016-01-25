@@ -45,7 +45,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 			});
 		}
         
-        function initSimpleRegistration(){
+        function initSimpleRegistration(){//Change
             lm.addOnSuccessCallback('complete-registration',function(data){
 				if (typeof data.redirect == 'string' && typeof data.redirect !== 'undefined'){
 					window.location = data.redirect;
@@ -446,6 +446,8 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
             
 		}
 		function step2(){
+			var $defineSpace = $('#define-space');
+			if(!$defineSpace.length) return;
             $("#define-space .back").click(function() {
                 saveDefinedSpace(function(response){
 					if (response !== undefined){
@@ -456,9 +458,78 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				});
             });
             
-			var $defineSpaceTable = $('.define-space');
-			var $defineSpace = $('#define-space');
-			if(!$defineSpace.length) return;
+            function openQuickReg(){//Change
+                var $trayLink = $('a[data-reg-type="quick-reg"]');
+                if($trayLink.length > 0){
+                    $trayLink.addClass('open');
+                    $trayLink.next().addClass('open');
+                    $trayLink.parent().addClass('open');
+                    $.scrollTo($('.quick-reg'), {duration : 600, offset : -120 });
+                    $defineSpaceTable = $('.reg-2-tray.open').find('.define-space');
+                    lm.rebind($defineSpace.attr('id'))
+                }
+            }
+            
+            function openRegTray(regType){
+                var $trayLink = $('a[data-reg-type="' + regType + '"]');
+                if($trayLink.length > 0 && !$trayLink.hasClass('open')){
+                    $trayLink.addClass('open');
+                    $trayLink.next().addClass('open').find('td').removeClass('loom-ignore');
+                    $trayLink.parent().addClass('open');
+                    $trayLink.parent().siblings('.reg-2-tray').removeClass('open');
+                    $trayLink.parent().siblings('.reg-2-tray').find('.open-tray-link').removeClass('open');
+                    $trayLink.parent().siblings('.reg-2-tray').find('.tray').removeClass('open').find('td').addClass('loom-ignore');
+                    $.scrollTo($('.quick-reg'), {duration : 600, offset : -120 });
+                    $defineSpaceTable = $('.reg-2-tray.open').find('.define-space');
+                }
+                lm.rebind($defineSpace.attr('id'));
+            }
+            
+            whichRegType();//Change
+            function whichRegType(){//Change
+                var regType = global.readJSCookieVal('reg-type');
+                if (regType === ''){
+                    if($('.advanced-reg').next('.tray').find('.define-space').find('tbody tr').length > 1 &&
+                        $('.advanced-reg').next('.tray').find('.define-space').find('tbody tr').find('select[name="temp"]').val() !== ''){
+                        openRegTray('advanced-reg');
+                    }else if($('.advanced-reg').next('.tray').find('.define-space').find('tbody tr').find('input[name="name"]').val() === 'All' &&
+                            $('.advanced-reg').next('.tray').find('.define-space').find('tbody tr').find('select[name="temp"]').val() === '1'){
+                        openQuickReg();
+                    }else{
+                        openQuickReg();
+                    }
+                } 
+                if($('.reg-2-tray').length > 0){
+                    openRegTray(regType);
+                }
+            }
+            
+			var $defineSpaceTable = $('.reg-2-tray.open').find('.define-space');//Change
+            if($defineSpaceTable.length === 0){//Change
+                $defineSpaceTable = $('.define-space');//Change
+            }
+            
+            $defineSpace.find('.reg-2-tray').find('.open-tray-link').click(function(){//Change
+                var $this = $(this);
+                $this.addClass('open').siblings('.tray').addClass('open').parent().addClass('open').siblings().removeClass('open').find('.tray').removeClass('open').siblings('.open-tray-link').removeClass('open');
+                $defineSpaceTable = $('.reg-2-tray.open').find('.define-space');
+                $defineSpaceTable.find('td.input-field').removeClass('loom-ignore');
+                $('.reg-2-tray.open').siblings().find('.define-space').find('td.input-field').addClass('loom-ignore');
+                lm.rebind($defineSpace.attr('id'));
+                $.scrollTo($('.quick-reg'), {duration : 600, offset : -120 });
+            });
+            // $defineSpaceTable.find('td').find('.tool-tip').find('input,select,option').focusin(function(){//Change
+            //     $(this).closest('table').find('.focus').removeClass('focus');
+            //     $(this).parent().addClass('focus');
+            // });
+            // $defineSpaceTable.find('td').find('.tool-tip').find('input,select,option').on('blur',function(){//Change
+            //     $(this).parent().removeClass('focus');
+            //     $(':focus').blur();
+            // });
+            $(document).on('change','.reg-2-tray.open .define-space td .tool-tip select',function(){//Change
+                $(this).blur();
+                $(this).parent().blur();
+            })
 			$(document).on('click','.new-pallet button, td[data-th="add-additional-pallet-width"] button',function(ev){
 				ev.preventDefault();
 				ev.stopImmediatePropagation();
@@ -481,9 +552,11 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 						if (response.error !== undefined && response.error === true && response.data !== undefined && response.data === "Users do not Match"){
 							window.location.href = '/';
 						}else{
+                            document.cookie = 'reg-type=' + $defineSpaceTable.parent('.tray').prev().data('reg-type');//Changed
 							window.location = $defineSpace.attr('action');
 						}
 					}else{
+                        document.cookie = 'reg-type=' + $defineSpaceTable.parent('.tray').prev().data('reg-type');//Changed
 						window.location = $defineSpace.attr('action');
 					}
 				});
@@ -497,6 +570,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 							if (response.error !== undefined && response.error === true && response.data !== undefined && response.data === "Users do not Match"){
 								window.location.href = '/'
 							}
+                            document.cookie = 'reg-type=' + $defineSpaceTable.parent('.tray').prev().data('reg-type');//Changed
 						}
 					});
 					saveRegistration();
@@ -567,7 +641,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					$element.attr('data-storage-group',parseInt($this.parent('td').parent('tr').attr('data-storage-group')));
 					$this.parent('td').parent('tr').after($element);
 					$element.find('td[data-th="Storage Temp"]').find('select').val(parseInt(storageType));
-					$element.find('td[data-th="add-additional-pallet-width"]').find('button').unbind('click');
+					
 				}else{
 					if($this.parent('td').length > 0 && $this.parent('td').data('th') === 'add-additional-pallet-width'){
 						storageGroup = parseInt($this.parent('td').parent('tr').attr('data-storage-group'));
@@ -581,13 +655,14 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 						$prevEle = $('.define-space tbody').find('tr').last();
 					}
 					$element = template.bind(data);
-					$element.find('td[data-th="add-additional-pallet-width"]').find('button').unbind('click');
-					$element.removeAttr('data-storage-group')
+                    $element.removeAttr('data-storage-group')
 					$element.attr('data-storage-group',storageGroup);
 					$prevEle.after($element);
 					$element.find('td[data-th="Storage Temp"]')
 				}
-				rebindForm();
+                $element.find('td[data-th="add-additional-pallet-width"]').removeClass('hidden').find('button').unbind('click');
+				$element.find('td[data-th="Remove"]').removeClass('hidden').find('button').removeClass('hidden');
+                rebindForm();
 			}
 			$(document).on('change','#define-space td[data-th="Storage Name"] input[name="name"]',function(){
 				var $this = $(this);
@@ -653,11 +728,19 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				}else if($input.attr('type') === 'file'){
 					//Do nothing
 				}else{
-					object[json][jsonKey] = ($input.val());
+                    if($input.data('backend-value')){
+                        object[json][jsonKey] = ($input.data('backend-value'));
+                    }else{
+                        object[json][jsonKey] = ($input.val());
+                    }
 				}
 			}else{
 				if(name){
-					object[name] = $input.val();
+                    if($input.data('backend-value')){
+                        object[name] = ($input.data('backend-value'));
+                    }else{
+                        object[name] = $input.val();
+                    }
 				}
 			}
 		});

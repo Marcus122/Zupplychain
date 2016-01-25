@@ -71,7 +71,7 @@ var aggregateStorage = function(theStorages, VolumeDiscounts) {
         return volumeDiscounts;
     }
     
-    function palletsWillFitAtThisDate(wcDate, numPallets, palletType) {
+    function palletsWillFitAtThisDate(wcDate, numPallets, palletType) { //Need to do this method
         var storagesThisWeek = getStoragesAsTheyAreThisWeek(wcDate);
         var totalSpace = 0;
         storagesThisWeek.sort(function(x,y) { return x.name > y.name })//Ensure they are sorted by name at this point as it will be easier to index below.

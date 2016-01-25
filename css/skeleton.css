@@ -48,7 +48,7 @@
 }
 
 /* For devices larger than 550px */
-@media (min-width: 550px) {
+/*@media (min-width: 550px) {*/
   .container {
     width: 100%; }
   .column,
@@ -118,7 +118,7 @@
   
   .loom-form div.main .content-box:nth-child(2) fieldset.main div .row:nth-child(3) .input-field { position: relative; float: right; }
 
-}
+/*}*/
 
 
 /* Base Styles

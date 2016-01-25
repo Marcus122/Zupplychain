@@ -1,4 +1,10 @@
         <% include ./footer %>
 		</div>
+        <%if(!cookiePolicyAgreed){%>
+            <div id="cookie-policy">
+                <p>By continuing to use this site you are agreeing to the use of cookies as set out in the <a target="_blank" href="/terms-and-conditions/cookie-policy">cookie policy</a></p>
+                <button class="action mini" name="agree-cookie-policy">OK</button>
+            </div>
+        <%}%>
     </body>
 </html>

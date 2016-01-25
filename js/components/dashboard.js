@@ -194,8 +194,8 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			
 			$(document).on('click', '.toggle-view-edit',function(){
 				var $this = $(this);
-				var $tab = $this.parent().siblings('[data-view-edit-capture-zone="true"]');
-				if($tab) $tab = $this.closest('[data-view-edit-capture-zone="true"]');
+				//var $tab = $this.parent().siblings('[data-view-edit-capture-zone="true"]');
+				var $tab = $this.closest('[data-view-edit-capture-zone="true"]');
 				if ($tab.length === 0) $tab = $this.parent().next('[data-view-edit-capture-zone="true"]')
 				if (!$this.hasClass('down')){
 					if($this.data('mode') === 'view'){
@@ -249,6 +249,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 				$('.tab-content ' + clickedTab).removeClass('hidden').siblings().addClass('hidden');
 				$tab.addClass('active').siblings('li').removeClass('active');
 				$('#add-new-warehouse ul li:nth-child(2)').addClass('checked');
+                $('li[data-view="warehouses"]').attr('data-changed','true');
 				e.preventDefault();
 			});
 			
@@ -339,34 +340,46 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 		}
 		
 		function goToLinkViewTabContacts($this){
-			var links = $this.attr('href').split('#');
-			goToView('#' + links[1]);
-			goToTab('#' + links[2]);
-            $('a[href="#' + links[1] + '"]').parent('li').addClass('active').siblings('li').removeClass('active');
-			$('a[href="#' + links[2] + '"]').parent('li').addClass('active').siblings('li').removeClass('active');
-			$('.warehouse-specific-contacts').addClass('hidden');
-			if(links[3]){
-				$('select[name="warehouses"]').val($('select[name="warehouses"]').find('option[data-id="' + $this.closest('table').data('warehouse-id') + '"]').val());
-				$('button[name="view-warehouse-contacts"]').trigger('click',function(){
-					goToTab('#' + links[3]);
-					$('a[href="#' + links[3] + '"]').parent('li').addClass('active').siblings('li').removeClass('active');
-					scrollToPos('.warehouse-specific-contacts'); 
-				});
-			}
+			// var links = $this.attr('href').split('#');
+			// goToView('#' + links[1]);
+			// goToTab('#' + links[2]);
+            // $('a[href="#' + links[1] + '"]').parent('li').addClass('active').siblings('li').removeClass('active');
+			// $('a[href="#' + links[2] + '"]').parent('li').addClass('active').siblings('li').removeClass('active');
+			// $('.warehouse-specific-contacts').addClass('hidden');
+			// if(links[3]){
+			// 	$('select[name="warehouses"]').val($('select[name="warehouses"]').find('option[data-id="' + $this.closest('table').data('warehouse-id') + '"]').val());
+			// 	$('button[name="view-warehouse-contacts"]').trigger('click',function(){
+			// 		goToTab('#' + links[3]);
+			// 		$('a[href="#' + links[3] + '"]').parent('li').addClass('active').siblings('li').removeClass('active');
+			// 		scrollToPos('.warehouse-specific-contacts'); 
+			// 	});
+			// }
 		}
+        
+        $(document).on('click','a[data-go-to-view="true"]',function(){
+            var href = $(this).attr('href');
+            goToView(href);
+            $('#vertical-nav').find('li.active').removeClass('active');
+            $('#vertical-nav').find('a[href="' + href + '"]').parent().addClass('active');
+        });
 		
 		function goToView(href){
-			$('div[data-view="warehouses"]').find('.content-box[data-content="warehouses"]').removeClass('hidden');
-			$('#view-edit-warehouse').find('.row').remove();
-			$('#add-new-warehouse').find('.row').remove();
-			currentView = href;
-			if (currentView !== "" && !determineIfViewInBackLinks(currentView)) backLinks.push(currentView);
-			var $corrView = $('div[data-view="' + href.replace('#','') +'"]');
-			$corrView.removeClass('hidden').siblings('.dashboard-container').addClass('hidden');
-		}
+            if(href !== '#contacts'){ //Change, we are changing contacts
+                $('div[data-view="warehouses"]').find('.content-box[data-content="warehouses"]').removeClass('hidden');
+                $('#view-edit-warehouse').find('.row').remove();
+                $('#add-new-warehouse').find('.row').remove();
+                currentView = href;
+                if (currentView !== "" && !determineIfViewInBackLinks(currentView)){
+                    $('.dashboard-back').removeClass('hidden');
+                    backLinks.push(currentView);
+                } 
+                var $corrView = $('div[data-view="' + href.replace('#','') +'"]');
+                $corrView.removeClass('hidden').siblings('.dashboard-container').addClass('hidden');
+            }
+        }
 		
 		function goToTab(href){
-			$('.tab-content ' + href + ',div[data-content="' + href.replace('#','') + '"]').removeClass('hidden').siblings().addClass('hidden');
+			$('.tab-content ' + href + ',div[data-content="' + href.replace('#','') + '"]').removeClass('hidden').addClass('active').siblings().removeClass('active').addClass('hidden');
 		}
 		
 		function prepareWarehouseView($this){
@@ -547,20 +560,6 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 						$tr.find('td[data-field="clear"]').find('button').addClass('hidden');
 					}
 				}
-			});
-			
-			$(document).on('click','td[data-field="clear"] button',function(e){
-				e.preventDefault();
-				var $this = $(this);
-				var $tr = $this.closest('tr');
-				var inputs = $tr.find('input');
-				for (var i =0; i<inputs.length; i++){
-					$(inputs[i]).val('');
-					$(inputs[i]).parent().removeClass('success');
-					$(inputs[i]).parent().removeClass('error');
-					$(inputs[i]).parent().removeClass('error-depends');
-				}
-				$this.addClass('hidden');
 			});
 			
 			$(document).on('keyup','form[data-form-type="contacts-form"] table tbody tr td[data-field="name"] input',function(){

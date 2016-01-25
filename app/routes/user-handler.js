@@ -34,6 +34,8 @@ var handler = function(app) {
 		if(Object.keys(req.data.user).length > 0 && req.data.user.active === true){
 			res.redirect('/dashboard');
 		}else{
+            req.data.pageTitle = 'Login | Warehouse Pallet Storage Space | ZupplyChain';
+            req.data.description = 'ZupplyChain Provides A Free And Trustworthy Logistics Marketplace For Advertising And Searching Available Warehouse Storage.'
 			res.render("login",req.data);
 		}
 	});

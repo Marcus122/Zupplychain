@@ -14,7 +14,13 @@
                 <td data-field="name"><%=warehouses[i].name%></td>
                 <td data-field="address"><%=warehouses[i].city%>, <%=warehouses[i].postcode%></td>
                 <td data-field="view-edit-warehouse"><a data-action="view-edit-warehouse" class="action button" href="/view-edit-warehouse/<%=warehouses[i]._id%>">View</a></td>
-                <td data-field="view-warehouse-profile"><a href="/warehouse-profile/<%=warehouses[i]._id%>"  target="_blank" class="action button" data-go-to-page="true">View</a></td>
+                <td data-field="view-warehouse-profile">
+                    <%if(warehouses[i].storage != undefined && warehouses[i].storage.length > 0){%>
+                        <a href="/warehouse-profile/<%=warehouses[i]._id%>"  target="_blank" class="action button" data-go-to-page="true">View</a>
+                    <%}else{%>
+                        <p>Please add a storage to view your warehouse profile</p>
+                    <%}%>
+                </td>
             </tr>
         <%}%>
     </tbody>
