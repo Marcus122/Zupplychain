@@ -83,6 +83,7 @@ exports.config = {
 		"Container De-stuffing",
 		"Pick & Pack",
 		"Home Delivery",
+        "Palletisation"
 	],
 	specifications: [
         "Perimeter Fencing",
@@ -116,9 +117,9 @@ exports.config = {
     },
     
     temperatures : { // miss out 0 as we'll code for zero being a wild card.
-        1 : "Ambient",
-        4 : "Outside",
-        5 : "Bonded"
+        0 : "Ambient",
+        1 : "Outside",
+        2 : "Bonded"
     },
     
     minDurationOptions : { // numWeeks : textDescription

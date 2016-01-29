@@ -84,32 +84,31 @@ define(["jquery","loom/loom","loom/loomAlerts","templates/templates","jqueryPlug
             return '';
         }
 		
-		function centerPopup($element){
-			var top;
-			var $window = $(window);
-			var diff = $window.height() - $element.height();
-			var top = diff < 0 ? $window.scrollTop() + 25 : $window.scrollTop() + diff/2;
-			//var top = (screen.height/2) - (window.screen.availHeight/2);
-			if(top > 100){
-				top-=50;
-			}					
-			$element.css({
-				top:top
-			});
+		function centerPopup($element){//Change
+            $element.css({
+                "position": "fixed",
+                "top" : "50%",
+                "left" : "50%",
+                "margin-top" : "-" + ($element.height()/2) + "px",
+                "margin-left" : "-" + ($element.outerWidth()/2) + "px"
+            });
 		}
         
         function fileAPISupported(){ //Change
             return $("<input type='file'>").get(0).files !== undefined;
         }
 		
-		function showRegistrationExample($this,shouldCenterPopup){
+		function showRegistrationExample($this,shouldCenterPopup){//Change
+            if(typeof ga !== 'undefined'){
+                ga('send', 'event', 'Buttons', 'Click', 'Help Video 1');
+            }
 			var template = templates.getTemplate('video-popup');
 			var $popup = template.bind({});
 			$('body').append($popup);
+            $($popup).removeClass('hidden');
 			if(centerPopup){
 				centerPopup($popup);
 			}
-			$($popup).removeClass('hidden');
 			$popup.find('source').attr('src', $this.data('url'));
 			$popup.find('source').attr('type', 'video/' + $this.data('url').split('.')[1]);
 			if($this.attr('id') === 'reg-help-bubble' ){

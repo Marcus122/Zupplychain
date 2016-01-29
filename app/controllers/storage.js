@@ -115,7 +115,12 @@ exports.buildStorageNamesAndRenderPage = function(req,res,page){
 
 exports.sortStoragesByNameAndPalletType = function(storages){
 	storages.sort(function(x,y) { 
-		return x.name > y.name || x.palletType > y.palletType;
+		// return x.name > y.name || x.palletType > y.palletType;
+        if(x.name < y.name) return -1;
+        if(x.name > y.name) return 1;
+        if(x.palletType < y.palletType) return -1;
+        if(x.palletType > y.palletType) return 1;
+        return 0;
 	});
 	return storages;
 }

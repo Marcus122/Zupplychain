@@ -6,10 +6,6 @@ var mongoose = require('mongoose'),
 	
 var fields = {
 	warehouse: { type: Schema.ObjectId, ref: 'warehouse' },
-	availabilityController: [{ 
-		user:{type: Schema.ObjectId, ref: 'users' },
-		sortOrder:{type:Number,default:0}
-	}],
 	enquiresController: [{ 
 		user: {type: Schema.ObjectId, ref: 'users'},
 		sortOrder:{type:Number,default:0}
@@ -45,13 +41,13 @@ warehouseContactsSchema.statics = {
 		.exec(cb)
 	},
 	loadWarehousesContactsByACOrEC: function(userId,cb){
-    	this.find({$or:[{"availabilityController.user":{$in:[userId]}},{"enquiresController.user":{$in:[userId]}}]}).exec(cb);
+    	this.find({"enquiresController.user":{$in:[userId]}}).exec(cb);
   	},
 	removeByWarehouse: function(warehouse,cb){
 		this.find({warehouse: warehouse}).remove().exec(cb);
 	},
 	loadByUser: function(userId,cb){
-		this.find({$or:[{"availabilityController.user":{$in:[userId]}},{"enquiresController.user":{$in:[userId]}},{"creditController.user":{$in:[userId]}},{"invoiceController.user":{$in:[userId]}},{"pickingDispatch.user":{$in:[userId]}},{"goodsIn.user":{$in:[userId]}},{"transportCoordinator.user":{$in:[userId]}}]})
+		this.find({$or:[{"enquiresController.user":{$in:[userId]}},{"creditController.user":{$in:[userId]}},{"invoiceController.user":{$in:[userId]}},{"pickingDispatch.user":{$in:[userId]}},{"goodsIn.user":{$in:[userId]}},{"transportCoordinator.user":{$in:[userId]}}]})
 		.exec(cb);
 	},
 	deleteWhContact: function(id,users,contactType,cb){

@@ -7,10 +7,15 @@ define(["jquery","loom/loom","loom/loomAlerts","components/global"], function ($
         setEnquiryFromQueryParam();//Change
 		
 		loom.addOnSuccessCallback('contact-us',function(result){
+            var options = {};
+            options.centre = true;
 			if(result.error === true){
-				Alerts.showErrorMessage(result.data);
+				Alerts.showErrorMessage(result.data,options);
 			}else{
-				Alerts.showSuccessMessage(result.data);
+                if(typeof ga !== 'undefined'){
+                    ga('send', 'event', 'Buttons', 'Click', 'Send');//Change
+                }
+				Alerts.showSuccessMessage(result.data,options);
 			}
 		});
         

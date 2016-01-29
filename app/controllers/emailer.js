@@ -6,8 +6,7 @@ exports.version = "0.1.0";
 exports.buildTransporter = function(req,res,cb){                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            if (req.data.live === true){
         var transporter = nodemailer.createTransport(process.env.NODEMAILER_TRANSPORT_PROTOCOL,{
             name: process.env.NODEMAILER_SERVICE,
-            port: 25,
-            direct: true
+            port: 25
         });
     }else{                        
         var transporter = nodemailer.createTransport(process.env.NODEMAILER_TRANSPORT_PROTOCOL,{
@@ -25,12 +24,24 @@ exports.buildTransporter = function(req,res,cb){                                
 exports.sendMail = function(req,res,emailTemplate,receiver,from,subject,cb){
 		
 	var html = emailTemplate;
-	var mailOptions = {
-		from:    'Zupplychain <info@zupplychain.com>',
-		to:      receiver,
-		subject: subject,
-		html:    html,
-	}
+    var mailOptions;
+    if (req.data.live === true){
+        mailOptions = {
+            host: process.env.NODEMAILER_SERVICE,
+            port:    '25',
+            from:    'Zupplychain <info@zupplychain.com>',
+            to:      receiver,
+            subject: subject,
+            html:    html,
+        }
+    }else{
+        mailOptions = {
+            from:    'Zupplychain <info@zupplychain.com>',
+            to:      receiver,
+            subject: subject,
+            html:    html,
+        }
+    }
 	
 	exports.buildTransporter(req,res,function(transporter){
 		transporter.sendMail(mailOptions,function(err,info){

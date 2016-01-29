@@ -1,4 +1,4 @@
-define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],function(ResultsMap, Loom, Alerts){
+define(["components/search-results-map", "loom/loom", "loom/loomAlerts","components/global"],function(ResultsMap, Loom, Alerts, Global){
 
     
 
@@ -7,6 +7,7 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
 	var $postcode = $("input[name='postcode']");
 	var $maxDistance = $("input[name='max-distance']");
 	var loom = new Loom();
+    var global = new Global();
     var hasSearch = $('input[name="search-cached"]').length;
     var haveDoneASearch = false;
 
@@ -15,9 +16,9 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
        require(["jqueryPlugins/jquery.scrollTo.min"], function(scroll) {
            setTimeout(function(){
                     $(".search-results").fadeIn().removeClass('hidden');
-                    $.scrollTo(".search-results", { offset : -0 });
+                    $.scrollTo(".search-results", {duration : 600, offset : -0 });
                     $("#search-description-popup").css({position:"absolute", top:$('.search-results').offset().top-500 });
-                },1000);  
+                },1500);  
        });
     }
     
@@ -37,6 +38,12 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
     
     $("#search-form button").click(function(){
         $(".search-nag").fadeOut();
+    });
+    
+    $(document).on('click','.view-warehouse-link',function(){
+        if(typeof ga !== 'undefined'){
+            ga('send', 'event', 'Buttons', 'Click', 'More details');//Change
+        }
     });
 	
     //on postcode entry, load up the map centered on that postcode.
@@ -101,6 +108,7 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
     function openSearchPopup(){
         var $popup = $("#search-description-popup");
         $popup.removeClass('hidden');
+        global.centerPopup($popup);
     }
 	
 	function triggerSearch(){
@@ -223,9 +231,12 @@ define(["components/search-results-map", "loom/loom", "loom/loomAlerts"],functio
     
     loom.addOnSuccessCallback("search-form", function(response){
         searchFormSuccess(response);
+        if(typeof ga !== 'undefined'){
+            ga('send', 'event', 'Buttons', 'Click', 'Search');//Change
+        }
         setTimeout(function(){
             addSortArrows($('#search-results-table').find('thead'));
-        },50);
+        },1500);//Change
     });
     
     function addSortArrows($thead){

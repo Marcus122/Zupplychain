@@ -26,7 +26,6 @@
                         maxPallets = warehouse.storageProfile[wcDate].numPallets;
                     }
                 }
-                console.log(warehouse.storageProfile);
                 
         %>
         <table data-max-pallets="<%= maxPallets * 1.5  %>" data-highest-available-space="<%=warehouse.storageProfile.heighestAvailableSpace%>">
@@ -97,7 +96,6 @@
                                 <td class="storage-name" data-storage-name="<%= storageProfile.storages[0].name%>"><%= storageNames%></td>
                             <%}
                         }%>
-                        <%console.log(storageProfile.highestPriceOfAnyStorageUsed);%>
                         <td><%=storageProfile.highestPriceOfAnyStorageUsed.price  ? Number(storageProfile.highestPriceOfAnyStorageUsed.price).toFixed(2) : "N/A" %></td>
                         <td>
                         <% if (storageProfile.totalHandlingCharge) { //we only show the handling charge for weeks where it applies.%>

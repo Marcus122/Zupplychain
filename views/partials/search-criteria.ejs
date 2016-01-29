@@ -26,7 +26,7 @@
                         <input type="number"  step="5" name="max-distance" min="1" required="required" disabled value="<%=session.search ? query.maxDistance : 25 %>"/>
                     </div>
                     <div class="input-field">
-                        <label for="pallet-type">Pallet Width</label>
+                        <label for="pallet-type">Pallet Footprint</label>
                         <!--<select name="pallet-type" id="pallet-type" required="required">
                             <%
                             for (var i in palletTypes){%>
@@ -69,7 +69,7 @@
                     %>
                     <div class="input-field">
                         <label for="start-date">Start Date</label>
-                        <input type="text" data-loom-type="date" placeholder="dd/mm/yyy" name="start-date" data-loom-add-controls="true" readonly required="required" min="<%=minDate.toISOString().substring(0, 10)%>" max="<%=maxDate.toISOString().substring(0, 10)%>" value="<%= session.whSC ? session.whSC.sc[0].startDate : utils.printFormatDate(today)%>"/>
+                        <input type="text" data-loom-type="date" placeholder="dd/mm/yyy" name="start-date" data-loom-add-controls="true" readonly required="required" min="<%=minDate.toISOString().substring(0, 10)%>" max="<%=maxDate.toISOString().substring(0, 10)%>" value="<%= session.search ? utils.printFormatDate(query.startDate) : utils.printFormatDate(today)%>"/>
                     </div>
                     <div class="input-field">
                         <label for="minDuration">Estimated Period</label>

@@ -292,6 +292,15 @@ function warehouseProfile (req,res){
 		req.data.page = 'warehouse-profile';
         if (req.header('referer').indexOf('/dashboard') > -1){
             req.data.referer = 'dashboard';
+             req.data.storageTemps = [];
+             var str = req.warehouse.storage.toObject();
+             var str2;
+             for (var i = 0; i<str.length; i++){
+                 str2 = str[i].toObject();
+                 if (req.data.storageTemps.indexOf(str2.temp) === -1){
+                    req.data.storageTemps.push(str2.temp);
+                 }
+             }
         }else{
             req.data.referer = 'other';
         }
@@ -443,11 +452,9 @@ function batchStorage(req,res){
 		var storageArr=[];
 		var sortOrder = 0;
 		async.each(req.body, function(_storage,callback){
-			console.log("saving a storage");
 			sortOrder++;
 			_storage.sortOrder = sortOrder;
 			if(!_storage._id){ //if no id, create a new storage.
-				console.log("creating storage: " + _storage._id);
 				delete _storage._id;
 				storage.create(req.data.user,_storage,function(err,Storage){
 					if(err){
@@ -462,9 +469,8 @@ function batchStorage(req,res){
 				_storage.user=req.data.user._id;
 				delete _storage.__v;
                 req.warehouse.regComplete = true;//If it comes into here they have clicked finish on reg 3
-				req.warehouse.save();
+				//req.warehouse.save();
                 storage.updateWithData(_storage,function(err,Storage){
-					console.log("updating storage: " + _storage._id);
 					if(!err){
 						storageArr.push(Storage._id);
 						callback();
@@ -480,7 +486,7 @@ function batchStorage(req,res){
 				req.warehouse.storage=storageArr;
 				req.warehouse.active=true;
 				req.warehouse.save(function(){
-					setResponse(req,res);
+				 	setResponse(req,res);
 				});
 			}else{
 				setErrorResponse(err,res);

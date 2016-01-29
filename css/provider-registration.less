@@ -220,6 +220,27 @@ label[for="photos"]{
 		width:5%;
 		text-align:center;
 	}
+    tr td.input-field{
+        div.tool-tip:hover:before, div.tool-tip:hover:after{
+            visibility:hidden;
+            opacity:0;
+        }
+        &[data-th="Max Weight"]{
+            .tool-tip:after{
+                left:-82px;
+            }
+        }
+        &[data-th="Max Height"]{
+            .tool-tip:after{
+                left:-186px;
+            }
+        }
+        &[data-th="Pallet Spaces"]{
+            .tool-tip:after{
+                left:-271px;
+            }
+        }
+    }
 }
 #define-space .input-field input,
 #define-space .input-field div input,
@@ -525,28 +546,33 @@ form#define-space{
 		}
 	}
     .reg-2-tray{
+        position:relative;
+        &:nth-child(2){
+            z-index:100;
+        }
+        z-index:0;
         display:block;
         .open-tray-link{
             border:1px solid #ccc;
             height:78px;
             &.advanced-reg{
                 border-top:transparent;
-                height:102px;
+                //height:102px;
                 div{
                     span.explanation-text{
                         margin-left:17.5%;
                     }
-                    div.heading{
+                    /*div.heading{
                         top:-18px;
                         position:relative;
                     }
                     img{
                         top:-32px;
-                    }
+                    }*/
                 }
-                &:after{
+               /* &:after{
                     top:25px;
-                }
+                }*/
             }
             div{
                 .heading{
@@ -561,7 +587,7 @@ form#define-space{
                     }
                 }
                 span.explanation-text{
-                    width: 29%;
+                    width: 38%;
                     font-size: 1.5rem;
                     border: 1px solid #ccc;
                     border-radius: 5px;
@@ -754,6 +780,12 @@ input.currency{
 	.open-tray-link{
 		font-size:1.5rem !important;
 	}
+}
+
+.tabs li{
+    margin-bottom:0;
+    padding-bottom:0;
+    height:84px;
 }
 
 #reg-help-bubble{

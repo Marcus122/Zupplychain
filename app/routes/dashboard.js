@@ -13,29 +13,29 @@ var fs = require("../controllers/file-handler.js")
 var handler = function(app) {
 	app.param('warehouse_id', warehouses.load);
 	
-	app.get('/contacts-setup',function(req,res){
-        if (req.data.user._id && req.data.user.dashboardAccessLvl === 0){
-            dashboard.getWarehousesByUser(req.data.user,function(err,data){
-                if(err){
-                    setErrorResponse("Warehouse not found",res);
-                }else{
-                    req.data.page = 'contact-setup-walkthrough';
-                    req.data.warehouses = dashboard.sortWarehousesByCreatedDate(data.warehouses);
-                    req.data.masterContacts = data.masterContacts;
-                    req.data.registerStatus = data.registerStatus;
-                    req.data.authorisations = data.authorisations;
-                    req.data.warehouse = dashboard.getFirstWarehouseWithInconpleteContacts(req.data.warehouses);
-                    res.render('partials/dashboard/contact-setup-walkthrough',req.data);
-                }
-            });
-        }else{
-            res.redirect('/');
-        }
-	});
+	// app.get('/contacts-setup',function(req,res){
+    //     if (req.data.user._id && req.data.user.dashboardAccessLvl === 0){
+    //         dashboard.getWarehousesByUser(req.data.user,function(err,data){
+    //             if(err){
+    //                 setErrorResponse("Warehouse not found",res);
+    //             }else{
+    //                 req.data.page = 'contact-setup-walkthrough';
+    //                 req.data.warehouses = dashboard.sortWarehousesByCreatedDate(data.warehouses);
+    //                 req.data.masterContacts = data.masterContacts;
+    //                 req.data.registerStatus = data.registerStatus;
+    //                 req.data.authorisations = data.authorisations;
+    //                 req.data.warehouse = dashboard.getFirstWarehouseWithInconpleteContacts(req.data.warehouses);
+    //                 res.render('partials/dashboard/contact-setup-walkthrough',req.data);
+    //             }
+    //         });
+    //     }else{
+    //         res.redirect('/');
+    //     }
+	// });
 	
-	app.get('/contacts-explanation',function(req,res){
-		res.render('partials/dashboard/contacts-explanation',req.data);
-	});
+	// app.get('/contacts-explanation',function(req,res){
+	// 	res.render('partials/dashboard/contacts-explanation',req.data);
+	// });
 	
 	app.get('/dashboard', checkForLogon, function(req,res){
 		if(req.data.user.type === 1 && req.data.user.expiry === null){
@@ -155,13 +155,14 @@ var handler = function(app) {
 		})
 	});
 	
-	app.get('/view-edit-warehouse/:warehouse_id',function(req,res){
+	app.get('/view-edit-warehouse/:warehouse_id/:warehouseNum',function(req,res){
 		req.data.warehouse = req.warehouse;
 		req.data.services = local.config.services;
 		req.data.specifications = local.config.specifications;
 		req.data.palletTypes = local.config.palletTypes;
 		req.data.temperatures = local.config.temperatures;
-        req.data.authorisations = dashboard.getAuthorisations(req.data.user.dashboardAccessLvl)
+        req.data.authorisations = dashboard.getAuthorisations(req.data.user.dashboardAccessLvl);
+        req.data.warehouseNum = req.params.warehouseNum;
 		res.render('partials/dashboard/view-edit-warehouse',req.data);
 	});
 	

@@ -1,7 +1,7 @@
 <footer>
 			<div class="row container">
 				<div class="four columns">
-					<img src="/images/zupplychain-logo-strapline-footer.png" alt="Zupply Chain Logo" />
+					<img src="/images/zupplychain-logo-strapline-footer.png" alt="Zupply Chain Logo" width="310" height="100"/>
 					<!--<p class="address">
 					<b><%= config.headers.addressHeader %></b> <br/> <%= config.companyDetails.addressLine1 %>,<br> <%= config.companyDetails.addressLine2 %>,<br/> <%= config.companyDetails.city %>,<br/> <%= config.companyDetails.postcode %>
 					</p>
@@ -16,10 +16,10 @@
 					</ul>-->
                   </div>
                 <div class="four columns social-media-icons">
-                    <a target="_blank" rel="nofollow" href="https://www.linkedin.com/company/zupplychain-ltd"><img src="/images/linkedin-icon.png" alt="linkedin"/></a>
-                    <a target="_blank" rel="nofollow" href="https://www.facebook.com/ZupplyChain/"><img src="/images/facebook-icon.png" alt="Facebook"/></a>
-                    <a target="_blank" rel="nofollow" href="https://twitter.com/ZupplyChain"><img src="/images/twitter-icon.png" alt="Twitter"/></a>
-                    <a target="_blank" rel="nofollow" href="https://plus.google.com/109092450002682927594"><img src="/images/google-plus-icon.png" alt="Google Plus"/></a>
+                    <a target="_blank" rel="nofollow" href="https://www.linkedin.com/company/zupplychain-ltd"><img src="/images/linkedin-icon.png" alt="linkedin" width="50" height="50"/></a>
+                    <a target="_blank" rel="nofollow" href="https://www.facebook.com/ZupplyChain/"><img src="/images/facebook-icon.png" alt="Facebook" width="50" height="50"/></a>
+                    <a target="_blank" rel="nofollow" href="https://twitter.com/ZupplyChain"><img src="/images/twitter-icon.png" alt="Twitter" width="50" height="50"/></a>
+                    <a target="_blank" rel="nofollow" href="https://plus.google.com/109092450002682927594"><img src="/images/google-plus-icon.png" alt="Google Plus" width="50" height="50"/></a>
                 </div>
 				<div class="four columns terms">
 					<h5><a href="/terms-and-conditions" target="_blank">Terms And Conditions</a></h5>
@@ -36,19 +36,21 @@
         <script data-main="/js/app" src="/js/require.js"></script>
     <% }else{ %>
         <script data-main="/js/_dist/main" src="/js/require.js"></script>
-    <%}%>   
-    <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-        ga('create', 'UA-72195418-1', 'auto');
-        ga('send', 'pageview');
-    </script>
+    <%}%>
+    <%if(live){%>   
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+            ga('create', 'UA-72195418-1', 'auto');
+            ga('send', 'pageview');
+        </script>
     
-    <!-- BEGIN LivePerson Monitor. -->
-    <script type="text/javascript"> window.lpTag=window.lpTag||{};if(typeof window.lpTag._tagCount==='undefined'){window.lpTag={site:'74975180'||'',section:lpTag.section||'',autoStart:lpTag.autoStart===false?false:true,ovr:lpTag.ovr||{},_v:'1.5.1',_tagCount:1,protocol:location.protocol,events:{bind:function(app,ev,fn){lpTag.defer(function(){lpTag.events.bind(app,ev,fn);},0);},trigger:function(app,ev,json){lpTag.defer(function(){lpTag.events.trigger(app,ev,json);},1);}},defer:function(fn,fnType){if(fnType==0){this._defB=this._defB||[];this._defB.push(fn);}else if(fnType==1){this._defT=this._defT||[];this._defT.push(fn);}else{this._defL=this._defL||[];this._defL.push(fn);}},load:function(src,chr,id){var t=this;setTimeout(function(){t._load(src,chr,id);},0);},_load:function(src,chr,id){var url=src;if(!src){url=this.protocol+'//'+((this.ovr&&this.ovr.domain)?this.ovr.domain:'lptag.liveperson.net')+'/tag/tag.js?site='+this.site;}var s=document.createElement('script');s.setAttribute('charset',chr?chr:'UTF-8');if(id){s.setAttribute('id',id);}s.setAttribute('src',url);document.getElementsByTagName('head').item(0).appendChild(s);},init:function(){this._timing=this._timing||{};this._timing.start=(new Date()).getTime();var that=this;if(window.attachEvent){window.attachEvent('onload',function(){that._domReady('domReady');});}else{window.addEventListener('DOMContentLoaded',function(){that._domReady('contReady');},false);window.addEventListener('load',function(){that._domReady('domReady');},false);}if(typeof(window._lptStop)=='undefined'){this.load();}},start:function(){this.autoStart=true;},_domReady:function(n){if(!this.isDom){this.isDom=true;this.events.trigger('LPT','DOM_READY',{t:n});}this._timing[n]=(new Date()).getTime();},vars:lpTag.vars||[],dbs:lpTag.dbs||[],ctn:lpTag.ctn||[],sdes:lpTag.sdes||[],ev:lpTag.ev||[]};lpTag.init();}else{window.lpTag._tagCount+=1;} </script>
-    <!-- END LivePerson Monitor. -->
+        <!-- BEGIN LivePerson Monitor. -->
+        <script type="text/javascript"> window.lpTag=window.lpTag||{};if(typeof window.lpTag._tagCount==='undefined'){window.lpTag={site:'74975180'||'',section:lpTag.section||'',autoStart:lpTag.autoStart===false?false:true,ovr:lpTag.ovr||{},_v:'1.5.1',_tagCount:1,protocol:location.protocol,events:{bind:function(app,ev,fn){lpTag.defer(function(){lpTag.events.bind(app,ev,fn);},0);},trigger:function(app,ev,json){lpTag.defer(function(){lpTag.events.trigger(app,ev,json);},1);}},defer:function(fn,fnType){if(fnType==0){this._defB=this._defB||[];this._defB.push(fn);}else if(fnType==1){this._defT=this._defT||[];this._defT.push(fn);}else{this._defL=this._defL||[];this._defL.push(fn);}},load:function(src,chr,id){var t=this;setTimeout(function(){t._load(src,chr,id);},0);},_load:function(src,chr,id){var url=src;if(!src){url=this.protocol+'//'+((this.ovr&&this.ovr.domain)?this.ovr.domain:'lptag.liveperson.net')+'/tag/tag.js?site='+this.site;}var s=document.createElement('script');s.setAttribute('charset',chr?chr:'UTF-8');if(id){s.setAttribute('id',id);}s.setAttribute('src',url);document.getElementsByTagName('head').item(0).appendChild(s);},init:function(){this._timing=this._timing||{};this._timing.start=(new Date()).getTime();var that=this;if(window.attachEvent){window.attachEvent('onload',function(){that._domReady('domReady');});}else{window.addEventListener('DOMContentLoaded',function(){that._domReady('contReady');},false);window.addEventListener('load',function(){that._domReady('domReady');},false);}if(typeof(window._lptStop)=='undefined'){this.load();}},start:function(){this.autoStart=true;},_domReady:function(n){if(!this.isDom){this.isDom=true;this.events.trigger('LPT','DOM_READY',{t:n});}this._timing[n]=(new Date()).getTime();},vars:lpTag.vars||[],dbs:lpTag.dbs||[],ctn:lpTag.ctn||[],sdes:lpTag.sdes||[],ev:lpTag.ev||[]};lpTag.init();}else{window.lpTag._tagCount+=1;} </script>
+        <!-- END LivePerson Monitor. -->
+    <%}%>
 
 
 <script type="text/template" id="403-popup">

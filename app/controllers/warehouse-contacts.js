@@ -5,10 +5,6 @@ var company = require("../controllers/company.js");
 var local = require("../local.config.js");
 exports.version = "0.1.0";
 
-exports.updateAvailabilityController = function(warehouseContact,user,cb,sortOrder){
-	WarehouseContacts.update({_id:warehouseContact},{$push:{availabilityController:{'user':user,'sortOrder':sortOrder}}}).exec(cb);	
-}
-
 exports.updateEnquiresController = function(warehouseContact,user,cb,sortOrder){
 	WarehouseContacts.update({_id:warehouseContact},{$push:{enquiresController:{'user':user,'sortOrder':sortOrder}}}).exec(cb);	
 }

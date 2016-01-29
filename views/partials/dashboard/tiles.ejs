@@ -14,42 +14,38 @@
     <div class="columns twelve">
         <div class="content-box secondary tasks-box">
             <div class="header">
-			     <h3>Registration</h3>
+			     <h3>Registration - <%if(warehouse){%><%=warehouse.name%><%}else{%>First Warehouse<%}%></h3>
             </div>
             <div class="main row">
-                <p>To ensure your warehouse is included in search results, please complete steps 1 - 3. Step 4 will be available soon! For help please see our example video.</p>
-                <button class="button mini action" data-url="videos/Zupplychain-Registration-Animation.mp4" data-action="view-reg-example">View Example</button>
+                <p>To ensure your warehouse is included in search results, please complete steps 1 - 3. Step 4 will be available soon!</p>
+                <button class="button mini action" data-url="videos/Zupplychain-Registration-Animation.mp4" data-action="view-reg-example">Help Video</button>
                 <table class="dashboard-table">
                     <thead>
                         <tr>
-                            <th>Task</th>
+                            <th>Steps</th>
                             <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="no-link task-name">Account Creation</td>
+                            <td class="no-link task-name">Initial Registration</td>
                             <td class="no-link complete">
                                 COMPLETED
                              </td>
                         </tr>
                         <tr>
                             <td class="task-name">
-                                <%if((!warehouse) || (warehouse && !warehouse.regComplete)){%>
+                                <%if(!warehouse){%>
                                     <a href="/provider-registration-1">Step 1: Your Warehouse Details</a>
                                 <%}else{%>
-                                    <a data-go-to-view="true" href="#warehouses">Step 1: Your Warehouse Details</a>
+                                    Step 1: Your Warehouse Details
                                 <%}%>
                             </td>
-                            <td>
-                            <%if(warehouse){
-                                if(!warehouse.regComplete){%>
-                                    <a href="/provider-registration-1" class="task-status complete">COMPLETED</a>
-                                <%}else{%>
-                                    <a data-go-to-view="true" href="#warehouses" class="task-status complete">COMPLETED</a>
-                                <%}%>
+                            <td <%if(warehouse){%>class="no-link"<%}%>>
+                            <%if(warehouse){%>
+                                <p class="complete">COMPLETED</p>
                              <%}else{%>
-                                <a href="/provider-registration-1" class="task-status not-started">NOT STARTED</a>
+                                <a href="/provider-registration-1" class="task-status not-started">START NOW!</a>
                               <%}%>
                               </td>
                         </tr>
@@ -58,88 +54,85 @@
                                 <%if(!warehouse){%>
                                     Step 2: Your Storage Details
                                 <%}else{
-                                    if(!warehouse.regComplete){%>
-                                        <a href="/provider-registration-2">Step 2: Your Storage Details</a>
+                                    if(warehouse.storage && warehouse.storage.length > 0){%>
+                                        Step 2: Your Storage Details
                                     <%}else{%>
-                                        <a data-go-to-view="true" href="#warehouses">Step 2: Your Storage Details</a>
+                                        <a href="/provider-registration-2">Step 2: Your Storage Details</a>
                                     <%}%>
                                 <%}%>
                             </td>
-                            <td <%if(!warehouse){%> class="disabled"<%}%>>
-                             <%if(!warehouse){%>
-                                NOT STARTED
+                            <td <%if(!warehouse){%> class="disabled <%if(warehouse && warehouse.storage && warehouse.storage.length > 0){%> no-link <%}%>" <%}%> <%if(warehouse && warehouse.storage && warehouse.storage.length > 0){%> class="no-link" <%}%>>
+                             <%
+                             if(!warehouse){%>
+                                PENDING
                              <%}else
-                             if(warehouse && warehouse.storage && warehouse.storage.length > 0){
-                                if(!warehouse.regComplete){%>
-                                    <a href="/provider-registration-2" class="task-status complete">COMPLETED</a>
-                                <%}else{%>
-                                    <a data-go-to-view="true" href="#warehouses" class="task-status complete">COMPLETED</a>
-                                <%}%>
+                             if(!warehouse && (!warehouse.storage || warehouse.storage.length === 0)){%>
+                                 <a href="/provider-registration-2" class="task-status complete">START NOW!</a>
+                             <%}else
+                             if(warehouse && warehouse.storage && warehouse.storage.length > 0){%>
+                                 <p class="complete">COMPLETED</p>
                              <%}else{%>
-                                <a href="/provider-registration-2" class="task-status not-started">NOT STARTED</a>
+                                <a href="/provider-registration-2" class="task-status not-started">START NOW!</a>
                               <%}%></td>
                         </tr>
                         <tr>
-                            <td class="task-name <%if((!warehouse) || (warehouse && warehouse.storage && warehouse.storage.length === 0)){%>disabled<%}%>">
-                                <%if((!warehouse) || (warehouse && warehouse.storage && warehouse.storage.length === 0)){%>
-                                    Step 3: Your Pricing and Availability
-                                <%}else{
-                                    if(!warehouse.regComplete){%>
-                                        <a href="/provider-registration-3">Step 3: Your Pricing and Availability</a>
-                                    <%}else{%>
-                                        <a data-go-to-view="true" href="#warehouses">Step 3: Your Pricing and Availability</a>
-                                    <%}%>
-                                <%}%>
-                            </td>
-                            <td <%if((!warehouse) || (warehouse && warehouse.storage && warehouse.storage.length === 0)){%>class="disabled"<%}%>>
-                            <%anchorAdded=false%>
-                            <%if((!warehouse) || (warehouse && warehouse.storage && warehouse.storage.length === 0)){%>
-                                NOT STARTED
+                            <%anchorAdded=false;
+                            var storagesComplete = 0;
+                            var storagesPartiallyComplete = 0;
+                            var pending = false%>
+                            <%if((!warehouse) || (warehouse && warehouse.storage && warehouse.storage.length === 0)){
+                                pending = true;%>
                             <%}else{
                                 if(warehouse && warehouse.storage && warehouse.storage.length > 0){
                                     for (var i = 0; i<warehouse.storage.length; i++){
                                         if(warehouse.storage[i].basicPricing && warehouse.storage[i].basicPricing.price > 0 && warehouse.storage[i].basicPricing.charge > 0){
-                                            if(warehouse.storage[i].pallets[0].free != null){
-                                                if(!warehouse.regComplete){%>
-                                                    <a class="task-status complete" href="/provider-registration-3">COMPLETED</a>
-                                                <%}else{%>
-                                                    <a data-go-to-view="true" class="task-status complete" href="#warehouses">COMPLETED</a>
-                                                <%}%>
-                                                <%i = warehouse.storage.length;%>
-                                            <%}else{
-                                                if(!warehouse.regComplete){%>
-                                                    <a class="task-status partially-complete" href="/provider-registration-3">PARTIALLY COMPLETE</a>
-                                                <%}else{%>
-                                                    <a data-go-to-view="true" class="task-status partially-complete" href="#warehouses">PARTIALLY COMPLETE</a>
-                                                <%}%>
-                                                <%i = warehouse.storage.length;%>
-                                            <%}%>
-                                        <%}else if(warehouse.storage[i].pallets[0]){
-                                            if(!warehouse.regComplete){%>
-                                                <a class="task-status partially-complete" href="/provider-registration-3">PARTIALLY COMPLETE</a>
+                                            if(warehouse.storage[i].pallets[0].free != null){%>
+                                                <%storagesComplete ++;%>
                                             <%}else{%>
-                                                <a data-go-to-view="true" class="task-status partially-complete" href="#warehouses">PARTIALLY COMPLETE</a>
+                                                <%storagesPartiallyComplete ++;%>
                                             <%}%>
-                                            <%i = warehouse.storage.length;%>
+                                        <%}else if(warehouse.storage[i].pallets[0]){%>
+                                            <%storagesPartiallyComplete ++;%>
                                         <%}else{%>
-                                            <%if(anchorAdded === false){%>
-                                                <a href="/provider-registration-3" class="task-status not-started">NOT STARTED</a>
-                                            <%}%>
+                                            <%if(anchorAdded === false){
+                                                
+                                            }%>
                                             <%anchorAdded = true%>
                                         <%}
-                                    }%>         
+                                    }%> 
                                 <%}else{%>
-                                    <%if(anchorAdded === false){%>
-                                        <a href="/provider-registration-3" class="task-status not-started">NOT STARTED</a>
-                                    <%}%>
+                                    <%if(anchorAdded === false){
+                                        
+                                    }%>
                                     <%anchorAdded = true%>
                                 <%}%>
                             <%}%>
+                            <td class="task-name <%if((!warehouse) || (warehouse && warehouse.storage && warehouse.storage.length === 0)){%>disabled<%}%>">
+                                <%if((!warehouse) || (warehouse && warehouse.storage && warehouse.storage.length === 0) || pending || storagesComplete === warehouse.storage.length){%>
+                                    Step 3: Your Pricing and Availability
+                                <%}else{%>
+                                    <a href="/provider-registration-3">Step 3: Your Pricing and Availability</a>
+                                <%}%>
+                            </td>
+                            <td <%if((!warehouse) || (warehouse && warehouse.storage && warehouse.storage.length === 0)){%>class="disabled"<%}%> <%if(warehouse && storagesComplete === warehouse.storage.length || pending){%> class="no-link"<%}%>>
+                                <%if(pending){%>
+                                    PENDING
+                                <%}else
+                                if(storagesComplete === warehouse.storage.length){%>
+                                    <p class="complete">COMPLETED</p>
+                                <%}else
+                                if(storagesComplete === 0 && storagesPartiallyComplete === 0){%>
+                                    <a class="task-status not-started" href="/provider-registration-3">START NOW!</a>
+                                <%}else
+                                    if((storagesComplete > 0 && storagesPartiallyComplete === 0) || (storagesPartiallyComplete > 0)){%>
+                                        <a href="/provider-registration-3" class="task-status partially-complete">PARTIALLY COMPLETE</a>
+                                    <%}else
+                                %>
                           </td>
                         </tr>
                         <tr>
                             <td class="no-link task-name">Step 4: Your Contacts and Authorisations</td>
-                            <td class="no-link comming-soon">COMMING SOON</td>
+                            <td class="no-link comming-soon">COMING SOON</td>
                         </tr>
                     </tbody>
                 </table>
@@ -155,10 +148,10 @@
 							<h3>Account</h3>
 						</div>
 						<div class="main row">
-							<div class="columns six">
-								<img src="/images/admin-icon-dashboard.png" alt="Admin"/>
+							<div class="columns four">
+								<img src="/images/admin-icon-dashboard.png" alt="Admin" width="103" height="103"/>
 							</div>
-							<p class="columns six">View and edit your account details</p>
+							<p class="columns eight">View and edit your account details</p>
 						</div>
 					</div>
 				</button>
@@ -170,10 +163,10 @@
 							<h3>Contacts</h3>
 						</div>
 						<div class="main row">
-							<div class="columns six">
-								<img src="/images/contacts-icon-dashboard.png" alt="Contacts"/>
+							<div class="columns four">
+								<img src="/images/contacts-icon-dashboard.png" alt="Contacts" width="103" height="103"/>
 							</div>
-							<p class="columns six">View and edit your warehouse contacts</p>
+							<p class="columns eight">Coming Soon</p>
 						</div>
 					</div>
 				</button>
@@ -187,11 +180,11 @@
 							<h3>Warehouses</h3>
 						</div>
 						<div class="main row">
-							<div class="columns six">
-								<img src="/images/warehouse-icon-dashboard.png" alt="Warehouse Details"/>
+							<div class="columns four">
+								<img src="/images/warehouse-icon-dashboard.png" alt="Warehouse Details" width="103" height="103"/>
 							</div>
-							<p class="columns six">View and edit your warehouse details</p>
-							<p class="columns six">Add additional warehouses</p>
+							<p class="columns eight">View and edit your warehouse details and ammend pricing and availability</p>
+							<p class="columns eight">Add additional warehouses</p>
 						</div>
 					</div>
 				</button>
@@ -203,10 +196,10 @@
 							<h3>Messages</h3>
 						</div>
 						<div class="main row">
-							<div class="columns six">
+							<div class="columns four">
 								<img src="/images/user-icon-dashboard.png" alt="Users"/>
 							</div>
-							<p class="columns six">View your messages</p>
+							<p class="columns eight">View your messages</p>
 						</div>
 					</div>
 				</button>
@@ -221,10 +214,10 @@
 							<h3>Account</h3>
 						</div>
 						<div class="main row">
-							<div class="columns six">
-								<img src="/images/admin-icon-dashboard.png" alt="Admin"/>
+							<div class="columns four">
+								<img src="/images/admin-icon-dashboard.png" alt="Admin" width="103" height="103"/>
 							</div>
-							<p class="columns six">View and edit your account details</p>
+							<p class="columns eight">View and edit your account details</p>
 						</div>
 					</div>
 				</button>
@@ -236,10 +229,10 @@
 							<h3>Messages</h3>
 						</div>
 						<div class="main row">
-							<div class="columns six">
+							<div class="columns four">
 								<img src="/images/user-icon-dashboard.png" alt="Users"/>
 							</div>
-							<p class="columns six">View your messages</p>
+							<p class="columns eight">View your messages</p>
 						</div>
 					</div>
 				</button>
@@ -253,10 +246,10 @@
 							<h3>Contacts</h3>
 						</div>
 						<div class="main row">
-							<div class="columns six">
-								<img src="/images/contacts-icon-dashboard.png" alt="Contacts"/>
+							<div class="columns four">
+								<img src="/images/contacts-icon-dashboard.png" alt="Contacts" width="103" height="103"/>
 							</div>
-							<p class="columns six">View and edit your warehouse contacts</p>
+							<p class="columns eight">Coming Soon</p>
 						</div>
 					</div>
 				</button>

@@ -23,7 +23,6 @@ module.exports = function(_data){
         }
 		user_controller.user_by_id(session.user_id,function(err,user){
 			if(user){
-                console.log("loaded user based on session");
 				req.data.user = user;
 			}
 			return next();

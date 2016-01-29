@@ -71,17 +71,13 @@ define(["jquery"],function($){
         }
         
         function centerPopup($element){
-                var top;
-                var $window = $(window);
-                var diff = $window.height() - $element.height();
-                var top = diff < 0 ? $window.scrollTop() + 25 : $window.scrollTop() + diff/2;
-                //var top = (screen.height/2) - (window.screen.availHeight/2);
-                if(top > 100){
-                        top-=50;
-                }					
-                $element.css({
-                   top:top
-                }); 
+            $element.css({
+                "position": "fixed",
+                "top" : "50%",
+                "left" : "50%",
+                "margin-top" : "-" + ($element.height()/2) + "px",
+                "margin-left" : "-" + ($element.outerWidth()/2) + "px"
+            });
         }
         
         function showMessage(messageClass, message, options) {

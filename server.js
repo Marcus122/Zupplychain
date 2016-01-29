@@ -131,6 +131,8 @@ app.get('/demo', function (req,res) {
 });
 
 app.get("/" , function(req,res){
+   req.data.pageTitle = 'Pallet Space Rental | Warehouse Storage Hire | ZupplyChain';
+   req.data.description = 'ZupplyChain Is A Free UK-wide Logistics Marketplace Connecting Business With Pallet Storage Needs To  Warehousing Space Providers. Search Now!';
    res.render("index", req.data);
 });
 

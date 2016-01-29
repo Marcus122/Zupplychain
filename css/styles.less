@@ -230,7 +230,7 @@
  }
  header {
    box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
-   z-index:2;
+   z-index:999999999999;
    position: fixed;
 	width: 100%;
 	background: #fff;
@@ -692,22 +692,27 @@ span.highlight-bright{
 }
 
 .temperatures{
-    .temp-1:before { //ambient
+    .temp-0:before { //ambient
         &:extend(.ion);
         content:@ionicon-var-thermometer;
         &:extend(.hot);
     }
-    .temp-2:before { //chilled
+    // .temp-2:before { //chilled
+    //     &:extend(.ion);
+    //     content:@ionicon-var-thermometer;
+    //     &:extend(.cold);
+    // }
+    // .temp-3:before{ //frozen
+    //     &:extend(.ion);
+    //     content:@ionicon-var-ios-snowy;
+    //     &:extend(.cold);
+    // }
+    .temp-1:before{ //outside.
         &:extend(.ion);
-        content:@ionicon-var-thermometer;
-        &:extend(.cold);
+        content:@ionicon-var-ios-cloudy-outline;
+        color:@secondary;
     }
-    .temp-3:before{ //frozen
-        &:extend(.ion);
-        content:@ionicon-var-ios-snowy;
-        &:extend(.cold);
-    }
-    .temp-4:before{ //bonded.
+    .temp-2:before{ //bonded.
         &:extend(.ion);
         content:@ionicon-var-wineglass;
         color:@secondary;

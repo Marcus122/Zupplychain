@@ -113,7 +113,13 @@ function registrationHandler(req,res){
 		// }
         if(!req.data.user._id){
             res.redirect('/provider-register');
-        }else if (req.data.user._id && req.data.user.warehouses && (!req.data.user.warehouses[0] || !req.data.user.warehouses[0].regComplete)){
+        }else if(req.data.user._id && !req.data.user.warehouses[0]){
+            if(req.params.step === '1'){
+                res.render("registration" + "-" + req.params.step,req.data);
+            }else if(req.params.step === '2' || req.params.step === '3'){
+                res.redirect('/provider-registration-1')
+            }
+        }else if (req.data.user._id && req.data.user.warehouses && (req.data.user.warehouses[0])){
             if((req.params.step === '2' || req.params.step === '3') && (!req.data.user.warehouses[0] || !req.data.user.warehouses[0].name)){
                 res.redirect('/provider-registration-1')
             }else
@@ -123,7 +129,7 @@ function registrationHandler(req,res){
                 res.render("registration" + "-" + req.params.step,req.data);
             }
         }else{
-            //res.redirect('/dashboard#warehouses');
+            res.redirect('/dashboard');
         }
 }
 function populateData(req,res, next){
@@ -185,6 +191,7 @@ function completeRegistration(req,res){
                                         var emailData = {};
                                         emailData.email = req.body.email;
                                         emailData.loginUrl = req.protocol + '://' + req.headers.host + '/login';
+                                        emailData.prothost = req.protocol + '://' + req.headers.host;
                                         sendRegisteredEmail(req,res,emailData,function(){
                                             res.send({redirect: '/dashboard'});
                                         });

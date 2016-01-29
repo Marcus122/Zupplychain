@@ -146,7 +146,7 @@
 					</div>
 					<div class="input-field">
 						<div class="hint--top description-container">
-							<textarea data-json="insurance" id="additional-insruance-description" name="product-exceptions" placeholder="Please detail any exceptions" data-loom-validators="complexTelephoneNumberNotInInput|emailNotInInput"><%=warehouse.insurance.productExceptions%></textarea>
+							<textarea data-json="insurance" id="product-exceptions" name="product-exceptions" placeholder="Please detail any exceptions" data-loom-validators="complexTelephoneNumberNotInInput|emailNotInInput"><%=warehouse.insurance.productExceptions%></textarea>
 						</div>
 					</div>
 				<%}else{%>
@@ -167,7 +167,7 @@
 					</div>
 					<div class="input-field">
 						<div class="hint--top description-container">
-							<textarea data-json="insurance" id="additional-insruance-description" name="product-exceptions" placeholder="Please detail any exceptions" data-loom-validators="complexTelephoneNumberNotInInput|emailNotInInput"></textarea>
+							<textarea data-json="insurance" id="product-exceptions" name="product-exceptions" placeholder="Please detail any exceptions" data-loom-validators="complexTelephoneNumberNotInInput|emailNotInInput"></textarea>
 						</div>
 					</div>
 				<%}%>
@@ -227,7 +227,7 @@
 						for(var i=0;i<warehouse.documents.length;i++){%>
 							<div class="columns four row document">
 								<div class="columns five document-image">
-									<img src="./images/pdf.png"/>
+									<img src="./images/pdf.png" alt="Doc" width="48" height="48"/>
 								</div>
 								<a class="file-name columns four" href="<%=warehouse.documents[i].path%>"><%=warehouse.documents[i].title%></a>
 								<input type="hidden" name="relative-path" value="<%=warehouse.documents[i].path%>"/> 
@@ -238,6 +238,10 @@
 						<%}
 					}%>
 				</div>
+                <div class="checkbox input-field">
+                    <input required type="checkbox" name="accept" id="accept"/>
+                    <label for="accept"><a href="/terms-and-conditions" target="_blank">I agree to the terms and conditions.</a></label>
+                </div>
 			</fieldset>
 		</div>
 		<p class="reg-required-fields">*Required Fields</p>

@@ -105,7 +105,6 @@ exports.checkUserExists = function(email){
 	User.findOne({email:email})
 }
 exports.logout = function(req,res,cb){
-    console.log("logging out");
    req.session.user_id = "";
   delete req.session.user_id;
   cb(false);

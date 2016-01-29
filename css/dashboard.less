@@ -112,17 +112,23 @@
 		.main.row{
             button{
                 .unit-margin-bottom(2);
+                .unit-margin-left(2);
             }
 			padding: 10px;
-			text-align: center;
 			margin-bottom: 20px;
 			border-bottom-right-radius: 7px;
     		border-bottom-left-radius: 7px;
+            p{
+                display:inline-block;
+            }
 			table{
                 tbody tr:hover{
                     background-color:@primary;
                     td a,td{
                         color:#fff !important;
+                        p{
+                            color:#fff !important;
+                        }
                     }
                 }
                 td{
@@ -164,6 +170,18 @@
                     &.comming-soon,
                     &.partially-complete{
                         color:@highlight;
+                    }
+                    p{
+                        margin-bottom:0;
+                        &.complete{
+                            color:@primary;
+                        }
+                        &.not-started{
+                            color:@invalid-dark;
+                        }
+                        &.partially-complete{
+                            color:@highlight;
+                        }
                     }
                 }
 				width:100%;
@@ -223,6 +241,11 @@
 	a{
 		text-decoration: none;
 	}
+    label[for="accept"]{
+        a{
+            text-decoration:underline;
+        }
+    }
 	.banner{
 		margin-bottom:0;
 	}
@@ -390,7 +413,6 @@
 	div[data-view="contacts"],
     div[data-view="main"]{
 		.header{
-			position: relative;
 			.button{
 				position: absolute;
 				right: 0;
@@ -561,17 +583,17 @@
 			border:none;
 			li{
 				padding:0;
+                height:68px;
+                margin-bottom:0;
 				a,p{
 					font-size:2.1rem;
 					font-size:21px;
 					color:#fff;
 					display: block;
-					width: 88%;
-					height: 100%;
+					height: 86%;
 					margin-top: 10px;
 					margin-left: 20px;
 					margin-right: 20px;
-					margin-bottom: 202px;	
 					font-size:1.4rem;
 				}
 				&:after{
@@ -627,13 +649,19 @@
 		}
 		td{
 			text-align:center;
+            &[data-field="view-edit-warehouse"]{
+                width:20%;
+            }
+            &[data-field="view-warehouse-profile"]{
+                width: 24%;
+            }
 		}
 	}
 	.add-new-warehouse-container{
 		display: inline-block;
 		float: right;
-		button{
-			margin-left: 20px;
+		label{
+			margin-right: 20px;
 		}
 	}
 	.secondary.content-box{

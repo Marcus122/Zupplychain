@@ -10,14 +10,14 @@
 			</h1>
 			<div class="container">
 				<p class="desc medium-font">Follow our simple 3 step process to complete your registration</p>
-				<button class="button mini action" data-url="videos/Zupplychain-Registration-Animation.mp4" data-action="view-reg-example">View Example</button>
+				<button class="button mini action" data-url="videos/Zupplychain-Registration-Animation.mp4" data-action="view-reg-example">Help Video</button>
 			</div>
 		</div>-->
 		<div class="banner">
 			<h1>Create your first warehouse</h1>
 			<div class="container">
 				<p class="desc medium-font">Follow our simple 3 step process to create your first warehouse</p>
-				<button class="button mini action" data-url="videos/Zupplychain-Registration-Animation.mp4" data-action="view-reg-example">View Example</button>
+				<button class="button mini action" data-url="videos/Zupplychain-Registration-Animation.mp4" data-action="view-reg-example">Help Video</button>
 			</div>
 		</div>
 		<!--<p class="tag-line">
@@ -108,10 +108,10 @@
 										<label for="officeHours">Office Hours (Mon-Fri)</label><input id="officeHours" name="officeHours" type="text" value="<%=warehouse.officeHours%>"/>
 									</div>
 									<div class="input-field columns four small-input">
-										<label for="size">Size (sq m)</label><input id="size "name="size" type="number"/>
+										<label for="size">Size (sq m)</label><input id="size "name="size" type="number" value="<%if(warehouse.size !== null){%><%=warehouse.size%><%}%>"/>
 									</div>
 									<div class="columns four input-field small-input">
-										<label for="height">Height (m)</label><input id="height" name="height" type="number"/>
+										<label for="height">Height (m)</label><input id="height" name="height" type="number" value="<%if(warehouse.height !== null){%><%=warehouse.height%><%}%>"/>
 									</div>
 								</div>
 								<div class="specifications">
@@ -119,9 +119,10 @@
 									<div class="services">
 										<h5>Services</h5>
 										<div class="row">
-											<% for( i in services ){%>
+											<%services = utils.convertHyphenArrayDataToCC(services);
+                                            for( i in services ){%>
 												<div class="input-field check columns three">
-													<%if( warehouse.services && warehouse.services.indexOf(services[i]) != -1 ){%>
+													<%if( warehouse.services && (warehouse.services.indexOf(services[i])!= -1 || warehouse.services.indexOf(utils.convertHyphenArrayDataToCC(services[i]))!= -1) ){%>
 														<input data-array="services" name="name" type="checkbox" value="<%=services[i]%>" checked/>
 													<%}else{%>
 														<input data-array="services" name="name" type="checkbox" value="<%=services[i]%>"/>
@@ -135,7 +136,8 @@
 									<div class="warehouse-specifications">
 										<h5>Specifications</h5>
 										<div class="row">
-											<% for( i in specifications ){%>
+											<%specifications = utils.convertHyphenArrayDataToCC(specifications);
+                                            for( i in specifications ){%>
 												<div class="input-field check columns three">
 													<%if( warehouse.specifications && warehouse.specifications.indexOf(specifications[i]) != -1 ){%>
 														<input data-array="specifications" name="name" type="checkbox" value="<%=specifications[i]%>" checked/>
@@ -181,7 +183,7 @@
 									</div>
 									<div class="input-field">
 										<div class="hint--top description-container">
-											<textarea data-loom-validators="complexTelephoneNumberNotInInput|emailNotInInput" data-json="insurance" id="additional-insruance-description" name="additional-insurance-description" placeholder="Please detail product you cannot store"><%=warehouse.insurance.additionalInsuranceDescription%></textarea>
+											<textarea data-loom-validators="complexTelephoneNumberNotInInput|emailNotInInput" data-json="insurance" id="product-exceptions" name="product-exceptions" placeholder="Please detail product you cannot store"><%=warehouse.insurance.productExceptions%></textarea>
 										</div>
 									</div>
 								<%}else{%>
@@ -202,7 +204,7 @@
 									</div>
 									<div class="input-field">
 										<div class="hint--top description-container">
-											<textarea data-loom-validators="complexTelephoneNumberNotInInput|emailNotInInput" data-json="insurance" id="additional-insruance-description" name="additional-insurance-description" placeholder="Please detail product you cannot store"></textarea>
+											<textarea data-loom-validators="complexTelephoneNumberNotInInput|emailNotInInput" data-json="insurance" id="product-exceptions" name="product-exceptions" placeholder="Please detail product you cannot store"></textarea>
 										</div>
 									</div>
 								<%}%>
@@ -263,7 +265,7 @@
 										for(var i=0;i<warehouse.documents.length;i++){%>
 											<div class="columns four row document">
 												<div class="columns five document-image">
-													<img src="./images/pdf.png"/>
+													<img src="./images/pdf.png" alt="Doc" width="48" height="48"/>
 												</div>
 												<span class="file-name columns four"><%=warehouse.documents[i].title%></span>
 												<input type="hidden" name="relative-path" value="<%=warehouse.documents[i].path%>"/> 
@@ -274,6 +276,10 @@
 										<%}
 									}%>
 								</div>
+                                <div class="checkbox input-field">
+                                    <input required type="checkbox" name="accept" id="accept"/>
+                                    <label for="accept"><a href="/terms-and-conditions" target="_blank">I agree to the terms and conditions.</a></label>
+                                </div>
 							</fieldset>
 						</div>
 						<p>*Required Fields</p>

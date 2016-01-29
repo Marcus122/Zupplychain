@@ -15,7 +15,7 @@ var handler = function(app) {
         req.data.prothost = req.protocol + '://' + req.headers.host;
 		res.render('emails/contact-us',req.data,function(err,template){
 			if (!err){
-				emailer.sendMail(req,res,template,process.env.NODEMAILER_EMAIL_ADDRESS,req.body.email,req.body['your-enquiry'],function(err){
+				emailer.sendMail(req,res,template,process.env.NODEMAILER_EMAIL_ADDRESS,req.body.email,req.data.subject,function(err){
 					if(err){
 						setResponse('Error: Request not sent',res,true);
 					}else{

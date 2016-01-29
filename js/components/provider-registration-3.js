@@ -477,6 +477,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                     $($form).trigger('submit');
                 }
                 $traysToOpen.addClass("open");
+                $traysToOpen.find('.open-tray-link').addClass('open');
                 if(!$buttonCell.hasClass('success')){
                     $buttonCell.addClass("open");
                 }else{

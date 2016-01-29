@@ -9,6 +9,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 		var lm = new Loom();
 		var data={};
 		var DASHBOARD_PAGE = 'dashboard';
+        var PROVIDER_REG_PAGE = 'provider-registration';
 		var global = new Global();
         var regBubbleTimer;
 		
@@ -48,6 +49,9 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
         function initSimpleRegistration(){//Change
             lm.addOnSuccessCallback('complete-registration',function(data){
 				if (typeof data.redirect == 'string' && typeof data.redirect !== 'undefined'){
+                    if(typeof ga !== 'undefined'){
+                        ga('send', 'event', 'Buttons', 'Click', 'Register');//Change
+                    }
 					window.location = data.redirect;
 				}else if (data.message !== undefined){
 					Alerts.showErrorMessage(data.message);
@@ -195,6 +199,11 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 							if(result.error === false || result.error === null){
 								uploadFiles(warehouseId,function(result){
 									if(result.error === false || result.error === null){
+                                        if ($(location).attr("pathname").indexOf(PROVIDER_REG_PAGE) != -1){
+                                            if(typeof ga !== 'undefined'){
+                                                ga('send', 'event', 'Buttons', 'Click', 'Save & Continue 1');//Change
+                                            }
+                                        }
 										window.location = $registration.attr('action');
 									}else if (result.error === true){
 										Alerts.showErrorMessage(result.data);
@@ -223,7 +232,14 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 							if(result.error === false || result.error === null){
 								uploadFiles(warehouseId,function(result){
 									if(result.error === false || result.error === null){
-										saveRegistration();
+                                        if ($(location).attr("pathname").indexOf(PROVIDER_REG_PAGE) != -1){
+                                            if(typeof ga !== 'undefined'){
+                                                ga('send', 'event', 'Buttons', 'Click', 'Save & Continue 1');//CHange
+                                            }
+                                            window.location = '/dashboard';
+                                        }else{
+										  saveRegistration();
+                                        }
 									}else if (result.error === true){
 										Alerts.showErrorMessage(result.data);
 									}
@@ -498,8 +514,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                     }else{
                         openQuickReg();
                     }
-                } 
-                if($('.reg-2-tray').length > 0){
+                }else{ 
                     openRegTray(regType);
                 }
             }
@@ -518,25 +533,22 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
                 lm.rebind($defineSpace.attr('id'));
                 $.scrollTo($('.quick-reg'), {duration : 600, offset : -120 });
             });
-            // $defineSpaceTable.find('td').find('.tool-tip').find('input,select,option').focusin(function(){//Change
-            //     $(this).closest('table').find('.focus').removeClass('focus');
-            //     $(this).parent().addClass('focus');
-            // });
-            // $defineSpaceTable.find('td').find('.tool-tip').find('input,select,option').on('blur',function(){//Change
-            //     $(this).parent().removeClass('focus');
-            //     $(':focus').blur();
-            // });
-            $(document).on('change','.reg-2-tray.open .define-space td .tool-tip select',function(){//Change
-                $(this).blur();
-                $(this).parent().blur();
-            })
+            $(document).on('mouseover','.reg-2-tray.open .define-space td .tool-tip select',function(){//Change
+                $(this).parent().removeClass('no-hint');
+            });
+            $(document).on('focusin','.reg-2-tray.open .define-space td .tool-tip select,.reg-2-tray.open .define-space td .tool-tip input',function(){//Change
+                $(this).parent().addClass('focus');
+            });
+            $(document).on('focusout','.reg-2-tray.open .define-space td .tool-tip select,.reg-2-tray.open .define-space td .tool-tip input',function(){//Change
+                $(this).parent().removeClass('focus');
+            });
 			$(document).on('click','.new-pallet button, td[data-th="add-additional-pallet-width"] button',function(ev){
 				ev.preventDefault();
 				ev.stopImmediatePropagation();
 				addPallet($(this));
 				removeButtons();
 			});
-			$defineSpaceTable.on("click",".trash-button",function(ev){
+			$(document).on("click",".reg-2-tray.open .define-space tr .trash-button",function(ev){
 				ev.preventDefault();
 				$(this).closest('tr').remove();
 				rebindForm();
@@ -552,10 +564,20 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 						if (response.error !== undefined && response.error === true && response.data !== undefined && response.data === "Users do not Match"){
 							window.location.href = '/';
 						}else{
+                            if ($(location).attr("pathname").indexOf(PROVIDER_REG_PAGE) != -1){
+                                if(typeof ga !== 'undefined'){
+                                    ga('send', 'event', 'Buttons', 'Click', 'Save & Continue 2');//Change
+                                }
+                            }
                             document.cookie = 'reg-type=' + $defineSpaceTable.parent('.tray').prev().data('reg-type');//Changed
 							window.location = $defineSpace.attr('action');
 						}
 					}else{
+                        if ($(location).attr("pathname").indexOf(PROVIDER_REG_PAGE) != -1){
+                            if(typeof ga !== 'undefined'){
+                                ga('send', 'event', 'Buttons', 'Click', 'Save & Continue 2');//Change
+                            }
+                        }
                         document.cookie = 'reg-type=' + $defineSpaceTable.parent('.tray').prev().data('reg-type');//Changed
 						window.location = $defineSpace.attr('action');
 					}
@@ -570,10 +592,17 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 							if (response.error !== undefined && response.error === true && response.data !== undefined && response.data === "Users do not Match"){
 								window.location.href = '/'
 							}
+                            if ($(location).attr("pathname").indexOf(PROVIDER_REG_PAGE) != -1){
+                                if(typeof ga !== 'undefined'){
+                                    ga('send', 'event', 'Buttons', 'Click', 'Save & Continue 2');
+                                }
+                                window.location = '/dashboard';
+                            }else{
+                                saveRegistration();
+                            }
                             document.cookie = 'reg-type=' + $defineSpaceTable.parent('.tray').prev().data('reg-type');//Changed
 						}
 					});
-					saveRegistration();
 				}else{
 					ev.stopPropagation();
 					lm.focusOnInvalidField($defineSpace.attr('id'));
@@ -707,7 +736,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 					if($input.attr('type') === 'file'){
 						//object[array].push($input.prop("files"));
 					}else{
-                        if($input.data('backend-value')){
+                        if($input.data('backend-value') !== undefined || typeof $input.data('backend-value') !== 'undefined'){
                             object[array].push($input.data('backend-value'));
                         }else{
 						  object[array].push($input.val());
@@ -728,7 +757,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				}else if($input.attr('type') === 'file'){
 					//Do nothing
 				}else{
-                    if($input.data('backend-value')){
+                    if($input.data('backend-value') !== undefined || typeof $input.data('backend-value') !== 'undefined'){
                         object[json][jsonKey] = ($input.data('backend-value'));
                     }else{
                         object[json][jsonKey] = ($input.val());
@@ -736,7 +765,7 @@ define(["jquery","controllers/warehouse","loom/loom","templates/templates","loom
 				}
 			}else{
 				if(name){
-                    if($input.data('backend-value')){
+                    if($input.data('backend-value') !== undefined || typeof $input.data('backend-value') !== 'undefined'){
                         object[name] = ($input.data('backend-value'));
                     }else{
                         object[name] = $input.val();

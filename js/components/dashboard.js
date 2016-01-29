@@ -150,7 +150,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
                         $warehouseContainer.empty();
                         $warehouseContainer.append($warehouse);
                         $warehouseContainer.removeClass('hidden');
-                        initTabs();
+                        //initTabs();
                         prepareWarehouseView($this);
                         $warehouseContainer.find('input').not('[data-dont-disable="true"]').prop('disabled',true);
                         $warehouseContainer.find('button').not('[data-dont-disable="true"]').prop('disabled',true);
@@ -229,6 +229,7 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 				if( loom.isFormValid($(this).attr('id')) ){
 					var $tab = $('ul.tabs li:nth-child(2).four.columns')
 					var clickedTab = $tab.find('a').attr('href');
+                    if(!clickedTab) clickedTab = $tab.find('p').data('href');
 					$('.tab-content ' + clickedTab).removeClass('hidden').siblings().addClass('hidden');
 					$tab.addClass('active').siblings('li').removeClass('active');
 					$('#add-new-warehouse ul li:first-child').addClass('checked');
@@ -243,14 +244,17 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			});
 			
 			$(document).on('submit','#define-space',function(e){
-                rebuilPricingAndAvailability();
-				var $tab = $('ul.tabs li:nth-child(3).four.columns')
-				var clickedTab = $tab.find('a').attr('href');
-				$('.tab-content ' + clickedTab).removeClass('hidden').siblings().addClass('hidden');
-				$tab.addClass('active').siblings('li').removeClass('active');
-				$('#add-new-warehouse ul li:nth-child(2)').addClass('checked');
-                $('li[data-view="warehouses"]').attr('data-changed','true');
-				e.preventDefault();
+                if( loom.isFormValid($(this).attr('id')) ){
+                    rebuilPricingAndAvailability();
+                    var $tab = $('ul.tabs li:nth-child(3).four.columns')
+                    var clickedTab = $tab.find('a').attr('href');
+                    if(!clickedTab) clickedTab = $tab.find('p').data('href');
+                    $('.tab-content ' + clickedTab).removeClass('hidden').siblings().addClass('hidden');
+                    $tab.addClass('active').siblings('li').removeClass('active');
+                    $('#add-new-warehouse ul li:nth-child(2)').addClass('checked');
+                    $('li[data-view="warehouses"]').attr('data-changed','true');
+                    e.preventDefault();
+                }
 			});
 			
 			$(document).on('click', '.form-footer .back', function(){
@@ -264,21 +268,23 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			$(document).on('click','#define-space .save',function(e){
 				rebuilPricingAndAvailability();
                 if ($(this).closest('#add-new-warehouse').length === 0 && $(this).closest('form').find('.error').length === 0){
+                    loom.reset($(this).closest('form').attr('id'))
                     changeToDisplayMode($('div[data-view="warehouses"]'));
                 }
 			});
 			
 			$(document).on('click','#registration .save',function(e){
-				rebuildWarehouseList();//Change
+                rebuildWarehouseList();//Change
 				rebuildWarehouseDropdownList();
                 $('li[data-view="warehouses"]').removeClass('no-warehouses');
 				if($(this).closest('#add-new-warehouse').length === 0 && $(this).closest('form').find('.error').length === 0){
-					changeToDisplayMode($('div[data-view="warehouses"]'));
+                    loom.reset($(this).closest('form').attr('id'))
+                    changeToDisplayMode($('div[data-view="warehouses"]'));
 				}
 			});
 			
 			$(document).on('click','#save-and-finish',function(e){
-				changeToDisplayMode($('div[data-view="warehouses"]'));
+                changeToDisplayMode($('div[data-view="warehouses"]'));
 			});
 			
 			$(document).on('click','a[href="#warehouse-contacts"]',function(){
@@ -392,6 +398,8 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 				$viewEditButtonsUtility.addClass('hidden').addClass('hidden');
 			}else if($this.data('action') === ACTION_VIEW_EDIT_WAREHOUSE){
 				$viewEditButtonsUtility.removeClass('hidden');
+                $('.define-space').find('tr').find('td').removeClass('loom-ignore');//change
+                loom.rebind('define-space');//change
 			}
 		}
 		
@@ -494,16 +502,30 @@ define(["jquery","loom/loom","loom/loomAlerts","controllers/dashboard","template
 			});
 		}
 		
-		function initTabs(){
+		function initTabs(){//Change
 			$(document).on('click','.tabs ul.tabs a',function(e){
 				var $this = $(this);
-				if($this.parent().siblings('li.active').data('validate-form') === undefined || loom.isFormValid($this.parent('li').siblings('li.active').data('validate-form'))){
-					goToTab($this.attr('href'));
-					$this.parent('li').addClass('active').siblings().removeClass('active');
-					e.preventDefault();
-				}else{
-					loom.focusOnInvalidField($this.parent().siblings('li.active').data('validate-form'));
-				}
+                var $activeLi = $this.parent('li').siblings('li.active');
+                var $form = $('#' + $activeLi.data('validate-form'));
+                $form.attr("data-loom-do-not-show-success-css","true");
+                if($form.length > 0){
+                    loom.rebind($form.attr('id'));
+                    if($this.parent().siblings('li.active').data('validate-form') === undefined || loom.isFormValid($form.attr('id'))){
+                        goToTab($this.attr('href'));
+                        $this.parent('li').addClass('active').siblings().removeClass('active');
+                        e.preventDefault();
+                        $form.removeAttr("data-loom-do-not-show-success-css");
+                        loom.rebind($form.attr('id'));
+                    }else{
+                        loom.focusOnInvalidField($this.parent().siblings('li.active').data('validate-form'));
+                        $form.removeAttr("data-loom-do-not-show-success-css");
+                        loom.rebind($form.attr('id'));
+                    }
+                }else{
+                    goToTab($this.attr('href'));
+                    $this.parent('li').addClass('active').siblings().removeClass('active');
+                    e.preventDefault();
+                }
 			});
 			
 			$(document).on('click','div[data-view="contacts"] .tabs ul.tabs a',function(){//contacts specific stuff

@@ -52,6 +52,10 @@
   .hint:hover:before, .hint:hover:after, .hint:focus:before, .hint:focus:after, [data-hint]:hover:before, [data-hint]:hover:after, [data-hint]:focus:before, [data-hint]:focus:after {
     visibility: visible;
     opacity: 1; }
+  .hint.hidden:hover:before, .hint.hidden:hover:after, .hint.hidden:focus:before, .hint.hidden:focus:after, [data-hint].hidden:hover:before, [data-hint].hidden:hover:after, [data-hint].hidden:focus:before, [data-hint].hidden:focus:after {
+    visibility:hidden;
+    opacity:0;
+  }  
   .hint:hover:before, .hint:hover:after, [data-hint]:hover:before, [data-hint]:hover:after {
     -webkit-transition-delay: 100ms;
     -moz-transition-delay: 100ms;

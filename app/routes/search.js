@@ -192,7 +192,6 @@ function deleteUserWarehouse(id){
 
 function updateUseageProfileAndLoadWarehouse(req,res, next) {
     searchController.getFromSession(req, function(err, sessionQuery) {
-        console.log("loaded search from session to update, id is: ");
         if(err) {
             next();
             return;
@@ -233,7 +232,6 @@ function updateUseageProfileAndLoadWarehouse(req,res, next) {
         sessionQuery.useageProfile = currentUseageProfile;
         warehouseController.getById(warehouseId, function(err, warehouse){
             warehouse.generateStorageProfile(sessionQuery);
-            console.log("doing final session save in update usesage, id is: " + sessionQuery._id);
             saveSearch(sessionQuery, req);
             req.data.warehouse = warehouse;
             next();

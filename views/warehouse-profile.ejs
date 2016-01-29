@@ -24,7 +24,7 @@
                                     <div class="critera-popup">
                                         <ul>
                                             <li>
-                                            <span class="title">Pallet width</span>
+                                            <span class="title">Pallet Footprint</span>
                                             <span class="search-value"><%=palletWidths[query.palletType]%></span>
                                             </li>
                                             <li>
@@ -131,10 +131,15 @@
                             Height: <%= warehouse.height %>m<br/>
                             Office Hours:<br/><%= warehouse.officeHours %></p>
                                 <div class="temperatures">
-
-                                    <% for (var i =0;i<warehouse.storageTemps.length; i++) { %>
-                                        <span class="icon-box temp-<%= warehouse.storageTemps[i]%> "></span>    
-                                    <% } %>
+                                    <%if(referer === 'dashboard'){%>
+                                        <% for (var i =0;i<storageTemps.length; i++) { %>
+                                            <span class="icon-box temp-<%= storageTemps[i]%> "></span>    
+                                        <% } %>
+                                    <%}else{
+                                        for (var i =0;i<warehouse.storageTemps.length; i++) { %>
+                                            <span class="icon-box temp-<%= warehouse.storageTemps[i]%> "></span>    
+                                        <% }
+                                    }%>
                                 </div>
                             </div>
                             <div class="columns four">

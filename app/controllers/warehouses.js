@@ -26,7 +26,6 @@ exports.create = function (user,data,cb) {
 	warehouse.user = user._id;
 	warehouse.save(function(err){
 		if (!err) {
-			console.log("warehouse created");
 			return cb(null, warehouse);
 		  }else{
 			 return cb(err);
